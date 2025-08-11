@@ -5,7 +5,8 @@ import type { Page as BlogDoc } from '@/payload-types'
 
 export default async function BlogPage(props: any) {
   const slug = props?.params?.slug as string
-  const isDraft = draftMode().isEnabled
+  const { isEnabled } = await draftMode()
+  const isDraft = isEnabled
   const payload = await getPayload({ config: (await import('@/payload.config')).default })
   const { docs } = await payload.find({
     collection: 'blogs',

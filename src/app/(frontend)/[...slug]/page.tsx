@@ -4,7 +4,9 @@ import { getPayload } from 'payload'
 import type { Page } from '@/payload-types'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
-export default async function DynamicPage({ params }: { params: { slug?: string[] } }) {
+export default async function DynamicPage(props: any) {
+  const maybeParams = props?.params
+  const params = typeof maybeParams?.then === 'function' ? await maybeParams : maybeParams
   const slug = params?.slug?.join('/') ?? ''
   const { isEnabled } = await draftMode()
   const draft = isEnabled
