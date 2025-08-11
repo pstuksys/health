@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+
+/* targets all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Roboto, sans-serif, Arial, Helvetica, sans-serif;
+}
+
+body,html,main {
+    width: 100%;
+    height: 100%;
+}
+body{
+    
+   background-color: aquamarine;
+}
