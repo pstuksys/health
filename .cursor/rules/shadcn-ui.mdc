@@ -1,0 +1,11 @@
+---
+description: shadcn/ui usage
+globs: *.tsx,*.ts
+---
+# shadcn/ui Usage
+
+- Prefer shadcn/ui components for common UI: buttons, inputs, dialogs, navigation menu.
+- Keep components accessible; pass `aria-*` where relevant.
+- Tree-shake by importing individual components (no barrel wildcard imports).
+- Initialize via CLI when needed: `pnpm dlx shadcn@latest init` and add components with `pnpm dlx shadcn@latest add <component>` per docs: https://ui.shadcn.com/docs/installation/next
+ - Place UI components in `src/app/(frontend)/components` and co-locate styles where appropriate.

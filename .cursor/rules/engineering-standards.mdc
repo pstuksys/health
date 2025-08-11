@@ -1,0 +1,64 @@
+---
+alwaysApply: true
+---
+# Engineering Standards
+
+Yes, my liege. You are an expert TypeScript, React, Next.js, and Payload CMS developer. Apply these rules to all edits.
+
+## TypeScript
+- Never use `any`. Prefer explicit, precise types or generics. Use `unknown` when needed.
+- Favor `type` aliases unless extension is required.
+- Strict mode is enabled; avoid type assertions unless absolutely necessary.
+- Write self-documenting code with meaningful names.
+
+## React
+- Follow DRY; extract reusable components.
+- Use `React.memo`, `useMemo`, and `useCallback` to avoid unnecessary re-renders when appropriate.
+- Manage state thoughtfully; avoid deep prop drilling.
+- Keep JSX clean; use proper `key` props; handle render errors; follow a11y best practices.
+
+## Next.js
+- Choose correct data fetching (SSR, SSG, ISR) and caching strategies.
+- Use `next/image`, dynamic imports, and secure API routes with validation and error handling.
+- Use revalidation hooks/patterns (e.g., SWR) for cache freshness when applicable.
+
+## Payload CMS
+- Keep schemas consistent and maintainable; apply access control and validation.
+- Optimize queries; avoid over-fetching; sanitize user input.
+- Use PostgreSQL adapter, Vercel Blob storage, rich text (Lexical), and the following plugins: Form Builder, SEO, Search.
+- Enable admin preview/live preview, document locking, and root metadata.
+
+## Testing
+- Write unit tests for key functions/hooks and integration tests for critical flows.
+- Keep tests isolated and repeatable.
+
+## General
+- Clean, maintainable, production-ready code.
+- Minimal comments; readability over brevity; consistent formatting (ESLint/Prettier).
+- Use lazy loading and bundle splitting; store secrets in env vars only.
+
+References:
+- shadcn/ui Installation (Next.js): [installation](mdc:README.md)
+  Real docs: https://ui.shadcn.com/docs/installation/next
+- Payload Getting Started/Installation: https://payloadcms.com/docs/getting-started/installation
+- Admin options (preview, live preview): https://payloadcms.com/docs/admin/overview#admin-options
+- Admin preview: https://payloadcms.com/docs/admin/preview
+- Locked documents: https://payloadcms.com/docs/admin/locked-documents#config-options
+- Root metadata: https://payloadcms.com/docs/admin/metadata#root-metadata
+- Rich text: https://payloadcms.com/docs/rich-text/overview
+- Form builder: https://payloadcms.com/docs/plugins/form-builder
+- SEO plugin: https://payloadcms.com/docs/plugins/seo
+- Search plugin: https://payloadcms.com/docs/plugins/search
+- Email (Nodemailer): https://payloadcms.com/docs/email/overview
+
+## Project structure
+- App router with `src/app` organized into segments: `(payload)` for admin/api, `(frontend)` for site.
+- Collections live in `src/collections`, globals in `src/globals`.
+- Payload config at `src/payload.config.ts`; types generated to `src/payload-types.ts`.
+- Dynamic content routes under `src/app/(frontend)/[...slug]`.
+
+## Content authoring flow
+- Define new content via TypeScript configs in `src/collections` or `src/globals` using precise types.
+- After schema edits, run `pnpm payload generate:types` and use generated types from `@/payload-types` instead of custom types.
+- Use rich text (Lexical) for long-form content.
+- For SEO, use the SEO plugin fields and render appropriately on pages.
