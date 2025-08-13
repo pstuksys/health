@@ -4,6 +4,7 @@ import { Poppins } from 'next/font/google'
 import './globals.css'
 import { NavigationMenu } from './components/navigation-menu'
 import { Footer } from './components/footer/component'
+import { Facebook, Linkedin, Twitter, X } from 'lucide-react'
 // import { Banner } from './components/banner/component'
 
 const poppins = Poppins({
@@ -75,10 +76,10 @@ const footerLinks = [
 ]
 
 const socialLinks = [
-  { icon: '📘', href: 'https://facebook.com' },
-  { icon: '🐦', href: 'https://twitter.com' },
-  { icon: '📷', href: 'https://instagram.com' },
-  { icon: '💼', href: 'https://linkedin.com' },
+  { icon: Facebook, href: 'https://facebook.com' },
+  { icon: X, href: 'https://twitter.com' },
+  { icon: Twitter, href: 'https://instagram.com' },
+  { icon: Linkedin, href: 'https://linkedin.com' },
 ]
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -98,7 +99,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
         <main className="min-h-screen">{children}</main>
         <Footer
-          about="We are a digital agency focused on creating exceptional web experiences that help businesses grow and succeed in the modern digital landscape."
+          about="Fast, effective, and patient-friendly way to screen for obstructive sleep apnoea using a compact, two-sensor home device. This test offers a reliable alternative to more complex sleep studies, allowing you to get the answers you need — from the comfort of your home."
           socialLinks={socialLinks}
           footerLinks={footerLinks}
         />

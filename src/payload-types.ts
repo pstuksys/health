@@ -102,7 +102,7 @@ export interface Config {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
-  locale: null;
+  locale: 'en' | 'es' | 'de';
   user: User & {
     collection: 'users';
   };
@@ -154,12 +154,25 @@ export interface User {
   password?: string | null;
 }
 /**
+ * Upload images, documents, and other media files
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media".
  */
 export interface Media {
   id: number;
+  /**
+   * Alternative text for accessibility
+   */
   alt: string;
+  /**
+   * Optional caption for the media
+   */
+  caption?: string | null;
+  /**
+   * Photo credit or attribution
+   */
+  credit?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -171,18 +184,56 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    hero?: {
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
 }
 /**
+ * Create pages with flexible content blocks
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
   id: number;
+  /**
+   * Page title displayed in the browser tab and page header
+   */
   title: string;
   /**
    * URL path for this page. Example: about, blog/my-post
    */
   slug: string;
+  /**
+   * Page publication status
+   */
+  status?: ('draft' | 'published') | null;
+  /**
+   * Main page content using rich text editor
+   */
   content?: {
     root: {
       type: string;
@@ -198,10 +249,289 @@ export interface Page {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Add flexible content blocks to build your page layout
+   */
+  blocks?:
+    | (
+        | {
+            title: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            subtitle?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            align?: ('left' | 'center' | 'right') | null;
+            backgroundImage?: (number | null) | Media;
+            ctaButton?: {
+              label?: string | null;
+              href?: string | null;
+              variant?: ('primary' | 'secondary') | null;
+            };
+            secondaryCTA?: {
+              label?: string | null;
+              href?: string | null;
+            };
+            gradientOverlay?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'heroSection';
+          }
+        | {
+            text: string;
+            backgroundColor?: string | null;
+            ctaButton?: {
+              label?: string | null;
+              href?: string | null;
+            };
+            dismissible?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'banner';
+          }
+        | {
+            title: string;
+            content?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            layout?: ('full' | 'split') | null;
+            image?: (number | null) | Media;
+            imagePosition?: ('left' | 'right') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contentBlock';
+          }
+        | {
+            columns?: number | null;
+            cards: {
+              image?: (number | null) | Media;
+              title: string;
+              text?: string | null;
+              href?: string | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cardSection';
+          }
+        | {
+            image: number | Media;
+            imagePosition?: ('left' | 'right') | null;
+            title: string;
+            content?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaButton?: {
+              label?: string | null;
+              href?: string | null;
+            };
+            backgroundColor?: ('default' | 'light' | 'dark') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mediaBlock';
+          }
+        | {
+            title: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            description?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaButton: {
+              label: string;
+              href: string;
+            };
+            align?: ('left' | 'center' | 'right') | null;
+            variant?: ('default' | 'accent' | 'gradient') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'ctaBlock';
+          }
+        | {
+            title: string;
+            content?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            image?: (number | null) | Media;
+            ctaButton?: {
+              label?: string | null;
+              href?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'aboutUsSection';
+          }
+        | {
+            layout?: ('grid' | 'carousel') | null;
+            partners: {
+              logo: number | Media;
+              name: string;
+              href?: string | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'partnersBlock';
+          }
+        | {
+            posts?:
+              | {
+                  image?: (number | null) | Media;
+                  title: string;
+                  excerpt?: string | null;
+                  href: string;
+                  date?: string | null;
+                  author?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'blogPostCards';
+          }
+        | {
+            items?:
+              | {
+                  image?: (number | null) | Media;
+                  title?: string | null;
+                  description?: string | null;
+                  href?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            slidesToShow?: number | null;
+            autoplay?: boolean | null;
+            autoplayInterval?: number | null;
+            showArrows?: boolean | null;
+            showDots?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'carousel';
+          }
+        | {
+            enabled?: boolean | null;
+            placeholder?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'modalSearch';
+          }
+      )[]
+    | null;
   metadata?: {
+    /**
+     * Meta description for search engines (recommended: 150-160 characters)
+     */
     description?: string | null;
+    /**
+     * Comma-separated keywords for SEO
+     */
     keywords?: string | null;
+    /**
+     * Open Graph and Twitter card image
+     */
     image?: (number | null) | Media;
+    /**
+     * Prevent search engines from indexing this page
+     */
+    noIndex?: boolean | null;
+  };
+  settings?: {
+    /**
+     * Hide the page header
+     */
+    hideHeader?: boolean | null;
+    /**
+     * Hide the page footer
+     */
+    hideFooter?: boolean | null;
+    /**
+     * Use full width layout instead of container
+     */
+    fullWidth?: boolean | null;
   };
   meta?: {
     title?: string | null;
@@ -570,6 +900,8 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  caption?: T;
+  credit?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -581,6 +913,40 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -589,13 +955,200 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
+  status?: T;
   content?: T;
+  blocks?:
+    | T
+    | {
+        heroSection?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              align?: T;
+              backgroundImage?: T;
+              ctaButton?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                    variant?: T;
+                  };
+              secondaryCTA?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              gradientOverlay?: T;
+              id?: T;
+              blockName?: T;
+            };
+        banner?:
+          | T
+          | {
+              text?: T;
+              backgroundColor?: T;
+              ctaButton?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              dismissible?: T;
+              id?: T;
+              blockName?: T;
+            };
+        contentBlock?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              layout?: T;
+              image?: T;
+              imagePosition?: T;
+              id?: T;
+              blockName?: T;
+            };
+        cardSection?:
+          | T
+          | {
+              columns?: T;
+              cards?:
+                | T
+                | {
+                    image?: T;
+                    title?: T;
+                    text?: T;
+                    href?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        mediaBlock?:
+          | T
+          | {
+              image?: T;
+              imagePosition?: T;
+              title?: T;
+              content?: T;
+              ctaButton?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        ctaBlock?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              ctaButton?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              align?: T;
+              variant?: T;
+              id?: T;
+              blockName?: T;
+            };
+        aboutUsSection?:
+          | T
+          | {
+              title?: T;
+              content?: T;
+              image?: T;
+              ctaButton?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        partnersBlock?:
+          | T
+          | {
+              layout?: T;
+              partners?:
+                | T
+                | {
+                    logo?: T;
+                    name?: T;
+                    href?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        blogPostCards?:
+          | T
+          | {
+              posts?:
+                | T
+                | {
+                    image?: T;
+                    title?: T;
+                    excerpt?: T;
+                    href?: T;
+                    date?: T;
+                    author?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        carousel?:
+          | T
+          | {
+              items?:
+                | T
+                | {
+                    image?: T;
+                    title?: T;
+                    description?: T;
+                    href?: T;
+                    id?: T;
+                  };
+              slidesToShow?: T;
+              autoplay?: T;
+              autoplayInterval?: T;
+              showArrows?: T;
+              showDots?: T;
+              id?: T;
+              blockName?: T;
+            };
+        modalSearch?:
+          | T
+          | {
+              enabled?: T;
+              placeholder?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
   metadata?:
     | T
     | {
         description?: T;
         keywords?: T;
         image?: T;
+        noIndex?: T;
+      };
+  settings?:
+    | T
+    | {
+        hideHeader?: T;
+        hideFooter?: T;
+        fullWidth?: T;
       };
   meta?:
     | T

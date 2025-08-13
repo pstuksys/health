@@ -1,8 +1,9 @@
 import type React from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { Facebook, X, Twitter, Linkedin } from 'lucide-react'
 
-type SocialLink = { icon: React.ReactNode; href: string }
+type SocialLink = { icon: any; href: string }
 type FooterLink = { label: string; href: string }
 
 type FooterProps = {
@@ -23,16 +24,18 @@ export function Footer({ about, socialLinks, footerLinks, className }: FooterPro
           </div>
           <div className="space-y-4">
             <h3 className="text-lg font-semibold">Follow Us</h3>
-            <div className="flex space-x-4">
+            <div className="flex space-y-4 flex-col">
               {socialLinks.map((link, index) => (
                 <Link
                   key={index}
-                  href={link.href}
+                  href={link?.href}
                   className="text-gray-300 hover:text-ds-accent-yellow transition-colors duration-200"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {link.icon}
+                  Social soon
+                  {/* {Facebook} */}
+                  {/* {link.icon} */}
                 </Link>
               ))}
             </div>
@@ -46,7 +49,7 @@ export function Footer({ about, socialLinks, footerLinks, className }: FooterPro
                   href={link.href}
                   className="block text-gray-300 hover:text-ds-accent-yellow font-light transition-colors duration-200"
                 >
-                  {link.label}
+                  {link?.label}
                 </Link>
               ))}
             </div>
