@@ -16,12 +16,34 @@ import { Pages } from './collections/Pages'
 import { Blogs } from './collections/Blogs'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
-// import { revalidateOnChange } from './hooks/revalidate'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+// Environment variable validation
+const requiredEnvVars = {
+  BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN || '',
+  PAYLOAD_SECRET: process.env.PAYLOAD_SECRET || '',
+  POSTGRES_URL: process.env.POSTGRES_URL || '',
+}
+
+// Check for missing environment variables only in production
+if (process.env.NODE_ENV === 'production') {
+  const missingEnvVars = Object.entries(requiredEnvVars)
+    .filter(([_, value]) => !value)
+    .map(([key]) => key)
+
+  if (missingEnvVars.length > 0) {
+    throw new Error(`Missing required variables: ${missingEnvVars.join(', ')}.`)
+  }
+}
+
 export default buildConfig({
+  serverURL: process.env.NEXT_PUBLIC_SITE_URL,
+  localization: {
+    locales: ['en', 'es', 'de'],
+    defaultLocale: 'en',
+  },
   admin: {
     user: Users.slug,
     meta: {
@@ -54,10 +76,8 @@ export default buildConfig({
   plugins: [
     payloadCloudPlugin(),
     vercelBlobStorage({
-      collections: {
-        media: true,
-      },
-      token: process.env.BLOB_READ_WRITE_TOKEN ?? '',
+      collections: { media: true },
+      token: process.env.BLOB_READ_WRITE_TOKEN,
     }),
     seoPlugin({
       uploadsCollection: 'media',

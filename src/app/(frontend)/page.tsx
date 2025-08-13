@@ -1,8 +1,8 @@
 import { headers as getHeaders } from 'next/headers'
-import Image from 'next/image'
+// import Image from 'next/image'
 import { getPayload } from 'payload'
 import React from 'react'
-import { fileURLToPath } from 'url'
+// import { fileURLToPath } from 'url'
 
 import config from '@/payload.config'
 
@@ -12,7 +12,7 @@ export default async function HomePage() {
   const payload = await getPayload({ config: payloadConfig })
   const { user } = await payload.auth({ headers })
 
-  const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
+  // const fileURL = `vscode://file/${fileURLToPath(import.meta.url)}`
 
   return (
     <div>
