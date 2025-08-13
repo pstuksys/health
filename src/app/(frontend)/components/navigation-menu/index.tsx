@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Menu, X, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
+// TODO: move to types.ts
 interface SubMenuItem {
   label: string
   href: string
