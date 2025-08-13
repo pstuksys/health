@@ -21,6 +21,11 @@ import { Footer } from './globals/Footer'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
+const blobToken = process.env.BLOB_READ_WRITE_TOKEN || ''
+if (!blobToken) {
+  throw new Error('BLOB_READ_WRITE_TOKEN is required for Vercel Blob storage')
+}
+
 export default buildConfig({
   admin: {
     user: Users.slug,
@@ -54,10 +59,8 @@ export default buildConfig({
   plugins: [
     payloadCloudPlugin(),
     vercelBlobStorage({
-      collections: {
-        media: true,
-      },
-      token: process.env.BLOB_READ_WRITE_TOKEN ?? '',
+      collections: { media: true },
+      token: blobToken,
     }),
     seoPlugin({
       uploadsCollection: 'media',
