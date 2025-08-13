@@ -5,6 +5,7 @@ import React from 'react'
 // import { fileURLToPath } from 'url'
 
 import config from '@/payload.config'
+import MockData from './components/ui-mock-data'
 
 export default async function HomePage() {
   const headers = await getHeaders()
@@ -16,7 +17,8 @@ export default async function HomePage() {
 
   return (
     <div>
-      <h1>Welcome to Payload + Next + shadcn</h1>
+      {/* <h1>Welcome to Payload + Next + shadcn</h1> */}
+      <MockData />
     </div>
   )
 }
