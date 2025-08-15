@@ -28,7 +28,21 @@ export const Blogs: CollectionConfig = {
     drafts: true,
   },
   lockDocuments: { duration: 600 },
-  access: { read: () => true },
+  access: {
+    read: () => true,
+    create: ({ req }) => {
+      const role = (req?.user as { role?: string } | undefined)?.role
+      return role === 'editor' || role === 'admin'
+    },
+    update: ({ req }) => {
+      const role = (req?.user as { role?: string } | undefined)?.role
+      return role === 'editor' || role === 'admin'
+    },
+    delete: ({ req }) => {
+      const role = (req?.user as { role?: string } | undefined)?.role
+      return role === 'admin'
+    },
+  },
   fields: [
     { name: 'title', type: 'text', required: true },
     {

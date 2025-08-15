@@ -102,7 +102,7 @@ export interface Config {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
-  locale: 'en' | 'es' | 'de';
+  locale: 'en';
   user: User & {
     collection: 'users';
   };
@@ -135,6 +135,10 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: number;
+  /**
+   * Controls access to content and admin features
+   */
+  role: 'viewer' | 'editor' | 'admin';
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -228,10 +232,6 @@ export interface Page {
    */
   slug: string;
   /**
-   * Page publication status
-   */
-  status?: ('draft' | 'published') | null;
-  /**
    * Main page content using rich text editor
    */
   content?: {
@@ -250,69 +250,14 @@ export interface Page {
     [k: string]: unknown;
   } | null;
   /**
+   * If enabled, the hero is rendered using the Main Content rich text.
+   */
+  showHero?: boolean | null;
+  /**
    * Add flexible content blocks to build your page layout
    */
   blocks?:
     | (
-        | {
-            title: {
-              root: {
-                type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
-                version: number;
-              };
-              [k: string]: unknown;
-            };
-            subtitle?: {
-              root: {
-                type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
-                version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-            align?: ('left' | 'center' | 'right') | null;
-            backgroundImage?: (number | null) | Media;
-            ctaButton?: {
-              label?: string | null;
-              href?: string | null;
-              variant?: ('primary' | 'secondary') | null;
-            };
-            secondaryCTA?: {
-              label?: string | null;
-              href?: string | null;
-            };
-            gradientOverlay?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'heroSection';
-          }
-        | {
-            text: string;
-            backgroundColor?: string | null;
-            ctaButton?: {
-              label?: string | null;
-              href?: string | null;
-            };
-            dismissible?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'banner';
-          }
         | {
             title: string;
             content?: {
@@ -492,47 +437,8 @@ export interface Page {
             blockName?: string | null;
             blockType: 'carousel';
           }
-        | {
-            enabled?: boolean | null;
-            placeholder?: string | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'modalSearch';
-          }
       )[]
     | null;
-  metadata?: {
-    /**
-     * Meta description for search engines (recommended: 150-160 characters)
-     */
-    description?: string | null;
-    /**
-     * Comma-separated keywords for SEO
-     */
-    keywords?: string | null;
-    /**
-     * Open Graph and Twitter card image
-     */
-    image?: (number | null) | Media;
-    /**
-     * Prevent search engines from indexing this page
-     */
-    noIndex?: boolean | null;
-  };
-  settings?: {
-    /**
-     * Hide the page header
-     */
-    hideHeader?: boolean | null;
-    /**
-     * Hide the page footer
-     */
-    hideFooter?: boolean | null;
-    /**
-     * Use full width layout instead of container
-     */
-    fullWidth?: boolean | null;
-  };
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -541,6 +447,18 @@ export interface Page {
      */
     image?: (number | null) | Media;
   };
+  /**
+   * Hide the page header
+   */
+  hideHeader?: boolean | null;
+  /**
+   * Hide the page footer
+   */
+  hideFooter?: boolean | null;
+  /**
+   * Use full width layout instead of container
+   */
+  fullWidth?: boolean | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -877,6 +795,7 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  role?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -955,50 +874,11 @@ export interface MediaSelect<T extends boolean = true> {
 export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
-  status?: T;
   content?: T;
+  showHero?: T;
   blocks?:
     | T
     | {
-        heroSection?:
-          | T
-          | {
-              title?: T;
-              subtitle?: T;
-              align?: T;
-              backgroundImage?: T;
-              ctaButton?:
-                | T
-                | {
-                    label?: T;
-                    href?: T;
-                    variant?: T;
-                  };
-              secondaryCTA?:
-                | T
-                | {
-                    label?: T;
-                    href?: T;
-                  };
-              gradientOverlay?: T;
-              id?: T;
-              blockName?: T;
-            };
-        banner?:
-          | T
-          | {
-              text?: T;
-              backgroundColor?: T;
-              ctaButton?:
-                | T
-                | {
-                    label?: T;
-                    href?: T;
-                  };
-              dismissible?: T;
-              id?: T;
-              blockName?: T;
-            };
         contentBlock?:
           | T
           | {
@@ -1126,29 +1006,6 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        modalSearch?:
-          | T
-          | {
-              enabled?: T;
-              placeholder?: T;
-              id?: T;
-              blockName?: T;
-            };
-      };
-  metadata?:
-    | T
-    | {
-        description?: T;
-        keywords?: T;
-        image?: T;
-        noIndex?: T;
-      };
-  settings?:
-    | T
-    | {
-        hideHeader?: T;
-        hideFooter?: T;
-        fullWidth?: T;
       };
   meta?:
     | T
@@ -1157,6 +1014,9 @@ export interface PagesSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
+  hideHeader?: T;
+  hideFooter?: T;
+  fullWidth?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -1380,6 +1240,15 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
+  enableBanter?: boolean | null;
+  /**
+   * Optional description text shown above the site header
+   */
+  headerDescription?: string | null;
+  /**
+   * Short line of text displayed when Banter Block is enabled
+   */
+  banterText?: string | null;
   navigation?:
     | {
         label: string;
@@ -1427,6 +1296,9 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  enableBanter?: T;
+  headerDescription?: T;
+  banterText?: T;
   navigation?:
     | T
     | {

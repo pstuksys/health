@@ -7,7 +7,25 @@ export const Users: CollectionConfig = {
   },
   auth: true,
   fields: [
-    // Email added by default
-    // Add more fields as needed
+    {
+      name: 'role',
+      type: 'select',
+      required: true,
+      defaultValue: 'viewer',
+      options: [
+        { label: 'Viewer', value: 'viewer' },
+        { label: 'Editor', value: 'editor' },
+        { label: 'Admin', value: 'admin' },
+      ],
+      admin: {
+        description: 'Controls access to content and admin features',
+        position: 'sidebar',
+      },
+      access: {
+        // Only admins can set or change roles
+        create: ({ req }) => (req.user as { role?: string } | undefined)?.role === 'admin',
+        update: ({ req }) => (req.user as { role?: string } | undefined)?.role === 'admin',
+      },
+    },
   ],
 }

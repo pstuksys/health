@@ -66,7 +66,6 @@ export function ModalSearch({ isOpen, onClose, onSearch, className }: ModalSearc
               className="w-full pl-12 pr-4 py-3 text-lg bg-white border-2 border-gray-200 focus:border-ds-pastille-green focus:ring-ds-pastille-green"
               autoFocus
             />
-            {/* <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" /> */}
           </div>
           <div className="flex justify-center">
             <Button

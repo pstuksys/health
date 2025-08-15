@@ -5,6 +5,34 @@ export const Header: GlobalConfig = {
   access: { read: () => true },
   fields: [
     {
+      name: 'enableBanter',
+      type: 'checkbox',
+      label: 'Enable Banter Block',
+      defaultValue: false,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'headerDescription',
+      type: 'textarea',
+      label: 'Description Above Header',
+      admin: {
+        description: 'Optional description text shown above the site header',
+        condition: (_, siblingData) => Boolean(siblingData?.enableBanter),
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'banterText',
+      type: 'text',
+      label: 'Banter Text',
+      admin: {
+        condition: (_, siblingData) => Boolean(siblingData?.enableBanter),
+        description: 'Short line of text displayed when Banter Block is enabled',
+      },
+    },
+    {
       name: 'navigation',
       type: 'array',
       label: 'Navigation Items',
