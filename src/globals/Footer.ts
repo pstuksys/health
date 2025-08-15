@@ -5,7 +5,7 @@ export const Footer: GlobalConfig = {
   access: { read: () => true },
   hooks: {
     afterChange: [
-      ({ doc }) => {
+      ({ doc: _doc }) => {
         void fetch(
           `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/api/revalidate?secret=${process.env.REVALIDATION_SECRET ?? ''}`,
           {
