@@ -4,11 +4,10 @@ import { getPayload } from 'payload'
 import type { Page, Media } from '@/payload-types'
 import { HeroSection } from '@/app/(frontend)/components/hero-section/component'
 import { RenderBlocks, deriveGlobalHeroProps } from '@/app/(frontend)/components/RenderBlocks'
-import { getHeaderFooter } from '@/lib/cms/globals'
 
 // Force dynamic rendering to prevent build-time database queries
-// export const dynamic = 'force-dynamic'
-// export const revalidate = 0
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 function mediaToUrl(media: number | Media | null | undefined): string {
   if (!media || typeof media === 'number') return ''
