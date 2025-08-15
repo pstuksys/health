@@ -8,6 +8,7 @@ import { partnersBlockFields } from '../app/(frontend)/components/partners-block
 import { blogPostCardsFields } from '../app/(frontend)/components/blog-post-cards/config'
 import { carouselFields } from '../app/(frontend)/components/carousel/config'
 import { navigationMenuFields } from '../app/(frontend)/components/navigation-menu/config'
+import { heroSectionFields } from '../app/(frontend)/components/hero-section/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -64,8 +65,14 @@ const navigationMenuBlock: Block = {
   fields: navigationMenuFields,
 }
 
+const heroSectionBlock: Block = {
+  slug: 'heroSection',
+  fields: heroSectionFields,
+}
+
 // All available page blocks
 const pageBlocks: Block[] = [
+  heroSectionBlock,
   contentBlock,
   cardSectionBlock,
   mediaBlock,

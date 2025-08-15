@@ -259,6 +259,53 @@ export interface Page {
   blocks?:
     | (
         | {
+            title: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            subtitle?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            align?: ('left' | 'center' | 'right') | null;
+            backgroundImage?: (number | null) | Media;
+            ctaButton?: {
+              label?: string | null;
+              href?: string | null;
+              variant?: ('primary' | 'secondary') | null;
+            };
+            secondaryCTA?: {
+              label?: string | null;
+              href?: string | null;
+            };
+            gradientOverlay?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'heroSection';
+          }
+        | {
             title: string;
             content?: {
               root: {
@@ -879,6 +926,30 @@ export interface PagesSelect<T extends boolean = true> {
   blocks?:
     | T
     | {
+        heroSection?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              align?: T;
+              backgroundImage?: T;
+              ctaButton?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                    variant?: T;
+                  };
+              secondaryCTA?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              gradientOverlay?: T;
+              id?: T;
+              blockName?: T;
+            };
         contentBlock?:
           | T
           | {

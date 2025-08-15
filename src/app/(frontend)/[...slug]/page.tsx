@@ -1,8 +1,59 @@
 import { notFound } from 'next/navigation'
 import { draftMode } from 'next/headers'
+import type { Metadata } from 'next'
 import { getPayload } from 'payload'
-import type { Page } from '@/payload-types'
-import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
+import type { Page, Media } from '@/payload-types'
+import { HeroSection } from '@/app/(frontend)/components/hero-section/component'
+import {
+  RenderBlocks,
+  hasHeroBlock,
+  deriveGlobalHeroProps,
+} from '@/app/(frontend)/components/RenderBlocks'
+
+function mediaToUrl(media: number | Media | null | undefined): string {
+  if (!media || typeof media === 'number') return ''
+  return (
+    media.url ??
+    media.sizes?.hero?.url ??
+    media.sizes?.card?.url ??
+    media.sizes?.thumbnail?.url ??
+    ''
+  )
+}
+
+export async function generateMetadata(props: any): Promise<Metadata> {
+  const maybeParams = props?.params
+  const params = typeof maybeParams?.then === 'function' ? await maybeParams : maybeParams
+  const slug = params?.slug?.join('/') ?? ''
+  const payload = await getPayload({ config: (await import('@/payload.config')).default })
+  const { docs } = await payload.find({
+    collection: 'pages',
+    where: { slug: { equals: slug } },
+    limit: 1,
+  })
+  const page = docs[0] as Page | undefined
+  if (!page) return {}
+
+  const title = page.meta?.title ?? page.title
+  const description = page.meta?.description ?? undefined
+  const imageUrl = mediaToUrl(page.meta?.image as any)
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      images: imageUrl ? [{ url: imageUrl }] : undefined,
+    },
+    twitter: {
+      card: imageUrl ? 'summary_large_image' : 'summary',
+      title,
+      description,
+      images: imageUrl ? [imageUrl] : undefined,
+    },
+  }
+}
 
 export default async function DynamicPage(props: any) {
   const maybeParams = props?.params
@@ -22,17 +73,13 @@ export default async function DynamicPage(props: any) {
   const page = docs[0] as Page | undefined
   if (!page) return notFound()
 
+  const renderHeroFromBlocks = hasHeroBlock(page.blocks)
+  const heroProps = deriveGlobalHeroProps(page)
+
   return (
-    <main className="container mx-auto max-w-3xl py-8">
-      <h1 className="text-3xl font-semibold mb-6">{(page as any).title}</h1>
-      {/* Render lexical rich text JSON in your preferred renderer. Placeholder below. */}
-      <pre className="whitespace-pre-wrap break-words text-sm bg-gray-100 p-4 rounded">
-        {JSON.stringify(
-          ((page as any).content ?? null) as unknown as SerializedEditorState,
-          null,
-          2,
-        )}
-      </pre>
+    <main className="flex flex-col">
+      {!renderHeroFromBlocks && <HeroSection {...heroProps} />}
+      <RenderBlocks blocks={page.blocks ?? null} />
     </main>
   )
 }
