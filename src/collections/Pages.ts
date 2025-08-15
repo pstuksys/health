@@ -7,8 +7,6 @@ import { aboutUsSectionFields } from '../app/(frontend)/components/about-us-sect
 import { partnersBlockFields } from '../app/(frontend)/components/partners-block/config'
 import { blogPostCardsFields } from '../app/(frontend)/components/blog-post-cards/config'
 import { carouselFields } from '../app/(frontend)/components/carousel/config'
-import { navigationMenuFields } from '../app/(frontend)/components/navigation-menu/config'
-import { heroSectionFields } from '../app/(frontend)/components/hero-section/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -60,19 +58,9 @@ const carouselBlock: Block = {
   fields: carouselFields,
 }
 
-const navigationMenuBlock: Block = {
-  slug: 'navigationMenu',
-  fields: navigationMenuFields,
-}
-
-const heroSectionBlock: Block = {
-  slug: 'heroSection',
-  fields: heroSectionFields,
-}
-
 // All available page blocks
 const pageBlocks: Block[] = [
-  heroSectionBlock,
+  // heroSectionBlock,
   contentBlock,
   cardSectionBlock,
   mediaBlock,
@@ -166,7 +154,7 @@ export const Pages: CollectionConfig = {
             {
               name: 'slug',
               type: 'text',
-              required: true,
+              required: false,
               unique: true,
               index: true,
               admin: {
@@ -181,6 +169,16 @@ export const Pages: CollectionConfig = {
               admin: {
                 description: 'Content displayed within the Hero when Show Hero is enabled',
                 className: 'hero-content-editor',
+              },
+            },
+            {
+              name: 'heroBackground',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Hero Background Image',
+              admin: {
+                description:
+                  'Optional background image for the Hero section when Show Hero is enabled',
               },
             },
             {

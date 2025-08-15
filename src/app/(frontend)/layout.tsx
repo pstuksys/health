@@ -5,6 +5,7 @@ import './globals.css'
 import { NavigationMenu } from './components/navigation-menu'
 import { Footer } from './components/footer/component'
 import { getHeaderFooter } from '@/lib/cms/globals'
+import { Banner } from './components/banner/component'
 // import { Banner } from './components/banner/component'
 
 const poppins = Poppins({
@@ -132,17 +133,13 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <html lang="en" className={`${poppins.variable} antialiased`}>
       <body className="font-sans bg-ds-light-neutral">
         {header?.enableBanter && header?.headerDescription && (
-          <div className="w-full bg-ds-dark-blue text-white text-sm py-2">
-            <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
-              {header.headerDescription}
-            </div>
-          </div>
+          <Banner text={header.headerDescription} />
         )}
         <NavigationMenu
           items={items}
-          logo={
-            (typeof header?.logo !== 'number' ? header?.logo?.url : undefined) as string | undefined
-          }
+          // logo={
+          //   (typeof header?.logo !== 'number' ? header?.logo?.url : undefined) as string | undefined
+          // }
           ctaButton={
             header?.ctaButton?.label && header?.ctaButton?.href
               ? { label: header.ctaButton.label, href: header.ctaButton.href }

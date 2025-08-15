@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import { Button } from '@/app/(frontend)/components/ui/button'
 import { cn } from '@/lib/utils'
 import { getAlignmentClasses, type AlignmentType } from '@/lib/design-system'
@@ -30,13 +31,21 @@ export function HeroSection({
   return (
     <section
       className={cn(
-        'relative py-20 px-4 sm:px-6 lg:px-8 min-h-[60vh] flex items-center',
-        backgroundImage ? 'bg-cover bg-center bg-no-repeat' : 'bg-ds-light-neutral',
+        'relative py-20 px-4 sm:px-6 lg:px-8 min-h-[60vh] flex items-center bg-ds-light-neutral',
         className,
       )}
-      style={backgroundImage ? { backgroundImage: `url(${backgroundImage})` } : undefined}
     >
-      {gradientOverlay && (
+      {backgroundImage && (
+        <Image
+          src={backgroundImage}
+          alt="hero"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+      )}
+      {gradientOverlay && !backgroundImage && (
         <div className="absolute inset-0 bg-gradient-to-r from-ds-dark-blue/80 to-ds-pastille-green/60" />
       )}
       <div className="relative z-10 max-w-7xl mx-auto w-full">

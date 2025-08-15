@@ -230,7 +230,7 @@ export interface Page {
   /**
    * URL path for this page. Example: about, blog/my-post
    */
-  slug: string;
+  slug?: string | null;
   /**
    * Content displayed within the Hero when Show Hero is enabled
    */
@@ -250,6 +250,10 @@ export interface Page {
     [k: string]: unknown;
   } | null;
   /**
+   * Optional background image for the Hero section when Show Hero is enabled
+   */
+  heroBackground?: (number | null) | Media;
+  /**
    * If enabled, the hero is rendered using the Hero Content rich text.
    */
   showHero?: boolean | null;
@@ -258,53 +262,6 @@ export interface Page {
    */
   blocks?:
     | (
-        | {
-            title: {
-              root: {
-                type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
-                version: number;
-              };
-              [k: string]: unknown;
-            };
-            subtitle?: {
-              root: {
-                type: string;
-                children: {
-                  type: string;
-                  version: number;
-                  [k: string]: unknown;
-                }[];
-                direction: ('ltr' | 'rtl') | null;
-                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-                indent: number;
-                version: number;
-              };
-              [k: string]: unknown;
-            } | null;
-            align?: ('left' | 'center' | 'right') | null;
-            backgroundImage?: (number | null) | Media;
-            ctaButton?: {
-              label?: string | null;
-              href?: string | null;
-              variant?: ('primary' | 'secondary') | null;
-            };
-            secondaryCTA?: {
-              label?: string | null;
-              href?: string | null;
-            };
-            gradientOverlay?: boolean | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'heroSection';
-          }
         | {
             title: string;
             content?: {
@@ -927,34 +884,11 @@ export interface PagesSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   content?: T;
+  heroBackground?: T;
   showHero?: T;
   blocks?:
     | T
     | {
-        heroSection?:
-          | T
-          | {
-              title?: T;
-              subtitle?: T;
-              align?: T;
-              backgroundImage?: T;
-              ctaButton?:
-                | T
-                | {
-                    label?: T;
-                    href?: T;
-                    variant?: T;
-                  };
-              secondaryCTA?:
-                | T
-                | {
-                    label?: T;
-                    href?: T;
-                  };
-              gradientOverlay?: T;
-              id?: T;
-              blockName?: T;
-            };
         contentBlock?:
           | T
           | {

@@ -7,7 +7,6 @@ import { Button } from '@/app/(frontend)/components/ui/button'
 import { Menu, X, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
-// TODO: move to types.ts
 interface SubMenuItem {
   label: string
   href: string
@@ -135,11 +134,15 @@ export function NavigationMenu({
     >
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
+          <Link href="/" className="flex items-center">
+            <Image src="/logo.svg" alt="Logo" width={240} height={40} className="" />
+          </Link>
           <div className="flex-shrink-0">
-            {logo ? (
+            {/* {logo ? (
               <Link href="/" className="flex items-center">
                 <Image
-                  src={logo || '/placeholder.svg'}
+                  // src={logo || '/placeholder.svg'}
+                  src="/logo.svg"
                   alt="Logo"
                   width={120}
                   height={40}
@@ -150,7 +153,7 @@ export function NavigationMenu({
               <Link href="/" className="text-xl font-semibold text-white">
                 Logo
               </Link>
-            )}
+            )} */}
           </div>
 
           {/* Desktop Navigation */}

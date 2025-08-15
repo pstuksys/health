@@ -301,13 +301,16 @@ function BlockRenderer({ block }: { block: PageBlock }) {
 }
 
 export function hasHeroBlock(blocks: Page['blocks'] | null | undefined): boolean {
-  return Array.isArray(blocks) && blocks.some((b) => b.blockType === 'heroSection')
+  return (
+    Array.isArray(blocks) &&
+    blocks.some((b) => (b as { blockType: string }).blockType === 'heroSection')
+  )
 }
 
 export function deriveGlobalHeroProps(page: Page) {
   const titleHtml = page.title ? String(page.title) : ''
   const subtitleHtml = page.content ? lexicalToHtml(page.content) : (page.meta?.description ?? '')
-  const bg = mediaToUrl(page.meta?.image as any)
+  const bg = mediaToUrl((page as any).heroBackground ?? (page.meta?.image as any))
   return {
     title: titleHtml,
     subtitle: subtitleHtml,
