@@ -31,7 +31,7 @@ async function getHomePage(draft = false): Promise<Page | null> {
   return JSON.parse(JSON.stringify(doc))
 }
 
-// Header/Footer are fetched in layout; keep this page focused on content rendering
+// Header/Footer are fetched in layout; keep this page focused on content  rendering
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getHomePage(false)
