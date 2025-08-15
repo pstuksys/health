@@ -3,21 +3,105 @@ import type { GlobalConfig } from 'payload'
 export const Footer: GlobalConfig = {
   slug: 'footer',
   access: { read: () => true },
+  hooks: {
+    afterChange: [
+      ({ doc: _doc }) => {
+        void fetch(
+          `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/api/revalidate?secret=${process.env.REVALIDATION_SECRET ?? ''}`,
+          {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ tags: ['global:footer'] }),
+          },
+        ).catch(() => {})
+      },
+    ],
+  },
   fields: [
     {
-      name: 'links',
-      type: 'array',
-      label: 'Footer Links',
+      name: 'about',
+      type: 'textarea',
+      label: 'About',
+    },
+    {
+      type: 'row',
       fields: [
-        { name: 'label', type: 'text', required: true },
-        { name: 'href', type: 'text', required: true },
-        { name: 'external', type: 'checkbox', label: 'External', defaultValue: false },
+        {
+          name: 'navigationLinks',
+          type: 'array',
+          label: 'Navigation Links',
+          fields: [
+            { name: 'label', type: 'text', required: true },
+            {
+              name: 'linkType',
+              type: 'radio',
+              defaultValue: 'internal',
+              options: [
+                { label: 'Internal', value: 'internal' },
+                { label: 'External', value: 'external' },
+              ],
+            },
+            {
+              name: 'page',
+              type: 'relationship',
+              relationTo: ['pages', 'blogs'],
+              admin: { condition: (_, siblingData) => siblingData?.linkType === 'internal' },
+            },
+            {
+              name: 'href',
+              type: 'text',
+              admin: { condition: (_, siblingData) => siblingData?.linkType === 'external' },
+            },
+          ],
+        },
+        {
+          name: 'legalLinks',
+          type: 'array',
+          label: 'Legal Links',
+          fields: [
+            { name: 'label', type: 'text', required: true },
+            {
+              name: 'linkType',
+              type: 'radio',
+              defaultValue: 'internal',
+              options: [
+                { label: 'Internal', value: 'internal' },
+                { label: 'External', value: 'external' },
+              ],
+            },
+            {
+              name: 'page',
+              type: 'relationship',
+              relationTo: ['pages', 'blogs'],
+              admin: { condition: (_, siblingData) => siblingData?.linkType === 'internal' },
+            },
+            {
+              name: 'href',
+              type: 'text',
+              admin: { condition: (_, siblingData) => siblingData?.linkType === 'external' },
+            },
+          ],
+        },
       ],
     },
     {
-      name: 'copyright',
-      type: 'text',
-      admin: { description: 'e.g., © 2025 Health Co.' },
+      name: 'contact',
+      type: 'group',
+      label: 'Contact Information',
+      fields: [
+        { name: 'email', type: 'email' },
+        { name: 'phone', type: 'text' },
+        { name: 'address', type: 'textarea' },
+      ],
+    },
+    {
+      name: 'socialLinks',
+      type: 'array',
+      label: 'Social Links',
+      fields: [
+        { name: 'platform', type: 'select', options: ['facebook', 'twitter', 'linkedin', 'x'] },
+        { name: 'url', type: 'text' },
+      ],
     },
   ],
 }

@@ -1,6 +1,4 @@
 import type { CollectionConfig, Block } from 'payload'
-import { heroSectionFields } from '../app/(frontend)/components/hero-section/config'
-import { bannerFields } from '../app/(frontend)/components/banner/config'
 import { contentBlockFields } from '../app/(frontend)/components/content-block/config'
 import { cardSectionFields } from '../app/(frontend)/components/card-section/config'
 import { mediaBlockFields } from '../app/(frontend)/components/media-block/config'
@@ -9,18 +7,15 @@ import { aboutUsSectionFields } from '../app/(frontend)/components/about-us-sect
 import { partnersBlockFields } from '../app/(frontend)/components/partners-block/config'
 import { blogPostCardsFields } from '../app/(frontend)/components/blog-post-cards/config'
 import { carouselFields } from '../app/(frontend)/components/carousel/config'
-import { navigationMenuFields } from '../app/(frontend)/components/navigation-menu/config'
-import { modalSearchFields } from '../app/(frontend)/components/modal-search/config'
 
-// Convert component fields to blocks format
-const heroSectionBlock: Block = {
-  slug: 'heroSection',
-  fields: heroSectionFields,
-}
-
-const bannerBlock: Block = {
-  slug: 'banner',
-  fields: bannerFields,
+// Safely extract authenticated user's role without using `any`
+const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
+  if (!req || typeof req !== 'object' || !('user' in req)) return undefined
+  const user = (req as Record<string, unknown>).user
+  if (!user || typeof user !== 'object') return undefined
+  const role = (user as Record<string, unknown>).role
+  if (role === 'viewer' || role === 'editor' || role === 'admin') return role
+  return undefined
 }
 
 const contentBlock: Block = {
@@ -63,20 +58,9 @@ const carouselBlock: Block = {
   fields: carouselFields,
 }
 
-const navigationMenuBlock: Block = {
-  slug: 'navigationMenu',
-  fields: navigationMenuFields,
-}
-
-const modalSearchBlock: Block = {
-  slug: 'modalSearch',
-  fields: modalSearchFields,
-}
-
 // All available page blocks
 const pageBlocks: Block[] = [
-  heroSectionBlock,
-  bannerBlock,
+  // heroSectionBlock,
   contentBlock,
   cardSectionBlock,
   mediaBlock,
@@ -85,7 +69,6 @@ const pageBlocks: Block[] = [
   partnersBlock,
   blogPostCardsBlock,
   carouselBlock,
-  modalSearchBlock,
 ]
 
 export const Pages: CollectionConfig = {
@@ -111,6 +94,18 @@ export const Pages: CollectionConfig = {
       const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
       return `${base}/${slug ?? ''}?preview=true`
     },
+    livePreview: {
+      url: ({ data }) => {
+        const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+        const slug = typeof data?.slug === 'string' ? data.slug : ''
+        return `${base}/${slug}`
+      },
+      breakpoints: [
+        { label: 'Mobile', name: 'mobile', width: 375, height: 667 },
+        { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
+        { label: 'Desktop', name: 'desktop', width: 1280, height: 800 },
+      ],
+    },
     description: 'Create pages with flexible content blocks',
   },
   versions: {
@@ -120,124 +115,126 @@ export const Pages: CollectionConfig = {
     duration: 600,
   },
   access: {
-    read: () => true,
+    // Public can read only published; editors/admins can read all
+    read: ({ req }) => {
+      const role = getUserRoleFromReq(req)
+      if (role === 'editor' || role === 'admin') return true
+      return {
+        _status: { equals: 'published' },
+      }
+    },
+    create: ({ req }) => {
+      const role = getUserRoleFromReq(req)
+      return role === 'editor' || role === 'admin'
+    },
+    update: ({ req }) => {
+      const role = getUserRoleFromReq(req)
+      return role === 'editor' || role === 'admin'
+    },
+    delete: ({ req }) => {
+      const role = getUserRoleFromReq(req)
+      return role === 'admin'
+    },
   },
   fields: [
     {
-      name: 'title',
-      type: 'text',
-      required: true,
-      admin: {
-        description: 'Page title displayed in the browser tab and page header',
-      },
-    },
-    {
-      name: 'slug',
-      type: 'text',
-      required: true,
-      unique: true,
-      index: true,
-      admin: {
-        description: 'URL path for this page. Example: about, blog/my-post',
-      },
-    },
-    {
-      name: 'status',
-      type: 'select',
-      options: [
-        { label: 'Draft', value: 'draft' },
-        { label: 'Published', value: 'published' },
-      ],
-      defaultValue: 'draft',
-      admin: {
-        description: 'Page publication status',
-      },
-    },
-    {
-      name: 'content',
-      type: 'richText',
-      label: 'Main Content',
-      required: false,
-      admin: {
-        description: 'Main page content using rich text editor',
-      },
-    },
-    {
-      name: 'blocks',
-      type: 'blocks',
-      label: 'Content Blocks',
-      blocks: pageBlocks,
-      admin: {
-        description: 'Add flexible content blocks to build your page layout',
-      },
-    },
-    {
-      name: 'metadata',
-      type: 'group',
-      label: 'SEO Metadata',
-      fields: [
+      type: 'tabs',
+      tabs: [
         {
-          name: 'description',
-          type: 'text',
-          admin: {
-            description: 'Meta description for search engines (recommended: 150-160 characters)',
-          },
+          label: 'Content',
+          fields: [
+            {
+              name: 'title',
+              type: 'text',
+              required: true,
+              admin: {
+                description: 'Page title displayed in the browser tab and page header',
+              },
+            },
+            {
+              name: 'slug',
+              type: 'text',
+              required: false,
+              unique: true,
+              index: true,
+              admin: {
+                description: 'URL path for this page. Example: about, blog/my-post',
+              },
+            },
+            {
+              name: 'content',
+              type: 'richText',
+              label: 'Hero Content',
+              required: false,
+              admin: {
+                description: 'Content displayed within the Hero when Show Hero is enabled',
+                className: 'hero-content-editor',
+              },
+            },
+            {
+              name: 'heroBackground',
+              type: 'upload',
+              relationTo: 'media',
+              label: 'Hero Background Image',
+              admin: {
+                description:
+                  'Optional background image for the Hero section when Show Hero is enabled',
+              },
+            },
+            {
+              name: 'showHero',
+              type: 'checkbox',
+              label: 'Show Hero',
+              defaultValue: false,
+              admin: {
+                description: 'If enabled, the hero is rendered using the Hero Content rich text.',
+              },
+            },
+          ],
         },
         {
-          name: 'keywords',
-          type: 'text',
-          admin: {
-            description: 'Comma-separated keywords for SEO',
-          },
-        },
-        {
-          name: 'image',
-          type: 'upload',
-          relationTo: 'media',
-          admin: {
-            description: 'Open Graph and Twitter card image',
-          },
-        },
-        {
-          name: 'noIndex',
-          type: 'checkbox',
-          defaultValue: false,
-          admin: {
-            description: 'Prevent search engines from indexing this page',
-          },
+          label: 'Blocks',
+          fields: [
+            {
+              name: 'blocks',
+              type: 'blocks',
+              label: 'Content Blocks',
+              blocks: pageBlocks,
+              admin: {
+                description: 'Add flexible content blocks to build your page layout',
+              },
+            },
+          ],
         },
       ],
     },
+    // Sidebar controls for layout/visibility
     {
-      name: 'settings',
-      type: 'group',
-      label: 'Page Settings',
-      fields: [
-        {
-          name: 'hideHeader',
-          type: 'checkbox',
-          defaultValue: false,
-          admin: {
-            description: 'Hide the page header',
-          },
-        },
-        {
-          name: 'hideFooter',
-          type: 'checkbox',
-          defaultValue: false,
-          admin: {
-            description: 'Hide the page footer',
-          },
-        },
-        {
-          name: 'fullWidth',
-          type: 'checkbox',
-          defaultValue: false,
-          admin: {
-            description: 'Use full width layout instead of container',
-          },
-        },
-      ],
+      name: 'hideHeader',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Hide the page header',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'hideFooter',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Hide the page footer',
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'fullWidth',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: {
+        description: 'Use full width layout instead of container',
+        position: 'sidebar',
+      },
     },
   ],
 }

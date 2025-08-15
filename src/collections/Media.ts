@@ -4,6 +4,19 @@ export const Media: CollectionConfig = {
   slug: 'media',
   access: {
     read: () => true,
+    create: ({ req }) => {
+      const role = (req?.user as { role?: string } | undefined)?.role
+      // Allow uploads for authenticated users; prefer role check
+      return Boolean(req?.user) || role === 'editor' || role === 'admin'
+    },
+    update: ({ req }) => {
+      const role = (req?.user as { role?: string } | undefined)?.role
+      return role === 'editor' || role === 'admin'
+    },
+    delete: ({ req }) => {
+      const role = (req?.user as { role?: string } | undefined)?.role
+      return role === 'admin'
+    },
   },
   admin: {
     useAsTitle: 'alt',

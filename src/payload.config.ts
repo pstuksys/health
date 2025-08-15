@@ -39,9 +39,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 export default buildConfig({
-  serverURL: process.env.NEXT_PUBLIC_SITE_URL,
+  serverURL: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   localization: {
-    locales: ['en', 'es', 'de'],
+    // locales: ['en', 'es', 'de'],
+    locales: ['en'],
     defaultLocale: 'en',
   },
   admin: {
@@ -60,9 +61,11 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
+  cors: [process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000', 'http://127.0.0.1:3000'],
+  csrf: [process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000', 'http://127.0.0.1:3000'],
   collections: [Users, Media, Pages, Blogs],
   editor: lexicalEditor(),
-  secret: process.env.PAYLOAD_SECRET || '',
+  secret: process.env.PAYLOAD_SECRET || 'dev-secret-please-change',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
@@ -75,17 +78,19 @@ export default buildConfig({
   sharp,
   plugins: [
     payloadCloudPlugin(),
-    vercelBlobStorage({
-      collections: { media: true },
-      token: process.env.BLOB_READ_WRITE_TOKEN,
-    }),
+    ...(process.env.BLOB_READ_WRITE_TOKEN
+      ? [
+          vercelBlobStorage({
+            collections: { media: true },
+            token: process.env.BLOB_READ_WRITE_TOKEN,
+          }),
+        ]
+      : []),
     seoPlugin({
       uploadsCollection: 'media',
       collections: ['pages', 'blogs'],
       tabbedUI: true,
       generateTitle: ({ doc }) => (typeof doc?.title === 'string' ? doc.title : ''),
-      generateDescription: ({ doc }) =>
-        typeof doc?.metadata?.description === 'string' ? doc.metadata.description : '',
     }),
     formBuilderPlugin({}),
     searchPlugin({
