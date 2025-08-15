@@ -106,6 +106,18 @@ export const Pages: CollectionConfig = {
       const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
       return `${base}/${slug ?? ''}?preview=true`
     },
+    livePreview: {
+      url: ({ data }) => {
+        const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
+        const slug = typeof data?.slug === 'string' ? data.slug : ''
+        return `${base}/${slug}`
+      },
+      breakpoints: [
+        { label: 'Mobile', name: 'mobile', width: 375, height: 667 },
+        { label: 'Tablet', name: 'tablet', width: 768, height: 1024 },
+        { label: 'Desktop', name: 'desktop', width: 1280, height: 800 },
+      ],
+    },
     description: 'Create pages with flexible content blocks',
   },
   versions: {
@@ -164,10 +176,11 @@ export const Pages: CollectionConfig = {
             {
               name: 'content',
               type: 'richText',
-              label: 'Main Content',
+              label: 'Hero Content',
               required: false,
               admin: {
-                description: 'Main page content using rich text editor',
+                description: 'Content displayed within the Hero when Show Hero is enabled',
+                className: 'hero-content-editor',
               },
             },
             {
@@ -176,7 +189,7 @@ export const Pages: CollectionConfig = {
               label: 'Show Hero',
               defaultValue: false,
               admin: {
-                description: 'If enabled, the hero is rendered using the Main Content rich text.',
+                description: 'If enabled, the hero is rendered using the Hero Content rich text.',
               },
             },
           ],

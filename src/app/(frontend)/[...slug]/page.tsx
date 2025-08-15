@@ -30,6 +30,7 @@ export async function generateMetadata(props: any): Promise<Metadata> {
     collection: 'pages',
     where: { slug: { equals: slug } },
     limit: 1,
+    depth: 2,
   })
   const page = docs[0] as Page | undefined
   if (!page) return {}
@@ -68,17 +69,19 @@ export default async function DynamicPage(props: any) {
     where: { slug: { equals: slug } },
     draft,
     limit: 1,
+    depth: 2,
   })
 
-  const page = docs[0] as Page | undefined
+  const page = JSON.parse(JSON.stringify(docs[0] as Page | undefined)) as Page | undefined
   if (!page) return notFound()
 
   const renderHeroFromBlocks = hasHeroBlock(page.blocks)
   const heroProps = deriveGlobalHeroProps(page)
+  const showGlobalHero = Boolean(page.showHero)
 
   return (
     <main className="flex flex-col">
-      {!renderHeroFromBlocks && <HeroSection {...heroProps} />}
+      {!renderHeroFromBlocks && showGlobalHero && <HeroSection {...heroProps} />}
       <RenderBlocks blocks={page.blocks ?? null} />
     </main>
   )

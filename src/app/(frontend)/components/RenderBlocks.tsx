@@ -198,7 +198,10 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
           image: mediaToUrl(p.image as unknown as Media),
           title: p.title,
           excerpt: p.excerpt ?? '',
-          href: p.href,
+          href:
+            (p as any).linkType === 'external'
+              ? ((p as any).href ?? '#')
+              : `/blogs/${(p as any)?.post?.value?.slug ?? (p as any)?.post?.slug ?? ''}`,
           date: p.date ?? undefined,
           author: p.author ?? undefined,
         }),

@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Button } from '@/components/ui/button'
+import { Button } from '@/app/(frontend)/components/ui/button'
 import { Menu, X, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
@@ -51,7 +51,7 @@ export function NavigationMenu({
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [isMegaMenuVisible, setIsMegaMenuVisible] = useState(false)
-  const hoverTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const hoverTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const megaMenuRef = useRef<HTMLDivElement>(null)
 
   const toggleMobileMenu = () => {

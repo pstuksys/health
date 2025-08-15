@@ -232,7 +232,7 @@ export interface Page {
    */
   slug: string;
   /**
-   * Main page content using rich text editor
+   * Content displayed within the Hero when Show Hero is enabled
    */
   content?: {
     root: {
@@ -250,7 +250,7 @@ export interface Page {
     [k: string]: unknown;
   } | null;
   /**
-   * If enabled, the hero is rendered using the Main Content rich text.
+   * If enabled, the hero is rendered using the Hero Content rich text.
    */
   showHero?: boolean | null;
   /**
@@ -455,7 +455,12 @@ export interface Page {
                   image?: (number | null) | Media;
                   title: string;
                   excerpt?: string | null;
-                  href: string;
+                  linkType?: ('internal' | 'external') | null;
+                  href?: string | null;
+                  post?: {
+                    relationTo: 'blogs';
+                    value: number | Blog;
+                  } | null;
                   date?: string | null;
                   author?: string | null;
                   id?: string | null;
@@ -1049,7 +1054,9 @@ export interface PagesSelect<T extends boolean = true> {
                     image?: T;
                     title?: T;
                     excerpt?: T;
+                    linkType?: T;
                     href?: T;
+                    post?: T;
                     date?: T;
                     author?: T;
                     id?: T;
@@ -1311,18 +1318,20 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
+  logo?: (number | null) | Media;
+  ctaButton?: {
+    label?: string | null;
+    href?: string | null;
+  };
   enableBanter?: boolean | null;
   /**
    * Optional description text shown above the site header
    */
   headerDescription?: string | null;
-  /**
-   * Short line of text displayed when Banter Block is enabled
-   */
-  banterText?: string | null;
   navigation?:
     | {
         label: string;
+        hasMegaMenu?: boolean | null;
         linkType?: ('internal' | 'external') | null;
         page?:
           | ({
@@ -1334,6 +1343,48 @@ export interface Header {
               value: number | Blog;
             } | null);
         href?: string | null;
+        megaMenu?: {
+          categories?:
+            | {
+                title: string;
+                items?:
+                  | {
+                      label: string;
+                      linkType?: ('internal' | 'external') | null;
+                      page?:
+                        | ({
+                            relationTo: 'pages';
+                            value: number | Page;
+                          } | null)
+                        | ({
+                            relationTo: 'blogs';
+                            value: number | Blog;
+                          } | null);
+                      href?: string | null;
+                      id?: string | null;
+                    }[]
+                  | null;
+                id?: string | null;
+              }[]
+            | null;
+          featured?:
+            | {
+                label: string;
+                linkType?: ('internal' | 'external') | null;
+                page?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+                href?: string | null;
+                id?: string | null;
+              }[]
+            | null;
+        };
         external?: boolean | null;
         id?: string | null;
       }[]
@@ -1347,18 +1398,53 @@ export interface Header {
  */
 export interface Footer {
   id: number;
-  links?:
+  about?: string | null;
+  navigationLinks?:
     | {
         label: string;
-        href: string;
-        external?: boolean | null;
+        linkType?: ('internal' | 'external') | null;
+        page?:
+          | ({
+              relationTo: 'pages';
+              value: number | Page;
+            } | null)
+          | ({
+              relationTo: 'blogs';
+              value: number | Blog;
+            } | null);
+        href?: string | null;
         id?: string | null;
       }[]
     | null;
-  /**
-   * e.g., © 2025 Health Co.
-   */
-  copyright?: string | null;
+  legalLinks?:
+    | {
+        label: string;
+        linkType?: ('internal' | 'external') | null;
+        page?:
+          | ({
+              relationTo: 'pages';
+              value: number | Page;
+            } | null)
+          | ({
+              relationTo: 'blogs';
+              value: number | Blog;
+            } | null);
+        href?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  contact?: {
+    email?: string | null;
+    phone?: string | null;
+    address?: string | null;
+  };
+  socialLinks?:
+    | {
+        platform?: ('facebook' | 'twitter' | 'linkedin' | 'x') | null;
+        url?: string | null;
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1367,16 +1453,51 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  logo?: T;
+  ctaButton?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+      };
   enableBanter?: T;
   headerDescription?: T;
-  banterText?: T;
   navigation?:
     | T
     | {
         label?: T;
+        hasMegaMenu?: T;
         linkType?: T;
         page?: T;
         href?: T;
+        megaMenu?:
+          | T
+          | {
+              categories?:
+                | T
+                | {
+                    title?: T;
+                    items?:
+                      | T
+                      | {
+                          label?: T;
+                          linkType?: T;
+                          page?: T;
+                          href?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              featured?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    page?: T;
+                    href?: T;
+                    id?: T;
+                  };
+            };
         external?: T;
         id?: T;
       };
@@ -1389,15 +1510,39 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  links?:
+  about?: T;
+  navigationLinks?:
     | T
     | {
         label?: T;
+        linkType?: T;
+        page?: T;
         href?: T;
-        external?: T;
         id?: T;
       };
-  copyright?: T;
+  legalLinks?:
+    | T
+    | {
+        label?: T;
+        linkType?: T;
+        page?: T;
+        href?: T;
+        id?: T;
+      };
+  contact?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+        address?: T;
+      };
+  socialLinks?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
