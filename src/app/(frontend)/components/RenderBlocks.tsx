@@ -8,6 +8,7 @@ import { AboutUsSection } from './about-us-section/component'
 import { PartnersBlock } from './partners-block/component'
 import { BlogPostCards } from './blog-post-cards/component'
 import { Carousel } from './carousel/component'
+import { TwoCardBlock } from './two-card-block'
 import { HeroSection } from './hero-section/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
@@ -208,23 +209,41 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
       )}
     />
   ),
-  carousel: (block) => (
-    <Carousel
-      items={((block as Extract<PageBlock, { blockType: 'carousel' }>).items ?? []).map((i) => ({
-        image: mediaToUrl(i.image as unknown as Media),
-        title: i.title ?? undefined,
-        description: i.description ?? undefined,
-        href: i.href ?? undefined,
-      }))}
-      slidesToShow={(block as Extract<PageBlock, { blockType: 'carousel' }>).slidesToShow ?? 3}
-      autoplay={(block as Extract<PageBlock, { blockType: 'carousel' }>).autoplay ?? false}
-      autoplayInterval={
-        (block as Extract<PageBlock, { blockType: 'carousel' }>).autoplayInterval ?? 5000
+  carousel: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'carousel' }>
+    const items = (b.items ?? []).map((i: any) => {
+      const image = mediaToUrl(i.image as unknown as Media)
+      const isExternal = i.linkType === 'external'
+      let href: string | undefined
+      if (isExternal) href = i.external?.href ?? undefined
+      else {
+        const rel = i.internal?.relation
+        const doc = rel?.value ?? rel
+        const slug = doc?.slug ?? ''
+        const collection = doc?.collection ?? rel?.relationTo
+        if (collection === 'blogs') href = `/blogs/${slug}`
+        else if (collection === 'pages') href = `/${slug}`
       }
-      showArrows={(block as Extract<PageBlock, { blockType: 'carousel' }>).showArrows ?? true}
-      showDots={(block as Extract<PageBlock, { blockType: 'carousel' }>).showDots ?? true}
-    />
-  ),
+      return {
+        image,
+        title: i.title ?? '',
+        description: i.description ?? '',
+        href,
+      }
+    })
+    return (
+      <Carousel
+        title={(b as any).title}
+        subtitle={(b as any).subtitle}
+        items={items}
+        slidesToShow={b.slidesToShow ?? 1}
+        autoplay={b.autoplay ?? false}
+        autoplayInterval={b.autoplayInterval ?? 5000}
+        showArrows={b.showArrows ?? true}
+        showDots={b.showDots ?? true}
+      />
+    )
+  },
   heroSection: (block) => {
     const b = block as {
       backgroundImage?: Media | number | null
@@ -257,6 +276,40 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
         gradientOverlay={b.gradientOverlay ?? false}
       />
     )
+  },
+  twoCardBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'twoCardBlock' }>
+    const items = (b.items ?? []).map((i: any) => {
+      const image = mediaToUrl(i.image as unknown as Media)
+      const links = (i.links ?? []).map((link: any) => {
+        const isExternal = link.linkType === 'external'
+        let href: string
+        if (isExternal) {
+          href = link.external?.href ?? '#'
+        } else {
+          const rel = link.internal?.relation
+          const doc = rel?.value ?? rel
+          const slug = doc?.slug ?? ''
+          const collection = doc?.collection ?? rel?.relationTo
+          if (collection === 'blogs') href = `/blogs/${slug}`
+          else if (collection === 'pages') href = `/${slug}`
+          else href = '#'
+        }
+        return {
+          text: link.text ?? '',
+          variant: link.variant ?? 'primary',
+          href,
+          external: isExternal,
+        }
+      })
+      return {
+        image,
+        title: i.title ?? '',
+        description: i.description ?? '',
+        links,
+      }
+    })
+    return <TwoCardBlock title={b.title} subtitle={b.subtitle ?? undefined} items={items} />
   },
 }
 

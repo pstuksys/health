@@ -428,12 +428,28 @@ export interface Page {
             blockType: 'blogPostCards';
           }
         | {
+            title?: string | null;
+            subtitle?: string | null;
             items?:
               | {
-                  image?: (number | null) | Media;
-                  title?: string | null;
+                  image: number | Media;
+                  title: string;
                   description?: string | null;
-                  href?: string | null;
+                  linkType?: ('internal' | 'external') | null;
+                  internal?: {
+                    relation?:
+                      | ({
+                          relationTo: 'pages';
+                          value: number | Page;
+                        } | null)
+                      | ({
+                          relationTo: 'blogs';
+                          value: number | Blog;
+                        } | null);
+                  };
+                  external?: {
+                    href?: string | null;
+                  };
                   id?: string | null;
                 }[]
               | null;
@@ -445,6 +461,41 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'carousel';
+          }
+        | {
+            title: string;
+            subtitle?: string | null;
+            items: {
+              image: number | Media;
+              title: string;
+              description: string;
+              links?:
+                | {
+                    text: string;
+                    variant?: ('primary' | 'secondary') | null;
+                    linkType?: ('internal' | 'external') | null;
+                    internal?: {
+                      relation:
+                        | {
+                            relationTo: 'pages';
+                            value: number | Page;
+                          }
+                        | {
+                            relationTo: 'blogs';
+                            value: number | Blog;
+                          };
+                    };
+                    external?: {
+                      href: string;
+                    };
+                    id?: string | null;
+                  }[]
+                | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'twoCardBlock';
           }
       )[]
     | null;
@@ -1001,13 +1052,25 @@ export interface PagesSelect<T extends boolean = true> {
         carousel?:
           | T
           | {
+              title?: T;
+              subtitle?: T;
               items?:
                 | T
                 | {
                     image?: T;
                     title?: T;
                     description?: T;
-                    href?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
                     id?: T;
                   };
               slidesToShow?: T;
@@ -1015,6 +1078,40 @@ export interface PagesSelect<T extends boolean = true> {
               autoplayInterval?: T;
               showArrows?: T;
               showDots?: T;
+              id?: T;
+              blockName?: T;
+            };
+        twoCardBlock?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    title?: T;
+                    description?: T;
+                    links?:
+                      | T
+                      | {
+                          text?: T;
+                          variant?: T;
+                          linkType?: T;
+                          internal?:
+                            | T
+                            | {
+                                relation?: T;
+                              };
+                          external?:
+                            | T
+                            | {
+                                href?: T;
+                              };
+                          id?: T;
+                        };
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };

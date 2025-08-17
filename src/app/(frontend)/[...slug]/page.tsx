@@ -72,7 +72,7 @@ export default async function DynamicPage(props: any) {
     depth: 2,
   })
 
-  const page = JSON.parse(JSON.stringify(docs[0] as Page | undefined)) as Page | undefined
+  const page = JSON?.parse(JSON?.stringify(docs[0] as Page | undefined)) as Page | undefined
   if (!page) return notFound()
 
   const renderHeroFromBlocks = hasHeroBlock(page.blocks)

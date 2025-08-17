@@ -7,6 +7,7 @@ import { aboutUsSectionFields } from '../app/(frontend)/components/about-us-sect
 import { partnersBlockFields } from '../app/(frontend)/components/partners-block/config'
 import { blogPostCardsFields } from '../app/(frontend)/components/blog-post-cards/config'
 import { carouselFields } from '../app/(frontend)/components/carousel/config'
+import { twoCardBlockFields } from '../app/(frontend)/components/two-card-block'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -58,6 +59,11 @@ const carouselBlock: Block = {
   fields: carouselFields,
 }
 
+const twoCardBlock: Block = {
+  slug: 'twoCardBlock',
+  fields: twoCardBlockFields,
+}
+
 // All available page blocks
 const pageBlocks: Block[] = [
   // heroSectionBlock,
@@ -69,6 +75,7 @@ const pageBlocks: Block[] = [
   partnersBlock,
   blogPostCardsBlock,
   carouselBlock,
+  twoCardBlock,
 ]
 
 export const Pages: CollectionConfig = {
