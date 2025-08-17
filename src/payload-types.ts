@@ -585,6 +585,16 @@ export interface Page {
             blockName?: string | null;
             blockType: 'twoCardBlock';
           }
+        | {
+            title: string;
+            subtitle?: string | null;
+            buttonText: string;
+            buttonHref: string;
+            backgroundImage: number | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'fullWidthBanner';
+          }
       )[]
     | null;
   meta?: {
@@ -1294,6 +1304,17 @@ export interface PagesSelect<T extends boolean = true> {
                         };
                     id?: T;
                   };
+              id?: T;
+              blockName?: T;
+            };
+        fullWidthBanner?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              buttonText?: T;
+              buttonHref?: T;
+              backgroundImage?: T;
               id?: T;
               blockName?: T;
             };

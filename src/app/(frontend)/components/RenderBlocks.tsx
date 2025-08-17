@@ -12,10 +12,10 @@ import { Testimonials } from './testimonials/component'
 import { BlogPostCards } from './blog-post-cards/component'
 import { Carousel } from './carousel/component'
 import { ScrollPostCards } from './scroll-post-cards/component'
-import type { ScrollPostCardsBlock } from '@/types/scroll-post-cards'
 import { TwoCardBlock } from './two-card-block'
 import { HeroSection } from './hero-section/component'
 import { TeamCards } from './team-cards/component'
+import { FullWidthBanner } from './full-width-banner/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -281,7 +281,7 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
     />
   ),
   scrollPostCards: (block) => {
-    const b = block as ScrollPostCardsBlock
+    const b = block as Extract<PageBlock, { blockType: 'scrollPostCards' }>
     const extractBlogSlug = (relation: unknown): string => {
       if (!relation || typeof relation !== 'object') return ''
       const rel = relation as { value?: unknown; slug?: unknown }
@@ -349,6 +349,20 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
         autoplayInterval={b.autoplayInterval ?? 5000}
         showArrows={b.showArrows ?? true}
         showDots={b.showDots ?? true}
+      />
+    )
+  },
+  fullWidthBanner: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'fullWidthBanner' }>
+    const bgUrl = mediaToUrl(b.backgroundImage as unknown as Media)
+    return (
+      <FullWidthBanner
+        title={b.title ?? ''}
+        subtitle={b.subtitle ?? undefined}
+        buttonText={b.buttonText ?? ''}
+        buttonHref={b.buttonHref ?? '#'}
+        backgroundImage={bgUrl as unknown as Media}
+        blockType={b.blockType}
       />
     )
   },
