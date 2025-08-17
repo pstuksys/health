@@ -21,55 +21,6 @@ export const metadata: Metadata = {
   generator: 'v0.app',
 }
 
-// Sample navigation data - this will be your single source of truth
-const navigationItems = [
-  {
-    label: 'Home',
-    href: '/',
-  },
-  {
-    label: 'About',
-    href: '/about',
-  },
-  {
-    label: 'Services',
-    megaMenu: {
-      categories: [
-        {
-          title: 'Web Development',
-          items: [
-            { label: 'Frontend Development', href: '/services/frontend' },
-            { label: 'Backend Development', href: '/services/backend' },
-            { label: 'Full Stack Development', href: '/services/fullstack' },
-          ],
-        },
-        {
-          title: 'Design',
-          items: [
-            { label: 'UI/UX Design', href: '/services/ui-ux' },
-            { label: 'Brand Identity', href: '/services/branding' },
-            { label: 'Web Design', href: '/services/web-design' },
-          ],
-        },
-      ],
-      featured: [
-        { label: 'Custom Solutions', href: '/services/custom' },
-        { label: 'Consulting', href: '/services/consulting' },
-      ],
-    },
-  },
-  {
-    label: 'Portfolio',
-    href: '/portfolio',
-  },
-  {
-    label: 'Contact',
-    href: '/contact',
-  },
-]
-
-// Footer/Nav sample constants removed; now fetched dynamically from Payload
-
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const { header, footer } = await getHeaderFooter()
 

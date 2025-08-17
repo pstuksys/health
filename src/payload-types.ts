@@ -407,6 +407,69 @@ export interface Page {
             blockType: 'partnersBlock';
           }
         | {
+            title: string;
+            partners: {
+              name: string;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'partnersTextBlock';
+          }
+        | {
+            title: string;
+            subtitle?: string | null;
+            description: string;
+            /**
+             * Enable search functionality for the table items
+             */
+            enableSearch?: boolean | null;
+            searchPlaceholder?: string | null;
+            items: {
+              title: string;
+              content: string;
+              /**
+               * Additional details that will be shown when expanded
+               */
+              details?: string | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'expandableTable';
+          }
+        | {
+            title: string;
+            testimonials: {
+              quote: string;
+              author: string;
+              role?: string | null;
+              id?: string | null;
+            }[];
+            autoplayInterval?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
+            title: string;
+            subtitle?: string | null;
+            enableCarousel?: boolean | null;
+            members: {
+              image: number | Media;
+              name: string;
+              description: string;
+              link: {
+                text: string;
+                href: string;
+              };
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'teamCards';
+          }
+        | {
             posts?:
               | {
                   image?: (number | null) | Media;
@@ -428,12 +491,53 @@ export interface Page {
             blockType: 'blogPostCards';
           }
         | {
-            items?:
+            title?: string | null;
+            subtitle?: string | null;
+            posts?:
               | {
                   image?: (number | null) | Media;
-                  title?: string | null;
-                  description?: string | null;
+                  category?: string | null;
+                  author?: string | null;
+                  date?: string | null;
+                  readTime?: string | null;
+                  title: string;
+                  excerpt?: string | null;
+                  linkType?: ('internal' | 'external') | null;
                   href?: string | null;
+                  post?: {
+                    relationTo: 'blogs';
+                    value: number | Blog;
+                  } | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'scrollPostCards';
+          }
+        | {
+            title?: string | null;
+            subtitle?: string | null;
+            items?:
+              | {
+                  image: number | Media;
+                  title: string;
+                  description?: string | null;
+                  linkType?: ('internal' | 'external') | null;
+                  internal?: {
+                    relation?:
+                      | ({
+                          relationTo: 'pages';
+                          value: number | Page;
+                        } | null)
+                      | ({
+                          relationTo: 'blogs';
+                          value: number | Blog;
+                        } | null);
+                  };
+                  external?: {
+                    href?: string | null;
+                  };
                   id?: string | null;
                 }[]
               | null;
@@ -445,6 +549,61 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'carousel';
+          }
+        | {
+            title: string;
+            subtitle?: string | null;
+            items: {
+              image: number | Media;
+              title: string;
+              description: string;
+              links?:
+                | {
+                    text: string;
+                    variant?: ('primary' | 'secondary') | null;
+                    linkType?: ('internal' | 'external') | null;
+                    internal?: {
+                      relation:
+                        | {
+                            relationTo: 'pages';
+                            value: number | Page;
+                          }
+                        | {
+                            relationTo: 'blogs';
+                            value: number | Blog;
+                          };
+                    };
+                    external?: {
+                      href: string;
+                    };
+                    id?: string | null;
+                  }[]
+                | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'twoCardBlock';
+          }
+        | {
+            title: string;
+            subtitle?: string | null;
+            buttonText: string;
+            buttonHref: string;
+            backgroundImage: number | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'fullWidthBanner';
+          }
+        | {
+            title: string;
+            subtitle: string;
+            buttonText: string;
+            buttonHref: string;
+            backgroundImage: number | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'parallaxHero';
           }
       )[]
     | null;
@@ -979,6 +1138,77 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        partnersTextBlock?:
+          | T
+          | {
+              title?: T;
+              partners?:
+                | T
+                | {
+                    name?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        expandableTable?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              description?: T;
+              enableSearch?: T;
+              searchPlaceholder?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    content?: T;
+                    details?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              title?: T;
+              testimonials?:
+                | T
+                | {
+                    quote?: T;
+                    author?: T;
+                    role?: T;
+                    id?: T;
+                  };
+              autoplayInterval?: T;
+              id?: T;
+              blockName?: T;
+            };
+        teamCards?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              enableCarousel?: T;
+              members?:
+                | T
+                | {
+                    image?: T;
+                    name?: T;
+                    description?: T;
+                    link?:
+                      | T
+                      | {
+                          text?: T;
+                          href?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
         blogPostCards?:
           | T
           | {
@@ -998,16 +1228,51 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        scrollPostCards?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              posts?:
+                | T
+                | {
+                    image?: T;
+                    category?: T;
+                    author?: T;
+                    date?: T;
+                    readTime?: T;
+                    title?: T;
+                    excerpt?: T;
+                    linkType?: T;
+                    href?: T;
+                    post?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
         carousel?:
           | T
           | {
+              title?: T;
+              subtitle?: T;
               items?:
                 | T
                 | {
                     image?: T;
                     title?: T;
                     description?: T;
-                    href?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
                     id?: T;
                   };
               slidesToShow?: T;
@@ -1015,6 +1280,62 @@ export interface PagesSelect<T extends boolean = true> {
               autoplayInterval?: T;
               showArrows?: T;
               showDots?: T;
+              id?: T;
+              blockName?: T;
+            };
+        twoCardBlock?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    title?: T;
+                    description?: T;
+                    links?:
+                      | T
+                      | {
+                          text?: T;
+                          variant?: T;
+                          linkType?: T;
+                          internal?:
+                            | T
+                            | {
+                                relation?: T;
+                              };
+                          external?:
+                            | T
+                            | {
+                                href?: T;
+                              };
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        fullWidthBanner?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              buttonText?: T;
+              buttonHref?: T;
+              backgroundImage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        parallaxHero?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              buttonText?: T;
+              buttonHref?: T;
+              backgroundImage?: T;
               id?: T;
               blockName?: T;
             };

@@ -261,9 +261,9 @@ export function NavigationMenu({
                   <div className="grid grid-cols-2 gap-4">
                     {getDisplayedItems(
                       items.find((item) => item.label === hoveredItem)?.megaMenu,
-                    ).map((subItem) => (
+                    ).map((subItem, index) => (
                       <Link
-                        key={subItem.href}
+                        key={index}
                         href={subItem.href}
                         className="mega-menu-item text-ds-dark-blue hover:text-ds-pastille-green text-sm font-light py-1 transition-colors duration-200 block hover:bg-gray-50 px-2 -mx-2 rounded"
                       >
@@ -371,9 +371,9 @@ export function NavigationMenu({
                                   {category.title}
                                 </span>
                                 <div className="ml-4 space-y-2">
-                                  {category.items.map((subItem) => (
+                                  {category.items.map((subItem, index) => (
                                     <Link
-                                      key={subItem.href}
+                                      key={`${category.title}-${index}`}
                                       href={subItem.href}
                                       className="text-ds-dark-blue hover:text-ds-pastille-green text-sm font-light block py-2 hover:bg-gray-50 px-3 -mx-3 rounded transition-all duration-200"
                                       onClick={() => setIsMobileMenuOpen(false)}

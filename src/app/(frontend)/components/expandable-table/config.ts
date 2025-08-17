@@ -1,0 +1,63 @@
+import type { Field } from 'payload'
+
+export const expandableTableFields: Field[] = [
+  {
+    name: 'title',
+    type: 'text',
+    required: true,
+    defaultValue: 'Expandable Table',
+  },
+  {
+    name: 'subtitle',
+    type: 'text',
+    required: false,
+  },
+  {
+    name: 'description',
+    type: 'textarea',
+    required: true,
+    defaultValue: 'Click on items to expand and see more details.',
+  },
+  {
+    name: 'enableSearch',
+    type: 'checkbox',
+    defaultValue: false,
+    admin: {
+      description: 'Enable search functionality for the table items',
+    },
+  },
+  {
+    name: 'searchPlaceholder',
+    type: 'text',
+    required: false,
+    defaultValue: 'Search items...',
+    admin: {
+      condition: (data) => data.enableSearch === true,
+    },
+  },
+  {
+    name: 'items',
+    type: 'array',
+    required: true,
+    fields: [
+      {
+        name: 'title',
+        type: 'text',
+        required: true,
+      },
+      {
+        name: 'content',
+        type: 'textarea',
+        required: true,
+      },
+      {
+        name: 'details',
+        type: 'textarea',
+        required: false,
+        admin: {
+          description: 'Additional details that will be shown when expanded',
+        },
+      },
+    ],
+  },
+]
