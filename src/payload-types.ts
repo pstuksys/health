@@ -407,6 +407,51 @@ export interface Page {
             blockType: 'partnersBlock';
           }
         | {
+            title: string;
+            partners: {
+              name: string;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'partnersTextBlock';
+          }
+        | {
+            title: string;
+            subtitle?: string | null;
+            description: string;
+            /**
+             * Enable search functionality for the table items
+             */
+            enableSearch?: boolean | null;
+            searchPlaceholder?: string | null;
+            items: {
+              title: string;
+              content: string;
+              /**
+               * Additional details that will be shown when expanded
+               */
+              details?: string | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'expandableTable';
+          }
+        | {
+            title: string;
+            testimonials: {
+              quote: string;
+              author: string;
+              role?: string | null;
+              id?: string | null;
+            }[];
+            autoplayInterval?: number | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'testimonials';
+          }
+        | {
             posts?:
               | {
                   image?: (number | null) | Media;
@@ -1027,6 +1072,54 @@ export interface PagesSelect<T extends boolean = true> {
                     href?: T;
                     id?: T;
                   };
+              id?: T;
+              blockName?: T;
+            };
+        partnersTextBlock?:
+          | T
+          | {
+              title?: T;
+              partners?:
+                | T
+                | {
+                    name?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        expandableTable?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              description?: T;
+              enableSearch?: T;
+              searchPlaceholder?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    content?: T;
+                    details?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        testimonials?:
+          | T
+          | {
+              title?: T;
+              testimonials?:
+                | T
+                | {
+                    quote?: T;
+                    author?: T;
+                    role?: T;
+                    id?: T;
+                  };
+              autoplayInterval?: T;
               id?: T;
               blockName?: T;
             };

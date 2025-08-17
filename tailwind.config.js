@@ -7,6 +7,11 @@ module.exports = {
     './src/collections/**/*.{js,ts,jsx,tsx,mdx}',
     './src/globals/**/*.{js,ts,jsx,tsx,mdx}',
   ],
+  safelist: [
+    {
+      pattern: /grid-cols-(1|2|3|4|5|6|7|8|9|10|11|12)/,
+    },
+  ],
   theme: {
     extend: {
       maxWidth: {

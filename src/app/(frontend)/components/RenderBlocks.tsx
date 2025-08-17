@@ -6,6 +6,9 @@ import { MediaBlock } from './media-block/component'
 import { CTABlock } from './cta-block/component'
 import { AboutUsSection } from './about-us-section/component'
 import { PartnersBlock } from './partners-block/component'
+import { PartnersTextBlock } from './partners-text-block/component'
+import { ExpandableTable } from './expandable-table/component'
+import { Testimonials } from './testimonials/component'
 import { BlogPostCards } from './blog-post-cards/component'
 import { Carousel } from './carousel/component'
 import { TwoCardBlock } from './two-card-block'
@@ -192,6 +195,51 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
       )}
     />
   ),
+  partnersTextBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'partnersTextBlock' }>
+    return (
+      <PartnersTextBlock
+        title={b.title}
+        partners={b.partners}
+        id={b.id}
+        blockName={b.blockName}
+        blockType={b.blockType}
+      />
+    )
+  },
+  expandableTable: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'expandableTable' }>
+    return (
+      <ExpandableTable
+        title={b.title}
+        subtitle={b.subtitle}
+        description={b.description}
+        items={b.items}
+        enableSearch={b.enableSearch}
+        searchPlaceholder={b.searchPlaceholder}
+        blockType={b.blockType}
+        blockName={b.blockName}
+        id={b.id}
+      />
+    )
+  },
+  testimonials: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'testimonials' }>
+    return (
+      <Testimonials
+        title={b.title}
+        testimonials={(b.testimonials ?? []).map((t) => ({
+          quote: t.quote,
+          author: t.author,
+          role: t.role,
+        }))}
+        autoplayInterval={b.autoplayInterval ?? 4000}
+        blockType={b.blockType}
+        blockName={b.blockName}
+        id={b.id}
+      />
+    )
+  },
   blogPostCards: (block) => (
     <BlogPostCards
       posts={((block as Extract<PageBlock, { blockType: 'blogPostCards' }>).posts ?? []).map(

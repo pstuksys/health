@@ -7,7 +7,7 @@ export default function Error(props: { error: Error & { digest?: string }; reset
   // const { error, reset } = props
 
   // Log full details to server logs (visible in Vercel)
-  // eslint-disable-next-line no-console
+   
   // console.error('RSC Error:', { message: error.message, digest: error.digest, stack: error.stack })
 
   return (

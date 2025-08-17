@@ -5,6 +5,9 @@ import { mediaBlockFields } from '../app/(frontend)/components/media-block/confi
 import { ctaBlockFields } from '../app/(frontend)/components/cta-block/config'
 import { aboutUsSectionFields } from '../app/(frontend)/components/about-us-section/config'
 import { partnersBlockFields } from '../app/(frontend)/components/partners-block/config'
+import { partnersTextBlockFields } from '../app/(frontend)/components/partners-text-block/config'
+import { expandableTableFields } from '../app/(frontend)/components/expandable-table/config'
+import { testimonialsFields } from '../app/(frontend)/components/testimonials/config'
 import { blogPostCardsFields } from '../app/(frontend)/components/blog-post-cards/config'
 import { carouselFields } from '../app/(frontend)/components/carousel/config'
 import { twoCardBlockFields } from '../app/(frontend)/components/two-card-block'
@@ -49,6 +52,21 @@ const partnersBlock: Block = {
   fields: partnersBlockFields,
 }
 
+const partnersTextBlock: Block = {
+  slug: 'partnersTextBlock',
+  fields: partnersTextBlockFields,
+}
+
+const expandableTableBlock: Block = {
+  slug: 'expandableTable',
+  fields: expandableTableFields,
+}
+
+const testimonialsBlock: Block = {
+  slug: 'testimonials',
+  fields: testimonialsFields,
+}
+
 const blogPostCardsBlock: Block = {
   slug: 'blogPostCards',
   fields: blogPostCardsFields,
@@ -73,6 +91,9 @@ const pageBlocks: Block[] = [
   ctaBlock,
   aboutUsSectionBlock,
   partnersBlock,
+  partnersTextBlock,
+  expandableTableBlock,
+  testimonialsBlock,
   blogPostCardsBlock,
   carouselBlock,
   twoCardBlock,
