@@ -12,6 +12,7 @@ import { teamCardsFields } from '../app/(frontend)/components/team-cards/config'
 import { blogPostCardsFields } from '../app/(frontend)/components/blog-post-cards/config'
 import { carouselFields } from '../app/(frontend)/components/carousel/config'
 import { twoCardBlockFields } from '../app/(frontend)/components/two-card-block'
+import { scrollPostCardsFields } from '../app/(frontend)/components/scroll-post-cards/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -34,6 +35,7 @@ const expandableTableBlock: Block = { slug: 'expandableTable', fields: expandabl
 const testimonialsBlock: Block = { slug: 'testimonials', fields: testimonialsFields }
 const teamCardsBlock: Block = { slug: 'teamCards', fields: teamCardsFields }
 const blogPostCardsBlock: Block = { slug: 'blogPostCards', fields: blogPostCardsFields }
+const scrollPostCardsBlock: Block = { slug: 'scrollPostCards', fields: scrollPostCardsFields }
 const carouselBlock: Block = { slug: 'carousel', fields: carouselFields }
 const twoCardBlock: Block = { slug: 'twoCardBlock', fields: twoCardBlockFields }
 
@@ -51,6 +53,7 @@ const pageBlocks: Block[] = [
   testimonialsBlock,
   teamCardsBlock,
   blogPostCardsBlock,
+  scrollPostCardsBlock,
   carouselBlock,
   twoCardBlock,
 ]

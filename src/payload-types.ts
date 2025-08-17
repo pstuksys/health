@@ -493,6 +493,31 @@ export interface Page {
         | {
             title?: string | null;
             subtitle?: string | null;
+            posts?:
+              | {
+                  image?: (number | null) | Media;
+                  category?: string | null;
+                  author?: string | null;
+                  date?: string | null;
+                  readTime?: string | null;
+                  title: string;
+                  excerpt?: string | null;
+                  linkType?: ('internal' | 'external') | null;
+                  href?: string | null;
+                  post?: {
+                    relationTo: 'blogs';
+                    value: number | Blog;
+                  } | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'scrollPostCards';
+          }
+        | {
+            title?: string | null;
+            subtitle?: string | null;
             items?:
               | {
                   image: number | Media;
@@ -1178,6 +1203,29 @@ export interface PagesSelect<T extends boolean = true> {
                     post?: T;
                     date?: T;
                     author?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        scrollPostCards?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              posts?:
+                | T
+                | {
+                    image?: T;
+                    category?: T;
+                    author?: T;
+                    date?: T;
+                    readTime?: T;
+                    title?: T;
+                    excerpt?: T;
+                    linkType?: T;
+                    href?: T;
+                    post?: T;
                     id?: T;
                   };
               id?: T;

@@ -11,6 +11,8 @@ import { ExpandableTable } from './expandable-table/component'
 import { Testimonials } from './testimonials/component'
 import { BlogPostCards } from './blog-post-cards/component'
 import { Carousel } from './carousel/component'
+import { ScrollPostCards } from './scroll-post-cards/component'
+import type { ScrollPostCardsBlock } from '@/types/scroll-post-cards'
 import { TwoCardBlock } from './two-card-block'
 import { HeroSection } from './hero-section/component'
 import { TeamCards } from './team-cards/component'
@@ -252,8 +254,12 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
       <TeamCards
         title={b.title}
         subtitle={b.subtitle ?? undefined}
-        members={members}
+        members={members.map((member) => ({
+          ...member,
+          image: member.image as unknown as Media,
+        }))}
         enableCarousel={b.enableCarousel ?? false}
+        blockType={b.blockType}
       />
     )
   },
@@ -274,6 +280,43 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
       )}
     />
   ),
+  scrollPostCards: (block) => {
+    const b = block as ScrollPostCardsBlock
+    const extractBlogSlug = (relation: unknown): string => {
+      if (!relation || typeof relation !== 'object') return ''
+      const rel = relation as { value?: unknown; slug?: unknown }
+      const candidate = (rel.value ?? rel) as { slug?: unknown }
+      return typeof candidate.slug === 'string' ? candidate.slug : ''
+    }
+    const posts = (b.posts ?? []).map((p) => {
+      const isExternal = (p as { linkType?: 'external' | 'internal' }).linkType === 'external'
+      const href = isExternal
+        ? ((p as { href?: string }).href ?? '#')
+        : `/blogs/${extractBlogSlug((p as { post?: unknown }).post)}`
+      return {
+        id: (p as { id?: string }).id ?? `${p.title}`,
+        image: mediaToUrl(p.image as unknown as Media),
+        title: p.title,
+        excerpt: p.excerpt ?? '',
+        author: p.author ?? '',
+        date: p.date ?? '',
+        readTime: p.readTime ?? '',
+        category: p.category ?? '',
+        href,
+      }
+    })
+    return (
+      <ScrollPostCards
+        title={b.title ?? undefined}
+        subtitle={b.subtitle ?? undefined}
+        posts={posts.map((p) => ({
+          ...p,
+          image: p.image as unknown as Media,
+        }))}
+        blockType={b.blockType}
+      />
+    )
+  },
   carousel: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'carousel' }>
     const items = (b.items ?? []).map((i: any) => {
