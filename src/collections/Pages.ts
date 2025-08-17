@@ -8,6 +8,7 @@ import { partnersBlockFields } from '../app/(frontend)/components/partners-block
 import { partnersTextBlockFields } from '../app/(frontend)/components/partners-text-block/config'
 import { expandableTableFields } from '../app/(frontend)/components/expandable-table/config'
 import { testimonialsFields } from '../app/(frontend)/components/testimonials/config'
+import { teamCardsFields } from '../app/(frontend)/components/team-cards/config'
 import { blogPostCardsFields } from '../app/(frontend)/components/blog-post-cards/config'
 import { carouselFields } from '../app/(frontend)/components/carousel/config'
 import { twoCardBlockFields } from '../app/(frontend)/components/two-card-block'
@@ -22,65 +23,19 @@ const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undef
   return undefined
 }
 
-const contentBlock: Block = {
-  slug: 'contentBlock',
-  fields: contentBlockFields,
-}
-
-const cardSectionBlock: Block = {
-  slug: 'cardSection',
-  fields: cardSectionFields,
-}
-
-const mediaBlock: Block = {
-  slug: 'mediaBlock',
-  fields: mediaBlockFields,
-}
-
-const ctaBlock: Block = {
-  slug: 'ctaBlock',
-  fields: ctaBlockFields,
-}
-
-const aboutUsSectionBlock: Block = {
-  slug: 'aboutUsSection',
-  fields: aboutUsSectionFields,
-}
-
-const partnersBlock: Block = {
-  slug: 'partnersBlock',
-  fields: partnersBlockFields,
-}
-
-const partnersTextBlock: Block = {
-  slug: 'partnersTextBlock',
-  fields: partnersTextBlockFields,
-}
-
-const expandableTableBlock: Block = {
-  slug: 'expandableTable',
-  fields: expandableTableFields,
-}
-
-const testimonialsBlock: Block = {
-  slug: 'testimonials',
-  fields: testimonialsFields,
-}
-
-const blogPostCardsBlock: Block = {
-  slug: 'blogPostCards',
-  fields: blogPostCardsFields,
-}
-
-const carouselBlock: Block = {
-  slug: 'carousel',
-  fields: carouselFields,
-}
-
-const twoCardBlock: Block = {
-  slug: 'twoCardBlock',
-  fields: twoCardBlockFields,
-}
+const contentBlock: Block = { slug: 'contentBlock', fields: contentBlockFields }
+const cardSectionBlock: Block = { slug: 'cardSection', fields: cardSectionFields }
+const mediaBlock: Block = { slug: 'mediaBlock', fields: mediaBlockFields }
+const ctaBlock: Block = { slug: 'ctaBlock', fields: ctaBlockFields }
+const aboutUsSectionBlock: Block = { slug: 'aboutUsSection', fields: aboutUsSectionFields }
+const partnersBlock: Block = { slug: 'partnersBlock', fields: partnersBlockFields }
+const partnersTextBlock: Block = { slug: 'partnersTextBlock', fields: partnersTextBlockFields }
+const expandableTableBlock: Block = { slug: 'expandableTable', fields: expandableTableFields }
+const testimonialsBlock: Block = { slug: 'testimonials', fields: testimonialsFields }
+const teamCardsBlock: Block = { slug: 'teamCards', fields: teamCardsFields }
+const blogPostCardsBlock: Block = { slug: 'blogPostCards', fields: blogPostCardsFields }
+const carouselBlock: Block = { slug: 'carousel', fields: carouselFields }
+const twoCardBlock: Block = { slug: 'twoCardBlock', fields: twoCardBlockFields }
 
 // All available page blocks
 const pageBlocks: Block[] = [
@@ -94,6 +49,7 @@ const pageBlocks: Block[] = [
   partnersTextBlock,
   expandableTableBlock,
   testimonialsBlock,
+  teamCardsBlock,
   blogPostCardsBlock,
   carouselBlock,
   twoCardBlock,
@@ -105,7 +61,9 @@ export const Pages: CollectionConfig = {
     afterChange: [
       ({ req: _req, doc }) => {
         void fetch(
-          `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/api/revalidate?secret=${process.env.REVALIDATION_SECRET ?? ''}`,
+          `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/api/revalidate?secret=${
+            process.env.REVALIDATION_SECRET ?? ''
+          }`,
           {
             method: 'POST',
             headers: { 'content-type': 'application/json' },
@@ -136,20 +94,13 @@ export const Pages: CollectionConfig = {
     },
     description: 'Create pages with flexible content blocks',
   },
-  versions: {
-    drafts: true,
-  },
-  lockDocuments: {
-    duration: 600,
-  },
+  versions: { drafts: true },
+  lockDocuments: { duration: 600 },
   access: {
-    // Public can read only published; editors/admins can read all
     read: ({ req }) => {
       const role = getUserRoleFromReq(req)
       if (role === 'editor' || role === 'admin') return true
-      return {
-        _status: { equals: 'published' },
-      }
+      return { _status: { equals: 'published' } }
     },
     create: ({ req }) => {
       const role = getUserRoleFromReq(req)
@@ -175,9 +126,7 @@ export const Pages: CollectionConfig = {
               name: 'title',
               type: 'text',
               required: true,
-              admin: {
-                description: 'Page title displayed in the browser tab and page header',
-              },
+              admin: { description: 'Page title displayed in the browser tab and page header' },
             },
             {
               name: 'slug',
@@ -185,9 +134,7 @@ export const Pages: CollectionConfig = {
               required: false,
               unique: true,
               index: true,
-              admin: {
-                description: 'URL path for this page. Example: about, blog/my-post',
-              },
+              admin: { description: 'URL path for this page. Example: about, blog/my-post' },
             },
             {
               name: 'content',
@@ -228,41 +175,29 @@ export const Pages: CollectionConfig = {
               type: 'blocks',
               label: 'Content Blocks',
               blocks: pageBlocks,
-              admin: {
-                description: 'Add flexible content blocks to build your page layout',
-              },
+              admin: { description: 'Add flexible content blocks to build your page layout' },
             },
           ],
         },
       ],
     },
-    // Sidebar controls for layout/visibility
     {
       name: 'hideHeader',
       type: 'checkbox',
       defaultValue: false,
-      admin: {
-        description: 'Hide the page header',
-        position: 'sidebar',
-      },
+      admin: { description: 'Hide the page header', position: 'sidebar' },
     },
     {
       name: 'hideFooter',
       type: 'checkbox',
       defaultValue: false,
-      admin: {
-        description: 'Hide the page footer',
-        position: 'sidebar',
-      },
+      admin: { description: 'Hide the page footer', position: 'sidebar' },
     },
     {
       name: 'fullWidth',
       type: 'checkbox',
       defaultValue: false,
-      admin: {
-        description: 'Use full width layout instead of container',
-        position: 'sidebar',
-      },
+      admin: { description: 'Use full width layout instead of container', position: 'sidebar' },
     },
   ],
 }

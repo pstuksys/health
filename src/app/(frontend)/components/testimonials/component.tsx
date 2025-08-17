@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import type { Page } from '@/payload-types'
+import { useIsMobile } from '@/hooks/use-is-mobile'
 
 type TestimonialsProps = Extract<NonNullable<Page['blocks']>[number], { blockType: 'testimonials' }>
 
@@ -11,6 +12,7 @@ export function Testimonials({
   autoplayInterval = 4000,
 }: TestimonialsProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     if (!Array.isArray(testimonials) || testimonials.length <= 1) return
@@ -20,7 +22,7 @@ export function Testimonials({
     return () => clearInterval(id)
   }, [testimonials, autoplayInterval])
 
-  const visibleCount = Math.min((testimonials || []).length, 3)
+  const visibleCount = isMobile ? 1 : Math.min((testimonials || []).length, 3)
 
   return (
     <section className="py-16 px-4 bg-gradient-to-br from-ds-light-neutral/30 to-ds-pastille-green/10">
@@ -29,7 +31,7 @@ export function Testimonials({
 
         <div className="relative overflow-hidden">
           <div
-            className="flex transition-transform duration-500 ease-in-out"
+            className="flex transition-transform duration-500 ease-in-out will-change-transform"
             style={{ transform: `translateX(-${currentIndex * (100 / (visibleCount || 1))}%)` }}
           >
             {(testimonials || []).map((t, index) => (

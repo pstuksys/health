@@ -13,6 +13,7 @@ import { BlogPostCards } from './blog-post-cards/component'
 import { Carousel } from './carousel/component'
 import { TwoCardBlock } from './two-card-block'
 import { HeroSection } from './hero-section/component'
+import { TeamCards } from './team-cards/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -235,8 +236,24 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
         }))}
         autoplayInterval={b.autoplayInterval ?? 4000}
         blockType={b.blockType}
-        blockName={b.blockName}
-        id={b.id}
+      />
+    )
+  },
+  teamCards: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'teamCards' }>
+    const members = (b.members ?? []).map((m) => ({
+      id: m.id ?? `${m.name}`,
+      image: mediaToUrl(m.image as unknown as Media),
+      name: m.name,
+      description: m.description,
+      link: { text: m.link?.text ?? '', href: m.link?.href ?? '#' },
+    }))
+    return (
+      <TeamCards
+        title={b.title}
+        subtitle={b.subtitle ?? undefined}
+        members={members}
+        enableCarousel={b.enableCarousel ?? false}
       />
     )
   },

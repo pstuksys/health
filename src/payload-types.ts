@@ -452,6 +452,24 @@ export interface Page {
             blockType: 'testimonials';
           }
         | {
+            title: string;
+            subtitle?: string | null;
+            enableCarousel?: boolean | null;
+            members: {
+              image: number | Media;
+              name: string;
+              description: string;
+              link: {
+                text: string;
+                href: string;
+              };
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'teamCards';
+          }
+        | {
             posts?:
               | {
                   image?: (number | null) | Media;
@@ -1120,6 +1138,29 @@ export interface PagesSelect<T extends boolean = true> {
                     id?: T;
                   };
               autoplayInterval?: T;
+              id?: T;
+              blockName?: T;
+            };
+        teamCards?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              enableCarousel?: T;
+              members?:
+                | T
+                | {
+                    image?: T;
+                    name?: T;
+                    description?: T;
+                    link?:
+                      | T
+                      | {
+                          text?: T;
+                          href?: T;
+                        };
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };
