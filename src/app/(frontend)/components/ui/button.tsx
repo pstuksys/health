@@ -21,7 +21,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       variant === 'outline'
         ? 'border border-border bg-transparent hover:bg-muted'
         : 'bg-primary text-primary-foreground hover:bg-primary/90'
-    const Comp = asChild ? ('span' as any) : 'button'
+    const Comp = asChild ? ('span' as const) : 'button'
     return (
       <Comp
         ref={ref}

@@ -3,11 +3,11 @@
 import React from 'react'
 import NotFound from './not-found'
 
-export default function Error(props: { error: Error & { digest?: string }; reset: () => void }) {
+export default function Error(_props: { error: Error & { digest?: string }; reset: () => void }) {
   // const { error, reset } = props
 
   // Log full details to server logs (visible in Vercel)
-   
+
   // console.error('RSC Error:', { message: error.message, digest: error.digest, stack: error.stack })
 
   return (

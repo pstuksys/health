@@ -16,6 +16,7 @@ import { TwoCardBlock } from './two-card-block'
 import { HeroSection } from './hero-section/component'
 import { TeamCards } from './team-cards/component'
 import { FullWidthBanner } from './full-width-banner/component'
+import { ParallaxHero } from './parallax-hero/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -363,6 +364,22 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
         buttonHref={b.buttonHref ?? '#'}
         backgroundImage={bgUrl as unknown as Media}
         blockType={b.blockType}
+      />
+    )
+  },
+  parallaxHero: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'parallaxHero' }>
+    const bgUrl = mediaToUrl(b.backgroundImage as unknown as Media)
+    return (
+      <ParallaxHero
+        title={b.title ?? ''}
+        subtitle={b.subtitle ?? ''}
+        buttonText={b.buttonText ?? ''}
+        buttonHref={b.buttonHref ?? '#'}
+        backgroundImage={bgUrl as unknown as Media}
+        blockType={b.blockType}
+        blockName={b.blockName}
+        id={b.id}
       />
     )
   },

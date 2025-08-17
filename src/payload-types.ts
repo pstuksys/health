@@ -595,6 +595,16 @@ export interface Page {
             blockName?: string | null;
             blockType: 'fullWidthBanner';
           }
+        | {
+            title: string;
+            subtitle: string;
+            buttonText: string;
+            buttonHref: string;
+            backgroundImage: number | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'parallaxHero';
+          }
       )[]
     | null;
   meta?: {
@@ -1308,6 +1318,17 @@ export interface PagesSelect<T extends boolean = true> {
               blockName?: T;
             };
         fullWidthBanner?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              buttonText?: T;
+              buttonHref?: T;
+              backgroundImage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        parallaxHero?:
           | T
           | {
               title?: T;
