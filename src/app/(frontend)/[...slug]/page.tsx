@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import type { Page } from '@/payload-types'
+// import type { Page } from '@/payload-types'
 import { HeroSection } from '@/app/(frontend)/components/hero-section/component'
 import {
   RenderBlocks,
@@ -71,7 +71,7 @@ export default async function DynamicPage(props: { params: Promise<{ slug: strin
         slug: params?.slug,
         timestamp: new Date().toISOString(),
       })
-    } catch (paramError) {
+    } catch (_paramError) {
       console.error('Error details (params failed):', {
         message: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString(),
