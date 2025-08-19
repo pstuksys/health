@@ -29,73 +29,83 @@ function mediaToUrl(media: number | Media | null | undefined): string {
 }
 
 function lexicalToHtml(value: unknown): string {
-  if (!value || typeof value !== 'object' || !('root' in (value as Record<string, unknown>)))
-    return ''
-  const root = (value as { root?: unknown }).root as any
-  if (!root || typeof root !== 'object' || !Array.isArray(root.children)) return ''
+  // Ensure consistent behavior between server and client
+  try {
+    if (!value || typeof value !== 'object' || !('root' in (value as Record<string, unknown>)))
+      return ''
+    const root = (value as { root?: unknown }).root as any
+    if (!root || typeof root !== 'object' || !Array.isArray(root.children)) return ''
 
-  const serializeNode = (node: any): string => {
-    if (!node) return ''
-    switch (node.type) {
-      case 'paragraph': {
-        const children = Array.isArray(node.children)
-          ? node.children.map(serializeNode).join('')
-          : ''
-        return children ? `<p>${children}</p>` : '<p />'
-      }
-      case 'heading': {
-        const level = typeof node.tag === 'string' && /^h[1-6]$/.test(node.tag) ? node.tag : 'h2'
-        const children = Array.isArray(node.children)
-          ? node.children.map(serializeNode).join('')
-          : ''
-        return `<${level}>${children}</${level}>`
-      }
-      case 'text': {
-        let text: string = node.text ?? ''
-        if (node.format) {
-          const isBold = (node.format & 1) === 1
-          const isItalic = (node.format & 2) === 2
-          const isUnderline = (node.format & 4) === 4
-          if (isBold) text = `<strong>${text}</strong>`
-          if (isItalic) text = `<em>${text}</em>`
-          if (isUnderline) text = `<u>${text}</u>`
+    const serializeNode = (node: any): string => {
+      if (!node) return ''
+      switch (node.type) {
+        case 'paragraph': {
+          const children = Array.isArray(node.children)
+            ? node.children.map(serializeNode).join('')
+            : ''
+          return children ? `<p>${children}</p>` : ''
         }
-        return text
-      }
-      case 'link': {
-        const children = Array.isArray(node.children)
-          ? node.children.map(serializeNode).join('')
-          : ''
-        const href = typeof node.url === 'string' ? node.url : '#'
-        const rel = node.rel ? ` rel="${node.rel}"` : ''
-        const target = node.target ? ` target="${node.target}"` : ''
-        return `<a href="${href}"${rel}${target}>${children}</a>`
-      }
-      case 'list': {
-        const tag = node.listType === 'number' || node.listType === 'ordered' ? 'ol' : 'ul'
-        const children = Array.isArray(node.children)
-          ? node.children.map(serializeNode).join('')
-          : ''
-        return `<${tag}>${children}</${tag}>`
-      }
-      case 'listitem': {
-        const children = Array.isArray(node.children)
-          ? node.children.map(serializeNode).join('')
-          : ''
-        return `<li>${children}</li>`
-      }
-      case 'linebreak':
-        return '<br />'
-      default: {
-        const children = Array.isArray(node.children)
-          ? node.children.map(serializeNode).join('')
-          : ''
-        return children
+        case 'heading': {
+          const level = typeof node.tag === 'string' && /^h[1-6]$/.test(node.tag) ? node.tag : 'h2'
+          const children = Array.isArray(node.children)
+            ? node.children.map(serializeNode).join('')
+            : ''
+          return children ? `<${level}>${children}</${level}>` : ''
+        }
+        case 'text': {
+          let text: string = node.text ?? ''
+          if (!text.trim()) return '' // Skip empty text nodes
+          if (node.format) {
+            const isBold = (node.format & 1) === 1
+            const isItalic = (node.format & 2) === 2
+            const isUnderline = (node.format & 4) === 4
+            if (isBold) text = `<strong>${text}</strong>`
+            if (isItalic) text = `<em>${text}</em>`
+            if (isUnderline) text = `<u>${text}</u>`
+          }
+          return text
+        }
+        case 'link': {
+          const children = Array.isArray(node.children)
+            ? node.children.map(serializeNode).join('')
+            : ''
+          if (!children) return ''
+          const href = typeof node.url === 'string' ? node.url : '#'
+          const rel = node.rel ? ` rel="${node.rel}"` : ''
+          const target = node.target ? ` target="${node.target}"` : ''
+          return `<a href="${href}"${rel}${target}>${children}</a>`
+        }
+        case 'list': {
+          const children = Array.isArray(node.children)
+            ? node.children.map(serializeNode).join('')
+            : ''
+          if (!children) return ''
+          const tag = node.listType === 'number' || node.listType === 'ordered' ? 'ol' : 'ul'
+          return `<${tag}>${children}</${tag}>`
+        }
+        case 'listitem': {
+          const children = Array.isArray(node.children)
+            ? node.children.map(serializeNode).join('')
+            : ''
+          return children ? `<li>${children}</li>` : ''
+        }
+        case 'linebreak':
+          return '<br />'
+        default: {
+          const children = Array.isArray(node.children)
+            ? node.children.map(serializeNode).join('')
+            : ''
+          return children
+        }
       }
     }
-  }
 
-  return root.children.map(serializeNode).join('')
+    const result = root.children.map(serializeNode).join('').trim()
+    return result
+  } catch (error) {
+    console.warn('Error parsing lexical content:', error)
+    return ''
+  }
 }
 
 export const blockComponents: Record<string, (block: unknown) => JSX.Element> = {
@@ -500,9 +510,13 @@ export function hasHeroBlock(blocks: Page['blocks'] | null | undefined): boolean
 }
 
 export function deriveGlobalHeroProps(page: Page) {
-  const titleHtml = page.title ? String(page.title) : ''
-  const subtitleHtml = page.content ? lexicalToHtml(page.content) : (page.meta?.description ?? '')
-  const bg = mediaToUrl((page as any).heroBackground ?? (page.meta?.image as any))
+  // Ensure consistent rendering between server and client
+  const titleHtml = page?.title ? String(page.title).trim() : ''
+  const subtitleHtml = page?.content
+    ? lexicalToHtml(page.content).trim()
+    : (page?.meta?.description ?? '').trim()
+  const bg = mediaToUrl((page as any)?.heroBackground ?? (page?.meta?.image as any))
+
   return {
     title: titleHtml,
     subtitle: subtitleHtml,

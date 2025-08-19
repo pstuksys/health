@@ -32,6 +32,7 @@ export default async function HomePage() {
     const page = await getHomePage(draft)
 
     if (!page) {
+      console.warn('Home page not found in CMS')
       return (
         <main className="flex flex-col items-center justify-center min-h-[50vh]">
           <h1 className="text-2xl font-semibold text-gray-800">Welcome</h1>
@@ -43,6 +44,7 @@ export default async function HomePage() {
     const showGlobalHero = Boolean(page.showHero)
     const heroProps = deriveGlobalHeroProps(page)
 
+    // Ensure consistent rendering - avoid hydration mismatches
     return (
       <main className="flex flex-col">
         {showGlobalHero && <HeroSection {...heroProps} />}
@@ -51,6 +53,12 @@ export default async function HomePage() {
     )
   } catch (error) {
     console.error('Failed to render home page:', error)
+    // Log additional details for debugging in production
+    console.error('Error details:', {
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined,
+      timestamp: new Date().toISOString(),
+    })
     return (
       <main className="flex flex-col items-center justify-center min-h-[50vh]">
         <h1 className="text-2xl font-semibold text-gray-800">Something went wrong</h1>
