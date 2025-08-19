@@ -8,13 +8,22 @@ import type { Page, Media } from '@/payload-types'
  */
 export function mediaToUrl(media: number | Media | null | undefined): string {
   if (!media || typeof media === 'number') return ''
-  return (
+
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || ''
+
+  const url =
     media.url ??
     media.sizes?.hero?.url ??
     media.sizes?.card?.url ??
     media.sizes?.thumbnail?.url ??
     ''
-  )
+
+  // Return absolute URL for production, relative for development
+  if (url && !url.startsWith('http') && baseUrl) {
+    return `${baseUrl}${url}`
+  }
+
+  return url
 }
 
 /**

@@ -22,10 +22,21 @@ type PageBlock = NonNullable<Page['blocks']>[number]
 
 function mediaToUrl(media: number | Media | null | undefined): string {
   if (!media || typeof media === 'number') return ''
-  if (media.sizes?.hero?.url) return media.sizes.hero.url ?? ''
-  if (media.sizes?.card?.url) return media.sizes.card.url ?? ''
-  if (media.sizes?.thumbnail?.url) return media.sizes.thumbnail.url ?? ''
-  return media.url ?? ''
+
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || ''
+
+  let url = ''
+  if (media.sizes?.hero?.url) url = media.sizes.hero.url ?? ''
+  else if (media.sizes?.card?.url) url = media.sizes.card.url ?? ''
+  else if (media.sizes?.thumbnail?.url) url = media.sizes.thumbnail.url ?? ''
+  else url = media.url ?? ''
+
+  // Return absolute URL for production, relative for development
+  if (url && !url.startsWith('http') && baseUrl) {
+    return `${baseUrl}${url}`
+  }
+
+  return url
 }
 
 function lexicalToHtml(value: unknown): string {
