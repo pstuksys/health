@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Button } from '@/app/(frontend)/components/ui/button'
 import { cn } from '@/lib/utils'
 import { getAlignmentClasses, type AlignmentType } from '@/lib/design-system'
+import { ConsistentHTML } from '../safe-html/component'
 
 type CTAButton = { label: string; href: string; variant?: 'primary' | 'secondary' }
 
@@ -50,24 +51,24 @@ export function HeroSection({
       )}
       <div className="relative z-10 max-w-7xl mx-auto w-full">
         <div className={cn('max-w-4xl', alignmentClasses)}>
-          <h1
+          <ConsistentHTML
+            as="h1"
+            html={title || ''}
             className={cn(
               'text-4xl sm:text-5xl lg:text-6xl font-light leading-tight mb-6',
               backgroundImage || gradientOverlay ? 'text-white' : 'text-ds-dark-blue',
               alignmentClasses,
             )}
-            dangerouslySetInnerHTML={{ __html: title }}
           />
-          {subtitle && (
-            <p
-              className={cn(
-                'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
-                backgroundImage || gradientOverlay ? 'text-gray-200' : 'text-ds-pastille-green',
-                alignmentClasses,
-              )}
-              dangerouslySetInnerHTML={{ __html: subtitle }}
-            />
-          )}
+          <ConsistentHTML
+            as="p"
+            html={subtitle || ''}
+            className={cn(
+              'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
+              backgroundImage || gradientOverlay ? 'text-gray-200' : 'text-ds-pastille-green',
+              alignmentClasses,
+            )}
+          />
           {(ctaButton || secondaryCTA) && (
             <div className={cn('flex flex-col sm:flex-row gap-4', alignmentClasses)}>
               {ctaButton && (
