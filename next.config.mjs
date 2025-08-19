@@ -24,6 +24,16 @@ const nextConfig = {
         protocol: 'https',
         hostname: '*.public.blob.vercel-storage.com', // for production blob storage
       },
+      {
+        protocol: 'https',
+        hostname: 'health-dusky-sigma.vercel.app',
+        pathname: '/api/media/**',
+      },
+      {
+        protocol: 'https',
+        hostname: '*.vercel.app',
+        pathname: '/api/media/**',
+      },
     ],
   },
 }
