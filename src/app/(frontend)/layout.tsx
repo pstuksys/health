@@ -2,7 +2,7 @@ import type React from 'react'
 import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import './globals.css'
-import { NavigationMenu } from './components/navigation-menu'
+import { NavWithScroll } from './components/navigation-menu/NavWithScroll'
 import { Footer } from './components/footer/component'
 import { getHeaderFooter } from '@/lib/cms/globals'
 import { Banner } from './components/banner/component'
@@ -86,19 +86,15 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         {header?.enableBanter && header?.headerDescription && (
           <Banner text={header.headerDescription} />
         )}
-        <NavigationMenu
+        <NavWithScroll
           items={items}
-          // logo={
-          //   (typeof header?.logo !== 'number' ? header?.logo?.url : undefined) as string | undefined
-          // }
           ctaButton={
             header?.ctaButton?.label && header?.ctaButton?.href
               ? { label: header.ctaButton.label, href: header.ctaButton.href }
               : undefined
           }
-          sticky
         />
-        <main className="min-h-screen">{children}</main>
+        <main className="">{children}</main>
         <Footer
           about={footer?.about ?? ''}
           socialLinks={socialLinks}
@@ -114,3 +110,5 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     </html>
   )
 }
+
+// (client wrapper moved to components/navigation-menu/NavWithScroll.tsx)

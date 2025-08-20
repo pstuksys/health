@@ -1576,6 +1576,16 @@ export interface Header {
   logo?: (number | null) | Media;
   ctaButton?: {
     label?: string | null;
+    linkType?: ('internal' | 'external') | null;
+    page?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'blogs';
+          value: number | Blog;
+        } | null);
     href?: string | null;
   };
   enableBanter?: boolean | null;
@@ -1713,6 +1723,8 @@ export interface HeaderSelect<T extends boolean = true> {
     | T
     | {
         label?: T;
+        linkType?: T;
+        page?: T;
         href?: T;
       };
   enableBanter?: T;

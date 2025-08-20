@@ -32,9 +32,18 @@ export function mediaToUrl(media: number | Media | null | undefined): string {
 export async function getPage(slug: string, draft?: boolean, depth = 2): Promise<Page | null> {
   try {
     const payload = await getPayload({ config: (await import('@/payload.config')).default })
+    const where = slug
+      ? { slug: { equals: slug } }
+      : {
+          or: [
+            { slug: { equals: '' } },
+            { slug: { exists: false } },
+            { slug: { equals: null as unknown as string } },
+          ],
+        }
     const { docs } = await payload.find({
       collection: 'pages',
-      where: { slug: { equals: slug } },
+      where,
       draft,
       limit: 1,
       pagination: false,

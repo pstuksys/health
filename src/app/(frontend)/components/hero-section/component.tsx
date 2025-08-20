@@ -31,6 +31,7 @@ export function HeroSection({
   const alignmentClasses = getAlignmentClasses(align)
   return (
     <section
+      id="hero-section"
       className={cn(
         'relative py-20 px-4 sm:px-6 lg:px-8 min-h-[60vh] flex items-center bg-ds-light-neutral',
         className,
