@@ -26,27 +26,39 @@ export function Footer({
   contact,
   className,
 }: FooterProps) {
+  const handleEmailClick = () => {
+    if (contact?.email) {
+      window.location.href = `mailto:${contact.email}`
+    }
+  }
+
+  const handlePhoneClick = () => {
+    if (contact?.phone) {
+      window.location.href = `tel:${contact.phone}`
+    }
+  }
+
   return (
-    <footer className={cn('bg-ds-dark-blue text-white py-12', className)}>
+    <footer className={cn('bg-gradient-primary text-white py-12 shadow-lg', className)}>
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About */}
           {about && (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">About Us</h3>
+              <h3 className="text-lg font-semibold text-white">About Us</h3>
               <p className="text-gray-300 font-light text-sm md:text-md leading-relaxed">{about}</p>
             </div>
           )}
           {/* Social links */}
           {socialLinks.length > 0 && (
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Follow Us</h3>
+              <h3 className="text-lg font-semibold text-white">Follow Us</h3>
               <ul className="flex items-center gap-4">
                 {socialLinks.map((link, index) => (
                   <li key={index}>
                     <Link
                       href={link?.href}
-                      className="text-gray-300 hover:text-ds-accent-yellow transition-colors duration-200 inline-flex items-center justify-center rounded-full p-2"
+                      className="text-gray-300 hover:text-ds-accent-yellow transition-colors duration-200 inline-flex items-center justify-center rounded-full p-2 hover:bg-white/10"
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={link.platform ? `Follow us on ${link.platform}` : 'Follow us'}
@@ -65,7 +77,7 @@ export function Footer({
             {/* Navigation links */}
             {navLinks.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Navigation</h3>
+                <h3 className="text-lg font-semibold text-white">Navigation</h3>
                 <ul className="space-y-2">
                   {navLinks.map((link, index) => (
                     <li key={index} className="border-b border-white/10 pb-2 last:border-b-0">
@@ -83,7 +95,7 @@ export function Footer({
             {/* Legal links */}
             {legalLinks.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Legal</h3>
+                <h3 className="text-lg font-semibold text-white">Legal</h3>
                 <ul className="space-y-2">
                   {legalLinks.map((link, index) => (
                     <li key={index} className="border-b border-white/10 pb-2 last:border-b-0">
@@ -104,17 +116,37 @@ export function Footer({
             contact?.phone ||
             (contact?.address && (
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Contact</h3>
+                <h3 className="text-lg font-semibold text-white">Contact</h3>
                 <div className="space-y-2 text-gray-300 font-light">
                   {contact?.email && (
-                    <p className="flex items-center gap-2">
-                      <FaMailBulk size={18} /> <span>{contact.email}</span>
-                    </p>
+                    <button
+                      onClick={handleEmailClick}
+                      className="flex items-center gap-2 hover:text-ds-accent-yellow transition-colors duration-200 cursor-pointer group"
+                      aria-label={`Send email to ${contact.email}`}
+                    >
+                      <FaMailBulk
+                        size={18}
+                        className="group-hover:text-ds-accent-yellow transition-colors duration-200"
+                      />
+                      <span className="group-hover:text-ds-accent-yellow transition-colors duration-200">
+                        {contact.email}
+                      </span>
+                    </button>
                   )}
                   {contact?.phone && (
-                    <p className="flex items-center gap-2">
-                      <FaPhone size={18} /> <span>{contact.phone}</span>
-                    </p>
+                    <button
+                      onClick={handlePhoneClick}
+                      className="flex items-center gap-2 hover:text-ds-accent-yellow transition-colors duration-200 cursor-pointer group"
+                      aria-label={`Call ${contact.phone}`}
+                    >
+                      <FaPhone
+                        size={18}
+                        className="group-hover:text-ds-accent-yellow transition-colors duration-200"
+                      />
+                      <span className="group-hover:text-ds-accent-yellow transition-colors duration-200">
+                        {contact.phone}
+                      </span>
+                    </button>
                   )}
                   {contact?.address && <p className="whitespace-pre-line">{contact.address}</p>}
                 </div>
@@ -122,7 +154,7 @@ export function Footer({
             ))}
         </div>
         {/* Copyright && Back to top button */}
-        <div className="mt-8 pt-8 border-t border-ds-pastille-green relative">
+        <div className="mt-8 pt-8 border-t border-ds-accent-yellow relative">
           <p className="text-center text-gray-400 text-sm font-light">
             © {new Date().getFullYear()} Health. All rights reserved.
           </p>
@@ -131,7 +163,7 @@ export function Footer({
               if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
             }}
             aria-label="Back to top"
-            className="hidden sm:inline-flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 bg-ds-accent-yellow text-ds-dark-blue rounded-full p-3 shadow-lg hover:bg-ds-accent-yellow/90 transition-colors py-3"
+            className="hidden sm:inline-flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 text-ds-dark-blue rounded-full shadow-lg bg-ds-accent-yellow  p-3 hover:scale-[1.03] hover:brightness-110 active:brightness-95 transition-all duration-200 py-3"
           >
             <span className="block select-none" aria-hidden>
               <FaArrowUp className="h-4 w-4" />

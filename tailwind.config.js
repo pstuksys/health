@@ -23,6 +23,9 @@ module.exports = {
         'ds-accent-yellow': '#faa636', // CMYK: 0/42/84/0 | RGB: 250/166/54
         'ds-light-neutral': '#efefee', // CMYK: 7/5/7/0 | RGB: 239/239/238
       },
+      backgroundImage: {
+        'gradient-primary': 'linear-gradient(to right, #3D426A 0%, #547B82 100%)',
+      },
       fontFamily: {
         sans: ['var(--font-poppins)', 'Poppins', 'sans-serif'],
         heading: ['var(--font-poppins)', 'Poppins', 'sans-serif'],

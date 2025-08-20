@@ -200,6 +200,10 @@ body.mobile-menu-open {
   font-weight: 300; /* Light */
 }
 
+.bg-gradient-primary {
+  background: linear-gradient(to right, #3D426A 0%, #547B82 100%);
+}
+
 .bg-gradient-blue-green {
   background: linear-gradient(135deg, var(--ds-dark-blue) 0%, var(--ds-pastille-green) 100%);
 }

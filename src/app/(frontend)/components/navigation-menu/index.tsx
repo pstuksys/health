@@ -260,7 +260,7 @@ export function NavigationMenu({
     <nav
       className={cn(
         'w-full z-50 transition-all duration-300 ease-out ',
-        isScrolled ? 'bg-gradient-to-r from-blue-950 to-blue-700 shadow-lg' : 'bg-transparent',
+        isScrolled ? 'bg-gradient-primary shadow-lg' : 'bg-transparent',
         !isVisible && 'opacity-0 pointer-events-none',
         sticky && (isScrolled ? 'fixed top-0 left-0 right-0' : 'absolute top-0 left-0 right-0'),
         className,
@@ -488,7 +488,7 @@ export function NavigationMenu({
           {/* Mobile menu */}
           <div className="md:hidden fixed inset-0 z-50 bg-white animate-fade-in-down flex flex-col">
             {/* Header with close button */}
-            <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-gradient-to-r from-blue-950 to-blue-700 shadow-lg flex-shrink-0">
+            <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-gradient-primary shadow-lg flex-shrink-0">
               <div className="flex-shrink-0">
                 <Link ref={logoRef} href="/" className="flex items-center flex-shrink-0 w-40">
                   <Image

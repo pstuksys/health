@@ -82,7 +82,8 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <html lang="en" className={`${poppins.variable} antialiased`}>
-      <body className="font-sans bg-ds-light-neutral">
+      {/* TODO: if needed to revert add bg-ds-light-neutral to body */}
+      <body className="font-sans bg-white">
         {header?.enableBanter && header?.headerDescription && (
           <Banner text={header.headerDescription} />
         )}
