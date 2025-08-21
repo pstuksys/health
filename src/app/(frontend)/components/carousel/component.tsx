@@ -56,7 +56,7 @@ function CarouselCard({ item }: { item: ResolvedCarouselItem }) {
               </p>
             )}
             {item.href && (
-              <CMSLink href={item.href} className="min-w-24">
+              <CMSLink href={item.href} variant="primary" className="min-w-24">
                 {item.title}
               </CMSLink>
             )}

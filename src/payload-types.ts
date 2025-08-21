@@ -695,6 +695,35 @@ export interface Page {
             blockName?: string | null;
             blockType: 'parallaxHero';
           }
+        | {
+            title: string;
+            subtitle?: string | null;
+            image: number | Media;
+            enableBackground?: boolean | null;
+            imagePosition?: ('left' | 'right') | null;
+            linkType?: ('internal' | 'external') | null;
+            internal?: {
+              relation?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'blogs';
+                    value: number | Blog;
+                  } | null);
+            };
+            external?: {
+              href?: string | null;
+            };
+            cta?: {
+              text?: string | null;
+              variant?: ('primary' | 'secondary' | 'outline' | 'ghost') | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'singleCard';
+          }
       )[]
     | null;
   meta?: {
@@ -1461,6 +1490,34 @@ export interface PagesSelect<T extends boolean = true> {
               buttonText?: T;
               buttonHref?: T;
               backgroundImage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        singleCard?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              image?: T;
+              enableBackground?: T;
+              imagePosition?: T;
+              linkType?: T;
+              internal?:
+                | T
+                | {
+                    relation?: T;
+                  };
+              external?:
+                | T
+                | {
+                    href?: T;
+                  };
+              cta?:
+                | T
+                | {
+                    text?: T;
+                    variant?: T;
+                  };
               id?: T;
               blockName?: T;
             };

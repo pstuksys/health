@@ -15,6 +15,7 @@ import { twoCardBlockFields } from '../app/(frontend)/components/two-card-block'
 import { scrollPostCardsFields } from '../app/(frontend)/components/scroll-post-cards/config'
 import { fullWidthBannerFields } from '../app/(frontend)/components/full-width-banner/config'
 import { parallaxHeroFields } from '../app/(frontend)/components/parallax-hero/config'
+import { singleCardFields } from '@/components/single-card/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -43,6 +44,7 @@ const carouselBlock: Block = { slug: 'carousel', fields: carouselFields }
 const twoCardBlock: Block = { slug: 'twoCardBlock', fields: twoCardBlockFields }
 const fullWidthBannerBlock: Block = { slug: 'fullWidthBanner', fields: fullWidthBannerFields }
 const parallaxHeroBlock: Block = { slug: 'parallaxHero', fields: parallaxHeroFields }
+const singleCardBlock: Block = { slug: 'singleCard', fields: singleCardFields }
 
 // All available page blocks
 const pageBlocks: Block[] = [
@@ -62,6 +64,7 @@ const pageBlocks: Block[] = [
   twoCardBlock,
   fullWidthBannerBlock,
   parallaxHeroBlock,
+  singleCardBlock,
 ]
 
 export const Pages: CollectionConfig = {

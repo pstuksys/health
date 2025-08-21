@@ -13,10 +13,10 @@ import { BlogPostCards } from './blog-post-cards/component'
 import { Carousel } from './carousel/component'
 import { ScrollPostCards } from './scroll-post-cards/component'
 import { TwoCardBlock } from './two-card-block'
-import { HeroSection } from './hero-section/component'
 import { TeamCards } from './team-cards/component'
 import { FullWidthBanner } from './full-width-banner/component'
 import { ParallaxHero } from './parallax-hero/component'
+import { SingleCard } from './single-card/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -333,6 +333,26 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   carousel: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'carousel' }>
     return <Carousel {...b} />
+  },
+  singleCard: (block) => {
+    const b = block as any
+    return (
+      <SingleCard
+        title={b.title as string}
+        subtitle={(b.subtitle as string) ?? undefined}
+        image={b.image as Media}
+        imagePosition={(b as any).imagePosition as 'left' | 'right' | undefined}
+        enableBackground={Boolean((b as any).enableBackground)}
+        linkType={(b.linkType as 'internal' | 'external') ?? undefined}
+        internal={b.internal as { relation?: unknown } | undefined}
+        external={b.external as { href?: string } | undefined}
+        cta={
+          b.cta as
+            | { text?: string; variant?: 'primary' | 'secondary' | 'outline' | 'ghost' }
+            | undefined
+        }
+      />
+    )
   },
   fullWidthBanner: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'fullWidthBanner' }>

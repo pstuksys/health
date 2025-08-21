@@ -1,4 +1,3 @@
-// import Link from 'next/link'
 import Image from 'next/image'
 import { CMSLink } from '@/app/(frontend)/components/ui/cms-link'
 import { cn } from '@/lib/utils'
@@ -109,9 +108,10 @@ export function HeroSection({
                   size="lg"
                   className={cn(
                     'w-full sm:w-auto text-center',
-                    getTextColorClass(false) === 'text-white'
-                      ? 'border-white text-white hover:bg-white hover:text-ds-dark-blue'
-                      : 'border-ds-dark-blue text-ds-dark-blue hover:bg-ds-dark-blue hover:text-white',
+                    'border-white text-white hover:bg-white hover:text-ds-dark-blue',
+                    // getTextColorClass(false) === 'text-white'
+                    // ? 'border-white text-white hover:bg-white hover:text-ds-dark-blue'
+                    // : 'border-ds-dark-blue text-ds-dark-blue hover:bg-ds-dark-blue hover:text-white',
                   )}
                   external={secondaryCTA.href.startsWith('http')}
                 >

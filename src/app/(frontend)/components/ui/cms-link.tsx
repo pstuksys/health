@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 export type CMSLinkProps = {
   href: string
   children: React.ReactNode
-  variant?: 'primary' | 'secondary' | 'outline'
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
   size?: 'sm' | 'md' | 'lg'
   className?: string
   external?: boolean
@@ -23,7 +23,6 @@ export function CMSLink({
 }: CMSLinkProps) {
   const baseClasses = cn(
     'inline-flex items-center justify-center font-semibold transition-all duration-200',
-    'hover:scale-[1.03] hover:brightness-110 active:brightness-95',
     fullWidth && 'w-full',
   )
 
@@ -39,9 +38,16 @@ export function CMSLink({
     secondary: 'bg-ds-pastille-green text-white border-0 hover:bg-ds-pastille-green/90',
     outline:
       'bg-transparent border-2 border-ds-accent-yellow text-ds-accent-yellow hover:bg-ds-accent-yellow hover:text-ds-dark-blue',
+    ghost:
+      'relative bg-transparent p-0 border-0 rounded-none text-inherit hover:bg-transparent after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:w-0 hover:after:w-full after:bg-current after:transition-all after:duration-300',
   }
 
-  const classes = cn(baseClasses, sizeClasses[size], variantClasses[variant], className)
+  const classes = cn(
+    baseClasses,
+    variant === 'ghost' ? 'px-0 py-0' : sizeClasses[size],
+    variantClasses[variant],
+    className,
+  )
 
   if (external) {
     return (

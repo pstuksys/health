@@ -49,7 +49,7 @@ export function ContentBlock({
             {imageUrl && (
               <div
                 className={cn(
-                  'mt-12 relative w-full h-[360px] sm:h-[420px] lg:h-[480px] overflow-hidden rounded-lg shadow-lg transition-all duration-700 lg:sticky lg:top-4',
+                  'mt-12 relative w-full h-[360px] sm:h-[420px] lg:h-[480px] overflow-hidden rounded-lg shadow-lg transition-all duration-500 lg:sticky lg:top-4',
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
                 )}
               >
@@ -81,7 +81,7 @@ export function ContentBlock({
         >
           <div
             className={cn(
-              'space-y-6 transition-all duration-700',
+              'space-y-6 transition-all duration-500',
               !isImageLeft && 'lg:col-start-1',
               isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6',
             )}
@@ -99,7 +99,7 @@ export function ContentBlock({
           {imageUrl && (
             <div
               className={cn(
-                'relative w-full h-[360px] sm:h-[420px] lg:h-[480px] overflow-hidden rounded-lg shadow-lg transition-all duration-700 lg:sticky lg:top-4',
+                'relative w-full h-[360px] sm:h-[420px] lg:h-[480px] overflow-hidden rounded-lg shadow-lg transition-all duration-500 lg:sticky lg:top-4',
                 !isImageLeft && 'lg:col-start-2',
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
               )}
