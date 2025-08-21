@@ -258,6 +258,96 @@ export interface Page {
    */
   showHero?: boolean | null;
   /**
+   * Text color scheme for hero content
+   */
+  heroTextColor?: ('auto' | 'light' | 'dark') | null;
+  /**
+   * Add a gradient overlay for better text readability
+   */
+  heroGradientOverlay?: boolean | null;
+  /**
+   * Primary call-to-action button for the hero section
+   */
+  heroCTAButton?: {
+    /**
+     * Button text
+     */
+    label: string;
+    /**
+     * Choose between internal page/blog or external URL
+     */
+    linkType?: ('internal' | 'external') | null;
+    /**
+     * Link to an internal page or blog post
+     */
+    internal?: {
+      /**
+       * Choose the page or blog to link to
+       */
+      relation:
+        | {
+            relationTo: 'pages';
+            value: number | Page;
+          }
+        | {
+            relationTo: 'blogs';
+            value: number | Blog;
+          };
+    };
+    /**
+     * Link to an external website
+     */
+    external?: {
+      /**
+       * External URL (e.g., https://example.com)
+       */
+      href: string;
+    };
+    /**
+     * Button style variant
+     */
+    variant?: ('primary' | 'secondary') | null;
+  };
+  /**
+   * Secondary call-to-action button (optional)
+   */
+  heroSecondaryCTA?: {
+    /**
+     * Button text
+     */
+    label: string;
+    /**
+     * Choose between internal page/blog or external URL
+     */
+    linkType?: ('internal' | 'external') | null;
+    /**
+     * Link to an internal page or blog post
+     */
+    internal?: {
+      /**
+       * Choose the page or blog to link to
+       */
+      relation:
+        | {
+            relationTo: 'pages';
+            value: number | Page;
+          }
+        | {
+            relationTo: 'blogs';
+            value: number | Blog;
+          };
+    };
+    /**
+     * Link to an external website
+     */
+    external?: {
+      /**
+       * External URL (e.g., https://example.com)
+       */
+      href: string;
+    };
+  };
+  /**
    * Add flexible content blocks to build your page layout
    */
   blocks?:
@@ -395,11 +485,10 @@ export interface Page {
             blockType: 'aboutUsSection';
           }
         | {
+            title: string;
             layout?: ('grid' | 'carousel') | null;
             partners: {
               logo: number | Media;
-              name: string;
-              href?: string | null;
               id?: string | null;
             }[];
             id?: string | null;
@@ -604,6 +693,35 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'parallaxHero';
+          }
+        | {
+            title: string;
+            subtitle?: string | null;
+            image: number | Media;
+            enableBackground?: boolean | null;
+            imagePosition?: ('left' | 'right') | null;
+            linkType?: ('internal' | 'external') | null;
+            internal?: {
+              relation?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'blogs';
+                    value: number | Blog;
+                  } | null);
+            };
+            external?: {
+              href?: string | null;
+            };
+            cta?: {
+              text?: string | null;
+              variant?: ('primary' | 'secondary' | 'outline' | 'ghost') | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'singleCard';
           }
       )[]
     | null;
@@ -1045,6 +1163,41 @@ export interface PagesSelect<T extends boolean = true> {
   content?: T;
   heroBackground?: T;
   showHero?: T;
+  heroTextColor?: T;
+  heroGradientOverlay?: T;
+  heroCTAButton?:
+    | T
+    | {
+        label?: T;
+        linkType?: T;
+        internal?:
+          | T
+          | {
+              relation?: T;
+            };
+        external?:
+          | T
+          | {
+              href?: T;
+            };
+        variant?: T;
+      };
+  heroSecondaryCTA?:
+    | T
+    | {
+        label?: T;
+        linkType?: T;
+        internal?:
+          | T
+          | {
+              relation?: T;
+            };
+        external?:
+          | T
+          | {
+              href?: T;
+            };
+      };
   blocks?:
     | T
     | {
@@ -1126,13 +1279,12 @@ export interface PagesSelect<T extends boolean = true> {
         partnersBlock?:
           | T
           | {
+              title?: T;
               layout?: T;
               partners?:
                 | T
                 | {
                     logo?: T;
-                    name?: T;
-                    href?: T;
                     id?: T;
                   };
               id?: T;
@@ -1336,6 +1488,34 @@ export interface PagesSelect<T extends boolean = true> {
               buttonText?: T;
               buttonHref?: T;
               backgroundImage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        singleCard?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              image?: T;
+              enableBackground?: T;
+              imagePosition?: T;
+              linkType?: T;
+              internal?:
+                | T
+                | {
+                    relation?: T;
+                  };
+              external?:
+                | T
+                | {
+                    href?: T;
+                  };
+              cta?:
+                | T
+                | {
+                    text?: T;
+                    variant?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -1576,6 +1756,16 @@ export interface Header {
   logo?: (number | null) | Media;
   ctaButton?: {
     label?: string | null;
+    linkType?: ('internal' | 'external') | null;
+    page?:
+      | ({
+          relationTo: 'pages';
+          value: number | Page;
+        } | null)
+      | ({
+          relationTo: 'blogs';
+          value: number | Blog;
+        } | null);
     href?: string | null;
   };
   enableBanter?: boolean | null;
@@ -1713,6 +1903,8 @@ export interface HeaderSelect<T extends boolean = true> {
     | T
     | {
         label?: T;
+        linkType?: T;
+        page?: T;
         href?: T;
       };
   enableBanter?: T;

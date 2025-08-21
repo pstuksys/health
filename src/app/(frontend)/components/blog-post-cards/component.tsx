@@ -20,7 +20,7 @@ type BlogPostCardsProps = {
 export function BlogPostCards({ posts, mobileCarousel = false, className }: BlogPostCardsProps) {
   return (
     <section className={cn('py-16 px-4 sm:px-6 lg:px-8', className)}>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-container mx-auto">
         <div
           className={cn(
             'grid gap-8',

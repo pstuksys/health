@@ -46,7 +46,7 @@ export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps
   }, [])
 
   return (
-    <section ref={containerRef} className="py-16 px-4 max-w-7xl mx-auto">
+    <section ref={containerRef} className="py-16 px-4 max-w-container mx-auto">
       {title && (
         <div
           className={`text-center mb-12 transition-all duration-700 ${

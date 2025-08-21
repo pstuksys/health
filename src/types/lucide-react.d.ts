@@ -8,6 +8,5 @@ declare module 'lucide-react' {
   export const Menu: React.FC<React.SVGProps<SVGSVGElement>>
   export const ChevronLeft: React.FC<React.SVGProps<SVGSVGElement>>
   export const ChevronRight: React.FC<React.SVGProps<SVGSVGElement>>
+  export const MoreHorizontal: React.FC<React.SVGProps<SVGSVGElement>>
 }
-
-

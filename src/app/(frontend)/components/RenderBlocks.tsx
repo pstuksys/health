@@ -13,10 +13,10 @@ import { BlogPostCards } from './blog-post-cards/component'
 import { Carousel } from './carousel/component'
 import { ScrollPostCards } from './scroll-post-cards/component'
 import { TwoCardBlock } from './two-card-block'
-import { HeroSection } from './hero-section/component'
 import { TeamCards } from './team-cards/component'
 import { FullWidthBanner } from './full-width-banner/component'
 import { ParallaxHero } from './parallax-hero/component'
+import { SingleCard } from './single-card/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -120,19 +120,10 @@ function lexicalToHtml(value: unknown): string {
 }
 
 export const blockComponents: Record<string, (block: unknown) => JSX.Element> = {
-  contentBlock: (block) => (
-    <ContentBlock
-      title={(block as Extract<PageBlock, { blockType: 'contentBlock' }>).title}
-      content={lexicalToHtml((block as Extract<PageBlock, { blockType: 'contentBlock' }>).content)}
-      layout={(block as Extract<PageBlock, { blockType: 'contentBlock' }>).layout ?? 'full'}
-      image={mediaToUrl(
-        (block as Extract<PageBlock, { blockType: 'contentBlock' }>).image as unknown as Media,
-      )}
-      imagePosition={
-        (block as Extract<PageBlock, { blockType: 'contentBlock' }>).imagePosition ?? 'right'
-      }
-    />
-  ),
+  contentBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'contentBlock' }>
+    return <ContentBlock {...b} />
+  },
   cardSection: (block) => (
     <CardSection
       columns={(block as Extract<PageBlock, { blockType: 'cardSection' }>).columns ?? 3}
@@ -210,12 +201,11 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   ),
   partnersBlock: (block) => (
     <PartnersBlock
+      title={(block as Extract<PageBlock, { blockType: 'partnersBlock' }>).title}
       layout={(block as Extract<PageBlock, { blockType: 'partnersBlock' }>).layout ?? 'grid'}
       partners={((block as Extract<PageBlock, { blockType: 'partnersBlock' }>).partners ?? []).map(
         (p) => ({
-          logo: mediaToUrl(p.logo as unknown as Media),
-          name: p.name,
-          href: p.href ?? undefined,
+          logo: p.logo as Media,
         }),
       )}
     />
@@ -341,36 +331,25 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   },
   carousel: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'carousel' }>
-    const items = (b.items ?? []).map((i: any) => {
-      const image = mediaToUrl(i.image as unknown as Media)
-      const isExternal = i.linkType === 'external'
-      let href: string | undefined
-      if (isExternal) href = i.external?.href ?? undefined
-      else {
-        const rel = i.internal?.relation
-        const doc = rel?.value ?? rel
-        const slug = doc?.slug ?? ''
-        const collection = doc?.collection ?? rel?.relationTo
-        if (collection === 'blogs') href = `/blogs/${slug}`
-        else if (collection === 'pages') href = `/${slug}`
-      }
-      return {
-        image,
-        title: i.title ?? '',
-        description: i.description ?? '',
-        href,
-      }
-    })
+    return <Carousel {...b} />
+  },
+  singleCard: (block) => {
+    const b = block as any
     return (
-      <Carousel
-        title={(b as any).title}
-        subtitle={(b as any).subtitle}
-        items={items}
-        slidesToShow={b.slidesToShow ?? 1}
-        autoplay={b.autoplay ?? false}
-        autoplayInterval={b.autoplayInterval ?? 5000}
-        showArrows={b.showArrows ?? true}
-        showDots={b.showDots ?? true}
+      <SingleCard
+        title={b.title as string}
+        subtitle={(b.subtitle as string) ?? undefined}
+        image={b.image as Media}
+        imagePosition={(b as any).imagePosition as 'left' | 'right' | undefined}
+        enableBackground={Boolean((b as any).enableBackground)}
+        linkType={(b.linkType as 'internal' | 'external') ?? undefined}
+        internal={b.internal as { relation?: unknown } | undefined}
+        external={b.external as { href?: string } | undefined}
+        cta={
+          b.cta as
+            | { text?: string; variant?: 'primary' | 'secondary' | 'outline' | 'ghost' }
+            | undefined
+        }
       />
     )
   },
@@ -401,39 +380,6 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
         blockType={b.blockType}
         blockName={b.blockName}
         id={b.id}
-      />
-    )
-  },
-  heroSection: (block) => {
-    const b = block as {
-      backgroundImage?: Media | number | null
-      title?: unknown
-      subtitle?: unknown
-      align?: 'left' | 'center' | 'right'
-      ctaButton?: { label?: string; href?: string; variant?: 'primary' | 'secondary' } | null
-      secondaryCTA?: { label?: string; href?: string } | null
-      gradientOverlay?: boolean
-    }
-    const bgUrl = mediaToUrl(b.backgroundImage as unknown as Media)
-    const cta = b.ctaButton ?? undefined
-    const secondary = b.secondaryCTA ?? undefined
-    return (
-      <HeroSection
-        title={lexicalToHtml(b.title)}
-        subtitle={lexicalToHtml(b.subtitle)}
-        align={b.align ?? 'center'}
-        backgroundImage={bgUrl}
-        ctaButton={
-          cta
-            ? { label: cta.label ?? '', href: cta.href ?? '#', variant: cta.variant ?? 'primary' }
-            : undefined
-        }
-        secondaryCTA={
-          secondary
-            ? { label: secondary.label ?? '', href: secondary.href ?? '#', variant: 'secondary' }
-            : undefined
-        }
-        gradientOverlay={b.gradientOverlay ?? false}
       />
     )
   },
@@ -523,16 +469,79 @@ export function hasHeroBlock(blocks: Page['blocks'] | null | undefined): boolean
 export function deriveGlobalHeroProps(page: Page) {
   // Ensure consistent rendering between server and client
   const titleHtml = page?.title ? String(page.title).trim() : ''
-  const subtitleHtml = page?.content
-    ? lexicalToHtml(page.content).trim()
-    : (page?.meta?.description ?? '').trim()
+  // Prefer raw Lexical content for RichText; fallback to plain description string
+  const subtitleRaw: Page['content'] | string =
+    page?.content ?? (page?.meta?.description ?? '').trim()
   const bg = mediaToUrl((page as any)?.heroBackground ?? (page?.meta?.image as any))
+
+  // Extract hero configuration from Pages collection fields with proper type narrowing
+  const rawTextColor = (page as any)?.heroTextColor
+  const heroTextColor: 'auto' | 'light' | 'dark' =
+    rawTextColor === 'auto' || rawTextColor === 'light' || rawTextColor === 'dark'
+      ? rawTextColor
+      : 'auto'
+
+  const heroGradientOverlay = Boolean((page as any)?.heroGradientOverlay)
+
+  // Extract CTA button data
+  const heroCTAButton = (page as any)?.heroCTAButton
+  const heroSecondaryCTA = (page as any)?.heroSecondaryCTA
+
+  // Helper function to resolve internal/external links
+  const resolveLink = (buttonData: any): { label: string; href: string } => {
+    if (!buttonData) return { label: '', href: '#' }
+
+    const label = buttonData.label || ''
+
+    if (buttonData.linkType === 'external') {
+      return { label, href: buttonData.external?.href || '#' }
+    }
+
+    // Internal link - resolve to proper URL
+    if (buttonData.linkType === 'internal' && buttonData.internal?.relation) {
+      const relation = buttonData.internal.relation
+      let href = '#'
+
+      if (relation && typeof relation === 'object') {
+        const collection = relation.relationTo || relation.collection
+        const slug = relation.slug || relation.value?.slug || ''
+
+        if (collection === 'blogs') {
+          href = `/blogs/${slug}`
+        } else if (collection === 'pages') {
+          href = `/${slug}`
+        }
+      }
+
+      return { label, href }
+    }
+
+    return { label, href: '#' }
+  }
+
+  const ctaButton = heroCTAButton
+    ? {
+        ...resolveLink(heroCTAButton),
+        variant: (heroCTAButton.variant === 'primary' || heroCTAButton.variant === 'secondary'
+          ? heroCTAButton.variant
+          : 'primary') as 'primary' | 'secondary',
+      }
+    : undefined
+
+  const secondaryCTA = heroSecondaryCTA
+    ? {
+        ...resolveLink(heroSecondaryCTA),
+        variant: 'secondary' as const,
+      }
+    : undefined
 
   return {
     title: titleHtml,
-    subtitle: subtitleHtml,
+    subtitle: subtitleRaw,
     backgroundImage: bg,
-    align: 'center' as const,
-    gradientOverlay: true,
+    textColor: heroTextColor,
+    gradientOverlay: heroGradientOverlay,
+    ctaButton,
+    secondaryCTA,
   }
 }
