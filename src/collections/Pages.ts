@@ -26,6 +26,7 @@ const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undef
   return undefined
 }
 
+// Create blocks using the existing configs
 const contentBlock: Block = { slug: 'contentBlock', fields: contentBlockFields }
 const cardSectionBlock: Block = { slug: 'cardSection', fields: cardSectionFields }
 const mediaBlock: Block = { slug: 'mediaBlock', fields: mediaBlockFields }
@@ -45,7 +46,6 @@ const parallaxHeroBlock: Block = { slug: 'parallaxHero', fields: parallaxHeroFie
 
 // All available page blocks
 const pageBlocks: Block[] = [
-  // heroSectionBlock,
   contentBlock,
   cardSectionBlock,
   mediaBlock,
@@ -173,6 +173,170 @@ export const Pages: CollectionConfig = {
               admin: {
                 description: 'If enabled, the hero is rendered using the Hero Content rich text.',
               },
+            },
+
+            {
+              name: 'heroTextColor',
+              type: 'select',
+              label: 'Hero Text Color',
+              options: [
+                { label: 'Auto (based on background)', value: 'auto' },
+                { label: 'Light (white/light)', value: 'light' },
+                { label: 'Dark (dark text)', value: 'dark' },
+              ],
+              defaultValue: 'auto',
+              admin: {
+                description: 'Text color scheme for hero content',
+                condition: (data) => data.showHero,
+              },
+            },
+            {
+              name: 'heroGradientOverlay',
+              type: 'checkbox',
+              label: 'Hero Gradient Overlay',
+              defaultValue: false,
+              admin: {
+                description: 'Add a gradient overlay for better text readability',
+                condition: (data) => data.showHero,
+              },
+            },
+            {
+              name: 'heroCTAButton',
+              type: 'group',
+              label: 'Hero Primary Button',
+              admin: {
+                description: 'Primary call-to-action button for the hero section',
+                condition: (data) => data.showHero,
+              },
+              fields: [
+                {
+                  name: 'label',
+                  type: 'text',
+                  required: true,
+                  admin: { description: 'Button text' },
+                },
+                {
+                  name: 'linkType',
+                  type: 'select',
+                  label: 'Link Type',
+                  options: [
+                    { label: 'Internal', value: 'internal' },
+                    { label: 'External', value: 'external' },
+                  ],
+                  defaultValue: 'internal',
+                  admin: { description: 'Choose between internal page/blog or external URL' },
+                },
+                {
+                  name: 'internal',
+                  type: 'group',
+                  label: 'Internal Link',
+                  admin: {
+                    description: 'Link to an internal page or blog post',
+                    condition: (data, siblingData) => siblingData?.linkType === 'internal',
+                  },
+                  fields: [
+                    {
+                      name: 'relation',
+                      type: 'relationship',
+                      label: 'Select Page or Blog',
+                      relationTo: ['pages', 'blogs'],
+                      required: true,
+                      admin: { description: 'Choose the page or blog to link to' },
+                    },
+                  ],
+                },
+                {
+                  name: 'external',
+                  type: 'group',
+                  label: 'External Link',
+                  admin: {
+                    description: 'Link to an external website',
+                    condition: (data, siblingData) => siblingData?.linkType === 'external',
+                  },
+                  fields: [
+                    {
+                      name: 'href',
+                      type: 'text',
+                      required: true,
+                      admin: { description: 'External URL (e.g., https://example.com)' },
+                    },
+                  ],
+                },
+                {
+                  name: 'variant',
+                  type: 'select',
+                  options: [
+                    { label: 'Primary', value: 'primary' },
+                    { label: 'Secondary', value: 'secondary' },
+                  ],
+                  defaultValue: 'primary',
+                  admin: { description: 'Button style variant' },
+                },
+              ],
+            },
+            {
+              name: 'heroSecondaryCTA',
+              type: 'group',
+              label: 'Hero Secondary Button',
+              admin: {
+                description: 'Secondary call-to-action button (optional)',
+                condition: (data) => data.showHero,
+              },
+              fields: [
+                {
+                  name: 'label',
+                  type: 'text',
+                  required: true,
+                  admin: { description: 'Button text' },
+                },
+                {
+                  name: 'linkType',
+                  type: 'select',
+                  label: 'Link Type',
+                  options: [
+                    { label: 'Internal', value: 'internal' },
+                    { label: 'External', value: 'external' },
+                  ],
+                  defaultValue: 'internal',
+                  admin: { description: 'Choose between internal page/blog or external URL' },
+                },
+                {
+                  name: 'internal',
+                  type: 'group',
+                  label: 'Internal Link',
+                  admin: {
+                    description: 'Link to an internal page or blog post',
+                    condition: (data, siblingData) => siblingData?.linkType === 'internal',
+                  },
+                  fields: [
+                    {
+                      name: 'relation',
+                      type: 'relationship',
+                      label: 'Select Page or Blog',
+                      relationTo: ['pages', 'blogs'],
+                      required: true,
+                      admin: { description: 'Choose the page or blog to link to' },
+                    },
+                  ],
+                },
+                {
+                  name: 'external',
+                  type: 'group',
+                  label: 'External Link',
+                  admin: {
+                    description: 'Link to an external website',
+                    condition: (data, siblingData) => siblingData?.linkType === 'external',
+                  },
+                  fields: [
+                    {
+                      name: 'href',
+                      type: 'text',
+                      required: true,
+                      admin: { description: 'External URL (e.g., https://example.com)' },
+                    },
+                  ],
+                },
+              ],
             },
           ],
         },

@@ -258,6 +258,96 @@ export interface Page {
    */
   showHero?: boolean | null;
   /**
+   * Text color scheme for hero content
+   */
+  heroTextColor?: ('auto' | 'light' | 'dark') | null;
+  /**
+   * Add a gradient overlay for better text readability
+   */
+  heroGradientOverlay?: boolean | null;
+  /**
+   * Primary call-to-action button for the hero section
+   */
+  heroCTAButton?: {
+    /**
+     * Button text
+     */
+    label: string;
+    /**
+     * Choose between internal page/blog or external URL
+     */
+    linkType?: ('internal' | 'external') | null;
+    /**
+     * Link to an internal page or blog post
+     */
+    internal?: {
+      /**
+       * Choose the page or blog to link to
+       */
+      relation:
+        | {
+            relationTo: 'pages';
+            value: number | Page;
+          }
+        | {
+            relationTo: 'blogs';
+            value: number | Blog;
+          };
+    };
+    /**
+     * Link to an external website
+     */
+    external?: {
+      /**
+       * External URL (e.g., https://example.com)
+       */
+      href: string;
+    };
+    /**
+     * Button style variant
+     */
+    variant?: ('primary' | 'secondary') | null;
+  };
+  /**
+   * Secondary call-to-action button (optional)
+   */
+  heroSecondaryCTA?: {
+    /**
+     * Button text
+     */
+    label: string;
+    /**
+     * Choose between internal page/blog or external URL
+     */
+    linkType?: ('internal' | 'external') | null;
+    /**
+     * Link to an internal page or blog post
+     */
+    internal?: {
+      /**
+       * Choose the page or blog to link to
+       */
+      relation:
+        | {
+            relationTo: 'pages';
+            value: number | Page;
+          }
+        | {
+            relationTo: 'blogs';
+            value: number | Blog;
+          };
+    };
+    /**
+     * Link to an external website
+     */
+    external?: {
+      /**
+       * External URL (e.g., https://example.com)
+       */
+      href: string;
+    };
+  };
+  /**
    * Add flexible content blocks to build your page layout
    */
   blocks?:
@@ -1045,6 +1135,41 @@ export interface PagesSelect<T extends boolean = true> {
   content?: T;
   heroBackground?: T;
   showHero?: T;
+  heroTextColor?: T;
+  heroGradientOverlay?: T;
+  heroCTAButton?:
+    | T
+    | {
+        label?: T;
+        linkType?: T;
+        internal?:
+          | T
+          | {
+              relation?: T;
+            };
+        external?:
+          | T
+          | {
+              href?: T;
+            };
+        variant?: T;
+      };
+  heroSecondaryCTA?:
+    | T
+    | {
+        label?: T;
+        linkType?: T;
+        internal?:
+          | T
+          | {
+              relation?: T;
+            };
+        external?:
+          | T
+          | {
+              href?: T;
+            };
+      };
   blocks?:
     | T
     | {

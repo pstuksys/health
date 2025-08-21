@@ -404,39 +404,6 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
       />
     )
   },
-  heroSection: (block) => {
-    const b = block as {
-      backgroundImage?: Media | number | null
-      title?: unknown
-      subtitle?: unknown
-      align?: 'left' | 'center' | 'right'
-      ctaButton?: { label?: string; href?: string; variant?: 'primary' | 'secondary' } | null
-      secondaryCTA?: { label?: string; href?: string } | null
-      gradientOverlay?: boolean
-    }
-    const bgUrl = mediaToUrl(b.backgroundImage as unknown as Media)
-    const cta = b.ctaButton ?? undefined
-    const secondary = b.secondaryCTA ?? undefined
-    return (
-      <HeroSection
-        title={lexicalToHtml(b.title)}
-        subtitle={lexicalToHtml(b.subtitle)}
-        align={b.align ?? 'center'}
-        backgroundImage={bgUrl}
-        ctaButton={
-          cta
-            ? { label: cta.label ?? '', href: cta.href ?? '#', variant: cta.variant ?? 'primary' }
-            : undefined
-        }
-        secondaryCTA={
-          secondary
-            ? { label: secondary.label ?? '', href: secondary.href ?? '#', variant: 'secondary' }
-            : undefined
-        }
-        gradientOverlay={b.gradientOverlay ?? false}
-      />
-    )
-  },
   twoCardBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'twoCardBlock' }>
     const items = (b.items ?? []).map((i: any) => {
@@ -523,16 +490,79 @@ export function hasHeroBlock(blocks: Page['blocks'] | null | undefined): boolean
 export function deriveGlobalHeroProps(page: Page) {
   // Ensure consistent rendering between server and client
   const titleHtml = page?.title ? String(page.title).trim() : ''
-  const subtitleHtml = page?.content
-    ? lexicalToHtml(page.content).trim()
-    : (page?.meta?.description ?? '').trim()
+  // Prefer raw Lexical content for RichText; fallback to plain description string
+  const subtitleRaw: Page['content'] | string =
+    page?.content ?? (page?.meta?.description ?? '').trim()
   const bg = mediaToUrl((page as any)?.heroBackground ?? (page?.meta?.image as any))
+
+  // Extract hero configuration from Pages collection fields with proper type narrowing
+  const rawTextColor = (page as any)?.heroTextColor
+  const heroTextColor: 'auto' | 'light' | 'dark' =
+    rawTextColor === 'auto' || rawTextColor === 'light' || rawTextColor === 'dark'
+      ? rawTextColor
+      : 'auto'
+
+  const heroGradientOverlay = Boolean((page as any)?.heroGradientOverlay)
+
+  // Extract CTA button data
+  const heroCTAButton = (page as any)?.heroCTAButton
+  const heroSecondaryCTA = (page as any)?.heroSecondaryCTA
+
+  // Helper function to resolve internal/external links
+  const resolveLink = (buttonData: any): { label: string; href: string } => {
+    if (!buttonData) return { label: '', href: '#' }
+
+    const label = buttonData.label || ''
+
+    if (buttonData.linkType === 'external') {
+      return { label, href: buttonData.external?.href || '#' }
+    }
+
+    // Internal link - resolve to proper URL
+    if (buttonData.linkType === 'internal' && buttonData.internal?.relation) {
+      const relation = buttonData.internal.relation
+      let href = '#'
+
+      if (relation && typeof relation === 'object') {
+        const collection = relation.relationTo || relation.collection
+        const slug = relation.slug || relation.value?.slug || ''
+
+        if (collection === 'blogs') {
+          href = `/blogs/${slug}`
+        } else if (collection === 'pages') {
+          href = `/${slug}`
+        }
+      }
+
+      return { label, href }
+    }
+
+    return { label, href: '#' }
+  }
+
+  const ctaButton = heroCTAButton
+    ? {
+        ...resolveLink(heroCTAButton),
+        variant: (heroCTAButton.variant === 'primary' || heroCTAButton.variant === 'secondary'
+          ? heroCTAButton.variant
+          : 'primary') as 'primary' | 'secondary',
+      }
+    : undefined
+
+  const secondaryCTA = heroSecondaryCTA
+    ? {
+        ...resolveLink(heroSecondaryCTA),
+        variant: 'secondary' as const,
+      }
+    : undefined
 
   return {
     title: titleHtml,
-    subtitle: subtitleHtml,
+    subtitle: subtitleRaw,
     backgroundImage: bg,
-    align: 'center' as const,
-    gradientOverlay: true,
+    textColor: heroTextColor,
+    gradientOverlay: heroGradientOverlay,
+    ctaButton,
+    secondaryCTA,
   }
 }
