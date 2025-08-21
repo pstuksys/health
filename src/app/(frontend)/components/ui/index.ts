@@ -1,5 +1,5 @@
 export { Button } from './button'
-export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './card'
+export { Card, CardContent } from './card'
 export { Input } from './input'
 export { CMSLink } from './cms-link'
 export { LexicalEditor, MinimalLexicalEditor, FullLexicalEditor } from './lexical-editor'

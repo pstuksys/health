@@ -1,6 +1,6 @@
 import { draftMode } from 'next/headers'
 import type { Metadata } from 'next'
-import { getPayload } from 'payload'
+import { getPayload, Where } from 'payload'
 import type { Page, Media } from '@/payload-types'
 
 /**
@@ -43,7 +43,7 @@ export async function getPage(slug: string, draft?: boolean, depth = 2): Promise
         }
     const { docs } = await payload.find({
       collection: 'pages',
-      where,
+      where: where as unknown as Where,
       draft,
       limit: 1,
       pagination: false,

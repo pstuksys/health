@@ -74,7 +74,8 @@ export function HeroSection({
               <RichText
                 data={subtitle}
                 className={cn(
-                  'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
+                  '',
+                  // 'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
                   getTextColorClass(false),
                 )}
               />

@@ -485,11 +485,10 @@ export interface Page {
             blockType: 'aboutUsSection';
           }
         | {
+            title: string;
             layout?: ('grid' | 'carousel') | null;
             partners: {
               logo: number | Media;
-              name: string;
-              href?: string | null;
               id?: string | null;
             }[];
             id?: string | null;
@@ -1280,13 +1279,12 @@ export interface PagesSelect<T extends boolean = true> {
         partnersBlock?:
           | T
           | {
+              title?: T;
               layout?: T;
               partners?:
                 | T
                 | {
                     logo?: T;
-                    name?: T;
-                    href?: T;
                     id?: T;
                   };
               id?: T;

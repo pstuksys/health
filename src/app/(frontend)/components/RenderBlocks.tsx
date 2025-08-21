@@ -201,12 +201,11 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   ),
   partnersBlock: (block) => (
     <PartnersBlock
+      title={(block as Extract<PageBlock, { blockType: 'partnersBlock' }>).title}
       layout={(block as Extract<PageBlock, { blockType: 'partnersBlock' }>).layout ?? 'grid'}
       partners={((block as Extract<PageBlock, { blockType: 'partnersBlock' }>).partners ?? []).map(
         (p) => ({
-          logo: mediaToUrl(p.logo as unknown as Media),
-          name: p.name,
-          href: p.href ?? undefined,
+          logo: p.logo as Media,
         }),
       )}
     />
