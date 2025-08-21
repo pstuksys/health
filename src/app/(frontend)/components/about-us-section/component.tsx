@@ -22,7 +22,7 @@ export function AboutUsSection({
 }: AboutUsSectionProps) {
   return (
     <section className={cn('py-16 px-4 sm:px-6 lg:px-8 bg-ds-light-neutral', className)}>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div className="space-y-8">
             <h2 className="text-3xl sm:text-4xl font-light leading-tight text-ds-dark-blue">

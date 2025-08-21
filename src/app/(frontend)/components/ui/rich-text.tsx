@@ -26,3 +26,8 @@ export const RichText = memo(function RichText({ className, data, ...rest }: Ric
     />
   )
 })
+
+export function isLexicalEditorState(value: unknown): boolean {
+  if (!value || typeof value !== 'object') return false
+  return 'root' in (value as Record<string, unknown>)
+}

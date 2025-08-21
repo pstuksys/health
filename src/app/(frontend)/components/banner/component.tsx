@@ -27,7 +27,7 @@ export function Banner({
   if (!isVisible) return null
   return (
     <div className={cn('w-full py-3 px-4 text-center relative', backgroundColor, className)}>
-      <div className="max-w-7xl mx-auto flex items-center justify-center gap-4">
+      <div className="max-w-container mx-auto flex items-center justify-center gap-4">
         <p className="text-white text-sm font-light flex-1">{text}</p>
         {ctaButton && (
           <Button

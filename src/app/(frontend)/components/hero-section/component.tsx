@@ -19,7 +19,7 @@ type HeroSectionProps = {
 }
 
 export function HeroSection({
-  title,
+  title: _title,
   subtitle,
   backgroundImage,
   ctaButton,
@@ -68,8 +68,8 @@ export function HeroSection({
       {gradientOverlay && !backgroundImage && (
         <div className="absolute inset-0 bg-gradient-to-r from-ds-dark-blue/80 to-ds-pastille-green/60" />
       )}
-      <div className="relative z-10 max-w-7xl mx-auto w-full">
-        <div className="max-w-7xl">
+      <div className="relative z-10 max-w-container mx-auto w-full">
+        <div className="max-w-container">
           {Boolean(subtitle) &&
             (isLexicalEditorState(subtitle) ? (
               <RichText

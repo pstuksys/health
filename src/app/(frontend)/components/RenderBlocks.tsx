@@ -120,19 +120,10 @@ function lexicalToHtml(value: unknown): string {
 }
 
 export const blockComponents: Record<string, (block: unknown) => JSX.Element> = {
-  contentBlock: (block) => (
-    <ContentBlock
-      title={(block as Extract<PageBlock, { blockType: 'contentBlock' }>).title}
-      content={lexicalToHtml((block as Extract<PageBlock, { blockType: 'contentBlock' }>).content)}
-      layout={(block as Extract<PageBlock, { blockType: 'contentBlock' }>).layout ?? 'full'}
-      image={mediaToUrl(
-        (block as Extract<PageBlock, { blockType: 'contentBlock' }>).image as unknown as Media,
-      )}
-      imagePosition={
-        (block as Extract<PageBlock, { blockType: 'contentBlock' }>).imagePosition ?? 'right'
-      }
-    />
-  ),
+  contentBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'contentBlock' }>
+    return <ContentBlock {...b} />
+  },
   cardSection: (block) => (
     <CardSection
       columns={(block as Extract<PageBlock, { blockType: 'cardSection' }>).columns ?? 3}
@@ -341,38 +332,7 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   },
   carousel: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'carousel' }>
-    const items = (b.items ?? []).map((i: any) => {
-      const image = mediaToUrl(i.image as unknown as Media)
-      const isExternal = i.linkType === 'external'
-      let href: string | undefined
-      if (isExternal) href = i.external?.href ?? undefined
-      else {
-        const rel = i.internal?.relation
-        const doc = rel?.value ?? rel
-        const slug = doc?.slug ?? ''
-        const collection = doc?.collection ?? rel?.relationTo
-        if (collection === 'blogs') href = `/blogs/${slug}`
-        else if (collection === 'pages') href = `/${slug}`
-      }
-      return {
-        image,
-        title: i.title ?? '',
-        description: i.description ?? '',
-        href,
-      }
-    })
-    return (
-      <Carousel
-        title={(b as any).title}
-        subtitle={(b as any).subtitle}
-        items={items}
-        slidesToShow={b.slidesToShow ?? 1}
-        autoplay={b.autoplay ?? false}
-        autoplayInterval={b.autoplayInterval ?? 5000}
-        showArrows={b.showArrows ?? true}
-        showDots={b.showDots ?? true}
-      />
-    )
+    return <Carousel {...b} />
   },
   fullWidthBanner: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'fullWidthBanner' }>

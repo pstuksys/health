@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Button } from '@/app/(frontend)/components/ui/button'
 import { Menu, X, ChevronRight, MoreHorizontal } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Header } from '@/payload-types'
@@ -273,7 +272,13 @@ export function NavigationMenu({
             href="/"
             className="flex items-center flex-shrink-0 w-[160px] sm:w-[200px] md:w-[240px]"
           >
-            <Image src="/logo.svg" alt="Logo" width={240} height={40} className="w-full h-auto" />
+            <Image
+              src="/logo-white.svg"
+              alt="Logo"
+              width={240}
+              height={40}
+              className="w-full h-auto"
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -366,10 +371,7 @@ export function NavigationMenu({
               ref={ctaRef}
               className="hidden md:block flex-shrink-0 max-w-[150px] md:max-w-[180px]"
             >
-              <CMSLink
-                className="bg-ds-accent-yellow text-ds-dark-blue font-semibold w-full transition-all duration-200 hover:scale-[1.03] hover:brightness-110 active:brightness-95"
-                href={resolveUrl(ctaButton)}
-              >
+              <CMSLink variant="primary" href={resolveUrl(ctaButton)}>
                 {ctaButton.label}
               </CMSLink>
             </div>
@@ -492,7 +494,7 @@ export function NavigationMenu({
               <div className="flex-shrink-0">
                 <Link ref={logoRef} href="/" className="flex items-center flex-shrink-0 w-40">
                   <Image
-                    src="/logo.svg"
+                    src="/logo-white.svg"
                     alt="Logo"
                     width={240}
                     height={40}
@@ -558,12 +560,7 @@ export function NavigationMenu({
                 {/* CTA Button */}
                 {ctaButton && (
                   <div className="pt-6">
-                    <CMSLink
-                      href={resolveUrl(ctaButton)}
-                      className="bg-ds-accent-yellow text-ds-dark-blue font-semibold w-full transition-all duration-200 hover:scale-[1.03] hover:brightness-110 active:brightness-95"
-
-                      //  onClick={() => setIsMobileMenuOpen(false)}
-                    >
+                    <CMSLink href={resolveUrl(ctaButton)} variant="primary">
                       {ctaButton.label}
                     </CMSLink>
                   </div>

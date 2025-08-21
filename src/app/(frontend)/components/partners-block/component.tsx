@@ -10,7 +10,7 @@ export function PartnersBlock({ partners, layout = 'grid', className }: Partners
   if (layout === 'carousel') {
     return (
       <section className={cn('py-16 px-4 sm:px-6 lg:px-8', className)}>
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-container mx-auto">
           <div className="overflow-hidden">
             <div className="flex animate-scroll space-x-12">
               {[...partners, ...partners].map((partner, index) => (
@@ -50,7 +50,7 @@ export function PartnersBlock({ partners, layout = 'grid', className }: Partners
 
   return (
     <section className={cn('py-16 px-4 sm:px-6 lg:px-8', className)}>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-container mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8 items-center">
           {partners.map((partner, index) => (
             <div key={index} className="flex justify-center">

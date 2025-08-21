@@ -77,7 +77,7 @@ export function Footer({
             {/* Navigation links */}
             {navLinks.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">Navigation</h3>
+                {/* <h3 className="text-lg font-semibold text-white">Navigation</h3> */}
                 <ul className="space-y-2">
                   {navLinks.map((link, index) => (
                     <li key={index} className="border-b border-white/10 pb-2 last:border-b-0">
@@ -95,7 +95,7 @@ export function Footer({
             {/* Legal links */}
             {legalLinks.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">Legal</h3>
+                {/* <h3 className="text-lg font-semibold text-white">Legal</h3> */}
                 <ul className="space-y-2">
                   {legalLinks.map((link, index) => (
                     <li key={index} className="border-b border-white/10 pb-2 last:border-b-0">
@@ -112,46 +112,43 @@ export function Footer({
             )}
           </div>
           {/* Contact */}
-          {contact?.email ||
-            contact?.phone ||
-            (contact?.address && (
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold text-white">Contact</h3>
-                <div className="space-y-2 text-gray-300 font-light">
-                  {contact?.email && (
-                    <button
-                      onClick={handleEmailClick}
-                      className="flex items-center gap-2 hover:text-ds-accent-yellow transition-colors duration-200 cursor-pointer group"
-                      aria-label={`Send email to ${contact.email}`}
-                    >
-                      <FaMailBulk
-                        size={18}
-                        className="group-hover:text-ds-accent-yellow transition-colors duration-200"
-                      />
-                      <span className="group-hover:text-ds-accent-yellow transition-colors duration-200">
-                        {contact.email}
-                      </span>
-                    </button>
-                  )}
-                  {contact?.phone && (
-                    <button
-                      onClick={handlePhoneClick}
-                      className="flex items-center gap-2 hover:text-ds-accent-yellow transition-colors duration-200 cursor-pointer group"
-                      aria-label={`Call ${contact.phone}`}
-                    >
-                      <FaPhone
-                        size={18}
-                        className="group-hover:text-ds-accent-yellow transition-colors duration-200"
-                      />
-                      <span className="group-hover:text-ds-accent-yellow transition-colors duration-200">
-                        {contact.phone}
-                      </span>
-                    </button>
-                  )}
-                  {contact?.address && <p className="whitespace-pre-line">{contact.address}</p>}
-                </div>
-              </div>
-            ))}
+
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold text-white">Contact</h3>
+            <div className="space-y-2 text-gray-300 font-light">
+              {contact?.email && (
+                <button
+                  onClick={handleEmailClick}
+                  className="flex items-center gap-2 hover:text-ds-accent-yellow transition-colors duration-200 cursor-pointer group"
+                  aria-label={`Send email to ${contact.email}`}
+                >
+                  <FaMailBulk
+                    size={18}
+                    className="group-hover:text-ds-accent-yellow transition-colors duration-200"
+                  />
+                  <span className="group-hover:text-ds-accent-yellow transition-colors duration-200">
+                    {contact.email}
+                  </span>
+                </button>
+              )}
+              {contact?.phone && (
+                <button
+                  onClick={handlePhoneClick}
+                  className="flex items-center gap-2 hover:text-ds-accent-yellow transition-colors duration-200 cursor-pointer group"
+                  aria-label={`Call ${contact.phone}`}
+                >
+                  <FaPhone
+                    size={18}
+                    className="group-hover:text-ds-accent-yellow transition-colors duration-200"
+                  />
+                  <span className="group-hover:text-ds-accent-yellow transition-colors duration-200">
+                    {contact.phone}
+                  </span>
+                </button>
+              )}
+              {contact?.address && <p className="whitespace-pre-line">{contact.address}</p>}
+            </div>
+          </div>
         </div>
         {/* Copyright && Back to top button */}
         <div className="mt-8 pt-8 border-t border-ds-accent-yellow relative">
