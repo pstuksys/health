@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import type { Page } from '@/payload-types'
 import { useIsMobile } from '@/hooks/use-is-mobile'
+import { useSwipe } from '@/lib/hooks/use-swipe'
 
 type TestimonialsProps = Extract<NonNullable<Page['blocks']>[number], { blockType: 'testimonials' }>
 
@@ -13,6 +14,25 @@ export function Testimonials({
 }: TestimonialsProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const isMobile = useIsMobile()
+
+  const nextTestimonial = useCallback(() => {
+    if (Array.isArray(testimonials) && testimonials.length > 1) {
+      setCurrentIndex((prev) => (prev + 1) % testimonials.length)
+    }
+  }, [testimonials])
+
+  const prevTestimonial = useCallback(() => {
+    if (Array.isArray(testimonials) && testimonials.length > 1) {
+      setCurrentIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
+    }
+  }, [testimonials])
+
+  // Use the swipe hook for touch navigation
+  const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe({
+    minSwipeDistance: 50,
+    onSwipeLeft: nextTestimonial,
+    onSwipeRight: prevTestimonial,
+  })
 
   useEffect(() => {
     if (!Array.isArray(testimonials) || testimonials.length <= 1) return
@@ -29,7 +49,12 @@ export function Testimonials({
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-heading text-ds-dark-blue text-center mb-12">{title}</h2>
 
-        <div className="relative overflow-hidden">
+        <div
+          className="relative overflow-hidden"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <div
             className="flex transition-transform duration-500 ease-in-out will-change-transform"
             style={{ transform: `translateX(-${currentIndex * (100 / (visibleCount || 1))}%)` }}

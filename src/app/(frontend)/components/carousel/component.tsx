@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useSwipe } from '@/lib/hooks/use-swipe'
 import { CMSLink } from '../ui/cms-link'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from '@/lib/media'
@@ -135,6 +136,13 @@ export function MedicalCarousel(props: MedicalCarouselProps) {
     setCurrentIndex(index)
   }, [])
 
+  // Use the swipe hook for touch navigation
+  const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe({
+    minSwipeDistance: 50,
+    onSwipeLeft: nextSlide,
+    onSwipeRight: prevSlide,
+  })
+
   useEffect(() => {
     if (!effectiveAutoplay || isHovered || totalSlides <= 1) return
     const interval = setInterval(nextSlide, effectiveAutoplayInterval)
@@ -187,7 +195,12 @@ export function MedicalCarousel(props: MedicalCarouselProps) {
           </>
         )}
 
-        <div className="overflow-hidden rounded-xl">
+        <div
+          className="overflow-hidden rounded-xl"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <div
             className="flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
