@@ -1,5 +1,6 @@
 import React, { JSX } from 'react'
-import type { Page, Media } from '@/payload-types'
+import type { Page } from '@/payload-types'
+import { mediaToUrl } from '@/lib/media'
 import { ContentBlock } from './content-block/component'
 import { CardSection } from './card-section/component'
 import { MediaBlock } from './media-block/component'
@@ -21,314 +22,54 @@ import { SingleCard } from './single-card/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
-function mediaToUrl(media: number | Media | null | undefined): string {
-  if (!media || typeof media === 'number') return ''
-
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || ''
-
-  let url = ''
-  if (media.sizes?.hero?.url) url = media.sizes.hero.url ?? ''
-  else if (media.sizes?.card?.url) url = media.sizes.card.url ?? ''
-  else if (media.sizes?.thumbnail?.url) url = media.sizes.thumbnail.url ?? ''
-  else url = media.url ?? ''
-
-  // Return absolute URL for production, relative for development
-  if (url && !url.startsWith('http') && baseUrl) {
-    return `${baseUrl}${url}`
-  }
-
-  return url
-}
-
-function lexicalToHtml(value: unknown): string {
-  // Ensure consistent behavior between server and client
-  try {
-    if (!value || typeof value !== 'object' || !('root' in (value as Record<string, unknown>)))
-      return ''
-    const root = (value as { root?: unknown }).root as any
-    if (!root || typeof root !== 'object' || !Array.isArray(root.children)) return ''
-
-    const serializeNode = (node: any): string => {
-      if (!node) return ''
-      switch (node.type) {
-        case 'paragraph': {
-          const children = Array.isArray(node.children)
-            ? node.children.map(serializeNode).join('')
-            : ''
-          return children ? `<p>${children}</p>` : ''
-        }
-        case 'heading': {
-          const level = typeof node.tag === 'string' && /^h[1-6]$/.test(node.tag) ? node.tag : 'h2'
-          const children = Array.isArray(node.children)
-            ? node.children.map(serializeNode).join('')
-            : ''
-          return children ? `<${level}>${children}</${level}>` : ''
-        }
-        case 'text': {
-          let text: string = node.text ?? ''
-          if (!text.trim()) return '' // Skip empty text nodes
-          if (node.format) {
-            const isBold = (node.format & 1) === 1
-            const isItalic = (node.format & 2) === 2
-            const isUnderline = (node.format & 4) === 4
-            if (isBold) text = `<strong>${text}</strong>`
-            if (isItalic) text = `<em>${text}</em>`
-            if (isUnderline) text = `<u>${text}</u>`
-          }
-          return text
-        }
-        case 'link': {
-          const children = Array.isArray(node.children)
-            ? node.children.map(serializeNode).join('')
-            : ''
-          if (!children) return ''
-          const href = typeof node.url === 'string' ? node.url : '#'
-          const rel = node.rel ? ` rel="${node.rel}"` : ''
-          const target = node.target ? ` target="${node.target}"` : ''
-          return `<a href="${href}"${rel}${target}>${children}</a>`
-        }
-        case 'list': {
-          const children = Array.isArray(node.children)
-            ? node.children.map(serializeNode).join('')
-            : ''
-          if (!children) return ''
-          const tag = node.listType === 'number' || node.listType === 'ordered' ? 'ol' : 'ul'
-          return `<${tag}>${children}</${tag}>`
-        }
-        case 'listitem': {
-          const children = Array.isArray(node.children)
-            ? node.children.map(serializeNode).join('')
-            : ''
-          return children ? `<li>${children}</li>` : ''
-        }
-        case 'linebreak':
-          return '<br />'
-        default: {
-          const children = Array.isArray(node.children)
-            ? node.children.map(serializeNode).join('')
-            : ''
-          return children
-        }
-      }
-    }
-
-    const result = root.children.map(serializeNode).join('').trim()
-    return result
-  } catch (error) {
-    console.warn('Error parsing lexical content:', error)
-    return ''
-  }
-}
-
 export const blockComponents: Record<string, (block: unknown) => JSX.Element> = {
   contentBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'contentBlock' }>
     return <ContentBlock {...b} />
   },
-  cardSection: (block) => (
-    <CardSection
-      columns={(block as Extract<PageBlock, { blockType: 'cardSection' }>).columns ?? 3}
-      cards={((block as Extract<PageBlock, { blockType: 'cardSection' }>).cards ?? []).map(
-        (card) => ({
-          image: mediaToUrl(card.image as unknown as Media),
-          title: card.title,
-          text: card.text ?? '',
-          href: card.href ?? '#',
-        }),
-      )}
-    />
-  ),
-  mediaBlock: (block) => (
-    <MediaBlock
-      image={mediaToUrl(
-        (block as Extract<PageBlock, { blockType: 'mediaBlock' }>).image as unknown as Media,
-      )}
-      imagePosition={
-        (block as Extract<PageBlock, { blockType: 'mediaBlock' }>).imagePosition ?? 'left'
-      }
-      title={(block as Extract<PageBlock, { blockType: 'mediaBlock' }>).title}
-      content={lexicalToHtml((block as Extract<PageBlock, { blockType: 'mediaBlock' }>).content)}
-      ctaButton={
-        (block as Extract<PageBlock, { blockType: 'mediaBlock' }>).ctaButton
-          ? {
-              label:
-                (block as Extract<PageBlock, { blockType: 'mediaBlock' }>).ctaButton?.label ?? '',
-              href:
-                (block as Extract<PageBlock, { blockType: 'mediaBlock' }>).ctaButton?.href ?? '#',
-            }
-          : undefined
-      }
-      backgroundColor={
-        (block as Extract<PageBlock, { blockType: 'mediaBlock' }>).backgroundColor ?? 'default'
-      }
-    />
-  ),
-  ctaBlock: (block) => (
-    <CTABlock
-      title={lexicalToHtml((block as Extract<PageBlock, { blockType: 'ctaBlock' }>).title)}
-      description={lexicalToHtml(
-        (block as Extract<PageBlock, { blockType: 'ctaBlock' }>).description,
-      )}
-      ctaButton={{
-        label: (block as Extract<PageBlock, { blockType: 'ctaBlock' }>).ctaButton.label,
-        href: (block as Extract<PageBlock, { blockType: 'ctaBlock' }>).ctaButton.href,
-      }}
-      align={(block as Extract<PageBlock, { blockType: 'ctaBlock' }>).align ?? 'center'}
-      variant={(block as Extract<PageBlock, { blockType: 'ctaBlock' }>).variant ?? 'default'}
-    />
-  ),
-  aboutUsSection: (block) => (
-    <AboutUsSection
-      title={(block as Extract<PageBlock, { blockType: 'aboutUsSection' }>).title}
-      content={lexicalToHtml(
-        (block as Extract<PageBlock, { blockType: 'aboutUsSection' }>).content,
-      )}
-      image={mediaToUrl(
-        (block as Extract<PageBlock, { blockType: 'aboutUsSection' }>).image as unknown as Media,
-      )}
-      ctaButton={
-        (block as Extract<PageBlock, { blockType: 'aboutUsSection' }>).ctaButton
-          ? {
-              label:
-                (block as Extract<PageBlock, { blockType: 'aboutUsSection' }>).ctaButton?.label ??
-                '',
-              href:
-                (block as Extract<PageBlock, { blockType: 'aboutUsSection' }>).ctaButton?.href ??
-                '#',
-            }
-          : undefined
-      }
-    />
-  ),
-  partnersBlock: (block) => (
-    <PartnersBlock
-      title={(block as Extract<PageBlock, { blockType: 'partnersBlock' }>).title}
-      layout={(block as Extract<PageBlock, { blockType: 'partnersBlock' }>).layout ?? 'grid'}
-      partners={((block as Extract<PageBlock, { blockType: 'partnersBlock' }>).partners ?? []).map(
-        (p) => ({
-          logo: p.logo as Media,
-        }),
-      )}
-    />
-  ),
+  cardSection: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'cardSection' }>
+    return <CardSection {...b} />
+  },
+  mediaBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'mediaBlock' }>
+    return <MediaBlock {...b} />
+  },
+  ctaBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'ctaBlock' }>
+    return <CTABlock {...b} />
+  },
+  aboutUsSection: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'aboutUsSection' }>
+    return <AboutUsSection {...b} />
+  },
+  partnersBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'partnersBlock' }>
+    return <PartnersBlock {...b} />
+  },
   partnersTextBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'partnersTextBlock' }>
-    return (
-      <PartnersTextBlock
-        title={b.title}
-        partners={b.partners}
-        id={b.id}
-        blockName={b.blockName}
-        blockType={b.blockType}
-      />
-    )
+    return <PartnersTextBlock {...b} />
   },
   expandableTable: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'expandableTable' }>
-    return (
-      <ExpandableTable
-        title={b.title}
-        subtitle={b.subtitle}
-        description={b.description}
-        items={b.items}
-        enableSearch={b.enableSearch}
-        searchPlaceholder={b.searchPlaceholder}
-        blockType={b.blockType}
-        blockName={b.blockName}
-        id={b.id}
-      />
-    )
+    return <ExpandableTable {...b} />
   },
   testimonials: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'testimonials' }>
-    return (
-      <Testimonials
-        title={b.title}
-        testimonials={(b.testimonials ?? []).map((t) => ({
-          quote: t.quote,
-          author: t.author,
-          role: t.role,
-        }))}
-        autoplayInterval={b.autoplayInterval ?? 4000}
-        blockType={b.blockType}
-      />
-    )
+    return <Testimonials {...b} />
   },
   teamCards: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'teamCards' }>
-    const members = (b.members ?? []).map((m) => ({
-      id: m.id ?? `${m.name}`,
-      image: mediaToUrl(m.image as unknown as Media),
-      name: m.name,
-      description: m.description,
-      link: { text: m.link?.text ?? '', href: m.link?.href ?? '#' },
-    }))
-    return (
-      <TeamCards
-        title={b.title}
-        subtitle={b.subtitle ?? undefined}
-        members={members.map((member) => ({
-          ...member,
-          image: member.image as unknown as Media,
-        }))}
-        enableCarousel={b.enableCarousel ?? false}
-        blockType={b.blockType}
-      />
-    )
+    return <TeamCards {...b} />
   },
-  blogPostCards: (block) => (
-    <BlogPostCards
-      posts={((block as Extract<PageBlock, { blockType: 'blogPostCards' }>).posts ?? []).map(
-        (p) => ({
-          image: mediaToUrl(p.image as unknown as Media),
-          title: p.title,
-          excerpt: p.excerpt ?? '',
-          href:
-            (p as any).linkType === 'external'
-              ? ((p as any).href ?? '#')
-              : `/blogs/${(p as any)?.post?.value?.slug ?? (p as any)?.post?.slug ?? ''}`,
-          date: p.date ?? undefined,
-          author: p.author ?? undefined,
-        }),
-      )}
-    />
-  ),
+  blogPostCards: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'blogPostCards' }>
+    return <BlogPostCards {...(b as any)} />
+  },
   scrollPostCards: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'scrollPostCards' }>
-    const extractBlogSlug = (relation: unknown): string => {
-      if (!relation || typeof relation !== 'object') return ''
-      const rel = relation as { value?: unknown; slug?: unknown }
-      const candidate = (rel.value ?? rel) as { slug?: unknown }
-      return typeof candidate.slug === 'string' ? candidate.slug : ''
-    }
-    const posts = (b.posts ?? []).map((p) => {
-      const isExternal = (p as { linkType?: 'external' | 'internal' }).linkType === 'external'
-      const href = isExternal
-        ? ((p as { href?: string }).href ?? '#')
-        : `/blogs/${extractBlogSlug((p as { post?: unknown }).post)}`
-      return {
-        id: (p as { id?: string }).id ?? `${p.title}`,
-        image: mediaToUrl(p.image as unknown as Media),
-        title: p.title,
-        excerpt: p.excerpt ?? '',
-        author: p.author ?? '',
-        date: p.date ?? '',
-        readTime: p.readTime ?? '',
-        category: p.category ?? '',
-        href,
-      }
-    })
-    return (
-      <ScrollPostCards
-        title={b.title ?? undefined}
-        subtitle={b.subtitle ?? undefined}
-        posts={posts.map((p) => ({
-          ...p,
-          image: p.image as unknown as Media,
-        }))}
-        blockType={b.blockType}
-      />
-    )
+    return <ScrollPostCards {...b} />
   },
   carousel: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'carousel' }>
@@ -339,88 +80,20 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
     return <ScrollableCards {...b} />
   },
   singleCard: (block) => {
-    const b = block as any
-    return (
-      <SingleCard
-        title={b.title as string}
-        subtitle={(b.subtitle as string) ?? undefined}
-        image={b.image as Media}
-        imagePosition={(b as any).imagePosition as 'left' | 'right' | undefined}
-        enableBackground={Boolean((b as any).enableBackground)}
-        linkType={(b.linkType as 'internal' | 'external') ?? undefined}
-        internal={b.internal as { relation?: unknown } | undefined}
-        external={b.external as { href?: string } | undefined}
-        cta={
-          b.cta as
-            | { text?: string; variant?: 'primary' | 'secondary' | 'outline' | 'ghost' }
-            | undefined
-        }
-      />
-    )
+    const b = block as Extract<PageBlock, { blockType: 'singleCard' }>
+    return <SingleCard {...b} />
   },
   fullWidthBanner: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'fullWidthBanner' }>
-    const bgUrl = mediaToUrl(b.backgroundImage as unknown as Media)
-    return (
-      <FullWidthBanner
-        title={b.title ?? ''}
-        subtitle={b.subtitle ?? undefined}
-        buttonText={b.buttonText ?? ''}
-        buttonHref={b.buttonHref ?? '#'}
-        backgroundImage={bgUrl as unknown as Media}
-        blockType={b.blockType}
-      />
-    )
+    return <FullWidthBanner {...b} />
   },
   parallaxHero: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'parallaxHero' }>
-    const bgUrl = mediaToUrl(b.backgroundImage as unknown as Media)
-    return (
-      <ParallaxHero
-        title={b.title ?? ''}
-        subtitle={b.subtitle ?? ''}
-        buttonText={b.buttonText ?? ''}
-        buttonHref={b.buttonHref ?? '#'}
-        backgroundImage={bgUrl as unknown as Media}
-        blockType={b.blockType}
-        blockName={b.blockName}
-        id={b.id}
-      />
-    )
+    return <ParallaxHero {...b} />
   },
   twoCardBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'twoCardBlock' }>
-    const items = (b.items ?? []).map((i: any) => {
-      const image = mediaToUrl(i.image as unknown as Media)
-      const links = (i.links ?? []).map((link: any) => {
-        const isExternal = link.linkType === 'external'
-        let href: string
-        if (isExternal) {
-          href = link.external?.href ?? '#'
-        } else {
-          const rel = link.internal?.relation
-          const doc = rel?.value ?? rel
-          const slug = doc?.slug ?? ''
-          const collection = doc?.collection ?? rel?.relationTo
-          if (collection === 'blogs') href = `/blogs/${slug}`
-          else if (collection === 'pages') href = `/${slug}`
-          else href = '#'
-        }
-        return {
-          text: link.text ?? '',
-          variant: link.variant ?? 'primary',
-          href,
-          external: isExternal,
-        }
-      })
-      return {
-        image,
-        title: i.title ?? '',
-        description: i.description ?? '',
-        links,
-      }
-    })
-    return <TwoCardBlock title={b.title} subtitle={b.subtitle ?? undefined} items={items} />
+    return <TwoCardBlock {...b} />
   },
 }
 

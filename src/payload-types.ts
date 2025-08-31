@@ -547,15 +547,12 @@ export interface Page {
         | {
             title: string;
             subtitle?: string | null;
-            enableCarousel?: boolean | null;
             members: {
               image: number | Media;
               name: string;
               description: string;
-              link: {
-                text: string;
-                href: string;
-              };
+              linkedin?: string | null;
+              imagePosition?: ('left' | 'right') | null;
               id?: string | null;
             }[];
             id?: string | null;
@@ -1398,19 +1395,14 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               title?: T;
               subtitle?: T;
-              enableCarousel?: T;
               members?:
                 | T
                 | {
                     image?: T;
                     name?: T;
                     description?: T;
-                    link?:
-                      | T
-                      | {
-                          text?: T;
-                          href?: T;
-                        };
+                    linkedin?: T;
+                    imagePosition?: T;
                     id?: T;
                   };
               id?: T;

@@ -1,11 +1,57 @@
 'use client'
 
-import type { TwoCardBlockField } from '@/types/two-card-block'
 import { Card, CardContent } from '@/components/ui/card'
 import { CMSLink } from '@/components/ui/cms-link'
 import Image from 'next/image'
+import { mediaToUrl } from '@/lib/media'
+import type { Media } from '@/payload-types'
 
-export function TwoCardBlock({ title, subtitle, items }: TwoCardBlockField) {
+type RawTwoCardBlockProps = {
+  title: string
+  subtitle?: string | null | undefined
+  items?:
+    | Array<{
+        image?: number | Media | null | undefined
+        title: string
+        description: string
+        links?:
+          | Array<{
+              text: string
+              variant?: 'primary' | 'secondary' | null | undefined
+              linkType?: 'internal' | 'external' | null | undefined
+              internal?: { relation?: any }
+              external?: { href?: string | null | undefined }
+            }>
+          | null
+          | undefined
+      }>
+    | null
+    | undefined
+}
+
+function resolveLink(link: any): { href: string; external: boolean } {
+  if (link.linkType === 'external') {
+    return { href: link.external?.href ?? '#', external: true }
+  }
+
+  // Internal link - resolve to proper URL
+  if (link.internal?.relation) {
+    const rel = link.internal.relation
+    const doc = rel?.value ?? rel
+    const slug = doc?.slug ?? ''
+    const collection = doc?.collection ?? rel?.relationTo
+    let href = '#'
+
+    if (collection === 'blogs') href = `/blogs/${slug}`
+    else if (collection === 'pages') href = `/${slug}`
+
+    return { href, external: false }
+  }
+
+  return { href: '#', external: false }
+}
+
+export function TwoCardBlock({ title, subtitle, items }: RawTwoCardBlockProps) {
   return (
     <section className="w-full py-16 px-4">
       <div className="max-w-6xl mx-auto">
@@ -28,7 +74,7 @@ export function TwoCardBlock({ title, subtitle, items }: TwoCardBlockField) {
                 <div className="p-4">
                   <div className="relative w-full h-48 md:h-56 overflow-hidden rounded-lg">
                     <Image
-                      src={item.image || '/placeholder.svg'}
+                      src={mediaToUrl(item.image)}
                       alt={item.title}
                       fill
                       className="object-cover"
@@ -46,16 +92,19 @@ export function TwoCardBlock({ title, subtitle, items }: TwoCardBlockField) {
                   </p>
 
                   <div className="flex flex-wrap gap-3">
-                    {item.links.map((link, linkIndex) => (
-                      <CMSLink
-                        key={linkIndex}
-                        href={link.href}
-                        variant={link.variant}
-                        external={link.external}
-                      >
-                        {link.text}
-                      </CMSLink>
-                    ))}
+                    {(item.links || []).map((link, linkIndex) => {
+                      const resolvedLink = resolveLink(link)
+                      return (
+                        <CMSLink
+                          key={linkIndex}
+                          href={resolvedLink.href}
+                          variant={link.variant ?? 'primary'}
+                          external={resolvedLink.external}
+                        >
+                          {link.text}
+                        </CMSLink>
+                      )
+                    })}
                   </div>
                 </div>
               </CardContent>

@@ -1,30 +1,8 @@
 import { draftMode } from 'next/headers'
 import type { Metadata } from 'next'
 import { getPayload, Where } from 'payload'
-import type { Page, Media } from '@/payload-types'
-
-/**
- * Convert media object to URL string, handling different sizes
- */
-export function mediaToUrl(media: number | Media | null | undefined): string {
-  if (!media || typeof media === 'number') return ''
-
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || ''
-
-  const url =
-    media.url ??
-    media.sizes?.hero?.url ??
-    media.sizes?.card?.url ??
-    media.sizes?.thumbnail?.url ??
-    ''
-
-  // Return absolute URL for production, relative for development
-  if (url && !url.startsWith('http') && baseUrl) {
-    return `${baseUrl}${url}`
-  }
-
-  return url
-}
+import type { Page } from '@/payload-types'
+import { mediaToUrl } from './media'
 
 /**
  * Fetch a page by slug with proper error handling

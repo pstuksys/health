@@ -49,8 +49,6 @@ export function NavigationMenu({
   const lastVisibleLenRef = useRef<number>(items.length)
   const lastHiddenLenRef = useRef<number>(0)
 
-  console.log({ items })
-
   useEffect(() => {
     if (!navContainerRef.current || !navItemsRef.current) return
     let frame = 0
@@ -535,7 +533,7 @@ export function NavigationMenu({
                 {/* CTA Button */}
                 {ctaButton && (
                   <div className="pt-6">
-                    <CMSLink href={resolveUrl(ctaButton)} variant="primary">
+                    <CMSLink href={resolveUrl(ctaButton)} variant="primary" className="w-full">
                       {ctaButton.label}
                     </CMSLink>
                   </div>

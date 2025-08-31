@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Page } from '@/payload-types'
+import { mediaToUrl } from '@/lib/media'
+import { Page, Media } from '@/payload-types'
 
 type ParallaxHeroProps = Extract<NonNullable<Page['blocks']>[number], { blockType: 'parallaxHero' }>
 
@@ -16,6 +17,7 @@ export function ParallaxHero({
 }: ParallaxHeroProps) {
   const sectionRef = useRef<HTMLElement | null>(null)
   const [offsetY, setOffsetY] = useState(0)
+  const bgUrl = mediaToUrl(backgroundImage)
 
   useEffect(() => {
     let ticking = false
@@ -42,7 +44,7 @@ export function ParallaxHero({
       <div
         className="absolute inset-0 w-full h-[160%] bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url(${typeof backgroundImage === 'string' ? backgroundImage : ''})`,
+          backgroundImage: `url(${bgUrl})`,
           transform: `translate3d(0, ${offsetY}px, 0)`,
           willChange: 'transform',
         }}
@@ -52,15 +54,17 @@ export function ParallaxHero({
 
       <div className="relative z-10 flex items-center justify-center h-full px-4">
         <div className="text-center max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-6xl font-light text-white mb-6 leading-tight">{title}</h2>
+          <h2 className="text-4xl md:text-6xl font-light text-white mb-6 leading-tight">
+            {title || ''}
+          </h2>
           <p className="text-xl md:text-2xl text-white/90 mb-8 font-light leading-relaxed">
-            {subtitle}
+            {subtitle || ''}
           </p>
           <Button
             asChild
             className="bg-ds-accent-yellow hover:bg-ds-accent-yellow/90 text-ds-dark-blue font-semibold px-8 py-3 text-lg rounded-md transition-all duration-300 hover:scale-105 shadow-lg"
           >
-            <Link href={buttonHref}>{buttonText}</Link>
+            <Link href={buttonHref ?? '#'}>{buttonText || 'Learn More'}</Link>
           </Button>
         </div>
       </div>

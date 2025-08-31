@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 export type CMSLinkProps = {
   href: string
   children: React.ReactNode
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost'
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'default'
   size?: 'sm' | 'md' | 'lg'
   className?: string
   external?: boolean
@@ -40,6 +40,7 @@ export function CMSLink({
       'bg-transparent border-2 border-ds-accent-yellow text-ds-accent-yellow hover:bg-ds-accent-yellow hover:text-ds-dark-blue',
     ghost:
       'relative bg-transparent p-0 border-0 rounded-none text-inherit hover:bg-transparent after:absolute after:left-0 after:-bottom-0.5 after:h-[2px] after:w-0 hover:after:w-full after:bg-current after:transition-all after:duration-300',
+    default: '',
   }
 
   const classes = cn(
