@@ -89,9 +89,9 @@ export function HeroSection({
                 )}
               />
             ))}
-          {(ctaButton || secondaryCTA) && (
+          {(ctaButton?.label && ctaButton?.href) || (secondaryCTA?.label && secondaryCTA?.href) ? (
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-              {ctaButton && (
+              {ctaButton?.label && ctaButton?.href && (
                 <CMSLink
                   href={ctaButton.href}
                   variant={ctaButton.variant === 'secondary' ? 'secondary' : 'primary'}
@@ -102,7 +102,7 @@ export function HeroSection({
                   {ctaButton.label}
                 </CMSLink>
               )}
-              {secondaryCTA && (
+              {secondaryCTA?.label && secondaryCTA?.href && (
                 <CMSLink
                   href={secondaryCTA.href}
                   variant="outline"
@@ -120,7 +120,7 @@ export function HeroSection({
                 </CMSLink>
               )}
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </section>

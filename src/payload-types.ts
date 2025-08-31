@@ -272,7 +272,7 @@ export interface Page {
     /**
      * Button text
      */
-    label: string;
+    label?: string | null;
     /**
      * Choose between internal page/blog or external URL
      */
@@ -284,15 +284,15 @@ export interface Page {
       /**
        * Choose the page or blog to link to
        */
-      relation:
-        | {
+      relation?:
+        | ({
             relationTo: 'pages';
             value: number | Page;
-          }
-        | {
+          } | null)
+        | ({
             relationTo: 'blogs';
             value: number | Blog;
-          };
+          } | null);
     };
     /**
      * Link to an external website
@@ -301,7 +301,7 @@ export interface Page {
       /**
        * External URL (e.g., https://example.com)
        */
-      href: string;
+      href?: string | null;
     };
     /**
      * Button style variant
@@ -315,7 +315,7 @@ export interface Page {
     /**
      * Button text
      */
-    label: string;
+    label?: string | null;
     /**
      * Choose between internal page/blog or external URL
      */
@@ -327,15 +327,15 @@ export interface Page {
       /**
        * Choose the page or blog to link to
        */
-      relation:
-        | {
+      relation?:
+        | ({
             relationTo: 'pages';
             value: number | Page;
-          }
-        | {
+          } | null)
+        | ({
             relationTo: 'blogs';
             value: number | Blog;
-          };
+          } | null);
     };
     /**
      * Link to an external website
@@ -344,7 +344,7 @@ export interface Page {
       /**
        * External URL (e.g., https://example.com)
        */
-      href: string;
+      href?: string | null;
     };
   };
   /**

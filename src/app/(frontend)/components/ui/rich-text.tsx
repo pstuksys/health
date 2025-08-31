@@ -22,7 +22,7 @@ export const RichText = memo(function RichText({ className, data, ...rest }: Ric
     <PayloadRichText
       {...(rest as unknown as React.ComponentProps<typeof PayloadRichText>)}
       data={data as unknown as React.ComponentProps<typeof PayloadRichText>['data']}
-      className={cn(className)}
+      className={cn('rich-text-content', className)}
     />
   )
 })

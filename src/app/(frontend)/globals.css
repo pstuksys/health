@@ -66,11 +66,11 @@ body.mobile-menu-open {
 }
 
 /* Rich Text Content Styling */
-/* .rich-text-content {
+.rich-text-content {
   @apply text-base leading-relaxed;
-} */
+}
 
-/* .rich-text-content h1,
+.rich-text-content h1,
 .rich-text-content h2,
 .rich-text-content h3,
 .rich-text-content h4,
@@ -105,9 +105,9 @@ body.mobile-menu-open {
 
 .rich-text-content p {
   @apply mb-4 last:mb-0;
-} */
+}
 
-/* .rich-text-content ul,
+.rich-text-content ul,
 .rich-text-content ol {
   @apply mb-4 pl-6;
 }
@@ -130,7 +130,7 @@ body.mobile-menu-open {
 
 .rich-text-content u {
   @apply underline;
-} */
+}
 
 /* Hero-specific rich text styling */
 /* .hero-title {

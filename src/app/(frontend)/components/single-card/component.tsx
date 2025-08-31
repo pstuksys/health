@@ -50,8 +50,8 @@ export function SingleCard({
       <div className="max-w-container mx-auto">
         <div
           className={cn(
-            'grid grid-cols-1 md:grid-cols-2 gap-8 items-center border rounded-2xl p-6',
-            enableBackground && 'bg-[#f3f5f7]',
+            'grid grid-cols-1 md:grid-cols-2 gap-8 items-center rounded-2xl p-6',
+            enableBackground && 'border bg-[#f3f5f7]',
           )}
         >
           <div

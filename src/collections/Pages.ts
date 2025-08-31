@@ -215,7 +215,7 @@ export const Pages: CollectionConfig = {
                 {
                   name: 'label',
                   type: 'text',
-                  required: true,
+                  required: false,
                   admin: { description: 'Button text' },
                 },
                 {
@@ -243,7 +243,7 @@ export const Pages: CollectionConfig = {
                       type: 'relationship',
                       label: 'Select Page or Blog',
                       relationTo: ['pages', 'blogs'],
-                      required: true,
+                      required: false,
                       admin: { description: 'Choose the page or blog to link to' },
                     },
                   ],
@@ -260,7 +260,7 @@ export const Pages: CollectionConfig = {
                     {
                       name: 'href',
                       type: 'text',
-                      required: true,
+                      required: false,
                       admin: { description: 'External URL (e.g., https://example.com)' },
                     },
                   ],
@@ -289,7 +289,6 @@ export const Pages: CollectionConfig = {
                 {
                   name: 'label',
                   type: 'text',
-                  required: true,
                   admin: { description: 'Button text' },
                 },
                 {
@@ -317,7 +316,7 @@ export const Pages: CollectionConfig = {
                       type: 'relationship',
                       label: 'Select Page or Blog',
                       relationTo: ['pages', 'blogs'],
-                      required: true,
+                      required: false,
                       admin: { description: 'Choose the page or blog to link to' },
                     },
                   ],
@@ -334,7 +333,7 @@ export const Pages: CollectionConfig = {
                     {
                       name: 'href',
                       type: 'text',
-                      required: true,
+                      required: false,
                       admin: { description: 'External URL (e.g., https://example.com)' },
                     },
                   ],
