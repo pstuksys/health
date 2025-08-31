@@ -100,7 +100,7 @@ export function TeamCards({
               }}
             >
               {/* Main row with image, info, and button */}
-              <div className="transition-all duration-300 px-6 py-0">
+              <div className="transition-all duration-300 px-6 py-1 rounded-2xl bg-white border border-ds-pastille-green/20">
                 <div
                   className={`flex flex-col md:flex-row md:items-center gap-6 ${
                     (member.imagePosition || 'left') === 'right' ? 'md:flex-row-reverse' : ''

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { mediaToUrl } from '@/lib/media'
 import type { Page, Media } from '@/payload-types'
+import { CMSLink } from '../ui'
 
 type FullWidthBannerProps = Extract<
   NonNullable<Page['blocks']>[number],
@@ -34,12 +35,9 @@ export function FullWidthBanner({
         {subtitle && (
           <p className="text-base lg:text-lg font-light mb-6 max-w-2xl opacity-90">{subtitle}</p>
         )}
-        <Button
-          asChild
-          className="bg-ds-accent-yellow text-ds-dark-blue hover:bg-ds-accent-yellow/90 hover:scale-105 transition-all duration-200 font-semibold px-8 py-3"
-        >
-          <Link href={buttonHref ?? '#'}>{buttonText || 'Learn More'}</Link>
-        </Button>
+        <CMSLink variant="primary" href={buttonHref ?? '#'}>
+          {buttonText || ''}
+        </CMSLink>
       </div>
     </section>
   )
