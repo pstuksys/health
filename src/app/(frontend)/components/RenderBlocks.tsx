@@ -37,7 +37,7 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   },
   ctaBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'ctaBlock' }>
-    return <CTABlock {...b} />
+    return <CTABlock {...(b as any)} />
   },
   aboutUsSection: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'aboutUsSection' }>

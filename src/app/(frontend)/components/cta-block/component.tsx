@@ -12,8 +12,8 @@ type CTABlockProps = {
   title?: any // Lexical content
   description?: any // Lexical content
   ctaButton?: CTAButton
-  align?: AlignmentType | null | undefined
-  variant?: 'default' | 'accent' | 'gradient' | null | undefined
+  align?: AlignmentType
+  variant?: 'default' | 'accent' | 'gradient'
   className?: string
 }
 
