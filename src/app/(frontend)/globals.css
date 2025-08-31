@@ -66,11 +66,11 @@ body.mobile-menu-open {
 }
 
 /* Rich Text Content Styling */
-/* .rich-text-content {
+.rich-text-content {
   @apply text-base leading-relaxed;
-} */
+}
 
-/* .rich-text-content h1,
+.rich-text-content h1,
 .rich-text-content h2,
 .rich-text-content h3,
 .rich-text-content h4,
@@ -105,9 +105,9 @@ body.mobile-menu-open {
 
 .rich-text-content p {
   @apply mb-4 last:mb-0;
-} */
+}
 
-/* .rich-text-content ul,
+.rich-text-content ul,
 .rich-text-content ol {
   @apply mb-4 pl-6;
 }
@@ -130,16 +130,41 @@ body.mobile-menu-open {
 
 .rich-text-content u {
   @apply underline;
-} */
-
-/* Hero-specific rich text styling */
-/* .hero-title {
-  @apply text-4xl sm:text-5xl lg:text-6xl font-light leading-tight mb-6;
 }
 
-.hero-subtitle {
-  @apply text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl;
-} */
+/* Hero-specific rich text styling */
+.hero-section .rich-text-content h1,
+.hero-section .rich-text-content h2,
+.hero-section .rich-text-content h3,
+.hero-section .rich-text-content h4,
+.hero-section .rich-text-content h5,
+.hero-section .rich-text-content h6 {
+  @apply font-light leading-tight mb-4 mt-4;
+}
+
+.hero-section .rich-text-content h1 {
+  @apply text-2xl sm:text-3xl lg:text-4xl;
+}
+
+.hero-section .rich-text-content h2 {
+  @apply text-xl sm:text-2xl lg:text-3xl;
+}
+
+.hero-section .rich-text-content h3 {
+  @apply text-lg sm:text-xl lg:text-2xl;
+}
+
+.hero-section .rich-text-content h4 {
+  @apply text-base sm:text-lg lg:text-xl;
+}
+
+.hero-section .rich-text-content h5 {
+  @apply text-sm sm:text-base lg:text-lg;
+}
+
+.hero-section .rich-text-content h6 {
+  @apply text-xs sm:text-sm lg:text-base;
+}
 
 @custom-variant dark (&:is(.dark *));
 

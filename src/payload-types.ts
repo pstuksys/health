@@ -272,7 +272,7 @@ export interface Page {
     /**
      * Button text
      */
-    label: string;
+    label?: string | null;
     /**
      * Choose between internal page/blog or external URL
      */
@@ -284,15 +284,15 @@ export interface Page {
       /**
        * Choose the page or blog to link to
        */
-      relation:
-        | {
+      relation?:
+        | ({
             relationTo: 'pages';
             value: number | Page;
-          }
-        | {
+          } | null)
+        | ({
             relationTo: 'blogs';
             value: number | Blog;
-          };
+          } | null);
     };
     /**
      * Link to an external website
@@ -301,7 +301,7 @@ export interface Page {
       /**
        * External URL (e.g., https://example.com)
        */
-      href: string;
+      href?: string | null;
     };
     /**
      * Button style variant
@@ -315,7 +315,7 @@ export interface Page {
     /**
      * Button text
      */
-    label: string;
+    label?: string | null;
     /**
      * Choose between internal page/blog or external URL
      */
@@ -327,15 +327,15 @@ export interface Page {
       /**
        * Choose the page or blog to link to
        */
-      relation:
-        | {
+      relation?:
+        | ({
             relationTo: 'pages';
             value: number | Page;
-          }
-        | {
+          } | null)
+        | ({
             relationTo: 'blogs';
             value: number | Blog;
-          };
+          } | null);
     };
     /**
      * Link to an external website
@@ -344,9 +344,13 @@ export interface Page {
       /**
        * External URL (e.g., https://example.com)
        */
-      href: string;
+      href?: string | null;
     };
   };
+  /**
+   * Choose the alignment for the hero CTA buttons
+   */
+  heroCTAAlignment?: ('left' | 'center' | 'right') | null;
   /**
    * Add flexible content blocks to build your page layout
    */
@@ -543,15 +547,12 @@ export interface Page {
         | {
             title: string;
             subtitle?: string | null;
-            enableCarousel?: boolean | null;
             members: {
               image: number | Media;
               name: string;
               description: string;
-              link: {
-                text: string;
-                href: string;
-              };
+              linkedin?: string | null;
+              imagePosition?: ('left' | 'right') | null;
               id?: string | null;
             }[];
             id?: string | null;
@@ -603,6 +604,56 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'scrollPostCards';
+          }
+        | {
+            title?: string | null;
+            subtitle?: string | null;
+            cards: {
+              title: string;
+              icon?:
+                | (
+                    | 'Heart'
+                    | 'Activity'
+                    | 'Users'
+                    | 'Shield'
+                    | 'Star'
+                    | 'CheckCircle'
+                    | 'Lightbulb'
+                    | 'Target'
+                    | 'TrendingUp'
+                    | 'Award'
+                    | 'Zap'
+                    | 'Leaf'
+                    | 'Globe'
+                    | 'Clock'
+                    | 'MapPin'
+                    | 'Phone'
+                    | 'Mail'
+                    | 'MessageCircle'
+                    | 'Calendar'
+                    | 'FileText'
+                  )
+                | null;
+              content: {
+                root: {
+                  type: string;
+                  children: {
+                    type: string;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'scrollableCards';
           }
         | {
             title?: string | null;
@@ -1198,6 +1249,7 @@ export interface PagesSelect<T extends boolean = true> {
               href?: T;
             };
       };
+  heroCTAAlignment?: T;
   blocks?:
     | T
     | {
@@ -1343,19 +1395,14 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               title?: T;
               subtitle?: T;
-              enableCarousel?: T;
               members?:
                 | T
                 | {
                     image?: T;
                     name?: T;
                     description?: T;
-                    link?:
-                      | T
-                      | {
-                          text?: T;
-                          href?: T;
-                        };
+                    linkedin?: T;
+                    imagePosition?: T;
                     id?: T;
                   };
               id?: T;
@@ -1398,6 +1445,22 @@ export interface PagesSelect<T extends boolean = true> {
                     linkType?: T;
                     href?: T;
                     post?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        scrollableCards?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    icon?: T;
+                    content?: T;
                     id?: T;
                   };
               id?: T;

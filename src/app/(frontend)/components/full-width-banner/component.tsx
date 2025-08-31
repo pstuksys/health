@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import type { Page } from '@/payload-types'
+import { mediaToUrl } from '@/lib/media'
+import type { Page, Media } from '@/payload-types'
 
 type FullWidthBannerProps = Extract<
   NonNullable<Page['blocks']>[number],
@@ -17,17 +18,19 @@ export function FullWidthBanner({
   buttonHref,
   backgroundImage,
 }: FullWidthBannerProps) {
+  const bgUrl = mediaToUrl(backgroundImage)
+
   return (
     <section className={cn('relative w-full h-64 lg:h-72 overflow-hidden')}>
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${backgroundImage})` }}
+        style={{ backgroundImage: `url(${bgUrl})` }}
       >
         <div className="absolute inset-0 bg-ds-dark-blue/60" />
       </div>
 
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 text-center text-white">
-        <h2 className="text-2xl lg:text-4xl font-light mb-2 max-w-4xl">{title}</h2>
+        <h2 className="text-2xl lg:text-4xl font-light mb-2 max-w-4xl">{title || ''}</h2>
         {subtitle && (
           <p className="text-base lg:text-lg font-light mb-6 max-w-2xl opacity-90">{subtitle}</p>
         )}
@@ -35,7 +38,7 @@ export function FullWidthBanner({
           asChild
           className="bg-ds-accent-yellow text-ds-dark-blue hover:bg-ds-accent-yellow/90 hover:scale-105 transition-all duration-200 font-semibold px-8 py-3"
         >
-          <Link href={buttonHref}>{buttonText}</Link>
+          <Link href={buttonHref ?? '#'}>{buttonText || 'Learn More'}</Link>
         </Button>
       </div>
     </section>

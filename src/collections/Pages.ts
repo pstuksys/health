@@ -13,6 +13,7 @@ import { blogPostCardsFields } from '../app/(frontend)/components/blog-post-card
 import { carouselFields } from '../app/(frontend)/components/carousel/config'
 import { twoCardBlockFields } from '../app/(frontend)/components/two-card-block'
 import { scrollPostCardsFields } from '../app/(frontend)/components/scroll-post-cards/config'
+import { scrollableCards } from '../app/(frontend)/components/scrollable-cards/config'
 import { fullWidthBannerFields } from '../app/(frontend)/components/full-width-banner/config'
 import { parallaxHeroFields } from '../app/(frontend)/components/parallax-hero/config'
 import { singleCardFields } from '@/components/single-card/config'
@@ -40,6 +41,7 @@ const testimonialsBlock: Block = { slug: 'testimonials', fields: testimonialsFie
 const teamCardsBlock: Block = { slug: 'teamCards', fields: teamCardsFields }
 const blogPostCardsBlock: Block = { slug: 'blogPostCards', fields: blogPostCardsFields }
 const scrollPostCardsBlock: Block = { slug: 'scrollPostCards', fields: scrollPostCardsFields }
+const scrollableCardsBlock: Block = { slug: 'scrollableCards', fields: scrollableCards.fields }
 const carouselBlock: Block = { slug: 'carousel', fields: carouselFields }
 const twoCardBlock: Block = { slug: 'twoCardBlock', fields: twoCardBlockFields }
 const fullWidthBannerBlock: Block = { slug: 'fullWidthBanner', fields: fullWidthBannerFields }
@@ -60,6 +62,7 @@ const pageBlocks: Block[] = [
   teamCardsBlock,
   blogPostCardsBlock,
   scrollPostCardsBlock,
+  scrollableCardsBlock,
   carouselBlock,
   twoCardBlock,
   fullWidthBannerBlock,
@@ -215,7 +218,7 @@ export const Pages: CollectionConfig = {
                 {
                   name: 'label',
                   type: 'text',
-                  required: true,
+                  required: false,
                   admin: { description: 'Button text' },
                 },
                 {
@@ -243,7 +246,7 @@ export const Pages: CollectionConfig = {
                       type: 'relationship',
                       label: 'Select Page or Blog',
                       relationTo: ['pages', 'blogs'],
-                      required: true,
+                      required: false,
                       admin: { description: 'Choose the page or blog to link to' },
                     },
                   ],
@@ -260,7 +263,7 @@ export const Pages: CollectionConfig = {
                     {
                       name: 'href',
                       type: 'text',
-                      required: true,
+                      required: false,
                       admin: { description: 'External URL (e.g., https://example.com)' },
                     },
                   ],
@@ -289,7 +292,6 @@ export const Pages: CollectionConfig = {
                 {
                   name: 'label',
                   type: 'text',
-                  required: true,
                   admin: { description: 'Button text' },
                 },
                 {
@@ -317,7 +319,7 @@ export const Pages: CollectionConfig = {
                       type: 'relationship',
                       label: 'Select Page or Blog',
                       relationTo: ['pages', 'blogs'],
-                      required: true,
+                      required: false,
                       admin: { description: 'Choose the page or blog to link to' },
                     },
                   ],
@@ -334,12 +336,27 @@ export const Pages: CollectionConfig = {
                     {
                       name: 'href',
                       type: 'text',
-                      required: true,
+                      required: false,
                       admin: { description: 'External URL (e.g., https://example.com)' },
                     },
                   ],
                 },
               ],
+            },
+            {
+              name: 'heroCTAAlignment',
+              type: 'select',
+              label: 'Hero CTA Button Alignment',
+              options: [
+                { label: 'Left Aligned', value: 'left' },
+                { label: 'Centered', value: 'center' },
+                { label: 'Right Aligned', value: 'right' },
+              ],
+              defaultValue: 'left',
+              admin: {
+                description: 'Choose the alignment for the hero CTA buttons',
+                condition: (data) => data.showHero,
+              },
             },
           ],
         },

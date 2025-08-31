@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { useSwipe } from '@/lib/hooks/use-swipe'
 import { CMSLink } from '../ui/cms-link'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from '@/lib/media'
@@ -31,7 +32,7 @@ function chunkItems(items: ResolvedCarouselItem[], chunkSize: number): ResolvedC
 
 function CarouselCard({ item }: { item: ResolvedCarouselItem }) {
   const card = (
-    <div className="group cursor-pointer transition-all duration-300 hover:shadow-xl bg-white border border-ds-pastille-green/20 overflow-hidden rounded-[5px]">
+    <div className="group cursor-pointer transition-all duration-300 hover:shadow-xl bg-white border border-ds-pastille-green/20 overflow-hidden rounded-[5px] mx-1">
       {/* Mobile: Vertical layout, Desktop: Horizontal layout */}
       <div className="flex flex-col md:flex-row h-auto md:h-[18rem] lg:h-[19rem]">
         {/* Image Section */}
@@ -135,6 +136,13 @@ export function MedicalCarousel(props: MedicalCarouselProps) {
     setCurrentIndex(index)
   }, [])
 
+  // Use the swipe hook for touch navigation
+  const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe({
+    minSwipeDistance: 50,
+    onSwipeLeft: nextSlide,
+    onSwipeRight: prevSlide,
+  })
+
   useEffect(() => {
     if (!effectiveAutoplay || isHovered || totalSlides <= 1) return
     const interval = setInterval(nextSlide, effectiveAutoplayInterval)
@@ -187,7 +195,12 @@ export function MedicalCarousel(props: MedicalCarouselProps) {
           </>
         )}
 
-        <div className="overflow-hidden rounded-xl">
+        <div
+          className="overflow-hidden rounded-xl"
+          onTouchStart={onTouchStart}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+        >
           <div
             className="flex transition-transform duration-500 ease-in-out"
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}

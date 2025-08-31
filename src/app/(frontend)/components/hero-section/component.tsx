@@ -14,6 +14,7 @@ type HeroSectionProps = {
   secondaryCTA?: CTAButton
   gradientOverlay?: boolean
   textColor?: 'auto' | 'light' | 'dark'
+  ctaAlignment?: 'left' | 'center' | 'right'
   className?: string
 }
 
@@ -25,6 +26,7 @@ export function HeroSection({
   secondaryCTA,
   gradientOverlay = false,
   textColor = 'auto',
+  ctaAlignment = 'left',
   className,
 }: HeroSectionProps) {
   // Map text color values to CSS classes
@@ -42,11 +44,24 @@ export function HeroSection({
     return isTitle ? 'text-ds-dark-blue' : 'text-ds-pastille-green'
   }
 
+  // Map CTA alignment to CSS classes
+  const getCTAAlignmentClass = () => {
+    switch (ctaAlignment) {
+      case 'center':
+        return 'justify-center'
+      case 'right':
+        return 'justify-end'
+      case 'left':
+      default:
+        return 'justify-start'
+    }
+  }
+
   return (
     <section
       id="hero-section"
       className={cn(
-        'relative py-20 px-4 sm:px-6 lg:px-8 flex items-center bg-ds-light-neutral overflow-hidden min-h-[70vh]',
+        'hero-section relative py-20 px-4 sm:px-6 lg:px-8 flex items-center bg-ds-light-neutral overflow-hidden min-h-[70vh]',
         className,
       )}
     >
@@ -89,9 +104,14 @@ export function HeroSection({
                 )}
               />
             ))}
-          {(ctaButton || secondaryCTA) && (
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-              {ctaButton && (
+          {(ctaButton?.label && ctaButton?.href) || (secondaryCTA?.label && secondaryCTA?.href) ? (
+            <div
+              className={cn(
+                'flex flex-col sm:flex-row gap-4 w-full sm:w-auto',
+                getCTAAlignmentClass(),
+              )}
+            >
+              {ctaButton?.label && ctaButton?.href && (
                 <CMSLink
                   href={ctaButton.href}
                   variant={ctaButton.variant === 'secondary' ? 'secondary' : 'primary'}
@@ -102,7 +122,7 @@ export function HeroSection({
                   {ctaButton.label}
                 </CMSLink>
               )}
-              {secondaryCTA && (
+              {secondaryCTA?.label && secondaryCTA?.href && (
                 <CMSLink
                   href={secondaryCTA.href}
                   variant="outline"
@@ -120,7 +140,7 @@ export function HeroSection({
                 </CMSLink>
               )}
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </section>

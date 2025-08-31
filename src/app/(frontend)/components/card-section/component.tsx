@@ -1,10 +1,21 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { mediaToUrl } from '@/lib/media'
+import type { Media } from '@/payload-types'
 
-type Card = { image: string; title: string; text: string; href: string }
+type RawCard = {
+  image?: number | Media | null | undefined
+  title: string
+  text?: string | null | undefined
+  href?: string | null | undefined
+}
 
-type CardSectionProps = { cards: Card[]; columns?: number; className?: string }
+type CardSectionProps = {
+  cards: RawCard[]
+  columns?: number | null | undefined
+  className?: string
+}
 
 export function CardSection({ cards, columns = 3, className }: CardSectionProps) {
   const getGridClasses = () => {
@@ -26,12 +37,12 @@ export function CardSection({ cards, columns = 3, className }: CardSectionProps)
           {cards.map((card, index) => (
             <Link
               key={index}
-              href={card.href}
+              href={card.href ?? '#'}
               className="group bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
             >
               <div className="aspect-video relative overflow-hidden">
                 <Image
-                  src={card.image || '/placeholder.svg'}
+                  src={mediaToUrl(card.image)}
                   alt={card.title}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -41,7 +52,9 @@ export function CardSection({ cards, columns = 3, className }: CardSectionProps)
                 <h3 className="text-xl font-semibold text-ds-dark-blue group-hover:text-ds-pastille-green transition-colors duration-200">
                   {card.title}
                 </h3>
-                <p className="text-ds-pastille-green font-light leading-relaxed">{card.text}</p>
+                <p className="text-ds-pastille-green font-light leading-relaxed">
+                  {card.text ?? ''}
+                </p>
               </div>
             </Link>
           ))}

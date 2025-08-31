@@ -1,16 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450" role="img" aria-label="Placeholder image">
-  <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#3d426a"/>
-      <stop offset="100%" stop-color="#547b82"/>
-    </linearGradient>
-  </defs>
-  <rect width="800" height="450" fill="url(#g)"/>
-  <rect x="24" y="24" width="752" height="402" rx="12" ry="12" fill="rgba(255,255,255,0.08)"/>
-  <g fill="#efefee" font-family="Arial, Helvetica, sans-serif" text-anchor="middle">
-    <text x="400" y="225" font-size="28" font-weight="600">Placeholder</text>
-    <text x="400" y="255" font-size="14" fill="#e5e7eb">800×450</text>
-  </g>
-</svg>
-
-
+<svg xmlns="http://www.w3.org/2000/svg" width="680.764" height="528.354" viewBox="0 0 180.119 139.794"><g transform="translate(-13.59 -66.639)" paint-order="fill markers stroke"><path fill="#d0d0d0" d="M13.591 66.639H193.71v139.794H13.591z"/><path d="m118.507 133.514-34.249 34.249-15.968-15.968-41.938 41.937H178.726z" opacity=".675" fill="#fff"/><circle cx="58.217" cy="108.555" r="11.773" opacity=".675" fill="#fff"/><path fill="none" d="M26.111 77.634h152.614v116.099H26.111z"/></g></svg>

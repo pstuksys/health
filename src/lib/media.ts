@@ -6,7 +6,7 @@ import type { Media } from '@/payload-types'
  * - Prepends NEXT_PUBLIC_SITE_URL when needed for absolute URLs in production
  */
 export function mediaToUrl(media: number | Media | null | undefined): string {
-  if (!media || typeof media === 'number') return ''
+  if (!media || typeof media === 'number') return '/placeholder.svg'
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || ''
 
@@ -21,5 +21,5 @@ export function mediaToUrl(media: number | Media | null | undefined): string {
     return `${baseUrl}${url}`
   }
 
-  return url
+  return url || '/placeholder.svg'
 }

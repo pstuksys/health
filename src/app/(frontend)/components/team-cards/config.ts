@@ -1,13 +1,8 @@
 import type { Field } from 'payload'
 
 export const teamCardsFields: Field[] = [
-  { name: 'title', type: 'text', required: true, defaultValue: 'Our Team' },
-  { name: 'subtitle', type: 'text' },
-  {
-    name: 'enableCarousel',
-    type: 'checkbox',
-    defaultValue: false,
-  },
+  { name: 'title', type: 'text', required: true, defaultValue: 'Meet Our Team' },
+  { name: 'subtitle', type: 'text', defaultValue: 'The talented people behind our success' },
   {
     name: 'members',
     type: 'array',
@@ -16,13 +11,14 @@ export const teamCardsFields: Field[] = [
       { name: 'image', type: 'upload', relationTo: 'media', required: true },
       { name: 'name', type: 'text', required: true },
       { name: 'description', type: 'textarea', required: true },
+      { name: 'linkedin', type: 'text' },
       {
-        name: 'link',
-        type: 'group',
-        required: true,
-        fields: [
-          { name: 'text', type: 'text', required: true },
-          { name: 'href', type: 'text', required: true },
+        name: 'imagePosition',
+        type: 'select',
+        defaultValue: 'left',
+        options: [
+          { label: 'Left', value: 'left' },
+          { label: 'Right', value: 'right' },
         ],
       },
     ],

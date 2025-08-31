@@ -2,24 +2,12 @@
 
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import type { Media } from '@/payload-types'
+import type { Media, Page } from '@/payload-types'
 import { mediaToUrl } from '@/lib/media'
 import { CMSLink } from '../ui/cms-link'
 
-type SingleCardBlockLike = {
-  title: string
-  subtitle?: string | null
-  image?: number | Media
-  imagePosition?: 'left' | 'right' | null
-  enableBackground?: boolean | null
-  linkType?: 'internal' | 'external' | null
-  internal?: { relation?: unknown } | null
-  external?: { href?: string | null } | null
-  cta?: {
-    text?: string | null
-    variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | null
-  } | null
-}
+// Extract the singleCard block type from the Page blocks union
+type SingleCardBlock = Extract<NonNullable<Page['blocks']>[number], { blockType: 'singleCard' }>
 
 export function SingleCard({
   title,
@@ -31,7 +19,18 @@ export function SingleCard({
   internal,
   external,
   cta,
-}: SingleCardBlockLike) {
+}: Pick<
+  SingleCardBlock,
+  | 'title'
+  | 'subtitle'
+  | 'image'
+  | 'imagePosition'
+  | 'enableBackground'
+  | 'linkType'
+  | 'internal'
+  | 'external'
+  | 'cta'
+>) {
   const imageUrl = mediaToUrl(image as any)
 
   let href: string | undefined
@@ -50,8 +49,8 @@ export function SingleCard({
       <div className="max-w-container mx-auto">
         <div
           className={cn(
-            'grid grid-cols-1 md:grid-cols-2 gap-8 items-center border rounded-2xl p-6',
-            enableBackground && 'bg-[#f3f5f7]',
+            'grid grid-cols-1 md:grid-cols-2 gap-8 items-center rounded-2xl p-6',
+            enableBackground && 'border bg-[#f3f5f7]',
           )}
         >
           <div

@@ -3,12 +3,29 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import type { Page } from '@/payload-types'
+import { mediaToUrl } from '@/lib/media'
+import type { Page, Media } from '@/payload-types'
 
 type ScrollPostCardsProps = Extract<
   NonNullable<Page['blocks']>[number],
   { blockType: 'scrollPostCards' }
 >
+
+function resolveBlogHref(post: any): string {
+  if (post.linkType === 'external') {
+    return post.href ?? '#'
+  }
+
+  // Internal link - resolve to proper URL
+  if (post.post) {
+    const rel = post.post
+    const doc = rel?.value ?? rel
+    const slug = doc?.slug ?? ''
+    return `/blogs/${slug}`
+  }
+
+  return '#'
+}
 
 export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps) {
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set())
@@ -61,7 +78,7 @@ export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps
       <div className="space-y-8">
         {(posts || []).map((post, index) => (
           <article
-            key={post.id}
+            key={post.id || index}
             data-index={index}
             className={`w-full bg-white rounded-lg border border-pastille-green/20 overflow-hidden shadow-sm hover:shadow-md transition-all duration-700 ${
               visibleCards.has(index)
@@ -72,40 +89,40 @@ export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps
             <div className="md:flex">
               <div className="md:w-2/5 relative h-64 md:h-80">
                 <Image
-                  src={(post.image as unknown as string) || '/placeholder.svg'}
+                  src={mediaToUrl(post.image)}
                   alt={post.title}
                   fill
                   className="object-cover"
                 />
                 <div className="absolute top-4 left-4">
                   <span className="bg-accent-yellow text-medical-blue px-3 py-1 rounded-full text-sm font-medium">
-                    {post.category}
+                    {post.category || 'Blog'}
                   </span>
                 </div>
               </div>
 
               <div className="md:w-3/5 p-6 md:p-8 flex flex-col justify-center">
                 <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                  <span>{post.author}</span>
+                  <span>{post.author || 'Author'}</span>
                   <span>•</span>
-                  <span>{post.date}</span>
+                  <span>{post.date || 'Date'}</span>
                   <span>•</span>
-                  <span>{post.readTime} read</span>
+                  <span>{post.readTime || '5 min'} read</span>
                 </div>
 
                 <h3 className="text-2xl md:text-3xl font-light text-medical-blue mb-4 leading-tight">
                   {post.title}
                 </h3>
 
-                <p className="text-gray-600 mb-6 leading-relaxed">{post.excerpt}</p>
+                <p className="text-gray-600 mb-6 leading-relaxed">{post.excerpt || ''}</p>
 
                 <Link
-                  href={post.href || '#'}
-                  className="inline-flex items-center text-pastille-green hover:text-medical-blue transition-colors duration-200 font-medium group"
+                  href={resolveBlogHref(post)}
+                  className="inline-flex items-center text-accent-yellow hover:text-accent-yellow/80 font-semibold transition-colors duration-200"
                 >
-                  Read Full Article
+                  Read More
                   <svg
-                    className="ml-2 w-4 h-4 transition-transform duration-200 group-hover:translate-x-1"
+                    className="ml-2 w-4 h-4"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

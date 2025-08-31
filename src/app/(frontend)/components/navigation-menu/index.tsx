@@ -7,34 +7,7 @@ import { Menu, X, ChevronRight, MoreHorizontal } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Header } from '@/payload-types'
 import { CMSLink } from '../ui'
-
-// Utility function to resolve page/blog relationships to URLs
-const resolveUrl = (item: {
-  linkType?: 'internal' | 'external' | null
-  href?: string | null
-  page?: {
-    relationTo: 'pages' | 'blogs'
-    value: { slug?: string | null } | number
-  } | null
-}): string => {
-  if (item.linkType === 'external' && item.href) {
-    return item.href
-  }
-
-  if (item.linkType === 'internal' && item.page) {
-    const { relationTo, value } = item.page
-    if (relationTo === 'pages') {
-      const slug = typeof value === 'object' ? value.slug : ''
-      return `/${slug || ''}`
-    }
-    if (relationTo === 'blogs') {
-      const slug = typeof value === 'object' ? value.slug : ''
-      return `/blogs/${slug || ''}`
-    }
-  }
-
-  return '#'
-}
+import { resolveUrl } from '@/lib/navigation'
 
 // Extract types from Header interface
 type NavigationItem = NonNullable<Header['navigation']>[number]
@@ -297,7 +270,7 @@ export function NavigationMenu({
                   onMouseEnter={() => handleMouseEnter(item.label)}
                   onMouseLeave={handleMouseLeave}
                 >
-                  {item.linkType === 'internal' || item.linkType === 'external' ? (
+                  {item.linkType === 'internal' || item.linkType === 'external' || item.href ? (
                     <Link
                       href={resolveUrl(item)}
                       className="nav-item text-white hover:text-ds-accent-yellow px-3 py-2 text-sm font-light transition-all duration-200 ease-out flex items-center whitespace-nowrap max-w-[120px]"
@@ -516,7 +489,7 @@ export function NavigationMenu({
               <div className="space-y-6">
                 {items.map((item, index) => (
                   <div key={`${item.label}-${index}`}>
-                    {item.linkType === 'internal' || item.linkType === 'external' ? (
+                    {item.linkType === 'internal' || item.linkType === 'external' || item.href ? (
                       <Link
                         href={resolveUrl(item)}
                         className="text-ds-dark-blue hover:text-ds-pastille-green block text-lg font-light py-3 border-b border-gray-100 transition-colors duration-200"
@@ -560,7 +533,7 @@ export function NavigationMenu({
                 {/* CTA Button */}
                 {ctaButton && (
                   <div className="pt-6">
-                    <CMSLink href={resolveUrl(ctaButton)} variant="primary">
+                    <CMSLink href={resolveUrl(ctaButton)} variant="primary" className="w-full">
                       {ctaButton.label}
                     </CMSLink>
                   </div>
