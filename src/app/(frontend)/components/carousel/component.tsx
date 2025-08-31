@@ -32,7 +32,7 @@ function chunkItems(items: ResolvedCarouselItem[], chunkSize: number): ResolvedC
 
 function CarouselCard({ item }: { item: ResolvedCarouselItem }) {
   const card = (
-    <div className="group cursor-pointer transition-all duration-300 hover:shadow-xl bg-white border border-ds-pastille-green/20 overflow-hidden rounded-[5px]">
+    <div className="group cursor-pointer transition-all duration-300 hover:shadow-xl bg-white border border-ds-pastille-green/20 overflow-hidden rounded-[5px] mx-1">
       {/* Mobile: Vertical layout, Desktop: Horizontal layout */}
       <div className="flex flex-col md:flex-row h-auto md:h-[18rem] lg:h-[19rem]">
         {/* Image Section */}

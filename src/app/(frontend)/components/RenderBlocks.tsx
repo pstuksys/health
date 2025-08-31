@@ -12,6 +12,7 @@ import { Testimonials } from './testimonials/component'
 import { BlogPostCards } from './blog-post-cards/component'
 import { Carousel } from './carousel/component'
 import { ScrollPostCards } from './scroll-post-cards/component'
+import { ScrollableCards } from './scrollable-cards/component'
 import { TwoCardBlock } from './two-card-block'
 import { TeamCards } from './team-cards/component'
 import { FullWidthBanner } from './full-width-banner/component'
@@ -333,6 +334,10 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
     const b = block as Extract<PageBlock, { blockType: 'carousel' }>
     return <Carousel {...b} />
   },
+  scrollableCards: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'scrollableCards' }>
+    return <ScrollableCards {...b} />
+  },
   singleCard: (block) => {
     const b = block as any
     return (
@@ -487,6 +492,13 @@ export function deriveGlobalHeroProps(page: Page) {
   const heroCTAButton = (page as any)?.heroCTAButton
   const heroSecondaryCTA = (page as any)?.heroSecondaryCTA
 
+  // Extract CTA alignment
+  const rawCTAAlignment = (page as any)?.heroCTAAlignment
+  const heroCTAAlignment: 'left' | 'center' | 'right' =
+    rawCTAAlignment === 'left' || rawCTAAlignment === 'center' || rawCTAAlignment === 'right'
+      ? rawCTAAlignment
+      : 'left'
+
   // Helper function to resolve internal/external links
   const resolveLink = (buttonData: any): { label: string; href: string } => {
     if (!buttonData) return { label: '', href: '#' }
@@ -521,17 +533,16 @@ export function deriveGlobalHeroProps(page: Page) {
 
   const ctaButton = heroCTAButton
     ? {
-        ...resolveLink(heroCTAButton),
-        variant: (heroCTAButton.variant === 'primary' || heroCTAButton.variant === 'secondary'
-          ? heroCTAButton.variant
-          : 'primary') as 'primary' | 'secondary',
+        label: resolveLink(heroCTAButton).label,
+        href: resolveLink(heroCTAButton).href,
+        variant: heroCTAButton.variant || 'primary',
       }
     : undefined
 
   const secondaryCTA = heroSecondaryCTA
     ? {
-        ...resolveLink(heroSecondaryCTA),
-        variant: 'secondary' as const,
+        label: resolveLink(heroSecondaryCTA).label,
+        href: resolveLink(heroSecondaryCTA).href,
       }
     : undefined
 
@@ -539,9 +550,10 @@ export function deriveGlobalHeroProps(page: Page) {
     title: titleHtml,
     subtitle: subtitleRaw,
     backgroundImage: bg,
-    textColor: heroTextColor,
-    gradientOverlay: heroGradientOverlay,
     ctaButton,
     secondaryCTA,
+    gradientOverlay: heroGradientOverlay,
+    textColor: heroTextColor,
+    ctaAlignment: heroCTAAlignment,
   }
 }

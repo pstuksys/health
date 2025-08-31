@@ -348,6 +348,10 @@ export interface Page {
     };
   };
   /**
+   * Choose the alignment for the hero CTA buttons
+   */
+  heroCTAAlignment?: ('left' | 'center' | 'right') | null;
+  /**
    * Add flexible content blocks to build your page layout
    */
   blocks?:
@@ -603,6 +607,56 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'scrollPostCards';
+          }
+        | {
+            title?: string | null;
+            subtitle?: string | null;
+            cards: {
+              title: string;
+              icon?:
+                | (
+                    | 'Heart'
+                    | 'Activity'
+                    | 'Users'
+                    | 'Shield'
+                    | 'Star'
+                    | 'CheckCircle'
+                    | 'Lightbulb'
+                    | 'Target'
+                    | 'TrendingUp'
+                    | 'Award'
+                    | 'Zap'
+                    | 'Leaf'
+                    | 'Globe'
+                    | 'Clock'
+                    | 'MapPin'
+                    | 'Phone'
+                    | 'Mail'
+                    | 'MessageCircle'
+                    | 'Calendar'
+                    | 'FileText'
+                  )
+                | null;
+              content: {
+                root: {
+                  type: string;
+                  children: {
+                    type: string;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              };
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'scrollableCards';
           }
         | {
             title?: string | null;
@@ -1198,6 +1252,7 @@ export interface PagesSelect<T extends boolean = true> {
               href?: T;
             };
       };
+  heroCTAAlignment?: T;
   blocks?:
     | T
     | {
@@ -1398,6 +1453,22 @@ export interface PagesSelect<T extends boolean = true> {
                     linkType?: T;
                     href?: T;
                     post?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        scrollableCards?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    icon?: T;
+                    content?: T;
                     id?: T;
                   };
               id?: T;

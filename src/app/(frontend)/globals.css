@@ -133,13 +133,38 @@ body.mobile-menu-open {
 }
 
 /* Hero-specific rich text styling */
-/* .hero-title {
-  @apply text-4xl sm:text-5xl lg:text-6xl font-light leading-tight mb-6;
+.hero-section .rich-text-content h1,
+.hero-section .rich-text-content h2,
+.hero-section .rich-text-content h3,
+.hero-section .rich-text-content h4,
+.hero-section .rich-text-content h5,
+.hero-section .rich-text-content h6 {
+  @apply font-light leading-tight mb-4 mt-4;
 }
 
-.hero-subtitle {
-  @apply text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl;
-} */
+.hero-section .rich-text-content h1 {
+  @apply text-2xl sm:text-3xl lg:text-4xl;
+}
+
+.hero-section .rich-text-content h2 {
+  @apply text-xl sm:text-2xl lg:text-3xl;
+}
+
+.hero-section .rich-text-content h3 {
+  @apply text-lg sm:text-xl lg:text-2xl;
+}
+
+.hero-section .rich-text-content h4 {
+  @apply text-base sm:text-lg lg:text-xl;
+}
+
+.hero-section .rich-text-content h5 {
+  @apply text-sm sm:text-base lg:text-lg;
+}
+
+.hero-section .rich-text-content h6 {
+  @apply text-xs sm:text-sm lg:text-base;
+}
 
 @custom-variant dark (&:is(.dark *));
 

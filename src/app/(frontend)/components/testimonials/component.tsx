@@ -45,7 +45,7 @@ export function Testimonials({
   const visibleCount = isMobile ? 1 : Math.min((testimonials || []).length, 3)
 
   return (
-    <section className="py-16 px-4 bg-gradient-to-br from-ds-light-neutral/30 to-ds-pastille-green/10">
+    <section className="py-16 px-4 ">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-heading text-ds-dark-blue text-center mb-12">{title}</h2>
 
