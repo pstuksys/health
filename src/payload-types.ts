@@ -533,12 +533,26 @@ export interface Page {
           }
         | {
             title: string;
-            testimonials: {
-              quote: string;
-              author: string;
-              role?: string | null;
-              id?: string | null;
-            }[];
+            testimonialType?: ('custom' | 'doctify') | null;
+            testimonials?:
+              | {
+                  quote: string;
+                  author: string;
+                  role?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            doctifyConfig?: {
+              widgetId: string;
+              tenant: string;
+              language: string;
+              profileType: string;
+              layoutType: string;
+              slugs: string;
+              background: string;
+              itemBackground: string;
+              itemFrame?: boolean | null;
+            };
             autoplayInterval?: number | null;
             id?: string | null;
             blockName?: string | null;
@@ -1394,6 +1408,7 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               title?: T;
+              testimonialType?: T;
               testimonials?:
                 | T
                 | {
@@ -1401,6 +1416,19 @@ export interface PagesSelect<T extends boolean = true> {
                     author?: T;
                     role?: T;
                     id?: T;
+                  };
+              doctifyConfig?:
+                | T
+                | {
+                    widgetId?: T;
+                    tenant?: T;
+                    language?: T;
+                    profileType?: T;
+                    layoutType?: T;
+                    slugs?: T;
+                    background?: T;
+                    itemBackground?: T;
+                    itemFrame?: T;
                   };
               autoplayInterval?: T;
               id?: T;
