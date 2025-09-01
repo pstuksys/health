@@ -533,12 +533,26 @@ export interface Page {
           }
         | {
             title: string;
-            testimonials: {
-              quote: string;
-              author: string;
-              role?: string | null;
-              id?: string | null;
-            }[];
+            testimonialType?: ('custom' | 'doctify') | null;
+            testimonials?:
+              | {
+                  quote: string;
+                  author: string;
+                  role?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            doctifyConfig?: {
+              widgetId: string;
+              tenant: string;
+              language: string;
+              profileType: string;
+              layoutType: string;
+              slugs: string;
+              background: string;
+              itemBackground: string;
+              itemFrame?: boolean | null;
+            };
             autoplayInterval?: number | null;
             id?: string | null;
             blockName?: string | null;
@@ -663,6 +677,7 @@ export interface Page {
                   image: number | Media;
                   title: string;
                   description?: string | null;
+                  buttonText?: string | null;
                   linkType?: ('internal' | 'external') | null;
                   internal?: {
                     relation?:
@@ -729,7 +744,22 @@ export interface Page {
             title: string;
             subtitle?: string | null;
             buttonText: string;
-            buttonHref: string;
+            linkType?: ('internal' | 'external') | null;
+            internal?: {
+              relation?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'blogs';
+                    value: number | Blog;
+                  } | null);
+            };
+            external?: {
+              href?: string | null;
+            };
+            openInNewTab?: boolean | null;
             backgroundImage: number | Media;
             id?: string | null;
             blockName?: string | null;
@@ -1378,6 +1408,7 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               title?: T;
+              testimonialType?: T;
               testimonials?:
                 | T
                 | {
@@ -1385,6 +1416,19 @@ export interface PagesSelect<T extends boolean = true> {
                     author?: T;
                     role?: T;
                     id?: T;
+                  };
+              doctifyConfig?:
+                | T
+                | {
+                    widgetId?: T;
+                    tenant?: T;
+                    language?: T;
+                    profileType?: T;
+                    layoutType?: T;
+                    slugs?: T;
+                    background?: T;
+                    itemBackground?: T;
+                    itemFrame?: T;
                   };
               autoplayInterval?: T;
               id?: T;
@@ -1477,6 +1521,7 @@ export interface PagesSelect<T extends boolean = true> {
                     image?: T;
                     title?: T;
                     description?: T;
+                    buttonText?: T;
                     linkType?: T;
                     internal?:
                       | T
@@ -1538,7 +1583,18 @@ export interface PagesSelect<T extends boolean = true> {
               title?: T;
               subtitle?: T;
               buttonText?: T;
-              buttonHref?: T;
+              linkType?: T;
+              internal?:
+                | T
+                | {
+                    relation?: T;
+                  };
+              external?:
+                | T
+                | {
+                    href?: T;
+                  };
+              openInNewTab?: T;
               backgroundImage?: T;
               id?: T;
               blockName?: T;

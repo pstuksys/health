@@ -10,6 +10,7 @@ export type CMSLinkProps = {
   className?: string
   external?: boolean
   fullWidth?: boolean
+  target?: React.HTMLAttributeAnchorTarget
 }
 
 export function CMSLink({
@@ -20,6 +21,7 @@ export function CMSLink({
   className,
   external = false,
   fullWidth = false,
+  target = '_blank',
 }: CMSLinkProps) {
   const baseClasses = cn(
     'inline-flex items-center justify-center font-semibold transition-all duration-200',
@@ -59,7 +61,7 @@ export function CMSLink({
   }
 
   return (
-    <Link href={href} className={classes}>
+    <Link href={href} target={target} rel="noopener noreferrer" className={classes}>
       {children}
     </Link>
   )

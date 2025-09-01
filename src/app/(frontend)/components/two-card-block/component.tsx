@@ -54,7 +54,7 @@ function resolveLink(link: any): { href: string; external: boolean } {
 export function TwoCardBlock({ title, subtitle, items }: RawTwoCardBlockProps) {
   return (
     <section className="w-full py-16 px-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-container mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-light text-ds-dark-blue mb-4">{title}</h2>
           {subtitle && (

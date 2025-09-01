@@ -9,6 +9,7 @@ import { useSwipe } from '@/lib/hooks/use-swipe'
 import { CMSLink } from '../ui/cms-link'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from '@/lib/media'
+import { resolveLinkHref } from '@/lib/navigation'
 
 type CarouselBlock = Extract<NonNullable<Page['blocks']>[number], { blockType: 'carousel' }>
 
@@ -16,6 +17,7 @@ type ResolvedCarouselItem = {
   image: string
   title: string
   description?: string
+  buttonText?: string
   href?: string
 }
 
@@ -58,7 +60,7 @@ function CarouselCard({ item }: { item: ResolvedCarouselItem }) {
             )}
             {item.href && (
               <CMSLink href={item.href} variant="primary" className="min-w-24">
-                {item.title}
+                {item.buttonText || 'Learn More'}
               </CMSLink>
             )}
           </div>
@@ -98,22 +100,17 @@ export function MedicalCarousel(props: MedicalCarouselProps) {
     const rawItems = (items ?? []) as unknown[]
     return rawItems.map((i: any) => {
       const image = mediaToUrl(i.image as any)
-      const isExternal = i.linkType === 'external'
-      let href: string | undefined
-      if (isExternal) href = i.external?.href ?? undefined
-      else if (i.internal?.relation) {
-        const rel = i.internal.relation
-        const doc = rel?.value ?? rel
-        const slug = doc?.slug ?? ''
-        const collection = doc?.collection ?? rel?.relationTo
-        if (collection === 'blogs') href = `/blogs/${slug}`
-        else if (collection === 'pages') href = `/${slug}`
-      }
+      const href = resolveLinkHref({
+        linkType: i.linkType,
+        internal: i.internal,
+        external: i.external,
+      })
       return {
         image,
         title: i.title ?? '',
         description: i.description ?? '',
-        href,
+        buttonText: i.buttonText ?? 'Learn More',
+        href: href === '#' ? undefined : href,
       }
     })
   }, [items])
