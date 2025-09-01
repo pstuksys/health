@@ -663,6 +663,7 @@ export interface Page {
                   image: number | Media;
                   title: string;
                   description?: string | null;
+                  buttonText?: string | null;
                   linkType?: ('internal' | 'external') | null;
                   internal?: {
                     relation?:
@@ -729,7 +730,22 @@ export interface Page {
             title: string;
             subtitle?: string | null;
             buttonText: string;
-            buttonHref: string;
+            linkType?: ('internal' | 'external') | null;
+            internal?: {
+              relation?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'blogs';
+                    value: number | Blog;
+                  } | null);
+            };
+            external?: {
+              href?: string | null;
+            };
+            openInNewTab?: boolean | null;
             backgroundImage: number | Media;
             id?: string | null;
             blockName?: string | null;
@@ -1477,6 +1493,7 @@ export interface PagesSelect<T extends boolean = true> {
                     image?: T;
                     title?: T;
                     description?: T;
+                    buttonText?: T;
                     linkType?: T;
                     internal?:
                       | T
@@ -1538,7 +1555,18 @@ export interface PagesSelect<T extends boolean = true> {
               title?: T;
               subtitle?: T;
               buttonText?: T;
-              buttonHref?: T;
+              linkType?: T;
+              internal?:
+                | T
+                | {
+                    relation?: T;
+                  };
+              external?:
+                | T
+                | {
+                    href?: T;
+                  };
+              openInNewTab?: T;
               backgroundImage?: T;
               id?: T;
               blockName?: T;

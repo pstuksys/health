@@ -16,6 +16,7 @@ export const carouselFields: Field[] = [
       { name: 'image', type: 'upload', relationTo: 'media', required: true },
       { name: 'title', type: 'text', required: true },
       { name: 'description', type: 'textarea' },
+      { name: 'buttonText', type: 'text', defaultValue: 'Learn More' },
       {
         name: 'linkType',
         type: 'radio',

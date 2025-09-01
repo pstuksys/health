@@ -33,3 +33,37 @@ export const resolveUrl = (item: {
 
   return '#'
 }
+
+/**
+ * Generic utility function to resolve internal/external links with the modern structure
+ * Used by components like carousel, full-width banner, etc.
+ */
+export const resolveLinkHref = (linkData: {
+  linkType?: 'internal' | 'external' | null
+  internal?: {
+    relation?: {
+      relationTo?: 'pages' | 'blogs'
+      value?: { slug?: string | null } | number
+    } | null
+  } | null
+  external?: {
+    href?: string | null
+  } | null
+}): string => {
+  if (linkData.linkType === 'external') {
+    return linkData.external?.href ?? '#'
+  }
+
+  if (linkData.linkType === 'internal' && linkData.internal?.relation) {
+    const rel = linkData.internal.relation
+    const doc = rel?.value ?? rel
+    if (typeof doc === 'object' && doc !== null && 'slug' in doc) {
+      const slug = doc.slug ?? ''
+      const collection = rel?.relationTo
+      if (collection === 'blogs') return `/blogs/${slug}`
+      else if (collection === 'pages') return `/${slug}`
+    }
+  }
+
+  return '#'
+}

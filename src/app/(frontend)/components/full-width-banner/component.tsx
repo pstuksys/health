@@ -4,7 +4,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { mediaToUrl } from '@/lib/media'
-import type { Page, Media } from '@/payload-types'
+import { resolveLinkHref } from '@/lib/navigation'
+import type { Page } from '@/payload-types'
 import { CMSLink } from '../ui'
 
 type FullWidthBannerProps = Extract<
@@ -16,10 +17,20 @@ export function FullWidthBanner({
   title,
   subtitle,
   buttonText,
-  buttonHref,
+  linkType,
+  internal,
+  external,
+  openInNewTab,
   backgroundImage,
 }: FullWidthBannerProps) {
   const bgUrl = mediaToUrl(backgroundImage)
+
+  // Resolve the href using the utility function
+  const resolvedHref = resolveLinkHref({
+    linkType,
+    internal,
+    external,
+  })
 
   return (
     <section className={cn('relative w-full h-64 lg:h-72 overflow-hidden')}>
@@ -35,7 +46,7 @@ export function FullWidthBanner({
         {subtitle && (
           <p className="text-base lg:text-lg font-light mb-6 max-w-2xl opacity-90">{subtitle}</p>
         )}
-        <CMSLink variant="primary" href={buttonHref ?? '#'}>
+        <CMSLink variant="primary" href={resolvedHref} target={openInNewTab ? '_blank' : undefined}>
           {buttonText || ''}
         </CMSLink>
       </div>
