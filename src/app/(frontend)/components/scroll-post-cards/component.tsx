@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
 import { mediaToUrl } from '@/lib/media'
-import type { Page, Media } from '@/payload-types'
+import type { Page } from '@/payload-types'
+import { CMSLink } from '../ui'
 
 type ScrollPostCardsProps = Extract<
   NonNullable<Page['blocks']>[number],
@@ -95,7 +95,7 @@ export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps
                   className="object-cover"
                 />
                 <div className="absolute top-4 left-4">
-                  <span className="bg-accent-yellow text-medical-blue px-3 py-1 rounded-full text-sm font-medium">
+                  <span className="bg-ds-accent-yellow text-white border-0 transition-all duration-200  py-1 px-2 rounded-xl">
                     {post.category || 'Blog'}
                   </span>
                 </div>
@@ -103,11 +103,11 @@ export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps
 
               <div className="md:w-3/5 p-6 md:p-8 flex flex-col justify-center">
                 <div className="flex items-center gap-4 text-sm text-gray-500 mb-4">
-                  <span>{post.author || 'Author'}</span>
-                  <span>•</span>
-                  <span>{post.date || 'Date'}</span>
-                  <span>•</span>
-                  <span>{post.readTime || '5 min'} read</span>
+                  {post.author && <span>{post.author}</span>}
+                  {post.author && <span>•</span>}
+                  {post.date && <span>{post.date}</span>}
+                  {post.date && <span>•</span>}
+                  {post.readTime && <span>{post.readTime} read</span>}
                 </div>
 
                 <h3 className="text-2xl md:text-3xl font-light text-medical-blue mb-4 leading-tight">
@@ -116,10 +116,7 @@ export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps
 
                 <p className="text-gray-600 mb-6 leading-relaxed">{post.excerpt || ''}</p>
 
-                <Link
-                  href={resolveBlogHref(post)}
-                  className="inline-flex items-center text-accent-yellow hover:text-accent-yellow/80 font-semibold transition-colors duration-200"
-                >
+                <CMSLink href={resolveBlogHref(post)} variant="ghost" className="w-fit">
                   Read More
                   <svg
                     className="ml-2 w-4 h-4"
@@ -134,7 +131,7 @@ export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
-                </Link>
+                </CMSLink>
               </div>
             </div>
           </article>

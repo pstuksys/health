@@ -9,4 +9,8 @@ declare module 'lucide-react' {
   export const ChevronLeft: React.FC<React.SVGProps<SVGSVGElement>>
   export const ChevronRight: React.FC<React.SVGProps<SVGSVGElement>>
   export const MoreHorizontal: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Share: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Copy: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Share2: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Check: React.FC<React.SVGProps<SVGSVGElement>>
 }

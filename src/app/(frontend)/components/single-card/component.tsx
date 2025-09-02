@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import type { Media, Page } from '@/payload-types'
+import type { Page } from '@/payload-types'
 import { mediaToUrl } from '@/lib/media'
 import { CMSLink } from '../ui/cms-link'
 

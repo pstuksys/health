@@ -53,7 +53,16 @@ export const Blogs: CollectionConfig = {
       index: true,
     },
     { name: 'excerpt', type: 'textarea' },
+    {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      label: 'Featured Image',
+    },
     { name: 'content', type: 'richText', label: 'Content' },
+    { name: 'author', type: 'text', label: 'Author' },
+    { name: 'category', type: 'text', label: 'Category' },
+    { name: 'readTime', type: 'text', label: 'Read Time (e.g., "5 min")' },
     // SEO fields will be provided by @payloadcms/plugin-seo; avoid duplicate 'meta' field name
     { name: 'publishedAt', type: 'date' },
   ],
