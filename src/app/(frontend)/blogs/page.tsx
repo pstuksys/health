@@ -2,8 +2,9 @@ import { draftMode } from 'next/headers'
 import { getPayload } from 'payload'
 import { ScrollPostCards } from '@/app/(frontend)/components/scroll-post-cards/component'
 import type { Blog } from '@/payload-types'
+import { unstable_cache } from 'next/cache'
 
-export default async function BlogsPage() {
+async function getBlogs() {
   const { isEnabled } = await draftMode()
   const isDraft = isEnabled
   const payload = await getPayload({ config: (await import('@/payload.config')).default })
@@ -15,7 +16,17 @@ export default async function BlogsPage() {
     limit: 50,
   })
 
-  const blogs = docs as unknown as Blog[]
+  return docs as unknown as Blog[]
+}
+
+// Cache the blogs with proper tags for revalidation
+const getCachedBlogs = unstable_cache(getBlogs, ['blogs-list'], {
+  tags: ['blogs', 'blog-list', 'blog-posts', 'blogs-page'],
+  revalidate: 3600, // 1 hour fallback
+})
+
+export default async function BlogsPage() {
+  const blogs = await getCachedBlogs()
 
   if (!blogs || blogs.length === 0) {
     return (

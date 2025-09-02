@@ -116,7 +116,12 @@ export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps
 
                 <p className="text-gray-600 mb-6 leading-relaxed">{post.excerpt || ''}</p>
 
-                <CMSLink href={resolveBlogHref(post)} variant="ghost" className="w-fit">
+                <CMSLink
+                  href={resolveBlogHref(post)}
+                  variant="ghost"
+                  className="w-fit"
+                  target="_self"
+                >
                   Read More
                   <svg
                     className="ml-2 w-4 h-4"

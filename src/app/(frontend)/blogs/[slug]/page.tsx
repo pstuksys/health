@@ -6,9 +6,9 @@ import { mediaToUrl } from '@/lib/media'
 import Image from 'next/image'
 import type { Blog } from '@/payload-types'
 import { ShareButtons } from './ShareButtons'
+import { unstable_cache } from 'next/cache'
 
-export default async function BlogPage(props: any) {
-  const slug = props?.params?.slug as string
+async function getBlogBySlug(slug: string) {
   const { isEnabled } = await draftMode()
   const isDraft = isEnabled
   const payload = await getPayload({ config: (await import('@/payload.config')).default })
@@ -18,7 +18,18 @@ export default async function BlogPage(props: any) {
     draft: isDraft,
     limit: 1,
   })
-  const blog = docs[0] as unknown as Blog | undefined
+  return docs[0] as unknown as Blog | undefined
+}
+
+// Cache individual blog posts with proper tags
+const getCachedBlogBySlug = (slug: string) =>
+  unstable_cache(() => getBlogBySlug(slug), [`blog-detail-${slug}`], {
+    tags: ['blogs', 'blog-detail', `blog:${slug}`],
+  })()
+
+export default async function BlogPage(props: any) {
+  const slug = props?.params?.slug as string
+  const blog = await getCachedBlogBySlug(slug)
 
   if (!blog) return notFound()
 

@@ -1,20 +1,10 @@
 import type { CollectionConfig } from 'payload'
+import { revalidateBlogsOnChange } from '@/hooks/revalidate'
 
 export const Blogs: CollectionConfig = {
   slug: 'blogs',
   hooks: {
-    afterChange: [
-      ({ req: _req, doc }) => {
-        void fetch(
-          `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/api/revalidate?secret=${process.env.REVALIDATION_SECRET ?? ''}`,
-          {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ tags: ['blogs', `blog:${(doc as any)?.slug ?? ''}`] }),
-          },
-        ).catch(() => {})
-      },
-    ],
+    afterChange: [revalidateBlogsOnChange],
   },
   admin: {
     useAsTitle: 'title',
