@@ -839,6 +839,7 @@ export interface Blog {
   title: string;
   slug: string;
   excerpt?: string | null;
+  image?: (number | null) | Media;
   content?: {
     root: {
       type: string;
@@ -854,6 +855,9 @@ export interface Blog {
     };
     [k: string]: unknown;
   } | null;
+  author?: string | null;
+  category?: string | null;
+  readTime?: string | null;
   publishedAt?: string | null;
   meta?: {
     title?: string | null;
@@ -1661,7 +1665,11 @@ export interface BlogsSelect<T extends boolean = true> {
   title?: T;
   slug?: T;
   excerpt?: T;
+  image?: T;
   content?: T;
+  author?: T;
+  category?: T;
+  readTime?: T;
   publishedAt?: T;
   meta?:
     | T

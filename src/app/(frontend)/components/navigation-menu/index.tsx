@@ -238,7 +238,7 @@ export function NavigationMenu({
         className,
       )}
     >
-      <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-4">
         <div ref={navContainerRef} className="flex justify-between items-center h-16">
           <Link
             ref={logoRef}
