@@ -19,6 +19,8 @@ import { TeamCards } from './team-cards/component'
 import { FullWidthBanner } from './full-width-banner/component'
 import { ParallaxHero } from './parallax-hero/component'
 import { SingleCard } from './single-card/component'
+import { ServicesBannerBlock } from './services-banner-block/component'
+import { MedicalServicesGrid } from './medical-services-grid/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -93,7 +95,15 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   },
   twoCardBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'twoCardBlock' }>
-    return <TwoCardBlock {...b} />
+    return <TwoCardBlock {...(b as any)} />
+  },
+  servicesBannerBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'servicesBannerBlock' }>
+    return <ServicesBannerBlock {...b} />
+  },
+  medicalServicesGrid: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'medicalServicesGrid' }>
+    return <MedicalServicesGrid {...b} />
   },
 }
 

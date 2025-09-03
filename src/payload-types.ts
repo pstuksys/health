@@ -597,6 +597,14 @@ export interface Page {
         | {
             title?: string | null;
             subtitle?: string | null;
+            /**
+             * Disable scroll observer for instant visibility
+             */
+            disableObserver?: boolean | null;
+            /**
+             * Make entire card clickable instead of just the link
+             */
+            clickableCard?: boolean | null;
             posts?:
               | {
                   image?: (number | null) | Media;
@@ -706,7 +714,7 @@ export interface Page {
             blockType: 'carousel';
           }
         | {
-            title: string;
+            title?: string | null;
             subtitle?: string | null;
             items: {
               image: number | Media;
@@ -803,6 +811,113 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'singleCard';
+          }
+        | {
+            /**
+             * Main heading for the services banner section
+             */
+            title?: string | null;
+            /**
+             * Small subtitle text above the main title
+             */
+            subtitle?: string | null;
+            /**
+             * Background image for the section (optional)
+             */
+            backgroundImage?: (number | null) | Media;
+            /**
+             * Background color for the section
+             */
+            backgroundColor?: ('slate-800' | 'ds-dark-blue' | 'ds-pastille-green' | 'gray-900' | 'blue-900') | null;
+            /**
+             * Text color for the section
+             */
+            textColor?: ('white' | 'gray-100' | 'ds-dark-blue') | null;
+            /**
+             * Service option cards (1-3 options)
+             */
+            options: {
+              /**
+               * Icon for this service option
+               */
+              icon?: ('calendar' | 'settings' | 'shield') | null;
+              /**
+               * Title for this service option
+               */
+              title: string;
+              /**
+               * Description text for this service option
+               */
+              description: string;
+              /**
+               * Text for the call-to-action button
+               */
+              buttonText?: string | null;
+              /**
+               * Link configuration for this service option
+               */
+              link?: {
+                linkType?: ('internal' | 'external') | null;
+                internal?: {
+                  relation:
+                    | {
+                        relationTo: 'pages';
+                        value: number | Page;
+                      }
+                    | {
+                        relationTo: 'blogs';
+                        value: number | Blog;
+                      };
+                };
+                external?: {
+                  /**
+                   * External URL (e.g., https://example.com)
+                   */
+                  href: string;
+                };
+              };
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'servicesBannerBlock';
+          }
+        | {
+            /**
+             * Main heading for the medical services grid section
+             */
+            title?: string | null;
+            /**
+             * Small subtitle text above the main title
+             */
+            subtitle?: string | null;
+            /**
+             * Background color for the section
+             */
+            backgroundColor?: ('gray-50' | 'white' | 'blue-50' | 'green-50') | null;
+            /**
+             * Medical service cards (1-8 services)
+             */
+            services: {
+              /**
+               * Icon for this medical service
+               */
+              icon?:
+                | ('scan' | 'activity' | 'zap' | 'heart' | 'stethoscope' | 'check' | 'calendar' | 'settings' | 'shield')
+                | null;
+              /**
+               * Name of the medical service (e.g., MRI, ULTRASOUND)
+               */
+              name: string;
+              /**
+               * Show "Available for self-pay" badge
+               */
+              available?: boolean | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'medicalServicesGrid';
           }
       )[]
     | null;
@@ -1480,6 +1595,8 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               title?: T;
               subtitle?: T;
+              disableObserver?: T;
+              clickableCard?: T;
               posts?:
                 | T
                 | {
@@ -1638,6 +1755,58 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     text?: T;
                     variant?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        servicesBannerBlock?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              backgroundImage?: T;
+              backgroundColor?: T;
+              textColor?: T;
+              options?:
+                | T
+                | {
+                    icon?: T;
+                    title?: T;
+                    description?: T;
+                    buttonText?: T;
+                    link?:
+                      | T
+                      | {
+                          linkType?: T;
+                          internal?:
+                            | T
+                            | {
+                                relation?: T;
+                              };
+                          external?:
+                            | T
+                            | {
+                                href?: T;
+                              };
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        medicalServicesGrid?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              backgroundColor?: T;
+              services?:
+                | T
+                | {
+                    icon?: T;
+                    name?: T;
+                    available?: T;
+                    id?: T;
                   };
               id?: T;
               blockName?: T;

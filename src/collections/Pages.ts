@@ -17,6 +17,8 @@ import { scrollableCards } from '../app/(frontend)/components/scrollable-cards/c
 import { fullWidthBannerFields } from '../app/(frontend)/components/full-width-banner/config'
 import { parallaxHeroFields } from '../app/(frontend)/components/parallax-hero/config'
 import { singleCardFields } from '@/components/single-card/config'
+import { servicesBannerBlockFields } from '../app/(frontend)/components/services-banner-block/config'
+import { medicalServicesGridFields } from '../app/(frontend)/components/medical-services-grid/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -47,6 +49,16 @@ const twoCardBlock: Block = { slug: 'twoCardBlock', fields: twoCardBlockFields }
 const fullWidthBannerBlock: Block = { slug: 'fullWidthBanner', fields: fullWidthBannerFields }
 const parallaxHeroBlock: Block = { slug: 'parallaxHero', fields: parallaxHeroFields }
 const singleCardBlock: Block = { slug: 'singleCard', fields: singleCardFields }
+const servicesBannerBlock: Block = {
+  slug: 'servicesBannerBlock',
+  dbName: 'services_banner',
+  fields: servicesBannerBlockFields,
+}
+const medicalServicesGridBlock: Block = {
+  slug: 'medicalServicesGrid',
+  dbName: 'medical_services',
+  fields: medicalServicesGridFields,
+}
 
 // All available page blocks
 const pageBlocks: Block[] = [
@@ -68,6 +80,8 @@ const pageBlocks: Block[] = [
   fullWidthBannerBlock,
   parallaxHeroBlock,
   singleCardBlock,
+  servicesBannerBlock,
+  medicalServicesGridBlock,
 ]
 
 export const Pages: CollectionConfig = {

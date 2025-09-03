@@ -4,7 +4,7 @@ export const twoCardBlockFields: Field[] = [
   {
     name: 'title',
     type: 'text',
-    required: true,
+    required: false,
   },
   {
     name: 'subtitle',

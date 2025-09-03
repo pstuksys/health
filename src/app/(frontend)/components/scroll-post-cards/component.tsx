@@ -5,6 +5,7 @@ import Image from 'next/image'
 import { mediaToUrl } from '@/lib/media'
 import type { Page } from '@/payload-types'
 import { CMSLink } from '../ui'
+import Link from 'next/link'
 
 type ScrollPostCardsProps = Extract<
   NonNullable<Page['blocks']>[number],
@@ -27,12 +28,20 @@ function resolveBlogHref(post: any): string {
   return '#'
 }
 
-export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps) {
+export function ScrollPostCards({
+  title,
+  subtitle,
+  posts,
+  disableObserver,
+  clickableCard,
+}: ScrollPostCardsProps) {
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set())
-  const [isVisible, setIsVisible] = useState(false)
+  const [isVisible, setIsVisible] = useState(disableObserver || false)
   const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    if (disableObserver) return
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) setIsVisible(true)
@@ -42,9 +51,16 @@ export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps
 
     if (containerRef.current) observer.observe(containerRef.current)
     return () => observer.disconnect()
-  }, [])
+  }, [disableObserver])
 
   useEffect(() => {
+    if (disableObserver) {
+      // If observer is disabled, make all cards visible immediately
+      const allIndices = new Set((posts || []).map((_, index) => index))
+      setVisibleCards(allIndices)
+      return
+    }
+
     const cardObserver = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -60,7 +76,7 @@ export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps
     const cardElements = containerRef.current?.querySelectorAll('[data-index]')
     cardElements?.forEach((el) => cardObserver.observe(el))
     return () => cardObserver.disconnect()
-  }, [])
+  }, [disableObserver, posts])
 
   return (
     <section ref={containerRef} className="py-16 px-4 max-w-container mx-auto">
@@ -76,16 +92,8 @@ export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps
       )}
 
       <div className="space-y-8">
-        {(posts || []).map((post, index) => (
-          <article
-            key={post.id || index}
-            data-index={index}
-            className={`w-full bg-white rounded-lg border border-pastille-green/20 overflow-hidden shadow-sm hover:shadow-md transition-all duration-700 ${
-              visibleCards.has(index)
-                ? 'opacity-100 translate-y-0 scale-100'
-                : 'opacity-0 translate-y-8 scale-95'
-            }`}
-          >
+        {(posts || []).map((post, index) => {
+          const cardContent = (
             <div className="md:flex">
               <div className="md:w-2/5 relative h-64 md:h-80">
                 <Image
@@ -116,31 +124,57 @@ export function ScrollPostCards({ title, subtitle, posts }: ScrollPostCardsProps
 
                 <p className="text-gray-600 mb-6 leading-relaxed">{post.excerpt || ''}</p>
 
-                <CMSLink
-                  href={resolveBlogHref(post)}
-                  variant="ghost"
-                  className="w-fit"
-                  target="_self"
-                >
-                  Read More
-                  <svg
-                    className="ml-2 w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+                {!clickableCard && (
+                  <CMSLink
+                    href={resolveBlogHref(post)}
+                    variant="ghost"
+                    className="w-fit"
+                    target="_self"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </CMSLink>
+                    Read More
+                    <svg
+                      className="ml-2 w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </CMSLink>
+                )}
               </div>
             </div>
-          </article>
-        ))}
+          )
+
+          return (
+            <article
+              key={post.id || index}
+              data-index={index}
+              className={`w-full bg-white rounded-lg border border-pastille-green/20 overflow-hidden shadow-sm hover:shadow-md transition-all duration-700 ${
+                visibleCards.has(index)
+                  ? 'opacity-100 translate-y-0 scale-100'
+                  : 'opacity-0 translate-y-8 scale-95'
+              } ${clickableCard ? 'cursor-pointer' : ''}`}
+            >
+              {clickableCard ? (
+                <Link
+                  href={resolveBlogHref(post)}
+                  className="block hover:scale-101 transition-all duration-200"
+                  target="_self"
+                >
+                  {cardContent}
+                </Link>
+              ) : (
+                cardContent
+              )}
+            </article>
+          )
+        })}
       </div>
     </section>
   )

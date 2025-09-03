@@ -4,6 +4,18 @@ export const scrollPostCardsFields: Field[] = [
   { name: 'title', type: 'text' },
   { name: 'subtitle', type: 'text' },
   {
+    name: 'disableObserver',
+    type: 'checkbox',
+    defaultValue: false,
+    admin: { description: 'Disable scroll observer for instant visibility' },
+  },
+  {
+    name: 'clickableCard',
+    type: 'checkbox',
+    defaultValue: false,
+    admin: { description: 'Make entire card clickable instead of just the link' },
+  },
+  {
     name: 'posts',
     type: 'array',
     fields: [

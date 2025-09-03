@@ -72,7 +72,14 @@ export default async function BlogsPage() {
           </div>
         </div>
       </section>
-      <ScrollPostCards blockType="scrollPostCards" title="" subtitle="" posts={blogPosts} />
+      <ScrollPostCards
+        disableObserver={true}
+        clickableCard={true}
+        blockType="scrollPostCards"
+        title=""
+        subtitle=""
+        posts={blogPosts}
+      />
     </main>
   )
 }

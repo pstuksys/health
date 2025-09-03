@@ -48,72 +48,76 @@ export function ShareButtons({ title, url, excerpt }: ShareButtonsProps) {
   }
 
   return (
-    <div className="flex items-center gap-4 pt-6 border-t border-gray-200">
-      <span className="text-sm font-medium text-gray-700">Share this article:</span>
+    <div className="pt-6 border-t border-gray-200">
+      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+        <span className="text-sm font-medium text-gray-700 whitespace-nowrap">
+          Share this article:
+        </span>
 
-      <div className="flex items-center gap-2">
-        {/* Native share button (mobile) */}
-        <button
-          onClick={handleNativeShare}
-          className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
-          aria-label="Share article"
-        >
-          <Share2 className="h-4 w-4" />
-          <span>Share</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Native share button (mobile) */}
+          <button
+            onClick={handleNativeShare}
+            className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
+            aria-label="Share article"
+          >
+            <Share2 className="h-4 w-4" />
+            <span className="hidden sm:inline">Share</span>
+          </button>
 
-        {/* Copy link button */}
-        <button
-          onClick={handleCopyLink}
-          className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
-          aria-label="Copy link"
-        >
-          {copied ? (
-            <>
-              <Check className="h-4 w-4" />
-              <span>Copied!</span>
-            </>
-          ) : (
-            <>
-              <Copy className="h-4 w-4" />
-              <span>Copy Link</span>
-            </>
-          )}
-        </button>
+          {/* Copy link button */}
+          <button
+            onClick={handleCopyLink}
+            className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
+            aria-label="Copy link"
+          >
+            {copied ? (
+              <>
+                <Check className="h-4 w-4" />
+                <span className="hidden sm:inline">Copied!</span>
+              </>
+            ) : (
+              <>
+                <Copy className="h-4 w-4" />
+                <span className="hidden sm:inline">Copy Link</span>
+              </>
+            )}
+          </button>
 
-        {/* Social media share buttons */}
-        <a
-          href={shareLinks.twitter}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
-          aria-label="Share on Twitter"
-        >
-          <Twitter className="h-4 w-4" />
-          <span>Twitter</span>
-        </a>
+          {/* Social media share buttons */}
+          <a
+            href={shareLinks.twitter}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
+            aria-label="Share on Twitter"
+          >
+            <Twitter className="h-4 w-4" />
+            <span className="hidden sm:inline">Twitter</span>
+          </a>
 
-        <a
-          href={shareLinks.facebook}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
-          aria-label="Share on Facebook"
-        >
-          <Facebook className="h-4 w-4" />
-          <span>Facebook</span>
-        </a>
+          <a
+            href={shareLinks.facebook}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
+            aria-label="Share on Facebook"
+          >
+            <Facebook className="h-4 w-4" />
+            <span className="hidden sm:inline">Facebook</span>
+          </a>
 
-        <a
-          href={shareLinks.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
-          aria-label="Share on LinkedIn"
-        >
-          <Linkedin className="h-4 w-4" />
-          <span>LinkedIn</span>
-        </a>
+          <a
+            href={shareLinks.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
+            aria-label="Share on LinkedIn"
+          >
+            <Linkedin className="h-4 w-4" />
+            <span className="hidden sm:inline">LinkedIn</span>
+          </a>
+        </div>
       </div>
     </div>
   )
