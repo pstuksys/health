@@ -56,7 +56,9 @@ export function TwoCardBlock({ title, subtitle, items }: RawTwoCardBlockProps) {
     <section className="w-full py-16 px-4">
       <div className="max-w-container mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-light text-ds-dark-blue mb-4">{title}</h2>
+          {title && (
+            <h2 className="text-3xl md:text-4xl font-light text-ds-dark-blue mb-4">{title}</h2>
+          )}
           {subtitle && (
             <p className="text-lg text-ds-pastille-green/80 font-light max-w-2xl mx-auto">
               {subtitle}

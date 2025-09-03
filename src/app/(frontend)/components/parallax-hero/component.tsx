@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { mediaToUrl } from '@/lib/media'
-import { Page, Media } from '@/payload-types'
+import { Page } from '@/payload-types'
 
 type ParallaxHeroProps = Extract<NonNullable<Page['blocks']>[number], { blockType: 'parallaxHero' }>
 
