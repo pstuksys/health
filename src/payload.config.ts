@@ -4,7 +4,25 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
-import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import {
+  lexicalEditor,
+  BlocksFeature,
+  HeadingFeature,
+  LinkFeature,
+  UploadFeature,
+  FixedToolbarFeature,
+  BoldFeature,
+  ItalicFeature,
+  UnderlineFeature,
+  InlineCodeFeature,
+  OrderedListFeature,
+  UnorderedListFeature,
+  ChecklistFeature,
+  BlockquoteFeature,
+  HorizontalRuleFeature,
+  AlignFeature,
+  IndentFeature,
+} from '@payloadcms/richtext-lexical'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -64,7 +82,65 @@ export default buildConfig({
   cors: [process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000', 'http://127.0.0.1:3000'],
   csrf: [process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000', 'http://127.0.0.1:3000'],
   collections: [Users, Media, Pages, Blogs],
-  editor: lexicalEditor(),
+  editor: lexicalEditor({
+    features: ({ defaultFeatures }) => [
+      ...defaultFeatures,
+      // Text formatting
+      BoldFeature(),
+      ItalicFeature(),
+      UnderlineFeature(),
+      InlineCodeFeature(),
+
+      // Headings and structure
+      HeadingFeature({
+        enabledHeadingSizes: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+      }),
+
+      // Lists
+      OrderedListFeature(),
+      UnorderedListFeature(),
+      ChecklistFeature(),
+
+      // Other elements
+      BlockquoteFeature(),
+      HorizontalRuleFeature(),
+
+      // Alignment and layout
+      AlignFeature(),
+      IndentFeature(),
+
+      // Links and media
+      LinkFeature({
+        fields: [
+          {
+            name: 'rel',
+            label: 'Rel Attribute',
+            type: 'text',
+            admin: {
+              description:
+                'The rel attribute defines the relationship between a linked resource and the current document. This is a custom field, and is in addition to the default link fields.',
+            },
+          },
+        ],
+      }),
+      UploadFeature({
+        collections: {
+          uploads: {
+            fields: [
+              {
+                name: 'caption',
+                type: 'richText',
+                editor: lexicalEditor({}),
+              },
+            ],
+          },
+        },
+      }),
+
+      // Toolbar
+      FixedToolbarFeature(),
+    ],
+  }),
   secret: process.env.PAYLOAD_SECRET || 'dev-secret-please-change',
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),

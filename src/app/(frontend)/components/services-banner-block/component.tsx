@@ -43,7 +43,7 @@ export function ServicesBannerBlock({
 
       {/* Content Overlay */}
       <div className="relative z-10 px-6 py-16 md:px-12 lg:px-16">
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-container mx-auto">
           {/* Header */}
           <div className="mb-16">
             {subtitle && <h1 className={`text-blue-400 text-lg font-medium mb-2`}>{subtitle}</h1>}

@@ -357,7 +357,7 @@ export interface Page {
   blocks?:
     | (
         | {
-            title: string;
+            title?: string | null;
             content?: {
               root: {
                 type: string;

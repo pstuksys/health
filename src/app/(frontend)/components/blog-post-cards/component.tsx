@@ -43,7 +43,7 @@ export function BlogPostCards({
   className,
 }: BlogPostCardsProps) {
   return (
-    <section className={cn('py-16 px-4 sm:px-6 lg:px-8', className)}>
+    <section className={cn('py-6 px-4 sm:px-4 lg:px-4', className)}>
       <div className="max-w-container mx-auto">
         <div
           className={cn(

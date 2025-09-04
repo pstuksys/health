@@ -148,7 +148,7 @@ export function MedicalCarousel(props: MedicalCarouselProps) {
 
   return (
     <div
-      className={cn('w-full max-w-container mx-auto px-4 md:px-4 py-8 md:py-12', className)}
+      className={cn('w-full max-w-container mx-auto py-6 px-4 sm:px-4 lg:px-4', className)}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
