@@ -23,6 +23,9 @@ import { ServicesBannerBlock } from './services-banner-block/component'
 import { MedicalServicesGrid } from './medical-services-grid/component'
 import { ButtonBlock } from './button-block/component'
 import { ContentBlockArray } from './content-block-array/component'
+import { TwoBlocksText } from './two-blocks-text/component'
+import { ScoreAppWidget } from './scoreapp-widget/component'
+import { SleepAssessmentSteps } from './sleep-assessment-steps/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -114,6 +117,18 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   contentBlockArray: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'contentBlockArray' }>
     return <ContentBlockArray {...b} />
+  },
+  twoBlocksText: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'twoBlocksText' }>
+    return <TwoBlocksText {...b} />
+  },
+  scoreAppWidget: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'scoreAppWidget' }>
+    return <ScoreAppWidget {...b} />
+  },
+  sleepAssessmentSteps: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'sleepAssessmentSteps' }>
+    return <SleepAssessmentSteps {...b} />
   },
 }
 
