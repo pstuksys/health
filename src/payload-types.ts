@@ -749,9 +749,35 @@ export interface Page {
             blockType: 'twoCardBlock';
           }
         | {
-            title: string;
+            enableCarousel?: boolean | null;
+            enableQuotes?: boolean | null;
+            carouselItems?:
+              | {
+                  title: string;
+                  subtitle?: string | null;
+                  buttonText?: string | null;
+                  linkType?: ('internal' | 'external') | null;
+                  internal?: {
+                    relation?:
+                      | ({
+                          relationTo: 'pages';
+                          value: number | Page;
+                        } | null)
+                      | ({
+                          relationTo: 'blogs';
+                          value: number | Blog;
+                        } | null);
+                  };
+                  external?: {
+                    href?: string | null;
+                  };
+                  openInNewTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            title?: string | null;
             subtitle?: string | null;
-            buttonText: string;
+            buttonText?: string | null;
             linkType?: ('internal' | 'external') | null;
             internal?: {
               relation?:
@@ -1760,6 +1786,28 @@ export interface PagesSelect<T extends boolean = true> {
         fullWidthBanner?:
           | T
           | {
+              enableCarousel?: T;
+              enableQuotes?: T;
+              carouselItems?:
+                | T
+                | {
+                    title?: T;
+                    subtitle?: T;
+                    buttonText?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                    openInNewTab?: T;
+                    id?: T;
+                  };
               title?: T;
               subtitle?: T;
               buttonText?: T;
