@@ -36,6 +36,7 @@ export function HeroSection({
   className,
 }: HeroSectionProps) {
   const [isVisible, setIsVisible] = useState(false)
+  const [hasScrolled, setHasScrolled] = useState(false)
 
   // Trigger fade-in animation on mount
   useEffect(() => {
@@ -43,6 +44,18 @@ export function HeroSection({
       setIsVisible(true)
     }, 100)
     return () => clearTimeout(timer)
+  }, [])
+
+  // Track scroll position to hide bounce indicator
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setHasScrolled(true)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
   // Smooth scroll to next section
@@ -178,8 +191,8 @@ export function HeroSection({
         </div>
       </div>
 
-      {/* Scroll Indicator - only show when full height is enabled */}
-      {fullHeight && (
+      {/* Scroll Indicator - only show when full height is enabled and user hasn't scrolled */}
+      {fullHeight && !hasScrolled && (
         <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
           <button
             onClick={scrollToNext}

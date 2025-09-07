@@ -385,12 +385,50 @@ export interface Page {
             blockType: 'contentBlock';
           }
         | {
+            /**
+             * Optional title for the card section
+             */
+            title?: string | null;
+            /**
+             * Optional subtitle/description for the card section
+             */
+            subtitle?: string | null;
             columns?: number | null;
             cards: {
               image?: (number | null) | Media;
               title: string;
               text?: string | null;
-              href?: string | null;
+              /**
+               * Choose between internal page/blog or external URL
+               */
+              linkType?: ('internal' | 'external') | null;
+              /**
+               * Link to an internal page or blog post
+               */
+              internal?: {
+                /**
+                 * Choose the page or blog to link to
+                 */
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              /**
+               * Link to an external website
+               */
+              external?: {
+                /**
+                 * External URL (e.g., https://example.com)
+                 */
+                href?: string | null;
+              };
+              buttonText?: string | null;
               id?: string | null;
             }[];
             id?: string | null;
@@ -1008,6 +1046,135 @@ export interface Page {
             blockName?: string | null;
             blockType: 'contentBlockArray';
           }
+        | {
+            leftBlock: {
+              subtitle?: string | null;
+              title: string;
+              content?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: string;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+            };
+            rightBlock: {
+              title: string;
+              content?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: string;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'twoBlocksText';
+          }
+        | {
+            /**
+             * The full URL of your ScoreApp quiz/assessment (e.g., https://app.scoreapp.com/quiz/...)
+             */
+            scorecardUrl: string;
+            /**
+             * Choose how the quiz should be displayed on the page
+             */
+            displayMode?: ('chat' | 'popup' | 'slider' | 'inline') | null;
+            /**
+             * Text displayed on the button (for chat, popup, and slider modes)
+             */
+            buttonText?: string | null;
+            /**
+             * Hex color code for button text (chat mode)
+             */
+            buttonColor?: string | null;
+            /**
+             * Icon displayed on the chat button - Default is no icon for cleaner look
+             */
+            icon?: ('' | 'chat' | 'quiz' | 'help') | null;
+            /**
+             * Automatically open the chat when page loads
+             */
+            autoOpen?: boolean | null;
+            /**
+             * Size of the popup/slider modal
+             */
+            size?: ('small' | 'medium' | 'full') | null;
+            /**
+             * Position of the slider on the page
+             */
+            position?: ('bottom-right' | 'bottom-left' | 'top-right' | 'top-left') | null;
+            /**
+             * Preload the quiz content for faster opening
+             */
+            preload?: boolean | null;
+            /**
+             * Automatically adjust height based on content
+             */
+            autoHeight?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'scoreAppWidget';
+          }
+        | {
+            /**
+             * Main heading for the sleep assessment steps section
+             */
+            title?: string | null;
+            /**
+             * Descriptive text below the main title
+             */
+            subtitle?: string | null;
+            /**
+             * Steps in the sleep assessment process (leave empty to use default 4 steps)
+             */
+            steps?:
+              | {
+                  /**
+                   * Step number (e.g., "01", "02", "Step 1", etc.)
+                   */
+                  number: string;
+                  /**
+                   * Main title for this step
+                   */
+                  title: string;
+                  /**
+                   * Optional description text for this step
+                   */
+                  description?: string | null;
+                  /**
+                   * Optional list of bullet points for this step
+                   */
+                  bulletPoints?:
+                    | {
+                        point: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sleepAssessmentSteps';
+          }
       )[]
     | null;
   meta?: {
@@ -1509,6 +1676,8 @@ export interface PagesSelect<T extends boolean = true> {
         cardSection?:
           | T
           | {
+              title?: T;
+              subtitle?: T;
               columns?: T;
               cards?:
                 | T
@@ -1516,7 +1685,18 @@ export interface PagesSelect<T extends boolean = true> {
                     image?: T;
                     title?: T;
                     text?: T;
-                    href?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                    buttonText?: T;
                     id?: T;
                   };
               id?: T;
@@ -1950,6 +2130,63 @@ export interface PagesSelect<T extends boolean = true> {
                       | T
                       | {
                           href?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        twoBlocksText?:
+          | T
+          | {
+              leftBlock?:
+                | T
+                | {
+                    subtitle?: T;
+                    title?: T;
+                    content?: T;
+                  };
+              rightBlock?:
+                | T
+                | {
+                    title?: T;
+                    content?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        scoreAppWidget?:
+          | T
+          | {
+              scorecardUrl?: T;
+              displayMode?: T;
+              buttonText?: T;
+              buttonColor?: T;
+              icon?: T;
+              autoOpen?: T;
+              size?: T;
+              position?: T;
+              preload?: T;
+              autoHeight?: T;
+              id?: T;
+              blockName?: T;
+            };
+        sleepAssessmentSteps?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              steps?:
+                | T
+                | {
+                    number?: T;
+                    title?: T;
+                    description?: T;
+                    bulletPoints?:
+                      | T
+                      | {
+                          point?: T;
+                          id?: T;
                         };
                     id?: T;
                   };

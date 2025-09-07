@@ -20,6 +20,9 @@ import { singleCardFields } from '@/components/single-card/config'
 import { servicesBannerBlockFields } from '../app/(frontend)/components/services-banner-block/config'
 import { medicalServicesGridFields } from '../app/(frontend)/components/medical-services-grid/config'
 import { contentBlockArrayFields } from '../app/(frontend)/components/content-block-array/config'
+import { twoBlocksTextFields } from '../app/(frontend)/components/two-blocks-text/config'
+import { scoreAppWidgetFields } from '../app/(frontend)/components/scoreapp-widget/config'
+import { sleepAssessmentStepsFields } from '../app/(frontend)/components/sleep-assessment-steps/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -65,6 +68,21 @@ const contentBlockArrayBlock: Block = {
   dbName: 'content_block_array',
   fields: contentBlockArrayFields,
 }
+const twoBlocksTextBlock: Block = {
+  slug: 'twoBlocksText',
+  dbName: 'two_blocks_text',
+  fields: twoBlocksTextFields,
+}
+const scoreAppWidgetBlock: Block = {
+  slug: 'scoreAppWidget',
+  dbName: 'score_app_widget',
+  fields: scoreAppWidgetFields,
+}
+const sleepAssessmentStepsBlock: Block = {
+  slug: 'sleepAssessmentSteps',
+  dbName: 'sleep_assessment_steps',
+  fields: sleepAssessmentStepsFields,
+}
 
 // All available page blocks
 const pageBlocks: Block[] = [
@@ -89,6 +107,9 @@ const pageBlocks: Block[] = [
   servicesBannerBlock,
   medicalServicesGridBlock,
   contentBlockArrayBlock,
+  twoBlocksTextBlock,
+  scoreAppWidgetBlock,
+  sleepAssessmentStepsBlock,
 ]
 
 export const Pages: CollectionConfig = {
