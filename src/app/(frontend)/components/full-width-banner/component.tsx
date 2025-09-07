@@ -141,9 +141,13 @@ export function FullWidthBanner({
           <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-light max-w-4xl transition-opacity duration-300 leading-tight">
             {enableQuotes ? (
               <>
-                <span className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl opacity-80">"</span>
+                <span className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl opacity-80">
+                  &ldquo;
+                </span>
                 {currentContent.title}
-                <span className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl opacity-80">"</span>
+                <span className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl opacity-80">
+                  &rdquo;
+                </span>
               </>
             ) : (
               currentContent.title
