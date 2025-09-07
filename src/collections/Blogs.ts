@@ -51,7 +51,21 @@ export const Blogs: CollectionConfig = {
     },
     { name: 'content', type: 'richText', label: 'Content' },
     { name: 'author', type: 'text', label: 'Author' },
-    { name: 'category', type: 'text', label: 'Category' },
+    {
+      name: 'category',
+      type: 'select',
+      label: 'Category',
+      required: true,
+      options: [
+        { label: 'Sleep Disorders', value: 'sleep-disorders' },
+        { label: 'Diagnostics & Testing', value: 'diagnostics-testing' },
+        { label: 'Therapies & Treatments', value: 'therapies-treatments' },
+        { label: 'Lifestyle & Tips', value: 'lifestyle-tips' },
+      ],
+      admin: {
+        description: 'Select the category that best fits this blog post',
+      },
+    },
     { name: 'readTime', type: 'text', label: 'Read Time (e.g., "5 min")' },
     // SEO fields will be provided by @payloadcms/plugin-seo; avoid duplicate 'meta' field name
     { name: 'publishedAt', type: 'date' },

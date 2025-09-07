@@ -3,6 +3,7 @@ import { getPayload } from 'payload'
 import { ScrollPostCards } from '@/app/(frontend)/components/scroll-post-cards/component'
 import type { Blog } from '@/payload-types'
 import { unstable_cache } from 'next/cache'
+import { cn } from '@/lib/utils'
 
 async function getBlogs() {
   const { isEnabled } = await draftMode()
@@ -25,6 +26,18 @@ const getCachedBlogs = unstable_cache(getBlogs, ['blogs-list'], {
   revalidate: 3600, // 1 hour fallback
 })
 
+// Define blog categories with proper typing
+const BLOG_CATEGORIES = [
+  { label: 'Sleep Disorders Hub', value: 'sleep-disorders', id: 'sleep-disorders' },
+  { label: 'Diagnostics & Testing Hub', value: 'diagnostics-testing', id: 'diagnostics-testing' },
+  {
+    label: 'Therapies & Treatments Hub',
+    value: 'therapies-treatments',
+    id: 'therapies-treatments',
+  },
+  { label: 'Lifestyle & Tips Hub', value: 'lifestyle-tips', id: 'lifestyle-tips' },
+] as const
+
 export default async function BlogsPage() {
   const blogs = await getCachedBlogs()
 
@@ -41,8 +54,17 @@ export default async function BlogsPage() {
     )
   }
 
+  // Group blogs by category
+  const blogsByCategory = BLOG_CATEGORIES.reduce(
+    (acc, category) => {
+      acc[category.value] = blogs.filter((blog) => blog.category === category.value)
+      return acc
+    },
+    {} as Record<string, Blog[]>,
+  )
+
   // Transform blogs to match the ScrollPostCards component format
-  const blogPosts = blogs.map((blog) => ({
+  const transformBlog = (blog: Blog) => ({
     id: blog.id?.toString(),
     title: blog.title,
     excerpt: blog.excerpt,
@@ -53,10 +75,11 @@ export default async function BlogsPage() {
     author: blog.author || '',
     category: blog.category || '',
     readTime: blog.readTime || '',
-  }))
+  })
 
   return (
     <main className="min-h-screen w-full mx-auto bg-white">
+      {/* Hero Section */}
       <section
         id="hero-section"
         className="relative pt-20 pb-12 px-4 sm:px-6 lg:px-8 flex items-center bg-gradient-to-b from-ds-dark-blue to-ds-pastille-green overflow-hidden min-h-[50vh]"
@@ -72,14 +95,79 @@ export default async function BlogsPage() {
           </div>
         </div>
       </section>
-      <ScrollPostCards
-        disableObserver={true}
-        clickableCard={true}
-        blockType="scrollPostCards"
-        title=""
-        subtitle=""
-        posts={blogPosts}
-      />
+
+      {/* Category Navigation */}
+      <section className="bg-white border-b border-gray-200 sticky top-0 z-30">
+        <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
+          <nav className="flex space-x-8 overflow-x-auto py-4" aria-label="Blog categories">
+            {BLOG_CATEGORIES.map((category) => (
+              <a
+                key={category.value}
+                href={`#${category.id}`}
+                className={cn(
+                  'whitespace-nowrap py-2 px-4 text-sm font-medium rounded-full transition-colors duration-200',
+                  'text-ds-pastille-green hover:text-ds-dark-blue hover:bg-ds-light-neutral',
+                  'focus:outline-none focus:ring-2 focus:ring-ds-accent-yellow focus:ring-offset-2',
+                )}
+              >
+                {category.label}
+                {blogsByCategory[category.value]?.length > 0 && (
+                  <span className="ml-2 bg-ds-accent-yellow text-ds-dark-blue text-xs px-3 py-1 rounded-full">
+                    {blogsByCategory[category.value].length}
+                  </span>
+                )}
+              </a>
+            ))}
+          </nav>
+        </div>
+      </section>
+
+      {/* Blog Categories Sections */}
+      <div className="bg-ds-light-neutral">
+        {BLOG_CATEGORIES.map((category) => {
+          const categoryBlogs = blogsByCategory[category.value] || []
+
+          if (categoryBlogs.length === 0) {
+            return null
+          }
+
+          return (
+            <section key={category.value} id={category.id} className="py-16 scroll-mt-20">
+              <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl md:text-4xl font-light text-ds-dark-blue mb-4">
+                    {category.label}
+                  </h2>
+                  <div className="w-24 h-1 bg-ds-accent-yellow mx-auto"></div>
+                </div>
+
+                <ScrollPostCards
+                  disableObserver={true}
+                  clickableCard={true}
+                  blockType="scrollPostCards"
+                  title=""
+                  subtitle=""
+                  posts={categoryBlogs.map(transformBlog)}
+                />
+              </div>
+            </section>
+          )
+        })}
+      </div>
+
+      {/* Show message if no blogs in any category */}
+      {BLOG_CATEGORIES.every((cat) => (blogsByCategory[cat.value]?.length || 0) === 0) && (
+        <section className="py-16 bg-ds-light-neutral">
+          <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-2xl font-light text-ds-dark-blue mb-4">
+              No categorized blog posts available yet.
+            </h2>
+            <p className="text-ds-pastille-green">
+              Blog posts will appear here once they are assigned to categories.
+            </p>
+          </div>
+        </section>
+      )}
     </main>
   )
 }

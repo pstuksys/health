@@ -1060,7 +1060,10 @@ export interface Blog {
     [k: string]: unknown;
   } | null;
   author?: string | null;
-  category?: string | null;
+  /**
+   * Select the category that best fits this blog post
+   */
+  category: 'sleep-disorders' | 'diagnostics-testing' | 'therapies-treatments' | 'lifestyle-tips';
   readTime?: string | null;
   publishedAt?: string | null;
   meta?: {
