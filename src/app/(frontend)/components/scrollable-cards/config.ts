@@ -1,4 +1,5 @@
 import { Block } from 'payload'
+import { minimalRichTextEditor } from '@/lib/lexical/editor-configs'
 
 export const scrollableCards: Block = {
   slug: 'scrollableCards',
@@ -62,6 +63,7 @@ export const scrollableCards: Block = {
           type: 'richText',
           label: 'Content',
           required: true,
+          editor: minimalRichTextEditor,
         },
       ],
     },

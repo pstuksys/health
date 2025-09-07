@@ -116,7 +116,7 @@ body.mobile-menu-open {
   @apply mb-2;
 }
 
-.rich-text-content a {
+.rich-text-content a:not([class*="bg-"]):not([class*="border"]) {
   @apply text-ds-accent-yellow hover:text-ds-accent-yellow/80 underline underline-offset-2 transition-colors duration-200;
 }
 

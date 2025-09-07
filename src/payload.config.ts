@@ -35,8 +35,19 @@ import { Blogs } from './collections/Blogs'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 
+// Import button block for rich text editor
+import { buttonBlockFields } from './app/(frontend)/components/button-block/config'
+
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
+
+// Define blocks for rich text editor
+const richTextBlocks = [
+  {
+    slug: 'buttonBlock',
+    fields: buttonBlockFields,
+  },
+]
 
 // Environment variable validation
 const requiredEnvVars = {
@@ -139,6 +150,11 @@ export default buildConfig({
 
       // Toolbar
       FixedToolbarFeature(),
+
+      // Custom blocks feature
+      BlocksFeature({
+        blocks: richTextBlocks,
+      }),
     ],
   }),
   secret: process.env.PAYLOAD_SECRET || 'dev-secret-please-change',

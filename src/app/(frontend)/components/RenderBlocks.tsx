@@ -108,7 +108,7 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   },
   button: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'button' }>
-    return <ButtonBlock {...b} target={b.target || undefined} />
+    return <ButtonBlock {...(b as any)} />
   },
 }
 
