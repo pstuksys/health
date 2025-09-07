@@ -19,6 +19,7 @@ import { parallaxHeroFields } from '../app/(frontend)/components/parallax-hero/c
 import { singleCardFields } from '@/components/single-card/config'
 import { servicesBannerBlockFields } from '../app/(frontend)/components/services-banner-block/config'
 import { medicalServicesGridFields } from '../app/(frontend)/components/medical-services-grid/config'
+import { contentBlockArrayFields } from '../app/(frontend)/components/content-block-array/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -59,6 +60,11 @@ const medicalServicesGridBlock: Block = {
   dbName: 'medical_services',
   fields: medicalServicesGridFields,
 }
+const contentBlockArrayBlock: Block = {
+  slug: 'contentBlockArray',
+  dbName: 'content_block_array',
+  fields: contentBlockArrayFields,
+}
 
 // All available page blocks
 const pageBlocks: Block[] = [
@@ -82,6 +88,7 @@ const pageBlocks: Block[] = [
   singleCardBlock,
   servicesBannerBlock,
   medicalServicesGridBlock,
+  contentBlockArrayBlock,
 ]
 
 export const Pages: CollectionConfig = {

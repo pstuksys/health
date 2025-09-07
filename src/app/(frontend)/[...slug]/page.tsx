@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-// import type { Page } from '@/payload-types'
 import { HeroSection } from '@/app/(frontend)/components/hero-section/component'
 import {
   RenderBlocks,

@@ -31,7 +31,7 @@ export function MedicalServicesGrid({
 
   return (
     <section className={`py-16 px-4 bg-${bgColor}`}>
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-container mx-auto">
         {/* Header */}
         {(title || subtitle) && (
           <div className="text-center mb-12">
@@ -43,7 +43,7 @@ export function MedicalServicesGrid({
         )}
 
         {/* Services Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
           {(services || []).map((service, index) => {
             const IconComponent = iconMap[service.icon || 'scan'] || LucideIcons.Scan
 

@@ -37,7 +37,7 @@ export function ExpandableTable({
   }
 
   return (
-    <section className="py-16 px-4 sm:px-6 lg:px-8">
+    <section className="py-6 px-4 sm:px-4 lg:px-4">
       <div className="max-w-container mx-auto">
         <div className="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-start">
           {/* Text Content - Left Side */}

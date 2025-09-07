@@ -45,7 +45,7 @@ export function SingleCard({
   }
 
   return (
-    <section className={cn('py-12 px-4')}>
+    <section className={cn('py-6 px-4')}>
       <div className="max-w-container mx-auto">
         <div
           className={cn(

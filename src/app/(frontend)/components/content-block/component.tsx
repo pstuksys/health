@@ -34,12 +34,14 @@ export function ContentBlock({
 
   if (layout === 'full') {
     return (
-      <section ref={sectionRef} className={cn('py-16 px-4 sm:px-6 lg:px-8')}>
+      <section ref={sectionRef} className={cn('py-6 px-4 sm:px-4 lg:px-4')}>
         <div className="max-w-container mx-auto">
           <div className="space-y-8">
-            <h2 className="text-3xl sm:text-4xl font-light leading-tight text-ds-dark-blue text-center">
-              {title}
-            </h2>
+            {!title ? null : (
+              <h2 className="text-3xl sm:text-4xl font-light leading-tight text-ds-dark-blue text-center">
+                {title}
+              </h2>
+            )}
             {content && isLexicalEditorState(content) && (
               <RichText
                 data={content as unknown}
@@ -55,7 +57,7 @@ export function ContentBlock({
               >
                 <Image
                   src={imageUrl || '/placeholder.svg'}
-                  alt={title}
+                  alt={title || ''}
                   fill
                   sizes="(min-width: 1024px) 800px, 100vw"
                   className="object-cover"
@@ -71,18 +73,14 @@ export function ContentBlock({
   const isImageLeft = imagePosition === 'left'
 
   return (
-    <section ref={sectionRef} className={cn('py-16 px-4 sm:px-6 lg:px-8')}>
+    <section ref={sectionRef} className={cn('py-6 px-4 sm:px-4 lg:px-4')}>
       <div className="max-w-container mx-auto">
-        <div
-          className={cn(
-            'grid grid-cols-1 lg:grid-cols-2 gap-12 items-start',
-            !isImageLeft && 'lg:grid-flow-col-dense',
-          )}
-        >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          {/* Content Column */}
           <div
             className={cn(
               'space-y-6 transition-all duration-500',
-              !isImageLeft && 'lg:col-start-1',
+              isImageLeft ? 'lg:order-2' : 'lg:order-1',
               isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6',
             )}
           >
@@ -96,17 +94,19 @@ export function ContentBlock({
               />
             )}
           </div>
+
+          {/* Image Column */}
           {imageUrl && (
             <div
               className={cn(
                 'relative w-full h-[360px] sm:h-[420px] lg:h-[480px] overflow-hidden rounded-lg shadow-lg transition-all duration-500 lg:sticky lg:top-4',
-                !isImageLeft && 'lg:col-start-2',
+                isImageLeft ? 'lg:order-1' : 'lg:order-2',
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
               )}
             >
               <Image
                 src={imageUrl || '/placeholder.svg'}
-                alt={title}
+                alt={title || ''}
                 fill
                 sizes="(min-width: 1024px) 600px, 100vw"
                 className="object-cover"

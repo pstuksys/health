@@ -23,6 +23,8 @@
     "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
   },
   "dependencies": {
+    "@lexical/selection": "0.28.0",
+    "@lexical/utils": "0.28.0",
     "@payloadcms/db-vercel-postgres": "3.50.0",
     "@payloadcms/next": "3.50.0",
     "@payloadcms/payload-cloud": "3.50.0",
@@ -35,6 +37,7 @@
     "cross-env": "^7.0.3",
     "dotenv": "16.4.7",
     "graphql": "^16.8.1",
+    "lexical": "0.28.0",
     "lucide-react": "^0.469.0",
     "next": "15.3.2",
     "payload": "3.50.0",
@@ -77,6 +80,8 @@
   },
   "overrides": {
     "payload": "3.50.0",
-    "@payloadcms/*": "3.50.0"
+    "@payloadcms/*": "3.50.0",
+    "@lexical/*": "0.28.0",
+    "lexical": "0.28.0"
   }
 }

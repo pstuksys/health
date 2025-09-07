@@ -357,7 +357,7 @@ export interface Page {
   blocks?:
     | (
         | {
-            title: string;
+            title?: string | null;
             content?: {
               root: {
                 type: string;
@@ -749,9 +749,35 @@ export interface Page {
             blockType: 'twoCardBlock';
           }
         | {
-            title: string;
+            enableCarousel?: boolean | null;
+            enableQuotes?: boolean | null;
+            carouselItems?:
+              | {
+                  title: string;
+                  subtitle?: string | null;
+                  buttonText?: string | null;
+                  linkType?: ('internal' | 'external') | null;
+                  internal?: {
+                    relation?:
+                      | ({
+                          relationTo: 'pages';
+                          value: number | Page;
+                        } | null)
+                      | ({
+                          relationTo: 'blogs';
+                          value: number | Blog;
+                        } | null);
+                  };
+                  external?: {
+                    href?: string | null;
+                  };
+                  openInNewTab?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            title?: string | null;
             subtitle?: string | null;
-            buttonText: string;
+            buttonText?: string | null;
             linkType?: ('internal' | 'external') | null;
             internal?: {
               relation?:
@@ -918,6 +944,65 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'medicalServicesGrid';
+          }
+        | {
+            /**
+             * Optional section title displayed above the content blocks
+             */
+            title?: string | null;
+            /**
+             * Default: Each block uses its individual image position. Alternating: Automatically alternates image position for a zigzag pattern.
+             */
+            layout: 'default' | 'alternating';
+            /**
+             * Array of content blocks to display
+             */
+            contentBlocks: {
+              /**
+               * Title for this content block
+               */
+              title: string;
+              /**
+               * Description text for this content block
+               */
+              description: string;
+              /**
+               * Image for this content block
+               */
+              image: number | Media;
+              /**
+               * Position of the image relative to the text content
+               */
+              imagePosition: 'left' | 'right';
+              /**
+               * Text for the call-to-action button (optional)
+               */
+              buttonText?: string | null;
+              /**
+               * Choose whether to link to an internal page or external URL
+               */
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                /**
+                 * Type of content to link to
+                 */
+                relationTo: 'pages' | 'blogs';
+                /**
+                 * Slug of the page or blog to link to
+                 */
+                value: string;
+              };
+              external?: {
+                /**
+                 * External URL (e.g., https://example.com)
+                 */
+                href: string;
+              };
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contentBlockArray';
           }
       )[]
     | null;
@@ -1701,6 +1786,28 @@ export interface PagesSelect<T extends boolean = true> {
         fullWidthBanner?:
           | T
           | {
+              enableCarousel?: T;
+              enableQuotes?: T;
+              carouselItems?:
+                | T
+                | {
+                    title?: T;
+                    subtitle?: T;
+                    buttonText?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                    openInNewTab?: T;
+                    id?: T;
+                  };
               title?: T;
               subtitle?: T;
               buttonText?: T;
@@ -1806,6 +1913,36 @@ export interface PagesSelect<T extends boolean = true> {
                     icon?: T;
                     name?: T;
                     available?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        contentBlockArray?:
+          | T
+          | {
+              title?: T;
+              layout?: T;
+              contentBlocks?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    image?: T;
+                    imagePosition?: T;
+                    buttonText?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relationTo?: T;
+                          value?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
                     id?: T;
                   };
               id?: T;

@@ -3,6 +3,7 @@
 import React, { memo } from 'react'
 import { RichText as PayloadRichText } from '@payloadcms/richtext-lexical/react'
 import { cn } from '@/lib/utils'
+import { jsxConverters } from '@/lib/lexical/jsx-converters'
 
 export type RichTextProps = Omit<
   React.ComponentProps<typeof PayloadRichText>,
@@ -23,6 +24,7 @@ export const RichText = memo(function RichText({ className, data, ...rest }: Ric
       {...(rest as unknown as React.ComponentProps<typeof PayloadRichText>)}
       data={data as unknown as React.ComponentProps<typeof PayloadRichText>['data']}
       className={cn('rich-text-content', className)}
+      converters={jsxConverters}
     />
   )
 })

@@ -251,6 +251,7 @@ export function NavigationMenu({
               width={240}
               height={40}
               className="w-full h-auto"
+              priority
             />
           </Link>
 
