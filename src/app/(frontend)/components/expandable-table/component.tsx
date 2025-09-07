@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-// @ts-expect-error - lucide-react is not typed
+
 import { ChevronDown, Search } from 'lucide-react'
 import type { Page } from '@/payload-types'
 

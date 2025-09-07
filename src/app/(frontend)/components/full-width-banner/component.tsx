@@ -96,7 +96,10 @@ export function FullWidthBanner({
 
   return (
     <section
-      className={cn('relative w-full overflow-hidden', enableCarousel ? 'h-96' : 'h-64 lg:h-72')}
+      className={cn(
+        'relative w-full overflow-hidden',
+        enableCarousel ? 'h-96 min-h-96' : 'h-64 lg:h-72',
+      )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -138,14 +141,35 @@ export function FullWidthBanner({
             enableCarousel ? 'space-y-4 lg:space-y-6' : 'space-y-3 lg:space-y-4',
           )}
         >
-          <h2 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-light max-w-4xl transition-opacity duration-300 leading-tight">
+          <h2
+            className={cn(
+              'font-light max-w-4xl transition-opacity duration-300 leading-tight',
+              enableCarousel
+                ? 'text-lg sm:text-xl lg:text-2xl xl:text-3xl'
+                : 'text-xl sm:text-2xl lg:text-3xl xl:text-4xl',
+            )}
+          >
             {enableQuotes ? (
               <>
-                <span className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl opacity-80">
+                <span
+                  className={cn(
+                    'opacity-80',
+                    enableCarousel
+                      ? 'text-2xl sm:text-3xl lg:text-4xl xl:text-5xl'
+                      : 'text-3xl sm:text-4xl lg:text-5xl xl:text-6xl',
+                  )}
+                >
                   &ldquo;
                 </span>
                 {currentContent.title}
-                <span className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl opacity-80">
+                <span
+                  className={cn(
+                    'opacity-80',
+                    enableCarousel
+                      ? 'text-2xl sm:text-3xl lg:text-4xl xl:text-5xl'
+                      : 'text-3xl sm:text-4xl lg:text-5xl xl:text-6xl',
+                  )}
+                >
                   &rdquo;
                 </span>
               </>
@@ -158,7 +182,7 @@ export function FullWidthBanner({
               className={cn(
                 'font-light max-w-3xl opacity-90 transition-opacity duration-300 leading-relaxed',
                 enableCarousel
-                  ? 'text-sm sm:text-base lg:text-lg max-h-20 overflow-hidden'
+                  ? 'text-xs sm:text-sm lg:text-base max-h-16 overflow-hidden line-clamp-3'
                   : 'text-sm sm:text-base lg:text-lg line-clamp-3',
               )}
             >

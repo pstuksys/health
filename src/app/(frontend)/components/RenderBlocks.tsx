@@ -192,6 +192,9 @@ export function deriveGlobalHeroProps(page: Page) {
       ? rawCTAAlignment
       : 'left'
 
+  // Extract full height setting
+  const heroFullHeight = Boolean((page as any)?.heroFullHeight)
+
   // Helper function to resolve internal/external links
   const resolveLink = (buttonData: any): { label: string; href: string } => {
     if (!buttonData) return { label: '', href: '#' }
@@ -248,5 +251,6 @@ export function deriveGlobalHeroProps(page: Page) {
     gradientOverlay: heroGradientOverlay,
     textColor: heroTextColor,
     ctaAlignment: heroCTAAlignment,
+    fullHeight: heroFullHeight,
   }
 }
