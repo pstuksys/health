@@ -379,6 +379,17 @@ export const Pages: CollectionConfig = {
                 condition: (data) => data.showHero,
               },
             },
+            {
+              name: 'heroFullHeight',
+              type: 'checkbox',
+              label: 'Full Height Hero',
+              defaultValue: false,
+              admin: {
+                description:
+                  'Make the hero section take up the full viewport height (100vh) with animations',
+                condition: (data) => data.showHero,
+              },
+            },
           ],
         },
         {

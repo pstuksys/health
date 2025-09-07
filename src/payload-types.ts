@@ -352,6 +352,10 @@ export interface Page {
    */
   heroCTAAlignment?: ('left' | 'center' | 'right') | null;
   /**
+   * Make the hero section take up the full viewport height (100vh) with animations
+   */
+  heroFullHeight?: boolean | null;
+  /**
    * Add flexible content blocks to build your page layout
    */
   blocks?:
@@ -1484,6 +1488,7 @@ export interface PagesSelect<T extends boolean = true> {
             };
       };
   heroCTAAlignment?: T;
+  heroFullHeight?: T;
   blocks?:
     | T
     | {

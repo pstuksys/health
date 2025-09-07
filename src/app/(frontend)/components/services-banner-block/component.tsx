@@ -30,22 +30,30 @@ export function ServicesBannerBlock({
   const textColorClass = textColor || 'white'
 
   return (
-    <section className={`relative min-h-[600px] bg-${bgColor} overflow-hidden`}>
+    <section
+      className={`relative min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px] bg-${bgColor} overflow-hidden`}
+    >
       {/* Background Image */}
       {backgroundImage && (
         <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed sm:bg-scroll"
           style={{
             backgroundImage: `url('${mediaToUrl(backgroundImage)}')`,
+            backgroundAttachment: 'fixed',
+            backgroundPosition: 'center center',
+            backgroundSize: 'cover',
           }}
-        />
+        >
+          {/* Responsive overlay for better text readability */}
+          <div className="absolute inset-0 bg-black/30 sm:bg-black/20 lg:bg-black/10" />
+        </div>
       )}
 
       {/* Content Overlay */}
-      <div className="relative z-10 px-6 py-16 md:px-12 lg:px-16">
+      <div className="relative z-10 px-4 py-12 sm:px-6 sm:py-16 md:px-12 lg:px-16 lg:py-20">
         <div className="max-w-container mx-auto">
           {/* Header */}
-          <div className="mb-16">
+          <div className="mb-12 sm:mb-16 lg:mb-20">
             {subtitle && <h1 className={`text-blue-400 text-lg font-medium mb-2`}>{subtitle}</h1>}
             {title && (
               <h2
@@ -57,7 +65,7 @@ export function ServicesBannerBlock({
           </div>
 
           {/* Services Grid */}
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-0">
+          <div className="flex flex-col lg:flex-row gap-6 sm:gap-8 lg:gap-0">
             {(options || []).map((option, index) => {
               const IconComponent = iconMap[option.icon || 'calendar'] || Calendar
               const resolvedHref = option.link ? resolveLinkHref(option.link) : '#'

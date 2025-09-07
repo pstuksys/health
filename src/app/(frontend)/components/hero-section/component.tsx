@@ -1,4 +1,8 @@
+'use client'
+
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
+import { ChevronDown } from 'lucide-react'
 import { CMSLink } from '@/app/(frontend)/components/ui/cms-link'
 import { cn } from '@/lib/utils'
 import { ConsistentHTML } from '../safe-html/component'
@@ -15,6 +19,7 @@ type HeroSectionProps = {
   gradientOverlay?: boolean
   textColor?: 'auto' | 'light' | 'dark'
   ctaAlignment?: 'left' | 'center' | 'right'
+  fullHeight?: boolean
   className?: string
 }
 
@@ -27,8 +32,29 @@ export function HeroSection({
   gradientOverlay = false,
   textColor = 'auto',
   ctaAlignment = 'left',
+  fullHeight = false,
   className,
 }: HeroSectionProps) {
+  const [isVisible, setIsVisible] = useState(false)
+
+  // Trigger fade-in animation on mount
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true)
+    }, 100)
+    return () => clearTimeout(timer)
+  }, [])
+
+  // Smooth scroll to next section
+  const scrollToNext = () => {
+    const heroElement = document.getElementById('hero-section')
+    if (heroElement) {
+      const nextElement = heroElement.nextElementSibling as HTMLElement
+      if (nextElement) {
+        nextElement.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+  }
   // Map text color values to CSS classes
   const getTextColorClass = (isTitle: boolean = true) => {
     if (textColor === 'light') {
@@ -61,7 +87,10 @@ export function HeroSection({
     <section
       id="hero-section"
       className={cn(
-        'hero-section relative py-20 px-4 sm:px-6 lg:px-8 flex items-center bg-ds-light-neutral overflow-hidden min-h-[70vh]',
+        'hero-section relative flex items-center bg-ds-light-neutral overflow-hidden',
+        fullHeight
+          ? 'h-screen min-h-screen px-4 sm:px-6 lg:px-8'
+          : 'py-20 px-4 sm:px-6 lg:px-8 min-h-[70vh]',
         className,
       )}
     >
@@ -83,7 +112,12 @@ export function HeroSection({
         <div className="absolute inset-0 bg-gradient-to-r from-ds-dark-blue/80 to-ds-pastille-green/60" />
       )}
       <div className="relative z-10 max-w-container mx-auto w-full">
-        <div className="max-w-container">
+        <div
+          className={cn(
+            'max-w-container transition-all duration-1000 ease-out transform',
+            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
+          )}
+        >
           {Boolean(subtitle) &&
             (isLexicalEditorState(subtitle) ? (
               <RichText
@@ -143,6 +177,36 @@ export function HeroSection({
           ) : null}
         </div>
       </div>
+
+      {/* Scroll Indicator - only show when full height is enabled */}
+      {fullHeight && (
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
+          <button
+            onClick={scrollToNext}
+            className={cn(
+              'flex flex-col items-center space-y-2 transition-all duration-700 ease-out transform hover:scale-110',
+              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4',
+              'animate-bounce',
+            )}
+            aria-label="Scroll to next section"
+          >
+            <span
+              className={cn(
+                'text-sm font-light tracking-wider uppercase',
+                getTextColorClass(false),
+              )}
+            >
+              Scroll
+            </span>
+            <ChevronDown
+              className={cn(
+                'w-6 h-6 animate-bounce',
+                getTextColorClass(false).replace('text-gray-200', 'text-white'),
+              )}
+            />
+          </button>
+        </div>
+      )}
     </section>
   )
 }
