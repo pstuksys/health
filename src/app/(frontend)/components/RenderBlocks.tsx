@@ -22,6 +22,7 @@ import { SingleCard } from './single-card/component'
 import { ServicesBannerBlock } from './services-banner-block/component'
 import { MedicalServicesGrid } from './medical-services-grid/component'
 import { ButtonBlock } from './button-block/component'
+import { ContentBlockArray } from './content-block-array/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -109,6 +110,10 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   button: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'button' }>
     return <ButtonBlock {...(b as any)} />
+  },
+  contentBlockArray: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'contentBlockArray' }>
+    return <ContentBlockArray {...b} />
   },
 }
 

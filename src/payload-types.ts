@@ -919,6 +919,65 @@ export interface Page {
             blockName?: string | null;
             blockType: 'medicalServicesGrid';
           }
+        | {
+            /**
+             * Optional section title displayed above the content blocks
+             */
+            title?: string | null;
+            /**
+             * Default: Each block uses its individual image position. Alternating: Automatically alternates image position for a zigzag pattern.
+             */
+            layout: 'default' | 'alternating';
+            /**
+             * Array of content blocks to display
+             */
+            contentBlocks: {
+              /**
+               * Title for this content block
+               */
+              title: string;
+              /**
+               * Description text for this content block
+               */
+              description: string;
+              /**
+               * Image for this content block
+               */
+              image: number | Media;
+              /**
+               * Position of the image relative to the text content
+               */
+              imagePosition: 'left' | 'right';
+              /**
+               * Text for the call-to-action button (optional)
+               */
+              buttonText?: string | null;
+              /**
+               * Choose whether to link to an internal page or external URL
+               */
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                /**
+                 * Type of content to link to
+                 */
+                relationTo: 'pages' | 'blogs';
+                /**
+                 * Slug of the page or blog to link to
+                 */
+                value: string;
+              };
+              external?: {
+                /**
+                 * External URL (e.g., https://example.com)
+                 */
+                href: string;
+              };
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contentBlockArray';
+          }
       )[]
     | null;
   meta?: {
@@ -1806,6 +1865,36 @@ export interface PagesSelect<T extends boolean = true> {
                     icon?: T;
                     name?: T;
                     available?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        contentBlockArray?:
+          | T
+          | {
+              title?: T;
+              layout?: T;
+              contentBlocks?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    image?: T;
+                    imagePosition?: T;
+                    buttonText?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relationTo?: T;
+                          value?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
                     id?: T;
                   };
               id?: T;
