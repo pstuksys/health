@@ -24,10 +24,11 @@ export const sleepAssessmentStepsFields: Field[] = [
     name: 'steps',
     type: 'array',
     label: 'Assessment Steps',
-    minRows: 1,
-    maxRows: 6,
+    minRows: 4,
+    maxRows: 4,
+    required: true,
     admin: {
-      description: 'Steps in the sleep assessment process (leave empty to use default 4 steps)',
+      description: 'Exactly 4 steps in the sleep assessment process',
     },
     fields: [
       {
@@ -57,21 +58,144 @@ export const sleepAssessmentStepsFields: Field[] = [
         },
       },
       {
-        name: 'bulletPoints',
-        type: 'array',
-        label: 'Bullet Points',
+        name: 'buttonText',
+        type: 'text',
+        label: 'Button Text',
+        required: true,
         admin: {
-          description: 'Optional list of bullet points for this step',
+          description: 'Text displayed on the action button',
         },
-        fields: [
+      },
+      {
+        name: 'linkType',
+        type: 'radio',
+        label: 'Link Type',
+        options: [
           {
-            name: 'point',
-            type: 'text',
-            label: 'Bullet Point',
-            required: true,
+            label: 'Internal Link',
+            value: 'internal',
+          },
+          {
+            label: 'External Link',
+            value: 'external',
           },
         ],
+        defaultValue: 'internal',
+        admin: {
+          description: 'Choose whether the link is internal or external',
+        },
+      },
+      {
+        name: 'internal',
+        type: 'relationship',
+        relationTo: 'pages',
+        label: 'Internal Link',
+        admin: {
+          condition: (data, siblingData) => siblingData?.linkType === 'internal',
+          description: 'Select a page to link to',
+        },
+      },
+      {
+        name: 'external',
+        type: 'text',
+        label: 'External URL',
+        admin: {
+          condition: (data, siblingData) => siblingData?.linkType === 'external',
+          description: 'Enter the full URL (https://example.com)',
+        },
+      },
+      {
+        name: 'openInNewTab',
+        type: 'checkbox',
+        label: 'Open in New Tab',
+        defaultValue: false,
+        admin: {
+          condition: (data, siblingData) => siblingData?.linkType === 'external',
+        },
+      },
+      {
+        name: 'icon',
+        type: 'select',
+        label: 'Icon',
+        required: true,
+        options: [
+          {
+            label: 'File Text (Document)',
+            value: 'FileText',
+          },
+          {
+            label: 'Phone Call',
+            value: 'PhoneCall',
+          },
+          {
+            label: 'Beaker (Lab Test)',
+            value: 'Beaker',
+          },
+          {
+            label: 'Square Activity (Results)',
+            value: 'SquareActivity',
+          },
+        ],
+        admin: {
+          description: 'Choose an icon to represent this step',
+        },
       },
     ],
+  },
+  {
+    name: 'mainButtonText',
+    type: 'text',
+    label: 'Main Button Text',
+    defaultValue: 'Take a few minutes to complete sleep assessment',
+    admin: {
+      description: 'Text for the main call-to-action button at the bottom',
+    },
+  },
+  {
+    name: 'mainButtonLinkType',
+    type: 'radio',
+    label: 'Main Button Link Type',
+    options: [
+      {
+        label: 'Internal Link',
+        value: 'internal',
+      },
+      {
+        label: 'External Link',
+        value: 'external',
+      },
+    ],
+    defaultValue: 'internal',
+    admin: {
+      description: 'Choose whether the main button links internally or externally',
+    },
+  },
+  {
+    name: 'mainButtonInternal',
+    type: 'relationship',
+    relationTo: 'pages',
+    label: 'Main Button Internal Link',
+    admin: {
+      condition: (data, siblingData) => siblingData?.mainButtonLinkType === 'internal',
+      description: 'Select a page for the main button to link to',
+    },
+  },
+  {
+    name: 'mainButtonExternal',
+    type: 'text',
+    label: 'Main Button External URL',
+    admin: {
+      condition: (data, siblingData) => siblingData?.mainButtonLinkType === 'external',
+      description: 'Enter the full URL for the main button (https://example.com)',
+    },
+  },
+  {
+    name: 'mainButtonOpenInNewTab',
+    type: 'checkbox',
+    label: 'Open Main Button in New Tab',
+    defaultValue: false,
+    admin: {
+      condition: (data, siblingData) => siblingData?.mainButtonLinkType === 'external',
+    },
   },
 ]

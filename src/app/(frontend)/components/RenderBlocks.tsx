@@ -26,6 +26,8 @@ import { ContentBlockArray } from './content-block-array/component'
 import { TwoBlocksText } from './two-blocks-text/component'
 import { ScoreAppWidget } from './scoreapp-widget/component'
 import { SleepAssessmentSteps } from './sleep-assessment-steps/component'
+import { SleepAssessmentFeatures } from './sleep-assessment-features/component'
+import { NotificationBlock } from './notification-block/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -129,6 +131,14 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   sleepAssessmentSteps: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'sleepAssessmentSteps' }>
     return <SleepAssessmentSteps {...b} />
+  },
+  sleepAssessmentFeatures: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'sleepAssessmentFeatures' }>
+    return <SleepAssessmentFeatures {...b} />
+  },
+  notificationBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'notificationBlock' }>
+    return <NotificationBlock {...b} />
   },
 }
 
