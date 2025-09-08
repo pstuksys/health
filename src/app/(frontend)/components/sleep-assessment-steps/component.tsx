@@ -1,7 +1,7 @@
-'use client'
-
-import { useEffect, useRef, useState } from 'react'
-import { cn } from '@/lib/utils'
+import { Card } from '@/components/ui/card'
+import { FileText, PhoneCall, Beaker, ArrowRight, SquareActivity } from 'lucide-react'
+import { CMSLink } from '../ui'
+import { resolveLinkHref } from '@/lib/navigation'
 import type { Page } from '@/payload-types'
 
 type SleepAssessmentStepsProps = Extract<
@@ -9,102 +9,142 @@ type SleepAssessmentStepsProps = Extract<
   { blockType: 'sleepAssessmentSteps' }
 >
 
-export function SleepAssessmentSteps({ title, subtitle, steps }: SleepAssessmentStepsProps) {
-  const [isVisible, setIsVisible] = useState(false)
-  const sectionRef = useRef<HTMLElement>(null)
+// Icon mapping
+const iconMap = {
+  FileText,
+  PhoneCall,
+  Beaker,
+  SquareActivity,
+}
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) setIsVisible(true)
-      },
-      { threshold: 0.1 },
-    )
-    if (sectionRef.current) observer.observe(sectionRef.current)
-    return () => observer.disconnect()
-  }, [])
+type IconKey = keyof typeof iconMap
 
-  const defaultSteps = [
-    {
-      number: '01',
-      title: 'Tell us a bit about yourself.',
-      description: "Don't worry, your information is absolutely safe and private.",
-      bulletPoints: [],
-    },
-    {
-      number: '02',
-      title: 'Answer a few quick questions about your sleep.',
-      description: '',
-      bulletPoints: [],
-    },
-    {
-      number: '03',
-      title:
-        'Based on your responses, we can help check for symptoms associated with sleep issues such as:',
-      description: '',
-      bulletPoints: ['Obstructive sleep apnoea', 'Insomnia', 'Snoring', 'and many more...'],
-    },
-    {
-      number: '04',
-      title:
-        "Once you've completed the assessment you'll see your results on screen, and we'll also email them to you.",
-      description:
-        'You will be told whether you are at risk of sleep apnoea, insomnia or other sleep problems or if you have a low risk.',
-      bulletPoints: [],
-    },
-  ]
+export function SleepAssessmentSteps({
+  title,
+  subtitle,
+  steps,
+  mainButtonText,
+  mainButtonLinkType,
+  mainButtonInternal,
+  mainButtonExternal,
+  mainButtonOpenInNewTab,
+}: SleepAssessmentStepsProps) {
+  const stepsToRender = steps && steps.length > 0 ? steps : []
 
-  const stepsToRender = steps && steps.length > 0 ? steps : defaultSteps
+  // Resolve main button href using utility function
+  const mainButtonHref = resolveLinkHref({
+    linkType: mainButtonLinkType,
+    internal: mainButtonInternal
+      ? {
+          relation: {
+            relationTo: 'pages',
+            value: mainButtonInternal,
+          },
+        }
+      : null,
+    external: mainButtonExternal
+      ? {
+          href: mainButtonExternal,
+        }
+      : null,
+  })
+
+  const mainButtonIsExternal = mainButtonLinkType === 'external'
+  const mainButtonNewTab = mainButtonIsExternal && mainButtonOpenInNewTab
 
   return (
-    <section ref={sectionRef} className="py-16 px-4 bg-ds-light-neutral">
-      <div className="max-w-container mx-auto">
-        <div
-          className={cn(
-            'text-center mb-12 transition-all duration-700',
-            isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
-          )}
-        >
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-light text-ds-dark-blue mb-6 leading-tight">
-            {title || 'Unlock the secrets of your sleep in just 4 easy steps'}
-          </h1>
-          <p className="text-ds-pastille-green text-lg max-w-4xl mx-auto leading-relaxed font-light">
-            {subtitle ||
-              "As well as taking the assessment, it's important you discuss your symptoms with your doctor. They can help you rule out any underlying medical conditions and recommend treatment options if you do have a sleep disorder, or suggest lifestyle changes."}
-          </p>
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="text-center mb-12">
+        <h1 className="text-4xl font-bold text-ds-dark-blue mb-4 text-balance">
+          {title || 'Your Path to Better Sleep'}
+        </h1>
+        <p className="text-lg text-ds-pastille-green max-w-2xl mx-auto text-pretty">
+          {subtitle ||
+            'Follow these simple steps to understand your sleep health and get the support you need.'}
+        </p>
+      </div>
+
+      <div className="relative mb-12">
+        <div className="grid md:grid-cols-2 gap-6">
+          {stepsToRender.map((step, index) => {
+            const Icon = iconMap[(step as any).icon as IconKey] || FileText
+
+            // Use the utility function to resolve the href
+            const href = resolveLinkHref({
+              linkType: (step as any).linkType,
+              internal: (step as any).internal
+                ? {
+                    relation: {
+                      relationTo: 'pages',
+                      value: (step as any).internal,
+                    },
+                  }
+                : null,
+              external: (step as any).external
+                ? {
+                    href: (step as any).external,
+                  }
+                : null,
+            })
+
+            const isExternal = (step as any).linkType === 'external'
+            const openInNewTab = isExternal && (step as any).openInNewTab
+            const buttonText = (step as any).buttonText || 'Learn More'
+            return (
+              <Card
+                key={step.number}
+                className="p-6 bg-white border border-gray-200 hover:shadow-md transition-shadow"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="flex-shrink-0">
+                    <div className="w-10 h-10 bg-ds-accent-yellow text-white rounded-full flex items-center justify-center font-bold text-lg">
+                      {step.number}
+                    </div>
+                  </div>
+
+                  <div className="flex-1">
+                    <h3 className="text-xl font-semibold text-ds-dark-blue mb-2">{step.title}</h3>
+                    <Icon className="w-5 h-5 text-gray-400 mb-3" />
+
+                    <p className="text-gray-600 mb-4 leading-relaxed">{step.description}</p>
+
+                    <CMSLink
+                      variant="default"
+                      className="border border-1 border-ds-dark-blue text-ds-dark-blue bg-gray-50 hover:bg-transparent hover:text-ds-accent-yellow hover:border-ds-accent-yellow"
+                      href={href}
+                      external={isExternal}
+                      target={openInNewTab ? '_blank' : '_self'}
+                    >
+                      {buttonText}
+                      <ArrowRight className="w-4 h-4 ml-2" />
+                    </CMSLink>
+                  </div>
+                </div>
+              </Card>
+            )
+          })}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stepsToRender.map((step, index) => (
-            <div
-              key={step.number}
-              className={cn(
-                'bg-ds-dark-blue rounded-2xl p-6 text-white min-h-[280px] flex flex-col transition-all duration-500 shadow-lg hover:shadow-xl hover:-translate-y-1',
-                isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
-              )}
-              style={{ transitionDelay: `${index * 150}ms` }}
-            >
-              <div className="text-2xl font-light mb-4 text-ds-accent-yellow">{step.number}</div>
-              <h3 className="text-lg font-light mb-3 leading-tight">{step.title}</h3>
-              {step.description && (
-                <p className="text-white/80 text-sm leading-relaxed mb-3 font-light">
-                  {step.description}
-                </p>
-              )}
-              {step.bulletPoints && step.bulletPoints.length > 0 && (
-                <ul className="text-white/80 text-sm space-y-1 mt-auto">
-                  {step.bulletPoints.map((bulletPoint, pointIndex) => (
-                    <li key={pointIndex} className="flex items-center">
-                      <span className="w-1.5 h-1.5 bg-ds-accent-yellow rounded-full mr-3 flex-shrink-0"></span>
-                      {typeof bulletPoint === 'string' ? bulletPoint : bulletPoint.point}
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-          ))}
+        <div className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden md:block">
+          <ArrowRight className="w-6 h-6 text-ds-accent-yellow" />
+        </div>
+
+        <div className="absolute bottom-1/4 left-1/2 transform -translate-x-1/2 translate-y-1/2 hidden md:block">
+          <ArrowRight className="w-6 h-6 text-ds-accent-yellow" />
         </div>
       </div>
-    </section>
+
+      <div className="text-center">
+        <CMSLink
+          size="sm"
+          className="bg-ds-accent-yellow hover:bg-ds-accent-yellow text-white px-8 py-3 text-lg font-medium"
+          href={mainButtonHref}
+          external={mainButtonIsExternal}
+          target={mainButtonNewTab ? '_blank' : '_self'}
+        >
+          {mainButtonText || 'Take a few minutes to complete sleep assessment'}
+        </CMSLink>
+      </div>
+    </div>
   )
 }

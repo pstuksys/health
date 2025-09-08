@@ -1143,37 +1143,133 @@ export interface Page {
              */
             subtitle?: string | null;
             /**
-             * Steps in the sleep assessment process (leave empty to use default 4 steps)
+             * Exactly 4 steps in the sleep assessment process
              */
-            steps?:
-              | {
-                  /**
-                   * Step number (e.g., "01", "02", "Step 1", etc.)
-                   */
-                  number: string;
-                  /**
-                   * Main title for this step
-                   */
-                  title: string;
-                  /**
-                   * Optional description text for this step
-                   */
-                  description?: string | null;
-                  /**
-                   * Optional list of bullet points for this step
-                   */
-                  bulletPoints?:
-                    | {
-                        point: string;
-                        id?: string | null;
-                      }[]
-                    | null;
-                  id?: string | null;
-                }[]
-              | null;
+            steps: {
+              /**
+               * Step number (e.g., "01", "02", "Step 1", etc.)
+               */
+              number: string;
+              /**
+               * Main title for this step
+               */
+              title: string;
+              /**
+               * Optional description text for this step
+               */
+              description?: string | null;
+              /**
+               * Text displayed on the action button
+               */
+              buttonText: string;
+              /**
+               * Choose whether the link is internal or external
+               */
+              linkType?: ('internal' | 'external') | null;
+              /**
+               * Select a page to link to
+               */
+              internal?: (number | null) | Page;
+              /**
+               * Enter the full URL (https://example.com)
+               */
+              external?: string | null;
+              openInNewTab?: boolean | null;
+              /**
+               * Choose an icon to represent this step
+               */
+              icon: 'FileText' | 'PhoneCall' | 'Beaker' | 'SquareActivity';
+              id?: string | null;
+            }[];
+            /**
+             * Text for the main call-to-action button at the bottom
+             */
+            mainButtonText?: string | null;
+            /**
+             * Choose whether the main button links internally or externally
+             */
+            mainButtonLinkType?: ('internal' | 'external') | null;
+            /**
+             * Select a page for the main button to link to
+             */
+            mainButtonInternal?: (number | null) | Page;
+            /**
+             * Enter the full URL for the main button (https://example.com)
+             */
+            mainButtonExternal?: string | null;
+            mainButtonOpenInNewTab?: boolean | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'sleepAssessmentSteps';
+          }
+        | {
+            /**
+             * Main heading for the sleep assessment features section
+             */
+            title?: string | null;
+            /**
+             * Descriptive text below the main title
+             */
+            subtitle?: string | null;
+            /**
+             * Features highlighting the sleep assessment benefits
+             */
+            features: {
+              /**
+               * Main title for this feature
+               */
+              title: string;
+              /**
+               * Description text for this feature
+               */
+              description: string;
+              /**
+               * Choose an icon to represent this feature
+               */
+              icon:
+                | 'Clock'
+                | 'Shield'
+                | 'CheckCircle'
+                | 'Users'
+                | 'FileText'
+                | 'PhoneCall'
+                | 'Beaker'
+                | 'SquareActivity';
+              id?: string | null;
+            }[];
+            /**
+             * Text for the main call-to-action button
+             */
+            ctaButtonText?: string | null;
+            /**
+             * Choose whether the CTA button links internally or externally
+             */
+            ctaButtonLinkType?: ('internal' | 'external') | null;
+            /**
+             * Select a page for the CTA button to link to
+             */
+            ctaButtonInternal?: (number | null) | Page;
+            /**
+             * Enter the full URL for the CTA button (https://example.com)
+             */
+            ctaButtonExternal?: string | null;
+            ctaButtonOpenInNewTab?: boolean | null;
+            /**
+             * Small text displayed below the CTA button
+             */
+            bottomText?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sleepAssessmentFeatures';
+          }
+        | {
+            /**
+             * Small print notification text content
+             */
+            content: string;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'notificationBlock';
           }
       )[]
     | null;
@@ -2182,14 +2278,48 @@ export interface PagesSelect<T extends boolean = true> {
                     number?: T;
                     title?: T;
                     description?: T;
-                    bulletPoints?:
-                      | T
-                      | {
-                          point?: T;
-                          id?: T;
-                        };
+                    buttonText?: T;
+                    linkType?: T;
+                    internal?: T;
+                    external?: T;
+                    openInNewTab?: T;
+                    icon?: T;
                     id?: T;
                   };
+              mainButtonText?: T;
+              mainButtonLinkType?: T;
+              mainButtonInternal?: T;
+              mainButtonExternal?: T;
+              mainButtonOpenInNewTab?: T;
+              id?: T;
+              blockName?: T;
+            };
+        sleepAssessmentFeatures?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              features?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              ctaButtonText?: T;
+              ctaButtonLinkType?: T;
+              ctaButtonInternal?: T;
+              ctaButtonExternal?: T;
+              ctaButtonOpenInNewTab?: T;
+              bottomText?: T;
+              id?: T;
+              blockName?: T;
+            };
+        notificationBlock?:
+          | T
+          | {
+              content?: T;
               id?: T;
               blockName?: T;
             };
