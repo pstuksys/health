@@ -115,7 +115,7 @@ export function Footer({
 
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Contact</h3>
-            <div className="space-y-2 text-gray-300 font-light">
+            <div className="space-y-2 text-gray-300 font-light overflow-hidden">
               {contact?.email && (
                 <button
                   onClick={handleEmailClick}

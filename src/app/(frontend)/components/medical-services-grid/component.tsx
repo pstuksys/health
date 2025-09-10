@@ -2,6 +2,7 @@
 
 import * as LucideIcons from 'lucide-react'
 import type { Page } from '@/payload-types'
+import { mediaToUrl } from '@/lib/media'
 
 type MedicalServicesGridProps = Extract<
   NonNullable<Page['blocks']>[number],
@@ -46,25 +47,46 @@ export function MedicalServicesGrid({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
           {(services || []).map((service, index) => {
             const IconComponent = iconMap[service.icon || 'scan'] || LucideIcons.Scan
+            const backgroundImageUrl = mediaToUrl(service.backgroundImage)
+            const hasBackgroundImage = backgroundImageUrl !== '/placeholder.svg'
 
             return (
               <div
                 key={service.id || index}
-                className="relative bg-white rounded-lg p-8 text-center shadow-sm hover:shadow-md transition-shadow"
+                className={`relative rounded-lg p-8 text-center shadow-sm hover:shadow-md transition-shadow min-h-[200px] flex flex-col justify-center ${
+                  hasBackgroundImage ? 'bg-cover bg-center bg-no-repeat' : 'bg-white'
+                }`}
+                style={
+                  hasBackgroundImage
+                    ? {
+                        backgroundImage: `url(${backgroundImageUrl})`,
+                      }
+                    : undefined
+                }
               >
+                {/* Overlay for better text readability when background image is present */}
+                {hasBackgroundImage && <div className="absolute inset-0 bg-black/30 rounded-lg" />}
+
                 {service.available && (
-                  <div className="absolute -top-2 -right-2 bg-ds-accent-yellow text-white text-xs font-medium px-3 py-1 rounded-full">
+                  <div className="absolute -top-2 -right-2 bg-ds-accent-yellow text-white text-xs font-medium px-3 py-1 rounded-full z-10">
                     Available for self-pay
                   </div>
                 )}
 
-                <div className="flex justify-center mb-6">
-                  <div className="w-16 h-16 flex items-center justify-center">
-                    <IconComponent className="w-12 h-12 text-blue-500" />
+                {/* Icon - only show when no background image */}
+                {!hasBackgroundImage && (
+                  <div className="flex justify-center mb-6">
+                    <div className="w-16 h-16 flex items-center justify-center">
+                      <IconComponent className="w-12 h-12 text-blue-500" />
+                    </div>
                   </div>
-                </div>
+                )}
 
-                <h3 className="text-lg font-semibold text-blue-900 uppercase tracking-wide">
+                <h3
+                  className={`font-semibold uppercase tracking-wide relative z-10 ${
+                    hasBackgroundImage ? 'text-white text-xl md:text-2xl' : 'text-blue-900 text-lg'
+                  }`}
+                >
                   {service.name}
                 </h3>
               </div>

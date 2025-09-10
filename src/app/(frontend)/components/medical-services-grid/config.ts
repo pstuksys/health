@@ -62,6 +62,13 @@ export const medicalServicesGridFields: Field[] = [
         defaultValue: true,
         admin: { description: 'Show "Available for self-pay" badge' },
       },
+      {
+        name: 'backgroundImage',
+        type: 'upload',
+        relationTo: 'media',
+        required: false,
+        admin: { description: 'Optional background image for the service card' },
+      },
     ],
   },
 ]

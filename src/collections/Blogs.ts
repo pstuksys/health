@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
 import { revalidateBlogsOnChange } from '@/hooks/revalidate'
-
+ 
 export const Blogs: CollectionConfig = {
   slug: 'blogs',
   hooks: {

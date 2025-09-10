@@ -25,6 +25,8 @@ import { scoreAppWidgetFields } from '../app/(frontend)/components/scoreapp-widg
 import { sleepAssessmentStepsFields } from '../app/(frontend)/components/sleep-assessment-steps/config'
 import { sleepAssessmentFeaturesFields } from '../app/(frontend)/components/sleep-assessment-features/config'
 import { notificationBlockFields } from '../app/(frontend)/components/notification-block/config'
+import { formBlockFields } from '../app/(frontend)/components/form-block/config'
+import { contentBlockV2Fields } from '../app/(frontend)/components/content-block-v2/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -95,6 +97,16 @@ const notificationBlock: Block = {
   dbName: 'notification_block',
   fields: notificationBlockFields,
 }
+const formBlock: Block = {
+  slug: 'formBlock',
+  dbName: 'form_block',
+  fields: formBlockFields,
+}
+const contentBlockV2: Block = {
+  slug: 'contentBlockV2',
+  dbName: 'content_block_v2',
+  fields: contentBlockV2Fields,
+}
 
 // All available page blocks
 const pageBlocks: Block[] = [
@@ -124,6 +136,8 @@ const pageBlocks: Block[] = [
   sleepAssessmentStepsBlock,
   sleepAssessmentFeaturesBlock,
   notificationBlock,
+  formBlock,
+  contentBlockV2,
 ]
 
 export const Pages: CollectionConfig = {
@@ -424,6 +438,62 @@ export const Pages: CollectionConfig = {
                   'Make the hero section take up the full viewport height (100vh) with animations',
                 condition: (data) => data.showHero,
               },
+            },
+            {
+              name: 'showHeroStatsCard',
+              type: 'checkbox',
+              label: 'Show Hero Statistics Card',
+              defaultValue: false,
+              admin: {
+                description: 'Display a statistics card in the hero section',
+                condition: (data) => data.showHero,
+              },
+            },
+            {
+              name: 'heroStatsCard',
+              type: 'group',
+              label: 'Hero Statistics Card',
+              admin: {
+                description: 'Configure the statistics card displayed in the hero section',
+                condition: (data) => data.showHero && data.showHeroStatsCard,
+              },
+              fields: [
+                {
+                  name: 'title',
+                  type: 'text',
+                  defaultValue: 'Sleep Disorder Statistics',
+                  admin: { description: 'Main title for the statistics card' },
+                },
+                {
+                  name: 'statisticLabel',
+                  type: 'text',
+                  defaultValue: 'Sleep Apnoea Cases Worldwide',
+                  admin: {
+                    description: 'Label for the statistic (e.g., "Sleep Apnoea Cases Worldwide")',
+                  },
+                },
+                {
+                  name: 'statisticValue',
+                  type: 'text',
+                  defaultValue: '1 Billion',
+                  admin: { description: 'The statistic value (e.g., "1 Billion", "50%", "2.5M")' },
+                },
+                {
+                  name: 'description',
+                  type: 'textarea',
+                  defaultValue:
+                    'Nearly one billion people worldwide live with sleep apnoea, yet many remain undiagnosed.',
+                  admin: { description: 'Descriptive text below the statistic' },
+                },
+                {
+                  name: 'progressPercentage',
+                  type: 'number',
+                  defaultValue: 85,
+                  min: 0,
+                  max: 100,
+                  admin: { description: 'Progress bar percentage (0-100)' },
+                },
+              ],
             },
           ],
         },
