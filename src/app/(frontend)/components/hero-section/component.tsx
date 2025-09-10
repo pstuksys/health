@@ -7,6 +7,7 @@ import { CMSLink } from '@/app/(frontend)/components/ui/cms-link'
 import { cn } from '@/lib/utils'
 import { ConsistentHTML } from '../safe-html/component'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
+import { SleepDisorderStatsCard } from '../sleep-disorder-stats-card/component'
 import type { Page } from '@/payload-types'
 type CTAButton = { label: string; href: string; variant?: 'primary' | 'secondary' }
 
@@ -20,6 +21,14 @@ type HeroSectionProps = {
   textColor?: 'auto' | 'light' | 'dark'
   ctaAlignment?: 'left' | 'center' | 'right'
   fullHeight?: boolean
+  showStatsCard?: boolean
+  statsCard?: {
+    title?: string
+    statisticLabel?: string
+    statisticValue?: string
+    description?: string
+    progressPercentage?: number
+  }
   className?: string
 }
 
@@ -33,6 +42,8 @@ export function HeroSection({
   textColor = 'auto',
   ctaAlignment = 'left',
   fullHeight = false,
+  showStatsCard = false,
+  statsCard,
   className,
 }: HeroSectionProps) {
   const [isVisible, setIsVisible] = useState(false)
@@ -129,65 +140,84 @@ export function HeroSection({
           className={cn(
             'max-w-container transition-all duration-1000 ease-out transform',
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8',
+            showStatsCard ? 'flex flex-col lg:flex-row lg:items-center lg:gap-12' : '',
           )}
         >
-          {Boolean(subtitle) &&
-            (isLexicalEditorState(subtitle) ? (
-              <RichText
-                data={subtitle}
-                className={cn(
-                  '',
-                  // 'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
-                  getTextColorClass(false),
-                )}
-              />
-            ) : (
-              <ConsistentHTML
-                as="p"
-                html={(typeof subtitle === 'string' ? subtitle : '') || ''}
-                className={cn(
-                  'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
-                  getTextColorClass(false),
-                )}
-              />
-            ))}
-          {(ctaButton?.label && ctaButton?.href) || (secondaryCTA?.label && secondaryCTA?.href) ? (
-            <div
-              className={cn(
-                'flex flex-col sm:flex-row gap-4 w-full sm:w-auto',
-                getCTAAlignmentClass(),
-              )}
-            >
-              {ctaButton?.label && ctaButton?.href && (
-                <CMSLink
-                  href={ctaButton.href}
-                  variant={ctaButton.variant === 'secondary' ? 'secondary' : 'primary'}
-                  size="lg"
-                  className="w-full sm:w-auto text-center"
-                  external={ctaButton.href.startsWith('http')}
-                >
-                  {ctaButton.label}
-                </CMSLink>
-              )}
-              {secondaryCTA?.label && secondaryCTA?.href && (
-                <CMSLink
-                  href={secondaryCTA.href}
-                  variant="outline"
-                  size="lg"
+          {/* Main Content */}
+          <div className={cn(showStatsCard ? 'flex-1' : '')}>
+            {Boolean(subtitle) &&
+              (isLexicalEditorState(subtitle) ? (
+                <RichText
+                  data={subtitle}
                   className={cn(
-                    'w-full sm:w-auto text-center',
-                    'border-white text-white hover:bg-white hover:text-ds-dark-blue',
-                    // getTextColorClass(false) === 'text-white'
-                    // ? 'border-white text-white hover:bg-white hover:text-ds-dark-blue'
-                    // : 'border-ds-dark-blue text-ds-dark-blue hover:bg-ds-dark-blue hover:text-white',
+                    '',
+                    // 'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
+                    getTextColorClass(false),
                   )}
-                  external={secondaryCTA.href.startsWith('http')}
-                >
-                  {secondaryCTA.label}
-                </CMSLink>
-              )}
+                />
+              ) : (
+                <ConsistentHTML
+                  as="p"
+                  html={(typeof subtitle === 'string' ? subtitle : '') || ''}
+                  className={cn(
+                    'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
+                    getTextColorClass(false),
+                  )}
+                />
+              ))}
+            {(ctaButton?.label && ctaButton?.href) ||
+            (secondaryCTA?.label && secondaryCTA?.href) ? (
+              <div
+                className={cn(
+                  'flex flex-col sm:flex-row gap-4 w-full sm:w-auto',
+                  getCTAAlignmentClass(),
+                )}
+              >
+                {ctaButton?.label && ctaButton?.href && (
+                  <CMSLink
+                    href={ctaButton.href}
+                    variant={ctaButton.variant === 'secondary' ? 'secondary' : 'primary'}
+                    size="lg"
+                    className="w-full sm:w-auto text-center"
+                    external={ctaButton.href.startsWith('http')}
+                  >
+                    {ctaButton.label}
+                  </CMSLink>
+                )}
+                {secondaryCTA?.label && secondaryCTA?.href && (
+                  <CMSLink
+                    href={secondaryCTA.href}
+                    variant="outline"
+                    size="lg"
+                    className={cn(
+                      'w-full sm:w-auto text-center',
+                      'border-white text-white hover:bg-white hover:text-ds-dark-blue',
+                      // getTextColorClass(false) === 'text-white'
+                      // ? 'border-white text-white hover:bg-white hover:text-ds-dark-blue'
+                      // : 'border-ds-dark-blue text-ds-dark-blue hover:bg-ds-dark-blue hover:text-white',
+                    )}
+                    external={secondaryCTA.href.startsWith('http')}
+                  >
+                    {secondaryCTA.label}
+                  </CMSLink>
+                )}
+              </div>
+            ) : null}
+          </div>
+
+          {/* Statistics Card */}
+          {showStatsCard && statsCard && (
+            <div className="flex lg:justify-end mt-8 lg:mt-0">
+              <SleepDisorderStatsCard
+                title={statsCard.title}
+                statisticLabel={statsCard.statisticLabel}
+                statisticValue={statsCard.statisticValue}
+                description={statsCard.description}
+                progressPercentage={statsCard.progressPercentage}
+                className="w-full max-w-sm"
+              />
             </div>
-          ) : null}
+          )}
         </div>
       </div>
 

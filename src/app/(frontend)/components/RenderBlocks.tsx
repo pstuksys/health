@@ -230,6 +230,10 @@ export function deriveGlobalHeroProps(page: Page) {
   // Extract full height setting
   const heroFullHeight = Boolean((page as any)?.heroFullHeight)
 
+  // Extract statistics card settings
+  const showHeroStatsCard = Boolean((page as any)?.showHeroStatsCard)
+  const heroStatsCard = (page as any)?.heroStatsCard
+
   // Helper function to resolve internal/external links
   const resolveLink = (buttonData: any): { label: string; href: string } => {
     if (!buttonData) return { label: '', href: '#' }
@@ -287,5 +291,7 @@ export function deriveGlobalHeroProps(page: Page) {
     textColor: heroTextColor,
     ctaAlignment: heroCTAAlignment,
     fullHeight: heroFullHeight,
+    showStatsCard: showHeroStatsCard,
+    statsCard: heroStatsCard,
   }
 }

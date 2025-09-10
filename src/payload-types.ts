@@ -356,6 +356,35 @@ export interface Page {
    */
   heroFullHeight?: boolean | null;
   /**
+   * Display a statistics card in the hero section
+   */
+  showHeroStatsCard?: boolean | null;
+  /**
+   * Configure the statistics card displayed in the hero section
+   */
+  heroStatsCard?: {
+    /**
+     * Main title for the statistics card
+     */
+    title?: string | null;
+    /**
+     * Label for the statistic (e.g., "Sleep Apnoea Cases Worldwide")
+     */
+    statisticLabel?: string | null;
+    /**
+     * The statistic value (e.g., "1 Billion", "50%", "2.5M")
+     */
+    statisticValue?: string | null;
+    /**
+     * Descriptive text below the statistic
+     */
+    description?: string | null;
+    /**
+     * Progress bar percentage (0-100)
+     */
+    progressPercentage?: number | null;
+  };
+  /**
    * Add flexible content blocks to build your page layout
    */
   blocks?:
@@ -981,6 +1010,10 @@ export interface Page {
                * Show "Available for self-pay" badge
                */
               available?: boolean | null;
+              /**
+               * Optional background image for the service card
+               */
+              backgroundImage?: (number | null) | Media;
               id?: string | null;
             }[];
             id?: string | null;
@@ -1853,6 +1886,16 @@ export interface PagesSelect<T extends boolean = true> {
       };
   heroCTAAlignment?: T;
   heroFullHeight?: T;
+  showHeroStatsCard?: T;
+  heroStatsCard?:
+    | T
+    | {
+        title?: T;
+        statisticLabel?: T;
+        statisticValue?: T;
+        description?: T;
+        progressPercentage?: T;
+      };
   blocks?:
     | T
     | {
@@ -2295,6 +2338,7 @@ export interface PagesSelect<T extends boolean = true> {
                     icon?: T;
                     name?: T;
                     available?: T;
+                    backgroundImage?: T;
                     id?: T;
                   };
               id?: T;

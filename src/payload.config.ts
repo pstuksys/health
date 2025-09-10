@@ -38,6 +38,7 @@ import { Footer } from './globals/Footer'
 // Import blocks for rich text editor
 import { buttonBlockFields } from './app/(frontend)/components/button-block/config'
 import { formBlockFields } from './app/(frontend)/components/form-block/config'
+import { iconTextBlockFields } from './app/(frontend)/components/icon-text-block/config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -51,6 +52,10 @@ const richTextBlocks = [
   {
     slug: 'formBlock',
     fields: formBlockFields,
+  },
+  {
+    slug: 'iconTextBlock',
+    fields: iconTextBlockFields,
   },
 ]
 
