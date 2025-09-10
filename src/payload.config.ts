@@ -35,8 +35,9 @@ import { Blogs } from './collections/Blogs'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 
-// Import button block for rich text editor
+// Import blocks for rich text editor
 import { buttonBlockFields } from './app/(frontend)/components/button-block/config'
+import { formBlockFields } from './app/(frontend)/components/form-block/config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -46,6 +47,10 @@ const richTextBlocks = [
   {
     slug: 'buttonBlock',
     fields: buttonBlockFields,
+  },
+  {
+    slug: 'formBlock',
+    fields: formBlockFields,
   },
 ]
 

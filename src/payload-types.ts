@@ -1271,6 +1271,104 @@ export interface Page {
             blockName?: string | null;
             blockType: 'notificationBlock';
           }
+        | {
+            /**
+             * Select the form to display
+             */
+            form: number | Form;
+            /**
+             * Optional title to display above the form
+             */
+            title?: string | null;
+            /**
+             * Optional description to display above the form
+             */
+            description?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            /**
+             * Choose how the form should be displayed
+             */
+            layout?: ('default' | 'card' | 'centered') | null;
+            /**
+             * Maximum width of the form container
+             */
+            maxWidth?: ('sm' | 'md' | 'lg' | 'xl' | 'full') | null;
+            /**
+             * Background color for the form section
+             */
+            backgroundColor?: ('transparent' | 'white' | 'gray' | 'primary') | null;
+            /**
+             * Padding around the form
+             */
+            padding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            /**
+             * Width of the submit button
+             */
+            buttonWidth?: ('full' | 'auto') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'formBlock';
+          }
+        | {
+            /**
+             * Add columns with different widths. They will wrap to new rows automatically.
+             */
+            columns?:
+              | {
+                  /**
+                   * Width of this column
+                   */
+                  width: 'third' | 'half' | 'full';
+                  /**
+                   * Rich text content with full block support
+                   */
+                  content: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: string;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Spacing between columns and rows
+             */
+            spacing?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            /**
+             * Padding around the entire content block
+             */
+            containerPadding?: ('none' | 'sm' | 'md' | 'lg' | 'xl') | null;
+            /**
+             * Background color for the content block
+             */
+            backgroundColor?: ('transparent' | 'white' | 'gray' | 'primary') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contentBlockV2';
+          }
       )[]
     | null;
   meta?: {
@@ -2320,6 +2418,36 @@ export interface PagesSelect<T extends boolean = true> {
           | T
           | {
               content?: T;
+              id?: T;
+              blockName?: T;
+            };
+        formBlock?:
+          | T
+          | {
+              form?: T;
+              title?: T;
+              description?: T;
+              layout?: T;
+              maxWidth?: T;
+              backgroundColor?: T;
+              padding?: T;
+              buttonWidth?: T;
+              id?: T;
+              blockName?: T;
+            };
+        contentBlockV2?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    width?: T;
+                    content?: T;
+                    id?: T;
+                  };
+              spacing?: T;
+              containerPadding?: T;
+              backgroundColor?: T;
               id?: T;
               blockName?: T;
             };

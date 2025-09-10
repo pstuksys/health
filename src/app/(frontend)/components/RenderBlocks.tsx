@@ -28,6 +28,8 @@ import { ScoreAppWidget } from './scoreapp-widget/component'
 import { SleepAssessmentSteps } from './sleep-assessment-steps/component'
 import { SleepAssessmentFeatures } from './sleep-assessment-features/component'
 import { NotificationBlock } from './notification-block/component'
+import { FormBlock } from './form-block/component'
+import { ContentBlockV2 } from './content-block-v2/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -139,6 +141,14 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   notificationBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'notificationBlock' }>
     return <NotificationBlock {...b} />
+  },
+  formBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'formBlock' }>
+    return <FormBlock {...(b as any)} />
+  },
+  contentBlockV2: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'contentBlockV2' }>
+    return <ContentBlockV2 {...(b as any)} />
   },
 }
 

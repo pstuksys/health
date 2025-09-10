@@ -25,6 +25,8 @@ import { scoreAppWidgetFields } from '../app/(frontend)/components/scoreapp-widg
 import { sleepAssessmentStepsFields } from '../app/(frontend)/components/sleep-assessment-steps/config'
 import { sleepAssessmentFeaturesFields } from '../app/(frontend)/components/sleep-assessment-features/config'
 import { notificationBlockFields } from '../app/(frontend)/components/notification-block/config'
+import { formBlockFields } from '../app/(frontend)/components/form-block/config'
+import { contentBlockV2Fields } from '../app/(frontend)/components/content-block-v2/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -95,6 +97,16 @@ const notificationBlock: Block = {
   dbName: 'notification_block',
   fields: notificationBlockFields,
 }
+const formBlock: Block = {
+  slug: 'formBlock',
+  dbName: 'form_block',
+  fields: formBlockFields,
+}
+const contentBlockV2: Block = {
+  slug: 'contentBlockV2',
+  dbName: 'content_block_v2',
+  fields: contentBlockV2Fields,
+}
 
 // All available page blocks
 const pageBlocks: Block[] = [
@@ -124,6 +136,8 @@ const pageBlocks: Block[] = [
   sleepAssessmentStepsBlock,
   sleepAssessmentFeaturesBlock,
   notificationBlock,
+  formBlock,
+  contentBlockV2,
 ]
 
 export const Pages: CollectionConfig = {
