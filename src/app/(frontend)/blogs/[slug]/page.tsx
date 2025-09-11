@@ -1,35 +1,14 @@
 import { notFound } from 'next/navigation'
-import { draftMode } from 'next/headers'
-import { getPayload } from 'payload'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
 import { mediaToUrl } from '@/lib/media'
 import Image from 'next/image'
 import type { Blog } from '@/payload-types'
 import { ShareButtons } from './ShareButtons'
-import { unstable_cache } from 'next/cache'
-
-async function getBlogBySlug(slug: string) {
-  const { isEnabled } = await draftMode()
-  const isDraft = isEnabled
-  const payload = await getPayload({ config: (await import('@/payload.config')).default })
-  const { docs } = await payload.find({
-    collection: 'blogs',
-    where: { slug: { equals: slug } },
-    draft: isDraft,
-    limit: 1,
-  })
-  return docs[0] as unknown as Blog | undefined
-}
-
-// Cache individual blog posts with proper tags
-const getCachedBlogBySlug = (slug: string) =>
-  unstable_cache(() => getBlogBySlug(slug), [`blog-detail-${slug}`], {
-    tags: ['blogs', 'blog-detail', `blog:${slug}`],
-  })()
+import { getCachedBlogBySlug } from '@/lib/cms/payload-client'
 
 export default async function BlogPage(props: any) {
   const slug = props?.params?.slug as string
-  const blog = await getCachedBlogBySlug(slug)
+  const blog = await getCachedBlogBySlug(slug, 2)
 
   if (!blog) return notFound()
 
@@ -109,16 +88,9 @@ export default async function BlogPage(props: any) {
 
 export async function generateMetadata(props: any) {
   const slug = props?.params?.slug as string
-  const payload = await getPayload({ config: (await import('@/payload.config')).default })
 
   try {
-    const { docs } = await payload.find({
-      collection: 'blogs',
-      where: { slug: { equals: slug } },
-      limit: 1,
-    })
-
-    const blog = docs[0] as unknown as Blog | undefined
+    const blog = await getCachedBlogBySlug(slug, 2) // Need depth 2 for SEO meta fields
 
     if (!blog) {
       return {
@@ -127,11 +99,60 @@ export async function generateMetadata(props: any) {
       }
     }
 
+    // Use SEO plugin fields if available, fallback to blog fields
+    const seoTitle = blog.meta?.title
+    const seoDescription = blog.meta?.description
+    const seoImage = blog.meta?.image
+
     return {
-      title: `${blog.title} | Blog`,
-      description: blog.excerpt || `Read ${blog.title} on our blog.`,
+      title: seoTitle || `${blog.title} | Blog`,
+      description: seoDescription || blog.excerpt || `Read ${blog.title} on our blog.`,
+      openGraph: {
+        title: seoTitle || blog.title,
+        description: seoDescription || blog.excerpt || `Read ${blog.title} on our blog.`,
+        type: 'article',
+        publishedTime: blog.publishedAt || undefined,
+        authors: blog.author ? [blog.author] : undefined,
+        images: seoImage
+          ? [
+              {
+                url:
+                  typeof seoImage === 'object' && seoImage?.url
+                    ? seoImage.url
+                    : typeof blog.image === 'object' && blog.image?.url
+                      ? blog.image.url
+                      : undefined,
+                width: typeof seoImage === 'object' ? seoImage?.width : undefined,
+                height: typeof seoImage === 'object' ? seoImage?.height : undefined,
+                alt: typeof seoImage === 'object' ? seoImage?.alt || blog.title : blog.title,
+              },
+            ].filter((img) => img.url)
+          : typeof blog.image === 'object' && blog.image?.url
+            ? [
+                {
+                  url: blog.image.url,
+                  width: blog.image.width,
+                  height: blog.image.height,
+                  alt: blog.image.alt || blog.title,
+                },
+              ]
+            : undefined,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: seoTitle || blog.title,
+        description: seoDescription || blog.excerpt || `Read ${blog.title} on our blog.`,
+        images: seoImage
+          ? typeof seoImage === 'object' && seoImage?.url
+            ? [seoImage.url]
+            : undefined
+          : typeof blog.image === 'object' && blog.image?.url
+            ? [blog.image.url]
+            : undefined,
+      },
     }
   } catch (error) {
+    console.error('Error generating blog metadata:', error)
     return {
       title: 'Blog Post',
       description: 'Read our latest blog post.',

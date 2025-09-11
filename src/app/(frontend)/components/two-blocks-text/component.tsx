@@ -27,13 +27,13 @@ export function TwoBlocksText({ leftBlock, rightBlock }: TwoBlocksTextProps) {
 
   return (
     <section ref={sectionRef} className="bg-ds-light-neutral p-4 md:p-4">
-      <div className="max-w-container mx-auto">
+      <div className="max-w-container mx-auto overflow-hidden">
         <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 lg:gap-12 items-start">
           {/* Left Block */}
           <div
             className={cn(
-              'space-y-4 transition-all duration-500',
-              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-6',
+              'space-y-4 transition-all duration-700 ease-out',
+              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-8',
             )}
           >
             {leftBlock?.subtitle && (
@@ -57,8 +57,8 @@ export function TwoBlocksText({ leftBlock, rightBlock }: TwoBlocksTextProps) {
           {/* Right Block */}
           <div
             className={cn(
-              'bg-ds-dark-blue rounded-3xl p-8 md:p-10 lg:p-12 transition-all duration-500',
-              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-6',
+              'bg-ds-dark-blue rounded-3xl p-8 md:p-10 lg:p-12 transition-all duration-700 ease-out',
+              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8',
             )}
           >
             {rightBlock?.title && (

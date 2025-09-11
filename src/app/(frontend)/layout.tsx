@@ -5,8 +5,6 @@ import './globals.css'
 import { NavWithScroll } from './components/navigation-menu/NavWithScroll'
 import { Footer } from './components/footer/component'
 import { getHeaderFooter } from '@/lib/cms/globals'
-import { Banner } from './components/banner/component'
-// import { Banner } from './components/banner/component'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -16,9 +14,111 @@ const poppins = Poppins({
 })
 
 export const metadata: Metadata = {
-  title: 'Design System App',
-  description: 'Built with custom design system',
-  generator: 'v0.app',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  title: {
+    default: 'Health & Wellness Platform',
+    template: '%s | Health & Wellness Platform',
+  },
+  description:
+    'Your comprehensive health and wellness platform for sleep disorders, diagnostics, treatments, and lifestyle tips.',
+  keywords: [
+    'health',
+    'wellness',
+    'sleep disorders',
+    'medical diagnostics',
+    'treatments',
+    'healthcare',
+  ],
+  authors: [{ name: 'Health & Wellness Team' }],
+  creator: 'Health & Wellness Platform',
+  publisher: 'Health & Wellness Platform',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  category: 'healthcare',
+  classification: 'healthcare',
+  generator: 'Next.js',
+  applicationName: 'Health & Wellness Platform',
+  referrer: 'origin-when-cross-origin',
+  verification: {
+    // Add these when you have them
+    // google: 'your-google-site-verification',
+    // yandex: 'your-yandex-verification',
+    // yahoo: 'your-yahoo-verification',
+    // other: 'your-other-verification',
+  },
+  alternates: {
+    canonical: '/',
+    languages: {
+      'en-US': '/en-US',
+      en: '/en',
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: '/',
+    title: 'Health & Wellness Platform',
+    description:
+      'Your comprehensive health and wellness platform for sleep disorders, diagnostics, treatments, and lifestyle tips.',
+    siteName: 'Health & Wellness Platform',
+    images: [
+      {
+        url: '/logo.svg', // Update with your actual OG image
+        width: 1200,
+        height: 630,
+        alt: 'Health & Wellness Platform',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Health & Wellness Platform',
+    description:
+      'Your comprehensive health and wellness platform for sleep disorders, diagnostics, treatments, and lifestyle tips.',
+    creator: '@yourtwitterhandle', // Update with your Twitter handle
+    images: ['/logo.svg'], // Update with your actual Twitter image
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  icons: {
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png' },
+      { url: '/apple-icon-180.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+  },
+  manifest: '/manifest.json', // Create a web app manifest
+}
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  colorScheme: 'light',
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#3d426a' }, // ds-dark-blue
+    { media: '(prefers-color-scheme: dark)', color: '#3d426a' },
+  ],
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -82,11 +182,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <html lang="en" className={`${poppins.variable} antialiased`}>
-      {/* TODO: if needed to revert add bg-ds-light-neutral to body */}
       <body className="font-sans bg-white">
-        {header?.enableBanter && header?.headerDescription && (
-          <Banner text={header.headerDescription} />
-        )}
         <NavWithScroll
           items={items}
           ctaButton={

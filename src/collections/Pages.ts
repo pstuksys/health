@@ -140,23 +140,13 @@ const pageBlocks: Block[] = [
   contentBlockV2,
 ]
 
+import { revalidatePagesOnChange, revalidatePagesOnDelete } from '@/hooks/revalidate'
+
 export const Pages: CollectionConfig = {
   slug: 'pages',
   hooks: {
-    afterChange: [
-      ({ req: _req, doc }) => {
-        void fetch(
-          `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/api/revalidate?secret=${
-            process.env.REVALIDATION_SECRET ?? ''
-          }`,
-          {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ tags: ['pages', `page:${(doc as any)?.slug ?? ''}`] }),
-          },
-        ).catch(() => {})
-      },
-    ],
+    afterChange: [revalidatePagesOnChange],
+    afterDelete: [revalidatePagesOnDelete],
   },
   admin: {
     useAsTitle: 'title',

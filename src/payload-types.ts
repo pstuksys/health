@@ -2733,7 +2733,6 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: number;
-  logo?: (number | null) | Media;
   ctaButton?: {
     label?: string | null;
     linkType?: ('internal' | 'external') | null;
@@ -2748,11 +2747,6 @@ export interface Header {
         } | null);
     href?: string | null;
   };
-  enableBanter?: boolean | null;
-  /**
-   * Optional description text shown above the site header
-   */
-  headerDescription?: string | null;
   navigation?:
     | {
         label: string;
@@ -2878,7 +2872,6 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
-  logo?: T;
   ctaButton?:
     | T
     | {
@@ -2887,8 +2880,6 @@ export interface HeaderSelect<T extends boolean = true> {
         page?: T;
         href?: T;
       };
-  enableBanter?: T;
-  headerDescription?: T;
   navigation?:
     | T
     | {
