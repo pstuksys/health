@@ -66,7 +66,7 @@ export function SleepAssessmentSteps({
 
       <div className="relative mb-12">
         <div className="grid md:grid-cols-2 gap-6">
-          {stepsToRender.map((step, index) => {
+          {stepsToRender.map((step) => {
             const Icon = iconMap[(step as any).icon as IconKey] || FileText
 
             // Use the utility function to resolve the href

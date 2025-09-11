@@ -36,7 +36,7 @@ export async function generatePageMetadata(
 
   const title = page.meta?.title ?? page.title
   const description = page.meta?.description ?? undefined
-  const imageUrl = mediaToUrl(page.meta?.image as any)
+  const imageUrl = mediaToUrl(page.meta?.image)
 
   return {
     title,

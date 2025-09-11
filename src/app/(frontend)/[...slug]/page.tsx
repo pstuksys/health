@@ -6,7 +6,7 @@ import {
   hasHeroBlock,
   deriveGlobalHeroProps,
 } from '@/app/(frontend)/components/RenderBlocks'
-import { getPage, generateMetadataBySlug, isDraftModeEnabled } from '@/lib/page-utils'
+import { getPage, generateMetadataBySlug } from '@/lib/page-utils'
 
 /**
  * Check if a slug should be handled by the dynamic page route

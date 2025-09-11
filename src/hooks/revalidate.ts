@@ -129,7 +129,7 @@ export const createCollectionDeleteHook = (collectionSlug: string): CollectionAf
  * Universal revalidation hook for globals
  */
 export const createGlobalRevalidateHook = (globalSlug: string): GlobalAfterChangeHook => {
-  return async ({ doc }) => {
+  return async ({ doc: _doc }) => {
     const tags = [`global:${globalSlug}`]
 
     // Global-specific logic
