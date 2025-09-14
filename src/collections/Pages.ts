@@ -27,6 +27,7 @@ import { sleepAssessmentFeaturesFields } from '../app/(frontend)/components/slee
 import { notificationBlockFields } from '../app/(frontend)/components/notification-block/config'
 import { formBlockFields } from '../app/(frontend)/components/form-block/config'
 import { contentBlockV2Fields } from '../app/(frontend)/components/content-block-v2/config'
+import { patientsSleepFields } from '../app/(frontend)/components/patients-sleep/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -107,6 +108,11 @@ const contentBlockV2: Block = {
   dbName: 'content_block_v2',
   fields: contentBlockV2Fields,
 }
+const patientsSleepBlock: Block = {
+  slug: 'patientsSleep',
+  dbName: 'patients_sleep',
+  fields: patientsSleepFields,
+}
 
 // All available page blocks
 const pageBlocks: Block[] = [
@@ -138,6 +144,7 @@ const pageBlocks: Block[] = [
   notificationBlock,
   formBlock,
   contentBlockV2,
+  patientsSleepBlock,
 ]
 
 export const Pages: CollectionConfig = {

@@ -1402,6 +1402,161 @@ export interface Page {
             blockName?: string | null;
             blockType: 'contentBlockV2';
           }
+        | {
+            /**
+             * Main heading for the patients sleep section
+             */
+            title?: string | null;
+            /**
+             * Subtitle text below the main title
+             */
+            subtitle?: string | null;
+            /**
+             * Background color for the section
+             */
+            backgroundColor?: ('white' | 'ds-light-neutral' | 'blue-50' | 'green-50') | null;
+            /**
+             * Sleep test cards (1-10 tests)
+             */
+            sleepTests: {
+              /**
+               * Title of the sleep test
+               */
+              title: string;
+              /**
+               * Description of the sleep test
+               */
+              description: string;
+              /**
+               * What this test is best for
+               */
+              bestFor: string;
+              /**
+               * Icon for this sleep test
+               */
+              icon?: ('brain' | 'heart' | 'lungs' | 'moon' | 'activity' | 'stethoscope' | 'baby') | null;
+              /**
+               * Badge text (e.g., Gold Standard, Focused Test)
+               */
+              badge: string;
+              /**
+               * Text for the button (e.g., Learn more, Book now)
+               */
+              buttonText?: string | null;
+              /**
+               * Type of link
+               */
+              linkType?: ('internal' | 'external') | null;
+              /**
+               * Select a page to link to
+               */
+              internalLink?: (number | null) | Page;
+              /**
+               * External URL (e.g., https://example.com)
+               */
+              externalLink?: string | null;
+              id?: string | null;
+            }[];
+            aboutSection?: {
+              /**
+               * Show about section
+               */
+              enabled?: boolean | null;
+              /**
+               * Title for about section
+               */
+              title?: string | null;
+              /**
+               * Description for about section
+               */
+              description?: string | null;
+            };
+            pediatricSection?: {
+              /**
+               * Show pediatric section
+               */
+              enabled?: boolean | null;
+              /**
+               * Title for pediatric section
+               */
+              title?: string | null;
+              /**
+               * Description for pediatric section
+               */
+              description?: string | null;
+              /**
+               * Additional text for pediatric section
+               */
+              additionalText?: string | null;
+            };
+            ctaSection?: {
+              /**
+               * Show CTA section
+               */
+              enabled?: boolean | null;
+              /**
+               * Title for CTA section
+               */
+              title?: string | null;
+              /**
+               * Description for CTA section
+               */
+              description?: string | null;
+              /**
+               * Text for the main CTA button
+               */
+              buttonText?: string | null;
+              /**
+               * Text for phone call option
+               */
+              phoneText?: string | null;
+              /**
+               * Type of link for CTA button
+               */
+              ctaLinkType?: ('internal' | 'external') | null;
+              /**
+               * Select a page to link to
+               */
+              ctaInternalLink?: (number | null) | Page;
+              /**
+               * External URL (e.g., https://example.com)
+               */
+              ctaExternalLink?: string | null;
+            };
+            faqSection?: {
+              /**
+               * Show FAQ section
+               */
+              enabled?: boolean | null;
+              /**
+               * Title for FAQ section
+               */
+              title?: string | null;
+              /**
+               * Subtitle for FAQ section
+               */
+              subtitle?: string | null;
+              /**
+               * FAQ items (0-10 questions)
+               */
+              faqs?:
+                | {
+                    /**
+                     * FAQ question
+                     */
+                    question: string;
+                    /**
+                     * FAQ answer
+                     */
+                    answer: string;
+                    id?: string | null;
+                  }[]
+                | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'patientsSleep';
+          }
       )[]
     | null;
   meta?: {
@@ -2492,6 +2647,70 @@ export interface PagesSelect<T extends boolean = true> {
               spacing?: T;
               containerPadding?: T;
               backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        patientsSleep?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              backgroundColor?: T;
+              sleepTests?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    bestFor?: T;
+                    icon?: T;
+                    badge?: T;
+                    buttonText?: T;
+                    linkType?: T;
+                    internalLink?: T;
+                    externalLink?: T;
+                    id?: T;
+                  };
+              aboutSection?:
+                | T
+                | {
+                    enabled?: T;
+                    title?: T;
+                    description?: T;
+                  };
+              pediatricSection?:
+                | T
+                | {
+                    enabled?: T;
+                    title?: T;
+                    description?: T;
+                    additionalText?: T;
+                  };
+              ctaSection?:
+                | T
+                | {
+                    enabled?: T;
+                    title?: T;
+                    description?: T;
+                    buttonText?: T;
+                    phoneText?: T;
+                    ctaLinkType?: T;
+                    ctaInternalLink?: T;
+                    ctaExternalLink?: T;
+                  };
+              faqSection?:
+                | T
+                | {
+                    enabled?: T;
+                    title?: T;
+                    subtitle?: T;
+                    faqs?:
+                      | T
+                      | {
+                          question?: T;
+                          answer?: T;
+                          id?: T;
+                        };
+                  };
               id?: T;
               blockName?: T;
             };

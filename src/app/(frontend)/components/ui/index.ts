@@ -1,4 +1,5 @@
 export { Button } from './button'
+export { Badge } from './badge'
 export { Card, CardContent, CardHeader, CardTitle, CardDescription } from './card'
 export { Input } from './input'
 export { Textarea } from './textarea'
