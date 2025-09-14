@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react'
 
 import { ChevronDown, Search } from 'lucide-react'
 import type { Page } from '@/payload-types'
+import { RichText, isLexicalEditorState } from '../ui/rich-text'
 
 type ExpandableTableProps = Extract<
   NonNullable<Page['blocks']>[number],
@@ -13,7 +14,7 @@ type ExpandableTableProps = Extract<
 export function ExpandableTable({
   title = '',
   subtitle,
-  description = '',
+  description,
   items = [],
   enableSearch = false,
   searchPlaceholder = 'Search items...',
@@ -24,16 +25,28 @@ export function ExpandableTable({
   const filteredItems = useMemo(() => {
     if (!enableSearch || !searchQuery.trim()) return items
 
-    return items.filter(
-      (item) =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.details?.toLowerCase().includes(searchQuery.toLowerCase()),
-    )
+    return items.filter((item) => {
+      const titleMatch = item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      const contentMatch = item.content?.toLowerCase().includes(searchQuery.toLowerCase())
+
+      // For rich text details, we need to extract plain text for searching
+      let detailsMatch = false
+      if (item.details && isLexicalEditorState(item.details)) {
+        // Extract text content from lexical state for searching
+        const detailsText = JSON.stringify(item.details).toLowerCase()
+        detailsMatch = detailsText.includes(searchQuery.toLowerCase())
+      }
+
+      return titleMatch || contentMatch || detailsMatch
+    })
   }, [items, searchQuery, enableSearch])
 
   const handleItemClick = (itemId: string) => {
     setActiveItem(activeItem === itemId ? null : itemId)
+  }
+
+  const hasDetails = (item: any) => {
+    return item.details && isLexicalEditorState(item.details)
   }
 
   return (
@@ -47,7 +60,9 @@ export function ExpandableTable({
               {subtitle && (
                 <h3 className="text-xl font-semibold text-ds-pastille-green mb-6">{subtitle}</h3>
               )}
-              <p className="text-lg text-gray-600 leading-relaxed">{description}</p>
+              {description && (
+                <p className="text-lg text-gray-600 leading-relaxed">{description}</p>
+              )}
             </div>
           </div>
 
@@ -75,33 +90,56 @@ export function ExpandableTable({
                   className="border border-ds-pastille-green/30 rounded-lg bg-white overflow-hidden transition-all duration-300 hover:shadow-md"
                 >
                   {/* Item Header */}
-                  <button
-                    onClick={() => handleItemClick(item.id || '')}
-                    className="w-full px-6 py-4 text-left flex items-center justify-between hover:bg-ds-light-neutral/50 transition-colors duration-200"
+                  <div
+                    className={`w-full px-6 py-4 text-left flex items-center justify-between ${
+                      hasDetails(item)
+                        ? 'cursor-pointer hover:bg-ds-light-neutral/50 transition-colors duration-200'
+                        : ''
+                    }`}
+                    onClick={hasDetails(item) ? () => handleItemClick(item.id || '') : undefined}
+                    role={hasDetails(item) ? 'button' : undefined}
+                    tabIndex={hasDetails(item) ? 0 : undefined}
+                    onKeyDown={
+                      hasDetails(item)
+                        ? (e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault()
+                              handleItemClick(item.id || '')
+                            }
+                          }
+                        : undefined
+                    }
                   >
                     <div>
                       <h3 className="font-semibold text-ds-dark-blue text-lg">{item.title}</h3>
-                      <p className="text-gray-600 mt-1">{item.content}</p>
+                      {item.content && <p className="text-gray-600 mt-1">{item.content}</p>}
                     </div>
-                    <ChevronDown
-                      className={`h-5 w-5 text-ds-pastille-green transition-transform duration-300 flex-shrink-0 ml-4 ${
-                        activeItem === item.id ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-
-                  {/* Expandable Content */}
-                  <div
-                    className={`overflow-hidden transition-all duration-300 ${
-                      activeItem === item.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-                    }`}
-                  >
-                    {item.details && (
-                      <div className="px-6 pb-4 border-t border-ds-pastille-green/20">
-                        <div className="pt-4 text-gray-700 leading-relaxed">{item.details}</div>
-                      </div>
+                    {hasDetails(item) && (
+                      <ChevronDown
+                        className={`h-5 w-5 text-ds-pastille-green transition-transform duration-300 flex-shrink-0 ml-4 ${
+                          activeItem === item.id ? 'rotate-180' : ''
+                        }`}
+                      />
                     )}
                   </div>
+
+                  {/* Expandable Content */}
+                  {hasDetails(item) && (
+                    <div
+                      className={`overflow-hidden transition-all duration-300 ${
+                        activeItem === item.id ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+                      }`}
+                    >
+                      <div className="px-6 pb-4 border-t border-ds-pastille-green/20">
+                        <div className="pt-4">
+                          <RichText
+                            data={item.details as unknown}
+                            className="text-gray-700 leading-relaxed max-w-none"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

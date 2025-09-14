@@ -15,8 +15,7 @@ export const expandableTableFields: Field[] = [
   {
     name: 'description',
     type: 'textarea',
-    required: true,
-    defaultValue: 'Click on items to expand and see more details.',
+    required: false,
   },
   {
     name: 'enableSearch',
@@ -48,14 +47,15 @@ export const expandableTableFields: Field[] = [
       {
         name: 'content',
         type: 'textarea',
-        required: true,
+        required: false,
       },
       {
         name: 'details',
-        type: 'textarea',
+        type: 'richText',
         required: false,
         admin: {
-          description: 'Additional details that will be shown when expanded',
+          description:
+            'Additional details that will be shown when expanded (supports rich text formatting)',
         },
       },
     ],
