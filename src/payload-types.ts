@@ -1571,6 +1571,85 @@ export interface Page {
             blockName?: string | null;
             blockType: 'patientsSleep';
           }
+        | {
+            heroSection: {
+              title: string;
+              /**
+               * Highlighted quote in the hero section
+               */
+              quote?: string | null;
+              description?: string | null;
+              /**
+               * Hero section image
+               */
+              image?: (number | null) | Media;
+              /**
+               * Alt text for the hero image
+               */
+              imageAlt?: string | null;
+              ctaButton?: {
+                text?: string | null;
+                linkType?: ('internal' | 'external') | null;
+                internal?: (number | null) | Page;
+                external?: string | null;
+                openInNewTab?: boolean | null;
+              };
+            };
+            whyFocusSection?: {
+              title?: string | null;
+              description?: string | null;
+              statistics?:
+                | {
+                    /**
+                     * The statistic value (e.g., "£568", "17%")
+                     */
+                    value: string;
+                    /**
+                     * Description of what the statistic represents
+                     */
+                    description: string;
+                    color?: ('red' | 'orange' | 'green' | 'blue') | null;
+                    id?: string | null;
+                  }[]
+                | null;
+              /**
+               * Bold highlighted text in the callout box
+               */
+              highlightText?: string | null;
+              additionalText?: string | null;
+            };
+            servicesSection?: {
+              title?: string | null;
+              description?: string | null;
+              leftServices?:
+                | {
+                    icon?: ('users' | 'trending-up' | 'shield' | 'check-circle' | 'clock') | null;
+                    title: string;
+                    description: string;
+                    id?: string | null;
+                  }[]
+                | null;
+              rightServices?:
+                | {
+                    icon?: ('users' | 'trending-up' | 'shield' | 'check-circle' | 'clock') | null;
+                    title: string;
+                    description: string;
+                    id?: string | null;
+                  }[]
+                | null;
+              ctaText?: string | null;
+              ctaButton?: {
+                text?: string | null;
+                linkType?: ('internal' | 'external') | null;
+                internal?: (number | null) | Page;
+                external?: string | null;
+                openInNewTab?: boolean | null;
+              };
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'corporateHealth';
+          }
       )[]
     | null;
   meta?: {
@@ -2723,6 +2802,78 @@ export interface PagesSelect<T extends boolean = true> {
                           question?: T;
                           answer?: T;
                           id?: T;
+                        };
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        corporateHealth?:
+          | T
+          | {
+              heroSection?:
+                | T
+                | {
+                    title?: T;
+                    quote?: T;
+                    description?: T;
+                    image?: T;
+                    imageAlt?: T;
+                    ctaButton?:
+                      | T
+                      | {
+                          text?: T;
+                          linkType?: T;
+                          internal?: T;
+                          external?: T;
+                          openInNewTab?: T;
+                        };
+                  };
+              whyFocusSection?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    statistics?:
+                      | T
+                      | {
+                          value?: T;
+                          description?: T;
+                          color?: T;
+                          id?: T;
+                        };
+                    highlightText?: T;
+                    additionalText?: T;
+                  };
+              servicesSection?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    leftServices?:
+                      | T
+                      | {
+                          icon?: T;
+                          title?: T;
+                          description?: T;
+                          id?: T;
+                        };
+                    rightServices?:
+                      | T
+                      | {
+                          icon?: T;
+                          title?: T;
+                          description?: T;
+                          id?: T;
+                        };
+                    ctaText?: T;
+                    ctaButton?:
+                      | T
+                      | {
+                          text?: T;
+                          linkType?: T;
+                          internal?: T;
+                          external?: T;
+                          openInNewTab?: T;
                         };
                   };
               id?: T;

@@ -30,6 +30,7 @@ import { SleepAssessmentFeatures } from './sleep-assessment-features/component'
 import { NotificationBlock } from './notification-block/component'
 import { FormBlock } from './form-block/component'
 import { ContentBlockV2 } from './content-block-v2/component'
+import { CorporateHealth } from './corporate-health/component'
 import { PatientsSleep } from './patients-sleep/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
@@ -150,6 +151,10 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   patientsSleep: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'patientsSleep' }>
     return <PatientsSleep {...b} />
+  },
+  corporateHealth: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'corporateHealth' }>
+    return <CorporateHealth {...(b as any)} />
   },
 }
 
