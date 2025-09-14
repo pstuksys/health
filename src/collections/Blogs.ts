@@ -1,12 +1,8 @@
 import type { CollectionConfig } from 'payload'
-import { revalidateBlogsOnChange, revalidateBlogsOnDelete } from '@/hooks/revalidate'
 
 export const Blogs: CollectionConfig = {
   slug: 'blogs',
-  hooks: {
-    afterChange: [revalidateBlogsOnChange],
-    afterDelete: [revalidateBlogsOnDelete],
-  },
+  hooks: {},
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],

@@ -1,5 +1,4 @@
 import { getPayload } from 'payload'
-import { unstable_cache } from 'next/cache'
 import { draftMode } from 'next/headers'
 import type { Payload, Where } from 'payload'
 import type { Blog, Page, Header, Footer } from '@/payload-types'
@@ -19,11 +18,13 @@ export async function getPayloadClient(): Promise<Payload> {
 }
 
 /**
- * Base function to fetch pages with proper error handling
+ * Fetch a page by slug with proper error handling
  */
-async function fetchPage(slug: string, draft?: boolean, depth = 2): Promise<Page | null> {
+export async function getPage(slug: string, depth = 2): Promise<Page | null> {
   try {
     const payload = await getPayloadClient()
+    const { isEnabled } = await draftMode()
+
     const where = slug
       ? { slug: { equals: slug } }
       : {
@@ -37,7 +38,7 @@ async function fetchPage(slug: string, draft?: boolean, depth = 2): Promise<Page
     const { docs } = await payload.find({
       collection: 'pages',
       where: where as unknown as Where,
-      draft,
+      draft: isEnabled,
       limit: 1,
       pagination: false,
       depth,
@@ -52,14 +53,23 @@ async function fetchPage(slug: string, draft?: boolean, depth = 2): Promise<Page
 }
 
 /**
- * Base function to fetch blogs with proper error handling
+ * Fetch the home page (slug: '')
  */
-async function fetchBlogs(draft?: boolean, limit = 50): Promise<Blog[]> {
+export async function getHomePage(depth = 2): Promise<Page | null> {
+  return getPage('', depth)
+}
+
+/**
+ * Fetch blogs with proper error handling
+ */
+export async function getBlogs(limit = 50): Promise<Blog[]> {
   try {
     const payload = await getPayloadClient()
+    const { isEnabled } = await draftMode()
+
     const { docs } = await payload.find({
       collection: 'blogs',
-      draft,
+      draft: isEnabled,
       sort: '-publishedAt',
       limit,
       pagination: false,
@@ -73,15 +83,17 @@ async function fetchBlogs(draft?: boolean, limit = 50): Promise<Blog[]> {
 }
 
 /**
- * Base function to fetch a single blog by slug
+ * Fetch a single blog by slug
  */
-async function fetchBlogBySlug(slug: string, draft?: boolean, depth = 2): Promise<Blog | null> {
+export async function getBlogBySlug(slug: string, depth = 2): Promise<Blog | null> {
   try {
     const payload = await getPayloadClient()
+    const { isEnabled } = await draftMode()
+
     const { docs } = await payload.find({
       collection: 'blogs',
       where: { slug: { equals: slug } },
-      draft,
+      draft: isEnabled,
       limit: 1,
       pagination: false,
       depth,
@@ -96,135 +108,49 @@ async function fetchBlogBySlug(slug: string, draft?: boolean, depth = 2): Promis
 }
 
 /**
- * Base function to fetch header and footer globals
+ * Fetch header global
  */
-async function fetchHeaderFooter(): Promise<{ header: Header | null; footer: Footer | null }> {
+export async function getHeader(): Promise<Header | null> {
   try {
     const payload = await getPayloadClient()
-    const [header, footer] = await Promise.all([
-      payload.findGlobal({ slug: 'header', depth: 2 }) as Promise<Header>,
-      payload.findGlobal({ slug: 'footer', depth: 2 }) as Promise<Footer>,
-    ])
+    const header = (await payload.findGlobal({ slug: 'header', depth: 2 })) as Header
 
     // Strip any circular refs coming from the local API internals
-    const safe = JSON.parse(JSON.stringify({ header, footer }))
-    return { header: safe.header ?? null, footer: safe.footer ?? null }
+    const safe = JSON.parse(JSON.stringify(header))
+    return safe ?? null
+  } catch (error) {
+    console.error('Failed to fetch header:', error)
+    return null
+  }
+}
+
+/**
+ * Fetch footer global
+ */
+export async function getFooter(): Promise<Footer | null> {
+  try {
+    const payload = await getPayloadClient()
+    const footer = (await payload.findGlobal({ slug: 'footer', depth: 2 })) as Footer
+
+    // Strip any circular refs coming from the local API internals
+    const safe = JSON.parse(JSON.stringify(footer))
+    return safe ?? null
+  } catch (error) {
+    console.error('Failed to fetch footer:', error)
+    return null
+  }
+}
+
+/**
+ * Fetch both header and footer globals
+ */
+export async function getHeaderFooter(): Promise<{ header: Header | null; footer: Footer | null }> {
+  try {
+    const [header, footer] = await Promise.all([getHeader(), getFooter()])
+
+    return { header, footer }
   } catch (error) {
     console.error('Failed to fetch header/footer:', error)
     return { header: null, footer: null }
   }
-}
-
-/**
- * Cached functions with proper tags for revalidation
- */
-
-// Pages cache functions
-export const getCachedPage = (slug: string, depth = 2) => {
-  return unstable_cache(
-    async () => {
-      const { isEnabled } = await draftMode()
-      return fetchPage(slug, isEnabled, depth)
-    },
-    [`page:${slug}`, 'depth', depth.toString()],
-    {
-      tags: ['pages', `page:${slug}`],
-      // No revalidate time - only invalidate when content changes
-    },
-  )()
-}
-
-export const getCachedHomePage = (depth = 2) => {
-  return unstable_cache(
-    async () => {
-      const { isEnabled } = await draftMode()
-      return fetchPage('', isEnabled, depth)
-    },
-    ['page:home', 'depth', depth.toString()],
-    {
-      tags: ['pages', 'page:home', 'page:'],
-      // No revalidate time - only invalidate when content changes
-    },
-  )()
-}
-
-// Blogs cache functions
-export const getCachedBlogs = (limit = 50) => {
-  return unstable_cache(
-    async () => {
-      const { isEnabled } = await draftMode()
-      return fetchBlogs(isEnabled, limit)
-    },
-    ['blogs-list', 'limit', limit.toString()],
-    {
-      tags: ['blogs', 'blog-list', 'blog-posts', 'blogs-page'],
-      // No revalidate time - only invalidate when content changes
-    },
-  )()
-}
-
-export const getCachedBlogBySlug = (slug: string, depth = 2) => {
-  return unstable_cache(
-    async () => {
-      const { isEnabled } = await draftMode()
-      return fetchBlogBySlug(slug, isEnabled, depth)
-    },
-    [`blog:${slug}`, 'depth', depth.toString()],
-    {
-      tags: ['blogs', `blog:${slug}`, 'blog-detail'],
-      // No revalidate time - only invalidate when content changes
-    },
-  )()
-}
-
-// Globals cache functions
-export const getCachedHeaderFooter = () => {
-  return unstable_cache(fetchHeaderFooter, ['globals:header-footer'], {
-    tags: ['global:header', 'global:footer'],
-    // No revalidate time - only invalidate when content changes
-  })()
-}
-
-/**
- * Generic cached query function for advanced use cases
- */
-export const createCachedQuery = <T>(
-  queryFn: () => Promise<T>,
-  cacheKey: string[],
-  tags: string[],
-  revalidate?: number,
-) => {
-  const options: { tags: string[]; revalidate?: number } = { tags }
-  if (revalidate !== undefined) {
-    options.revalidate = revalidate
-  }
-  return unstable_cache(queryFn, cacheKey, options)
-}
-
-/**
- * Utility to get collection-specific cache tags
- */
-export const getCollectionCacheTags = (collection: string, slug?: string): string[] => {
-  const baseTags = [collection]
-
-  switch (collection) {
-    case 'pages':
-      baseTags.push('pages')
-      if (slug) baseTags.push(`page:${slug}`)
-      break
-    case 'blogs':
-      baseTags.push('blog-list', 'blog-posts', 'blogs-page')
-      if (slug) baseTags.push(`blog:${slug}`, 'blog-detail')
-      break
-    case 'header':
-      baseTags.push('global:header')
-      break
-    case 'footer':
-      baseTags.push('global:footer')
-      break
-    default:
-      if (slug) baseTags.push(`${collection}:${slug}`)
-  }
-
-  return baseTags
 }

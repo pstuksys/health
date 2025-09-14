@@ -1,24 +1,11 @@
 import type { Metadata } from 'next'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from './media'
-import { getCachedPage, getCachedHomePage } from './cms/payload-client'
+import { getPage, getHomePage } from './cms/payload-client'
 import { draftMode } from 'next/headers'
 
-/**
- * Fetch a page by slug with proper error handling
- * Now uses cached version from payload-client
- */
-export async function getPage(slug: string, depth = 2): Promise<Page | null> {
-  return getCachedPage(slug, depth)
-}
-
-/**
- * Fetch the home page (slug: '')
- * Now uses cached version from payload-client
- */
-export async function getHomePage(depth = 2): Promise<Page | null> {
-  return getCachedHomePage(depth)
-}
+// Re-export the functions from payload-client for backward compatibility
+export { getPage, getHomePage } from './cms/payload-client'
 
 /**
  * Generate metadata for a page

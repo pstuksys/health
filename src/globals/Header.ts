@@ -1,12 +1,9 @@
 import type { GlobalConfig } from 'payload'
-import { revalidateHeaderOnChange } from '@/hooks/revalidate'
 
 export const Header: GlobalConfig = {
   slug: 'header',
   access: { read: () => true, update: () => true },
-  hooks: {
-    afterChange: [revalidateHeaderOnChange],
-  },
+  hooks: {},
   fields: [
     {
       name: 'ctaButton',

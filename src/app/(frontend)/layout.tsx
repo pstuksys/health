@@ -3,14 +3,9 @@ import type { Metadata } from 'next'
 import { Poppins } from 'next/font/google'
 import './globals.css'
 import { Footer } from './components/footer/component'
-import { getHeaderFooter } from '@/lib/cms/globals'
+import { getHeader, getFooter } from '@/lib/cms/payload-client'
 import { NavWithScroll } from './components/navigation-menu/components/NavWithScroll'
-import {
-  transformNavigationItems,
-  transformFooterNavLinks,
-  transformFooterLegalLinks,
-  transformFooterSocialLinks,
-} from '@/lib/navigation-transformers'
+// Navigation transformers are now handled in the cache functions
 import { siteMetadata } from '@/lib/metadata'
 
 const poppins = Poppins({
@@ -34,13 +29,22 @@ export const viewport = {
 }
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const { header, footer } = await getHeaderFooter()
+  // Fetch data directly from Payload
+  const [header, footer] = await Promise.all([getHeader(), getFooter()])
 
-  // Transform navigation data using clean utility functions
-  const items = transformNavigationItems(header?.navigation)
-  const footerNavLinks = transformFooterNavLinks(footer?.navigationLinks)
-  const footerLegalLinks = transformFooterLegalLinks(footer?.legalLinks)
-  const socialLinks = transformFooterSocialLinks(footer?.socialLinks)
+  // Transform navigation data
+  const { transformNavigationItems } = await import('@/lib/navigation-transformers')
+  const items = header?.navigation ? transformNavigationItems(header.navigation) : []
+
+  // Transform footer data
+  const { transformFooterNavLinks, transformFooterLegalLinks, transformFooterSocialLinks } =
+    await import('@/lib/navigation-transformers')
+
+  const footerNavLinks = footer?.navigationLinks
+    ? transformFooterNavLinks(footer.navigationLinks)
+    : []
+  const footerLegalLinks = footer?.legalLinks ? transformFooterLegalLinks(footer.legalLinks) : []
+  const socialLinks = footer?.socialLinks ? transformFooterSocialLinks(footer.socialLinks) : []
 
   return (
     <html lang="en" className={`${poppins.variable} antialiased`}>

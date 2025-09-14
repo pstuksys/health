@@ -140,14 +140,9 @@ const pageBlocks: Block[] = [
   contentBlockV2,
 ]
 
-import { revalidatePagesOnChange, revalidatePagesOnDelete } from '@/hooks/revalidate'
-
 export const Pages: CollectionConfig = {
   slug: 'pages',
-  hooks: {
-    afterChange: [revalidatePagesOnChange],
-    afterDelete: [revalidatePagesOnDelete],
-  },
+  hooks: {},
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
