@@ -35,9 +35,14 @@ declare module 'lucide-react' {
   export const Users: React.FC<React.SVGProps<SVGSVGElement>>
   export const AlertTriangle: React.FC<React.SVGProps<SVGSVGElement>>
   export const Brain: React.FC<React.SVGProps<SVGSVGElement>>
-  export const Lungs: React.FC<React.SVGProps<SVGSVGElement>>
   export const Moon: React.FC<React.SVGProps<SVGSVGElement>>
   export const Baby: React.FC<React.SVGProps<SVGSVGElement>>
   export const Phone: React.FC<React.SVGProps<SVGSVGElement>>
   export const TrendingUp: React.FC<React.SVGProps<SVGSVGElement>>
+  export const HeartHandshake: React.FC<React.SVGProps<SVGSVGElement>>
+  export const ClipboardList: React.FC<React.SVGProps<SVGSVGElement>>
+  export const UserCheck: React.FC<React.SVGProps<SVGSVGElement>>
+  export const List: React.FC<React.SVGProps<SVGSVGElement>>
+  export const UserPlus: React.FC<React.SVGProps<SVGSVGElement>>
+  export const BriefcaseMedical: React.FC<React.SVGProps<SVGSVGElement>>
 }

@@ -29,6 +29,7 @@ import { formBlockFields } from '../app/(frontend)/components/form-block/config'
 import { contentBlockV2Fields } from '../app/(frontend)/components/content-block-v2/config'
 import { patientsSleepFields } from '../app/(frontend)/components/patients-sleep/config'
 import { corporateHealthFields } from '../app/(frontend)/components/corporate-health/config'
+import { occupationalHealthFields } from '../app/(frontend)/components/occupational-health/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -119,6 +120,11 @@ const corporateHealthBlock: Block = {
   dbName: 'corporate_health',
   fields: corporateHealthFields,
 }
+const occupationalHealthBlock: Block = {
+  slug: 'occupationalHealth',
+  dbName: 'occupational_health',
+  fields: occupationalHealthFields,
+}
 
 // All available page blocks
 const pageBlocks: Block[] = [
@@ -152,6 +158,7 @@ const pageBlocks: Block[] = [
   contentBlockV2,
   patientsSleepBlock,
   corporateHealthBlock,
+  occupationalHealthBlock,
 ]
 
 export const Pages: CollectionConfig = {

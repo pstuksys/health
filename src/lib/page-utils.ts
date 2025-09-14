@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from './media'
-import { getPage, getHomePage } from './cms/payload-client'
+import { getPage } from './cms/payload-client'
 import { draftMode } from 'next/headers'
 
 // Re-export the functions from payload-client for backward compatibility

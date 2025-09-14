@@ -17,7 +17,7 @@ type PatientsSleepProps = Extract<
 const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   brain: LucideIcons.Brain,
   heart: LucideIcons.Heart,
-  lungs: LucideIcons.Lungs,
+  lungs: LucideIcons.BriefcaseMedical,
   moon: LucideIcons.Moon,
   activity: LucideIcons.Activity,
   stethoscope: LucideIcons.Stethoscope,
