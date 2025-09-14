@@ -1,6 +1,7 @@
 'use client'
 
 import * as LucideIcons from 'lucide-react'
+import Image from 'next/image'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from '@/lib/media'
 
@@ -53,42 +54,55 @@ export function MedicalServicesGrid({
             return (
               <div
                 key={service.id || index}
-                className={`relative rounded-lg p-8 text-center shadow-sm hover:shadow-md transition-shadow min-h-[200px] flex flex-col justify-center ${
-                  hasBackgroundImage ? 'bg-cover bg-center bg-no-repeat' : 'bg-white'
+                className={`relative rounded-lg text-center shadow-sm hover:shadow-md transition-shadow min-h-[200px] ${
+                  hasBackgroundImage ? '' : 'bg-white'
                 }`}
-                style={
-                  hasBackgroundImage
-                    ? {
-                        backgroundImage: `url(${backgroundImageUrl})`,
-                      }
-                    : undefined
-                }
               >
+                {/* Background Image using Next.js Image */}
+                {hasBackgroundImage && (
+                  <div className="absolute inset-0 rounded-lg overflow-hidden">
+                    <Image
+                      src={backgroundImageUrl}
+                      alt={service.name || 'Medical service'}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 25vw, 20vw"
+                    />
+                  </div>
+                )}
+
                 {/* Overlay for better text readability when background image is present */}
-                {hasBackgroundImage && <div className="absolute inset-0 bg-black/30 rounded-lg" />}
-
-                {service.available && (
-                  <div className="absolute -top-2 -right-2 bg-ds-accent-yellow text-white text-xs font-medium px-3 py-1 rounded-full z-10">
-                    Available for self-pay
-                  </div>
+                {hasBackgroundImage && (
+                  <div className="absolute inset-0 bg-black/30 rounded-lg z-10" />
                 )}
 
-                {/* Icon - only show when no background image */}
-                {!hasBackgroundImage && (
-                  <div className="flex justify-center mb-6">
-                    <div className="w-16 h-16 flex items-center justify-center">
-                      <IconComponent className="w-12 h-12 text-blue-500" />
+                {/* Content Container */}
+                <div className="relative z-20 p-8 flex flex-col justify-center min-h-[200px]">
+                  {service.available && (
+                    <div className="absolute -top-2 -right-2 bg-ds-accent-yellow text-white text-xs font-medium px-3 py-1 rounded-full">
+                      Available for self-pay
                     </div>
-                  </div>
-                )}
+                  )}
 
-                <h3
-                  className={`font-semibold uppercase tracking-wide relative z-10 ${
-                    hasBackgroundImage ? 'text-white text-xl md:text-2xl' : 'text-blue-900 text-lg'
-                  }`}
-                >
-                  {service.name}
-                </h3>
+                  {/* Icon - only show when no background image */}
+                  {!hasBackgroundImage && (
+                    <div className="flex justify-center mb-6">
+                      <div className="w-16 h-16 flex items-center justify-center">
+                        <IconComponent className="w-12 h-12 text-blue-500" />
+                      </div>
+                    </div>
+                  )}
+
+                  <h3
+                    className={`font-semibold uppercase tracking-wide ${
+                      hasBackgroundImage
+                        ? 'text-white text-xl md:text-2xl'
+                        : 'text-blue-900 text-lg'
+                    }`}
+                  >
+                    {service.name}
+                  </h3>
+                </div>
               </div>
             )
           })}

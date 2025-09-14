@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { mediaToUrl } from '@/lib/media'
 import { resolveLinkHref } from '@/lib/navigation'
@@ -114,20 +115,28 @@ export function FullWidthBanner({
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
     >
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: `url(${bgUrl})` }}
-      >
-        <div className="absolute inset-0 bg-ds-dark-blue/60" />
+      {/* Background Image using Next.js Image */}
+      <div className="absolute inset-0 pointer-events-none">
+        <Image
+          src={bgUrl}
+          alt="Banner background"
+          fill
+          className="object-cover"
+          sizes="100vw"
+          priority
+        />
       </div>
+
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-ds-dark-blue/60 z-10 pointer-events-none" />
 
       {/* Navigation Arrows - only show when carousel is enabled and has multiple items */}
       {enableCarousel && totalSlides > 1 && (
-        <div className="hidden md:block">
+        <div className="hidden md:block z-30">
           <Button
             variant="outline"
             size="icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white border-ds-pastille-green/20 hover:border-ds-pastille-green/40 transition-all duration-300 items-center justify-center rounded-full shadow"
+            className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-white/90 hover:bg-white border-ds-pastille-green/20 hover:border-ds-pastille-green/40 transition-all duration-300 items-center justify-center rounded-full shadow"
             onClick={prevSlide}
             aria-label="Previous slide"
           >
@@ -136,7 +145,7 @@ export function FullWidthBanner({
           <Button
             variant="outline"
             size="icon"
-            className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white border-ds-pastille-green/20 hover:border-ds-pastille-green/40 transition-all duration-300 items-center justify-center rounded-full shadow"
+            className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-white/90 hover:bg-white border-ds-pastille-green/20 hover:border-ds-pastille-green/40 transition-all duration-300 items-center justify-center rounded-full shadow"
             onClick={nextSlide}
             aria-label="Next slide"
           >
@@ -145,7 +154,7 @@ export function FullWidthBanner({
         </div>
       )}
 
-      <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 py-8 text-center text-white">
+      <div className="relative z-20 flex flex-col items-center justify-center h-full px-4 py-8 text-center text-white">
         <div
           className={cn(
             'flex flex-col items-center justify-center max-w-5xl w-full',
@@ -217,7 +226,7 @@ export function FullWidthBanner({
 
       {/* Dots Navigation - only show when carousel is enabled and has multiple items */}
       {enableCarousel && totalSlides > 1 && (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex justify-center gap-2 md:hidden">
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 flex justify-center gap-2 md:hidden">
           {Array.from({ length: totalSlides }).map((_, index) => (
             <button
               key={index}
