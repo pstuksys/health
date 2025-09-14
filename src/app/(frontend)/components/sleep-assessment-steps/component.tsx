@@ -27,7 +27,6 @@ export function SleepAssessmentSteps({
   mainButtonLinkType,
   mainButtonInternal,
   mainButtonExternal,
-  mainButtonOpenInNewTab,
 }: SleepAssessmentStepsProps) {
   const stepsToRender = steps && steps.length > 0 ? steps : []
 
@@ -50,7 +49,6 @@ export function SleepAssessmentSteps({
   })
 
   const mainButtonIsExternal = mainButtonLinkType === 'external'
-  const mainButtonNewTab = mainButtonIsExternal && mainButtonOpenInNewTab
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -88,7 +86,6 @@ export function SleepAssessmentSteps({
             })
 
             const isExternal = (step as any).linkType === 'external'
-            const openInNewTab = isExternal && (step as any).openInNewTab
             const buttonText = (step as any).buttonText || 'Learn More'
             return (
               <Card
@@ -113,7 +110,6 @@ export function SleepAssessmentSteps({
                       className="border border-1 border-ds-dark-blue text-ds-dark-blue bg-gray-50 hover:bg-transparent hover:text-ds-accent-yellow hover:border-ds-accent-yellow"
                       href={href}
                       external={isExternal}
-                      target={openInNewTab ? '_blank' : '_self'}
                     >
                       {buttonText}
                       <ArrowRight className="w-4 h-4 ml-2" />
@@ -140,7 +136,6 @@ export function SleepAssessmentSteps({
           className="bg-ds-accent-yellow hover:bg-ds-accent-yellow text-white px-8 py-3 text-lg font-medium"
           href={mainButtonHref}
           external={mainButtonIsExternal}
-          target={mainButtonNewTab ? '_blank' : '_self'}
         >
           {mainButtonText || 'Take a few minutes to complete sleep assessment'}
         </CMSLink>

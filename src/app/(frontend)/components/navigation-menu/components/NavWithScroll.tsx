@@ -1,8 +1,8 @@
 'use client'
 
 import type React from 'react'
-import { NavigationMenu } from './index'
 import { useScrollNavigation } from '@/hooks/use-scroll-navigation'
+import { NavigationMenu } from '..'
 
 type Props = React.ComponentProps<typeof NavigationMenu>
 
