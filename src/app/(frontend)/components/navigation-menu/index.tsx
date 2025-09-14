@@ -20,7 +20,6 @@ type CTAButton = NonNullable<Header['ctaButton']>
 
 interface NavigationMenuProps {
   items: NavigationItem[]
-  // logo?: string
   ctaButton?: CTAButton
   sticky?: boolean
   className?: string
@@ -30,7 +29,6 @@ interface NavigationMenuProps {
 
 export function NavigationMenu({
   items,
-  // logo,
   ctaButton,
   sticky = false,
   className,
