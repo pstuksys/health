@@ -39,4 +39,5 @@ declare module 'lucide-react' {
   export const Moon: React.FC<React.SVGProps<SVGSVGElement>>
   export const Baby: React.FC<React.SVGProps<SVGSVGElement>>
   export const Phone: React.FC<React.SVGProps<SVGSVGElement>>
+  export const TrendingUp: React.FC<React.SVGProps<SVGSVGElement>>
 }

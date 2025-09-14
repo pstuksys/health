@@ -28,6 +28,7 @@ import { notificationBlockFields } from '../app/(frontend)/components/notificati
 import { formBlockFields } from '../app/(frontend)/components/form-block/config'
 import { contentBlockV2Fields } from '../app/(frontend)/components/content-block-v2/config'
 import { patientsSleepFields } from '../app/(frontend)/components/patients-sleep/config'
+import { corporateHealthFields } from '../app/(frontend)/components/corporate-health/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -113,6 +114,11 @@ const patientsSleepBlock: Block = {
   dbName: 'patients_sleep',
   fields: patientsSleepFields,
 }
+const corporateHealthBlock: Block = {
+  slug: 'corporateHealth',
+  dbName: 'corporate_health',
+  fields: corporateHealthFields,
+}
 
 // All available page blocks
 const pageBlocks: Block[] = [
@@ -145,6 +151,7 @@ const pageBlocks: Block[] = [
   formBlock,
   contentBlockV2,
   patientsSleepBlock,
+  corporateHealthBlock,
 ]
 
 export const Pages: CollectionConfig = {
