@@ -1,30 +1,7 @@
-import { draftMode } from 'next/headers'
-import { getPayload } from 'payload'
 import { ScrollPostCards } from '@/app/(frontend)/components/scroll-post-cards/component'
 import type { Blog } from '@/payload-types'
-import { unstable_cache } from 'next/cache'
 import { cn } from '@/lib/utils'
-
-async function getBlogs() {
-  const { isEnabled } = await draftMode()
-  const isDraft = isEnabled
-  const payload = await getPayload({ config: (await import('@/payload.config')).default })
-
-  const { docs } = await payload.find({
-    collection: 'blogs',
-    draft: isDraft,
-    sort: '-publishedAt',
-    limit: 50,
-  })
-
-  return docs as unknown as Blog[]
-}
-
-// Cache the blogs with proper tags for revalidation
-const getCachedBlogs = unstable_cache(getBlogs, ['blogs-list'], {
-  tags: ['blogs', 'blog-list', 'blog-posts', 'blogs-page'],
-  revalidate: 3600, // 1 hour fallback
-})
+import { getBlogs } from '@/lib/cms/payload-client'
 
 // Define blog categories with proper typing
 const BLOG_CATEGORIES = [
@@ -39,7 +16,7 @@ const BLOG_CATEGORIES = [
 ] as const
 
 export default async function BlogsPage() {
-  const blogs = await getCachedBlogs()
+  const blogs = await getBlogs(1000)
 
   if (!blogs || blogs.length === 0) {
     return (
@@ -176,5 +153,15 @@ export async function generateMetadata() {
   return {
     title: 'Blog | Health & Wellness Insights',
     description: 'Read our latest blog posts about health, wellness, and medical insights.',
+    openGraph: {
+      title: 'Blog | Health & Wellness Insights',
+      description: 'Read our latest blog posts about health, wellness, and medical insights.',
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Blog | Health & Wellness Insights',
+      description: 'Read our latest blog posts about health, wellness, and medical insights.',
+    },
   }
 }

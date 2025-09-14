@@ -79,7 +79,6 @@ export function ContentBlockArray({
                         variant="ghost"
                         size="lg"
                         external={block.linkType === 'external'}
-                        target={block.linkType === 'external' ? '_blank' : '_self'}
                         className="!text-ds-dark-blue hover:!text-ds-accent-yellow"
                       >
                         {block.buttonText}

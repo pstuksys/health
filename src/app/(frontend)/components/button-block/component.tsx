@@ -14,7 +14,6 @@ type ButtonBlockProps = {
   external?: {
     href: string
   }
-  target?: '_self' | '_blank'
 }
 
 export function ButtonBlock({
@@ -24,7 +23,6 @@ export function ButtonBlock({
   linkType,
   internal,
   external,
-  target,
 }: ButtonBlockProps) {
   const resolvedHref = resolveLinkHref({
     linkType,
@@ -41,13 +39,7 @@ export function ButtonBlock({
 
   return (
     <div className="my-4">
-      <CMSLink
-        href={resolvedHref}
-        variant={variant}
-        size={size}
-        external={linkType === 'external'}
-        target={linkType === 'external' ? '_blank' : '_self'}
-      >
+      <CMSLink href={resolvedHref} variant={variant} size={size} external={linkType === 'external'}>
         {label}
       </CMSLink>
     </div>

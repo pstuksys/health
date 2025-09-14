@@ -107,7 +107,7 @@ export function SleepAssessmentFeatures({
       {/* Features Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {featuresToRender.map((feature, index) => {
-          const Icon = iconMap[(feature as any).icon as IconKey] || Clock
+          const Icon = iconMap[feature.icon as IconKey] || Clock
           return (
             <div
               key={index}
@@ -135,7 +135,6 @@ export function SleepAssessmentFeatures({
           className="bg-ds-accent-yellow hover:bg-ds-accent-yellow text-white px-8 py-3 text-base font-medium mb-4"
           href={ctaButtonHref}
           external={ctaButtonIsExternal}
-          target={ctaButtonNewTab ? '_blank' : '_self'}
         >
           {ctaButtonText || 'Start Your Free Sleep Assessment'}
         </CMSLink>

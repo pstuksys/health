@@ -1,46 +1,11 @@
-import { draftMode } from 'next/headers'
 import type { Metadata } from 'next'
-import { getPayload, Where } from 'payload'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from './media'
+import { getPage, getHomePage } from './cms/payload-client'
+import { draftMode } from 'next/headers'
 
-/**
- * Fetch a page by slug with proper error handling
- */
-export async function getPage(slug: string, draft?: boolean, depth = 2): Promise<Page | null> {
-  try {
-    const payload = await getPayload({ config: (await import('@/payload.config')).default })
-    const where = slug
-      ? { slug: { equals: slug } }
-      : {
-          or: [
-            { slug: { equals: '' } },
-            { slug: { exists: false } },
-            { slug: { equals: null as unknown as string } },
-          ],
-        }
-    const { docs } = await payload.find({
-      collection: 'pages',
-      where: where as unknown as Where,
-      draft,
-      limit: 1,
-      pagination: false,
-      depth,
-    })
-    const doc = (docs?.[0] as Page | undefined) ?? null
-    return doc ? JSON.parse(JSON.stringify(doc)) : null
-  } catch (error) {
-    console.error(`Failed to fetch page with slug "${slug}":`, error)
-    return null
-  }
-}
-
-/**
- * Fetch the home page (slug: '')
- */
-export async function getHomePage(draft?: boolean): Promise<Page | null> {
-  return getPage('', draft)
-}
+// Re-export the functions from payload-client for backward compatibility
+export { getPage, getHomePage } from './cms/payload-client'
 
 /**
  * Generate metadata for a page
@@ -58,7 +23,7 @@ export async function generatePageMetadata(
 
   const title = page.meta?.title ?? page.title
   const description = page.meta?.description ?? undefined
-  const imageUrl = mediaToUrl(page.meta?.image as any)
+  const imageUrl = mediaToUrl(page.meta?.image)
 
   return {
     title,
@@ -85,9 +50,8 @@ export async function generateMetadataBySlug(
   fallback?: { title?: string; description?: string },
 ): Promise<Metadata> {
   try {
-    // Use draft mode if enabled
-    const { isEnabled } = await draftMode()
-    const page = await getPage(slug, isEnabled)
+    // Draft mode is automatically handled in getCachedPage
+    const page = await getPage(slug, 2) // depth = 2 for metadata
     return generatePageMetadata(page, fallback)
   } catch (error) {
     console.error(`Failed to generate metadata for slug "${slug}":`, error)

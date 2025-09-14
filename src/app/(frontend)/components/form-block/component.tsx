@@ -12,7 +12,6 @@ import {
   Select,
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
   RichText,
@@ -120,10 +119,11 @@ export function FormBlock({
     }
   }
 
-  const renderField = (field: NonNullable<FormType['fields']>[number]) => {
+  const renderField = (field: NonNullable<FormType['fields']>[number], index: number) => {
     // Use any to simplify type handling for now
     const fieldData = field as any
-    const fieldKey = fieldData.name || fieldData.id || Math.random().toString()
+    // Use stable ID based on field name and index to avoid hydration mismatch
+    const fieldKey = `field-${fieldData.name || 'unnamed'}-${index}`
     const isRequired = fieldData.required || false
 
     const fieldWrapper = (content: React.ReactNode) => (
@@ -379,7 +379,9 @@ export function FormBlock({
       )}
 
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="flex flex-wrap gap-4">{form.fields?.map(renderField)}</div>
+        <div className="flex flex-wrap gap-4">
+          {form.fields?.map((field, index) => renderField(field, index))}
+        </div>
 
         <div className={cn('pt-4', buttonWidth === 'auto' && 'flex justify-center')}>
           <Button
@@ -406,17 +408,19 @@ export function FormBlock({
               <CardHeader className="pb-6">
                 {title && <CardTitle className="text-2xl">{title}</CardTitle>}
                 {description && isLexicalEditorState(description) && (
-                  <CardDescription>
+                  <div className="text-sm text-muted-foreground">
                     <RichText
                       data={description}
                       className="prose prose-sm max-w-none text-ds-pastille-green pt-4"
                     />
-                  </CardDescription>
+                  </div>
                 )}
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="flex flex-wrap gap-4">{form.fields?.map(renderField)}</div>
+                  <div className="flex flex-wrap gap-4">
+                    {form.fields?.map((field, index) => renderField(field, index))}
+                  </div>
 
                   <div className="pt-4">
                     <Button

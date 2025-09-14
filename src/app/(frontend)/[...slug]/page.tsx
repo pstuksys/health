@@ -6,7 +6,57 @@ import {
   hasHeroBlock,
   deriveGlobalHeroProps,
 } from '@/app/(frontend)/components/RenderBlocks'
-import { getPage, generateMetadataBySlug, isDraftModeEnabled } from '@/lib/page-utils'
+import { getPage, generateMetadataBySlug } from '@/lib/page-utils'
+
+/**
+ * Check if a slug should be handled by the dynamic page route
+ * Returns true if it's a system/asset request that should be filtered out
+ */
+function isSystemRequest(slug: string): boolean {
+  const systemPatterns = [
+    // Browser/DevTools requests
+    '.well-known',
+    'devtools',
+    'chrome-extension',
+
+    // Next.js internal
+    '_next/',
+
+    // Static assets
+    '.js.map',
+    '.css.map',
+    '.js',
+    '.css',
+
+    // Images
+    '.ico',
+    '.png',
+    '.jpg',
+    '.jpeg',
+    '.gif',
+    '.svg',
+
+    // Fonts
+    '.woff',
+    '.woff2',
+    '.ttf',
+    '.eot',
+
+    // Common files
+    'favicon',
+    'robots.txt',
+    'sitemap.xml',
+    'manifest.json',
+  ]
+
+  return systemPatterns.some((pattern) =>
+    pattern.startsWith('.') && pattern.includes('/')
+      ? slug.startsWith(pattern.slice(1)) // Remove dot for startsWith check
+      : pattern.startsWith('.')
+        ? slug.endsWith(pattern)
+        : slug.includes(pattern),
+  )
+}
 
 export async function generateMetadata(props: {
   params: Promise<{ slug: string[] }>
@@ -33,20 +83,19 @@ export default async function DynamicPage(props: { params: Promise<{ slug: strin
     const params = await props.params
     const slug = params?.slug?.join('/') ?? ''
 
-    // Filter out Chrome DevTools and browser requests to reduce noise
-    if (
-      slug.includes('.well-known') ||
-      slug.includes('devtools') ||
-      slug.includes('chrome-extension')
-    ) {
-      return notFound()
+    // Filter out system requests that should not be handled by this route
+    if (isSystemRequest(slug)) {
+      // Silently return notFound() for system requests to avoid console spam
+      notFound()
     }
 
-    const draft = await isDraftModeEnabled()
-    const page = await getPage(slug, draft)
+    const page = await getPage(slug, 2) // depth = 2 for full page data
 
     if (!page) {
-      console.warn(`Page not found for slug: ${slug}`)
+      // Only log warnings for actual page requests, not system files
+      if (!slug.includes('.') && !slug.startsWith('_')) {
+        console.warn(`Page not found for slug: ${slug}`)
+      }
       return notFound()
     }
 
@@ -61,18 +110,30 @@ export default async function DynamicPage(props: { params: Promise<{ slug: strin
       </main>
     )
   } catch (error) {
+    // Don't log detailed errors for system requests or filtered requests
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+    if (errorMessage.includes('NEXT_HTTP_ERROR_FALLBACK')) {
+      // This is a normal 404, don't spam the console
+      return notFound()
+    }
+
     console.error('Failed to render dynamic page:', error)
     try {
       const params = await props.params
-      console.error('Error details:', {
-        message: error instanceof Error ? error.message : 'Unknown error',
-        stack: error instanceof Error ? error.stack : undefined,
-        slug: params?.slug,
-        timestamp: new Date().toISOString(),
-      })
+      const slug = params?.slug?.join('/') ?? ''
+
+      // Only log detailed errors for actual page requests, not system files
+      if (!isSystemRequest(slug)) {
+        console.error('Error details:', {
+          message: errorMessage,
+          stack: error instanceof Error ? error.stack : undefined,
+          slug: params?.slug,
+          timestamp: new Date().toISOString(),
+        })
+      }
     } catch (_paramError) {
       console.error('Error details (params failed):', {
-        message: error instanceof Error ? error.message : 'Unknown error',
+        message: errorMessage,
         timestamp: new Date().toISOString(),
       })
     }

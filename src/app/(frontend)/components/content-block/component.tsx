@@ -48,7 +48,7 @@ export function ContentBlock({
                 className="text-lg font-light leading-relaxed text-ds-pastille-green max-w-none"
               />
             )}
-            {imageUrl && (
+            {image && (
               <div
                 className={cn(
                   'mt-12 relative w-full h-[360px] sm:h-[420px] lg:h-[480px] overflow-hidden rounded-lg shadow-lg transition-all duration-500 lg:sticky lg:top-4',

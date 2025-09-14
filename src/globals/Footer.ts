@@ -3,20 +3,7 @@ import type { GlobalConfig } from 'payload'
 export const Footer: GlobalConfig = {
   slug: 'footer',
   access: { read: () => true },
-  hooks: {
-    afterChange: [
-      ({ doc: _doc }) => {
-        void fetch(
-          `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/api/revalidate?secret=${process.env.REVALIDATION_SECRET ?? ''}`,
-          {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ tags: ['global:footer'] }),
-          },
-        ).catch(() => {})
-      },
-    ],
-  },
+  hooks: {},
   fields: [
     {
       name: 'about',

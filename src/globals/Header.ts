@@ -2,23 +2,9 @@ import type { GlobalConfig } from 'payload'
 
 export const Header: GlobalConfig = {
   slug: 'header',
-  access: { read: () => true },
-  hooks: {
-    afterChange: [
-      ({ doc: _doc }) => {
-        void fetch(
-          `${process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'}/api/revalidate?secret=${process.env.REVALIDATION_SECRET ?? ''}`,
-          {
-            method: 'POST',
-            headers: { 'content-type': 'application/json' },
-            body: JSON.stringify({ tags: ['global:header'] }),
-          },
-        ).catch(() => {})
-      },
-    ],
-  },
+  access: { read: () => true, update: () => true },
+  hooks: {},
   fields: [
-    { name: 'logo', type: 'upload', relationTo: 'media' },
     {
       name: 'ctaButton',
       type: 'group',
@@ -45,25 +31,6 @@ export const Header: GlobalConfig = {
           admin: { condition: (_, siblingData) => siblingData?.linkType === 'external' },
         },
       ],
-    },
-    {
-      name: 'enableBanter',
-      type: 'checkbox',
-      label: 'Enable Banter Block',
-      defaultValue: false,
-      admin: {
-        position: 'sidebar',
-      },
-    },
-    {
-      name: 'headerDescription',
-      type: 'textarea',
-      label: 'Description Above Header',
-      admin: {
-        description: 'Optional description text shown above the site header',
-        condition: (_, siblingData) => Boolean(siblingData?.enableBanter),
-        position: 'sidebar',
-      },
     },
     {
       name: 'navigation',

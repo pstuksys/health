@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { mediaToUrl } from '@/lib/media'
 import { resolveLinkHref } from '@/lib/navigation'
+import { useSwipe } from '@/lib/hooks/use-swipe'
 import type { Page } from '@/payload-types'
 import { CMSLink } from '../ui'
 import { Button } from '../ui/button'
@@ -74,6 +75,13 @@ export function FullWidthBanner({
     setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides)
   }, [totalSlides])
 
+  // Use the swipe hook for touch navigation
+  const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe({
+    minSwipeDistance: 50,
+    onSwipeLeft: nextSlide,
+    onSwipeRight: prevSlide,
+  })
+
   // Auto-advance carousel every 5 seconds when not hovered
   useEffect(() => {
     if (!enableCarousel || totalSlides <= 1 || isHovered) return
@@ -102,6 +110,9 @@ export function FullWidthBanner({
       )}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
     >
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -194,7 +205,6 @@ export function FullWidthBanner({
               <CMSLink
                 variant="primary"
                 href={currentContent.href}
-                target={currentContent.openInNewTab ? '_blank' : undefined}
                 className="transition-opacity duration-300"
                 size="sm"
               >

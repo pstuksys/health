@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { HeroSection } from '@/app/(frontend)/components/hero-section/component'
 import { RenderBlocks, deriveGlobalHeroProps } from '@/app/(frontend)/components/RenderBlocks'
-import { getHomePage, generatePageMetadata, isDraftModeEnabled } from '@/lib/page-utils'
+import { getHomePage, generatePageMetadata } from '@/lib/page-utils'
 
 // Force dynamic rendering to prevent build-time database queries that cause PostgreSQL parsing errors
 export const dynamic = 'force-dynamic'
@@ -11,8 +11,7 @@ export const revalidate = 0
 
 export async function generateMetadata(): Promise<Metadata> {
   try {
-    const isDraft = await isDraftModeEnabled()
-    const page = await getHomePage(isDraft)
+    const page = await getHomePage()
     return generatePageMetadata(page, {
       title: 'Home',
       description: 'Welcome to our site',
@@ -28,8 +27,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   try {
-    const draft = await isDraftModeEnabled()
-    const page = await getHomePage(draft)
+    const page = await getHomePage()
 
     if (!page) {
       console.warn('Home page not found in CMS')

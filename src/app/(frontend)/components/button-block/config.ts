@@ -98,17 +98,4 @@ export const buttonBlockFields: Field[] = [
       },
     ],
   },
-  {
-    name: 'target',
-    type: 'select',
-    defaultValue: '_blank',
-    options: [
-      { label: 'Same Window', value: '_self' },
-      { label: 'New Window', value: '_blank' },
-    ],
-    admin: {
-      description: 'How the link should open',
-    },
-  },
 ]
-
