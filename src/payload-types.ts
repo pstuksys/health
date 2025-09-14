@@ -1650,6 +1650,129 @@ export interface Page {
             blockName?: string | null;
             blockType: 'corporateHealth';
           }
+        | {
+            heroSection?: {
+              title?: string | null;
+              subtitle?: string | null;
+              description1?: string | null;
+              description2?: string | null;
+              osaLink?: {
+                text?: string | null;
+                linkType?: ('internal' | 'external') | null;
+                internal?: {
+                  relation?: (number | null) | Page;
+                };
+                external?: {
+                  href?: string | null;
+                };
+              };
+              primaryCta?: {
+                text?: string | null;
+                linkType?: ('internal' | 'external') | null;
+                internal?: {
+                  relation?: (number | null) | Page;
+                };
+                external?: {
+                  href?: string | null;
+                };
+              };
+              secondaryCta?: {
+                text?: string | null;
+                linkType?: ('internal' | 'external') | null;
+                internal?: {
+                  relation?: (number | null) | Page;
+                };
+                external?: {
+                  href?: string | null;
+                };
+              };
+              statistics?:
+                | {
+                    icon?: ('shield' | 'clock' | 'users' | 'trending-up') | null;
+                    value: string;
+                    description: string;
+                    id?: string | null;
+                  }[]
+                | null;
+            };
+            journeySection?: {
+              title?: string | null;
+              description?: string | null;
+            };
+            pathwaySection?: {
+              title?: string | null;
+              description?: string | null;
+              steps?:
+                | {
+                    /**
+                     * Step number (1, 2, 3, etc.)
+                     */
+                    step: number;
+                    title: string;
+                    description: string;
+                    /**
+                     * Default button text if no link is provided
+                     */
+                    buttonText?: string | null;
+                    link?: {
+                      /**
+                       * Link text (overrides buttonText)
+                       */
+                      text?: string | null;
+                      linkType?: ('internal' | 'external') | null;
+                      internal?: {
+                        relation?: (number | null) | Page;
+                      };
+                      external?: {
+                        href?: string | null;
+                      };
+                    };
+                    id?: string | null;
+                  }[]
+                | null;
+            };
+            servicesSection?: {
+              title?: string | null;
+              description?: string | null;
+              services?:
+                | {
+                    icon?: ('stethoscope' | 'file-text' | 'heart-handshake') | null;
+                    title: string;
+                    description: string;
+                    cta?: {
+                      text?: string | null;
+                      linkType?: ('internal' | 'external') | null;
+                      internal?: {
+                        relation?: (number | null) | Page;
+                      };
+                      external?: {
+                        href?: string | null;
+                      };
+                    };
+                    id?: string | null;
+                  }[]
+                | null;
+            };
+            ctaSection?: {
+              title?: string | null;
+              description?: string | null;
+              primaryCta?: {
+                text?: string | null;
+                linkType?: ('internal' | 'external') | null;
+                internal?: (number | null) | Page;
+                external?: string | null;
+              };
+              secondaryCta?: {
+                text?: string | null;
+                linkType?: ('internal' | 'external') | null;
+                internal?: (number | null) | Page;
+                external?: string | null;
+              };
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'occupationalHealth';
+          }
       )[]
     | null;
   meta?: {
@@ -2874,6 +2997,165 @@ export interface PagesSelect<T extends boolean = true> {
                           internal?: T;
                           external?: T;
                           openInNewTab?: T;
+                        };
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        occupationalHealth?:
+          | T
+          | {
+              heroSection?:
+                | T
+                | {
+                    title?: T;
+                    subtitle?: T;
+                    description1?: T;
+                    description2?: T;
+                    osaLink?:
+                      | T
+                      | {
+                          text?: T;
+                          linkType?: T;
+                          internal?:
+                            | T
+                            | {
+                                relation?: T;
+                              };
+                          external?:
+                            | T
+                            | {
+                                href?: T;
+                              };
+                        };
+                    primaryCta?:
+                      | T
+                      | {
+                          text?: T;
+                          linkType?: T;
+                          internal?:
+                            | T
+                            | {
+                                relation?: T;
+                              };
+                          external?:
+                            | T
+                            | {
+                                href?: T;
+                              };
+                        };
+                    secondaryCta?:
+                      | T
+                      | {
+                          text?: T;
+                          linkType?: T;
+                          internal?:
+                            | T
+                            | {
+                                relation?: T;
+                              };
+                          external?:
+                            | T
+                            | {
+                                href?: T;
+                              };
+                        };
+                    statistics?:
+                      | T
+                      | {
+                          icon?: T;
+                          value?: T;
+                          description?: T;
+                          id?: T;
+                        };
+                  };
+              journeySection?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                  };
+              pathwaySection?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    steps?:
+                      | T
+                      | {
+                          step?: T;
+                          title?: T;
+                          description?: T;
+                          buttonText?: T;
+                          link?:
+                            | T
+                            | {
+                                text?: T;
+                                linkType?: T;
+                                internal?:
+                                  | T
+                                  | {
+                                      relation?: T;
+                                    };
+                                external?:
+                                  | T
+                                  | {
+                                      href?: T;
+                                    };
+                              };
+                          id?: T;
+                        };
+                  };
+              servicesSection?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    services?:
+                      | T
+                      | {
+                          icon?: T;
+                          title?: T;
+                          description?: T;
+                          cta?:
+                            | T
+                            | {
+                                text?: T;
+                                linkType?: T;
+                                internal?:
+                                  | T
+                                  | {
+                                      relation?: T;
+                                    };
+                                external?:
+                                  | T
+                                  | {
+                                      href?: T;
+                                    };
+                              };
+                          id?: T;
+                        };
+                  };
+              ctaSection?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    primaryCta?:
+                      | T
+                      | {
+                          text?: T;
+                          linkType?: T;
+                          internal?: T;
+                          external?: T;
+                        };
+                    secondaryCta?:
+                      | T
+                      | {
+                          text?: T;
+                          linkType?: T;
+                          internal?: T;
+                          external?: T;
                         };
                   };
               id?: T;

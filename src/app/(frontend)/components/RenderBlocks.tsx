@@ -31,6 +31,7 @@ import { NotificationBlock } from './notification-block/component'
 import { FormBlock } from './form-block/component'
 import { ContentBlockV2 } from './content-block-v2/component'
 import { CorporateHealth } from './corporate-health/component'
+import { OccupationalHealth } from './occupational-health/component'
 import { PatientsSleep } from './patients-sleep/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
@@ -155,6 +156,10 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   corporateHealth: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'corporateHealth' }>
     return <CorporateHealth {...(b as any)} />
+  },
+  occupationalHealth: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'occupationalHealth' }>
+    return <OccupationalHealth {...(b as any)} />
   },
 }
 
