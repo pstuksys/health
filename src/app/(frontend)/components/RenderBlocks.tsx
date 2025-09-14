@@ -1,6 +1,7 @@
 import React, { JSX } from 'react'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from '@/lib/media'
+import { resolveLinkHref } from '@/lib/navigation'
 import { ContentBlock } from './content-block/component'
 import { CardSection } from './card-section/component'
 import { MediaBlock } from './media-block/component'
@@ -21,7 +22,6 @@ import { ParallaxHero } from './parallax-hero/component'
 import { SingleCard } from './single-card/component'
 import { ServicesBannerBlock } from './services-banner-block/component'
 import { MedicalServicesGrid } from './medical-services-grid/component'
-import { ButtonBlock } from './button-block/component'
 import { ContentBlockArray } from './content-block-array/component'
 import { TwoBlocksText } from './two-blocks-text/component'
 import { ScoreAppWidget } from './scoreapp-widget/component'
@@ -104,7 +104,7 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   },
   twoCardBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'twoCardBlock' }>
-    return <TwoCardBlock {...(b as any)} />
+    return <TwoCardBlock {...b} />
   },
   servicesBannerBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'servicesBannerBlock' }>
@@ -113,10 +113,6 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   medicalServicesGrid: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'medicalServicesGrid' }>
     return <MedicalServicesGrid {...b} />
-  },
-  button: (block) => {
-    const b = block as Extract<PageBlock, { blockType: 'button' }>
-    return <ButtonBlock {...(b as any)} />
   },
   contentBlockArray: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'contentBlockArray' }>
@@ -234,50 +230,26 @@ export function deriveGlobalHeroProps(page: Page) {
   const showHeroStatsCard = Boolean((page as any)?.showHeroStatsCard)
   const heroStatsCard = (page as any)?.heroStatsCard
 
-  // Helper function to resolve internal/external links
-  const resolveLink = (buttonData: any): { label: string; href: string } => {
-    if (!buttonData) return { label: '', href: '#' }
-
-    const label = buttonData.label || ''
-
-    if (buttonData.linkType === 'external') {
-      return { label, href: buttonData.external?.href || '#' }
-    }
-
-    // Internal link - resolve to proper URL
-    if (buttonData.linkType === 'internal' && buttonData.internal?.relation) {
-      const relation = buttonData.internal.relation
-      let href = '#'
-
-      if (relation && typeof relation === 'object') {
-        const collection = relation.relationTo || relation.collection
-        const slug = relation.slug || relation.value?.slug || ''
-
-        if (collection === 'blogs') {
-          href = `/blogs/${slug}`
-        } else if (collection === 'pages') {
-          href = `/${slug}`
-        }
-      }
-
-      return { label, href }
-    }
-
-    return { label, href: '#' }
-  }
-
   const ctaButton = heroCTAButton
     ? {
-        label: resolveLink(heroCTAButton).label,
-        href: resolveLink(heroCTAButton).href,
+        label: heroCTAButton.label || '',
+        href: resolveLinkHref({
+          linkType: heroCTAButton.linkType,
+          internal: heroCTAButton.internal,
+          external: heroCTAButton.external,
+        }),
         variant: heroCTAButton.variant || 'primary',
       }
     : undefined
 
   const secondaryCTA = heroSecondaryCTA
     ? {
-        label: resolveLink(heroSecondaryCTA).label,
-        href: resolveLink(heroSecondaryCTA).href,
+        label: heroSecondaryCTA.label || '',
+        href: resolveLinkHref({
+          linkType: heroSecondaryCTA.linkType,
+          internal: heroSecondaryCTA.internal,
+          external: heroSecondaryCTA.external,
+        }),
       }
     : undefined
 

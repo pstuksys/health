@@ -16,7 +16,31 @@ export const resolveUrl = (item: {
   }
 
   if (item.linkType === 'external' && item.href) {
-    return item.href
+    const href = item.href
+
+    // If the href is just '#' or empty, return it as is
+    if (!href || href === '#') {
+      return href
+    }
+
+    // If the href already has a protocol (http://, https://, mailto:, tel:, etc.), return as is
+    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(href)) {
+      return href
+    }
+
+    // If the href starts with //, it's a protocol-relative URL, return as is
+    if (href.startsWith('//')) {
+      return href
+    }
+
+    // If the href doesn't start with /, assume it's a relative path and make it absolute
+    if (!href.startsWith('/')) {
+      return `https://${href}`
+    }
+
+    // If it starts with /, it's an internal path, but we're treating it as external
+    // This might be a misconfiguration, but return as is
+    return href
   }
 
   if (item.linkType === 'internal' && item.page) {
@@ -51,7 +75,31 @@ export const resolveLinkHref = (linkData: {
   } | null
 }): string => {
   if (linkData.linkType === 'external') {
-    return linkData.external?.href ?? '#'
+    const href = linkData.external?.href ?? '#'
+
+    // If the href is just '#' or empty, return it as is
+    if (!href || href === '#') {
+      return href
+    }
+
+    // If the href already has a protocol (http://, https://, mailto:, tel:, etc.), return as is
+    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(href)) {
+      return href
+    }
+
+    // If the href starts with //, it's a protocol-relative URL, return as is
+    if (href.startsWith('//')) {
+      return href
+    }
+
+    // If the href doesn't start with /, assume it's a relative path and make it absolute
+    if (!href.startsWith('/')) {
+      return `https://${href}`
+    }
+
+    // If it starts with /, it's an internal path, but we're treating it as external
+    // This might be a misconfiguration, but return as is
+    return href
   }
 
   if (linkData.linkType === 'internal' && linkData.internal?.relation) {

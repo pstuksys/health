@@ -94,7 +94,7 @@ export function CardSection({ title, subtitle, cards, columns, className }: Card
                         external: card.external,
                       })}
                       variant="ghost"
-                      className="text-ds-dark-blue font-medium hover:text-ds-pastille-green transition-colors duration-200"
+                      className="!text-ds-dark-blue font-medium hover:!text-ds-accent-yellow transition-colors duration-200"
                       external={card.linkType === 'external'}
                     >
                       {card.buttonText || 'Learn More'}
