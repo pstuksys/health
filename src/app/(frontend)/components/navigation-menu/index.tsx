@@ -123,7 +123,7 @@ export function NavigationMenu({
   return (
     <nav
       className={cn(
-        'w-full z-50 transition-all duration-300 ease-out ',
+        'w-full z-50 transition-all duration-300 ease-out',
         isScrolled ? 'bg-gradient-primary shadow-lg' : 'bg-transparent',
         !isVisible && 'opacity-0 pointer-events-none',
         sticky && (isScrolled ? 'fixed top-0 left-0 right-0' : 'absolute top-0 left-0 right-0'),

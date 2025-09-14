@@ -48,15 +48,15 @@ export function NavigationItems({
           {item.linkType === 'internal' || item.linkType === 'external' || item.href ? (
             <Link
               href={resolveUrl(item)}
-              className="nav-item text-white hover:text-ds-accent-yellow px-3 py-2 text-sm font-light transition-all duration-200 ease-out flex items-center whitespace-nowrap max-w-[120px]"
+              className="nav-item text-white hover:text-ds-accent-yellow px-3 py-2 text-sm font-light transition-all duration-200 ease-out flex items-center whitespace-nowrap min-w-0"
               title={item.label}
             >
-              <span className="truncate">{item.label}</span>
+              <span className="truncate max-w-[100px]">{item.label}</span>
               {item.megaMenu && <ChevronRight className="ml-1 h-3 w-3 rotate-90 flex-shrink-0" />}
             </Link>
           ) : (
-            <button className="nav-item text-white hover:text-ds-accent-yellow px-3 py-2 text-sm font-light transition-all duration-200 ease-out flex items-center whitespace-nowrap max-w-[120px]">
-              <span className="truncate">{item.label}</span>
+            <button className="nav-item text-white hover:text-ds-accent-yellow px-3 py-2 text-sm font-light transition-all duration-200 ease-out flex items-center whitespace-nowrap min-w-0">
+              <span className="truncate max-w-[100px]">{item.label}</span>
               {item.megaMenu && <ChevronRight className="ml-1 h-3 w-3 rotate-90 flex-shrink-0" />}
             </button>
           )}

@@ -5,10 +5,16 @@
 /* Custom navigation styles */
 .nav-item {
   @apply transition-all duration-200 ease-in-out;
+  @apply overflow-hidden;
 }
 
 .nav-item:hover {
   @apply transform -translate-y-0.5;
+}
+
+/* Ensure proper text truncation in navigation */
+.nav-item span {
+  @apply block overflow-hidden;
 }
 
 /* Enhanced focus states for accessibility */
