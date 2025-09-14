@@ -583,7 +583,7 @@ export interface Page {
         | {
             title: string;
             subtitle?: string | null;
-            description: string;
+            description?: string | null;
             /**
              * Enable search functionality for the table items
              */
@@ -591,11 +591,25 @@ export interface Page {
             searchPlaceholder?: string | null;
             items: {
               title: string;
-              content: string;
+              content?: string | null;
               /**
-               * Additional details that will be shown when expanded
+               * Additional details that will be shown when expanded (supports rich text formatting)
                */
-              details?: string | null;
+              details?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: string;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
               id?: string | null;
             }[];
             id?: string | null;

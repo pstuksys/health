@@ -243,15 +243,15 @@ export function PatientsSleep({
           <ExpandableTable
             blockType="expandableTable"
             title={faqSection.title || 'Frequently Asked Questions'}
-            subtitle={faqSection.subtitle || 'Common questions about our sleep testing services'}
-            description="Click on questions to expand and see detailed answers."
+            subtitle={faqSection.subtitle || ''}
+            description=""
             enableSearch={true}
             searchPlaceholder="Search FAQs..."
             items={(faqSection.faqs || []).map((faq, index) => ({
               id: faq.id || `faq-${index}`,
               title: faq.question,
               content: faq.answer,
-              details: faq.answer, // Using answer as details for consistency
+              // details removed - not needed since content already shows the answer
             }))}
           />
         )}
