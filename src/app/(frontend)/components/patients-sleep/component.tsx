@@ -51,7 +51,7 @@ export function PatientsSleep({
       className={`min-h-screen ${bgColor === 'ds-light-neutral' ? 'bg-ds-light-neutral' : `bg-${bgColor}`}`}
     >
       {/* Navigation Buttons */}
-      <nav className="sticky top-0 z-50 bg-white border-b shadow-sm">
+      <div className="bg-white border-b shadow-sm">
         <div className="max-w-container mx-auto px-4 py-4">
           <div className="flex justify-center space-x-4">
             <button
@@ -75,7 +75,7 @@ export function PatientsSleep({
             </button>
           </div>
         </div>
-      </nav>
+      </div>
 
       <main className="max-w-container mx-auto px-4 py-12 space-y-16">
         {/* About Section */}

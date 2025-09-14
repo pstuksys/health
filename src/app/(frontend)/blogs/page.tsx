@@ -1,7 +1,7 @@
 import { ScrollPostCards } from '@/app/(frontend)/components/scroll-post-cards/component'
 import type { Blog } from '@/payload-types'
 import { cn } from '@/lib/utils'
-import { getCachedBlogs } from '@/lib/cms/payload-client'
+import { getBlogs } from '@/lib/cms/payload-client'
 
 // Define blog categories with proper typing
 const BLOG_CATEGORIES = [
@@ -16,7 +16,7 @@ const BLOG_CATEGORIES = [
 ] as const
 
 export default async function BlogsPage() {
-  const blogs = await getCachedBlogs(1000)
+  const blogs = await getBlogs(1000)
 
   if (!blogs || blogs.length === 0) {
     return (

@@ -2,13 +2,12 @@ import { notFound } from 'next/navigation'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
 import { mediaToUrl } from '@/lib/media'
 import Image from 'next/image'
-import type { Blog } from '@/payload-types'
 import { ShareButtons } from './ShareButtons'
-import { getCachedBlogBySlug } from '@/lib/cms/payload-client'
+import { getBlogBySlug } from '@/lib/cms/payload-client'
 
 export default async function BlogPage(props: any) {
   const slug = props?.params?.slug as string
-  const blog = await getCachedBlogBySlug(slug, 2)
+  const blog = await getBlogBySlug(slug, 2)
 
   if (!blog) return notFound()
 
@@ -90,7 +89,7 @@ export async function generateMetadata(props: any) {
   const slug = props?.params?.slug as string
 
   try {
-    const blog = await getCachedBlogBySlug(slug, 2) // Need depth 2 for SEO meta fields
+    const blog = await getBlogBySlug(slug, 2) // Need depth 2 for SEO meta fields
 
     if (!blog) {
       return {
