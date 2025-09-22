@@ -2,13 +2,12 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import { mediaToUrl } from '@/lib/media'
 import { resolveLinkHref } from '@/lib/navigation'
 import { useSwipe } from '@/lib/hooks/use-swipe'
 import type { Page } from '@/payload-types'
 import { CMSLink } from '../ui'
+import { PayloadImage } from '../ui/payload-image'
 import { Button } from '../ui/button'
 
 type FullWidthBannerProps = Extract<
@@ -39,8 +38,6 @@ export function FullWidthBanner({
 }: FullWidthBannerProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
-
-  const bgUrl = mediaToUrl(backgroundImage)
 
   // Resolve carousel items with proper hrefs
   const resolvedCarouselItems = useMemo<CarouselItem[]>(() => {
@@ -116,16 +113,18 @@ export function FullWidthBanner({
       onTouchEnd={onTouchEnd}
     >
       {/* Background Image using Next.js Image */}
-      <div className="absolute inset-0 pointer-events-none">
-        <Image
-          src={bgUrl}
-          alt="Banner background"
-          fill
-          className="object-cover"
-          sizes="100vw"
-          priority
-        />
-      </div>
+      {backgroundImage && (
+        <div className="absolute inset-0 pointer-events-none">
+          <PayloadImage
+            media={backgroundImage}
+            variant="hero"
+            alt="Banner background"
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+      )}
 
       {/* Overlay */}
       <div className="absolute inset-0 bg-ds-dark-blue/60 z-10 pointer-events-none" />

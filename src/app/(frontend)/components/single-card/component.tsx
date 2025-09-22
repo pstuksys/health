@@ -1,10 +1,9 @@
 'use client'
 
-import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import type { Page } from '@/payload-types'
-import { mediaToUrl } from '@/lib/media'
-import { CMSLink } from '../ui/cms-link'
+import { CMSLink } from '../ui'
+import { PayloadImage } from '../ui/payload-image'
 
 // Extract the singleCard block type from the Page blocks union
 type SingleCardBlock = Extract<NonNullable<Page['blocks']>[number], { blockType: 'singleCard' }>
@@ -31,8 +30,6 @@ export function SingleCard({
   | 'external'
   | 'cta'
 >) {
-  const imageUrl = mediaToUrl(image as any)
-
   let href: string | undefined
   if (linkType === 'external') href = external?.href ?? '#'
   else if (internal?.relation) {
@@ -59,7 +56,7 @@ export function SingleCard({
               imagePosition === 'right' && 'md:order-2',
             )}
           >
-            {imageUrl && <Image src={imageUrl} alt={title} fill className="object-cover" />}
+            {image && <PayloadImage media={image} variant="card" alt={title || ''} fill />}
           </div>
           <div className={cn(imagePosition === 'right' && 'md:order-1')}>
             <h3 className="text-2xl md:text-3xl font-light text-ds-dark-blue mb-4">{title}</h3>

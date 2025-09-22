@@ -1,20 +1,20 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { ChevronDown } from 'lucide-react'
 import { CMSLink } from '@/app/(frontend)/components/ui/cms-link'
+import { PayloadImage } from '@/app/(frontend)/components/ui/payload-image'
 import { cn } from '@/lib/utils'
 import { ConsistentHTML } from '../safe-html/component'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
 import { SleepDisorderStatsCard } from '../sleep-disorder-stats-card/component'
-import type { Page } from '@/payload-types'
+import type { Page, Media } from '@/payload-types'
 type CTAButton = { label: string; href: string; variant?: 'primary' | 'secondary' }
 
 type HeroSectionProps = {
   title: string
   subtitle?: Page['content'] | string
-  backgroundImage?: string
+  backgroundImage?: string | number | Media | null
   ctaButton?: CTAButton
   secondaryCTA?: CTAButton
   gradientOverlay?: boolean
@@ -120,14 +120,15 @@ export function HeroSection({
     >
       {backgroundImage && (
         <>
-          <Image
-            src={backgroundImage}
-            alt="hero"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center"
-          />
+          {typeof backgroundImage === 'string' ? (
+            <img
+              src={backgroundImage}
+              alt="hero"
+              className="absolute inset-0 w-full h-full object-cover object-center"
+            />
+          ) : (
+            <PayloadImage media={backgroundImage} variant="hero" alt="hero" fill priority />
+          )}
           {/* Subtle overlay for better text readability */}
           <div className="absolute inset-0 bg-black/20" />
         </>

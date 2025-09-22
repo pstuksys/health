@@ -1,10 +1,9 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
-import { mediaToUrl } from '@/lib/media'
 import type { Page } from '@/payload-types'
 import { CMSLink } from '../ui'
+import { PayloadImage } from '../ui/payload-image'
 import Link from 'next/link'
 
 type ScrollPostCardsProps = Extract<
@@ -96,12 +95,7 @@ export function ScrollPostCards({
           const cardContent = (
             <div className="md:flex">
               <div className="md:w-2/5 relative h-64 md:h-80">
-                <Image
-                  src={mediaToUrl(post.image)}
-                  alt={post.title}
-                  fill
-                  className="object-cover"
-                />
+                <PayloadImage media={post.image} variant="card" alt={post.title} fill />
                 <div className="absolute top-4 left-4">
                   <span className="bg-ds-accent-yellow text-white border-0 transition-all duration-200  py-1 px-2 rounded-xl">
                     {post.category || 'Blog'}

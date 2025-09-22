@@ -1,6 +1,5 @@
 import React, { JSX } from 'react'
 import type { Page } from '@/payload-types'
-import { mediaToUrl } from '@/lib/media'
 import { resolveLinkHref } from '@/lib/navigation'
 import { ContentBlock } from './content-block/component'
 import { CardSection } from './card-section/component'
@@ -216,7 +215,7 @@ export function deriveGlobalHeroProps(page: Page) {
   // Prefer raw Lexical content for RichText; fallback to plain description string
   const subtitleRaw: Page['content'] | string =
     page?.content ?? (page?.meta?.description ?? '').trim()
-  const bg = mediaToUrl((page as any)?.heroBackground ?? (page?.meta?.image as any))
+  const bg = (page as any)?.heroBackground ?? (page?.meta?.image as any)
 
   // Extract hero configuration from Pages collection fields with proper type narrowing
   const rawTextColor = (page as any)?.heroTextColor

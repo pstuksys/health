@@ -13,6 +13,8 @@ const nextConfig = {
     return webpackConfig
   },
   images: {
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840], // Standard responsive breakpoints
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384], // For icons/thumbnails
     remotePatterns: [
       {
         protocol: 'http',
@@ -35,6 +37,7 @@ const nextConfig = {
         pathname: '/api/media/**',
       },
     ],
+    formats: ['image/avif', 'image/webp'],
   },
 }
 

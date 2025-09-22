@@ -2,8 +2,7 @@
 
 import { Card, CardContent } from '@/components/ui/card'
 import { CMSLink } from '@/components/ui/cms-link'
-import Image from 'next/image'
-import { mediaToUrl } from '@/lib/media'
+import { PayloadImage } from '@/app/(frontend)/components/ui/payload-image'
 import type { Page } from '@/payload-types'
 import { resolveLinkHref } from '@/lib/navigation'
 
@@ -33,12 +32,7 @@ export function TwoCardBlock({ title, subtitle, items }: TwoCardBlockProps) {
               <CardContent className="!p-0">
                 <div className="p-0 md:p-4">
                   <div className="relative w-full h-48 md:h-56 overflow-hidden rounded-none md:rounded-lg">
-                    <Image
-                      src={mediaToUrl(item.image)}
-                      alt={item.title}
-                      fill
-                      className="object-cover"
-                    />
+                    <PayloadImage media={item.image} variant="card" alt={item.title} fill />
                   </div>
                 </div>
 

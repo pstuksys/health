@@ -9,7 +9,6 @@ import {
   Stethoscope,
   HeartHandshake,
 } from 'lucide-react'
-import Image from 'next/image'
 import type { Page } from '@/payload-types'
 import { Button } from '../ui/button'
 import { CMSLink } from '../ui'
@@ -161,13 +160,12 @@ export function OccupationalHealth({
 
           <div className="max-w-4xl mx-auto">
             <div className="flex justify-center">
-              <Image
+              <img
                 src="/ipd-diagram.avif"
                 alt="Patient Journey Diagram"
                 width={800}
                 height={400}
                 className="max-w-full h-auto"
-                priority
               />
             </div>
           </div>

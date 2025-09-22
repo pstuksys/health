@@ -1,7 +1,6 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { mediaToUrl } from '@/lib/media'
+import { PayloadImage } from '@/app/(frontend)/components/ui/payload-image'
 import type { Media } from '@/payload-types'
 
 type RawBlogPost = {
@@ -58,8 +57,9 @@ export function BlogPostCards({
               <Link href={resolveBlogHref(post)} className="block">
                 <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
                   <div className="aspect-video relative overflow-hidden">
-                    <Image
-                      src={mediaToUrl(post.image)}
+                    <PayloadImage
+                      media={post.image}
+                      variant="card"
                       alt={post.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"

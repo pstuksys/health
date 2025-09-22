@@ -1,20 +1,19 @@
 'use client'
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
-import Image from 'next/image'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { useSwipe } from '@/lib/hooks/use-swipe'
-import { CMSLink } from '../ui/cms-link'
+import { CMSLink } from '../ui'
+import { PayloadImage } from '../ui/payload-image'
 import type { Page } from '@/payload-types'
-import { mediaToUrl } from '@/lib/media'
 import { resolveLinkHref } from '@/lib/navigation'
 
 type CarouselBlock = Extract<NonNullable<Page['blocks']>[number], { blockType: 'carousel' }>
 
 type ResolvedCarouselItem = {
-  image: string
+  image: any // Media object or ID
   title: string
   description?: string
   buttonText?: string
@@ -39,8 +38,9 @@ function CarouselCard({ item }: { item: ResolvedCarouselItem }) {
       <div className="flex flex-col md:flex-row h-auto md:h-[18rem] lg:h-[19rem]">
         {/* Image Section */}
         <div className="w-full md:w-1/2 overflow-hidden relative h-48 md:h-full min-h-[12rem] md:min-h-[18rem] lg:min-h-[19rem]">
-          <Image
-            src={item.image || '/placeholder.svg'}
+          <PayloadImage
+            media={item.image}
+            variant="card"
             alt={item.title}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -99,7 +99,7 @@ export function MedicalCarousel(props: MedicalCarouselProps) {
   const resolvedItems = useMemo<ResolvedCarouselItem[]>(() => {
     const rawItems = (items ?? []) as unknown[]
     return rawItems.map((i: any) => {
-      const image = mediaToUrl(i.image as any)
+      const image = i.image
       const href = resolveLinkHref({
         linkType: i.linkType,
         internal: i.internal,

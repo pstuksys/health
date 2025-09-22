@@ -1,11 +1,10 @@
 'use client'
 
-import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { isLexicalEditorState, RichText } from '@/app/(frontend)/components/ui/rich-text'
+import { PayloadImage } from '@/app/(frontend)/components/ui/payload-image'
 import type { Page } from '@/payload-types'
-import { mediaToUrl } from '@/lib/media'
 
 type ContentBlockProps = Extract<NonNullable<Page['blocks']>[number], { blockType: 'contentBlock' }>
 
@@ -30,8 +29,6 @@ export function ContentBlock({
     return () => observer.disconnect()
   }, [])
 
-  const imageUrl = mediaToUrl(image as any)
-
   if (layout === 'full') {
     return (
       <section ref={sectionRef} className={cn('py-6 px-4 sm:px-4 lg:px-4')}>
@@ -55,13 +52,7 @@ export function ContentBlock({
                   isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
                 )}
               >
-                <Image
-                  src={imageUrl || '/placeholder.svg'}
-                  alt={title || ''}
-                  fill
-                  sizes="(min-width: 1024px) 800px, 100vw"
-                  className="object-cover"
-                />
+                <PayloadImage media={image} variant="hero" alt={title || ''} fill />
               </div>
             )}
           </div>
@@ -96,7 +87,7 @@ export function ContentBlock({
           </div>
 
           {/* Image Column */}
-          {imageUrl && (
+          {image && (
             <div
               className={cn(
                 'relative w-full h-[360px] sm:h-[420px] lg:h-[480px] overflow-hidden rounded-lg shadow-lg transition-all duration-500 lg:sticky lg:top-4',
@@ -104,13 +95,7 @@ export function ContentBlock({
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6',
               )}
             >
-              <Image
-                src={imageUrl || '/placeholder.svg'}
-                alt={title || ''}
-                fill
-                sizes="(min-width: 1024px) 600px, 100vw"
-                className="object-cover"
-              />
+              <PayloadImage media={image} variant="card" alt={title || ''} fill />
             </div>
           )}
         </div>

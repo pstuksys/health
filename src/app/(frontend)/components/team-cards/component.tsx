@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import Image from 'next/image'
 import { Button } from '../ui/button'
 import type { Page } from '@/payload-types'
 import { CMSLink } from '../ui'
+import { PayloadImage } from '../ui/payload-image'
 import { cn } from '@/lib/utils'
 
 // Extract the teamCards block type from the Page blocks union
@@ -109,13 +109,10 @@ export function TeamCards({
                   {/* Profile Image */}
                   <div className="flex-shrink-0 mx-auto md:mx-0">
                     <div className="relative w-48 h-48 md:w-60 md:h-60 overflow-hidden rounded-full group cursor-pointer hover:shadow-2xl transition-all duration-300">
-                      <Image
-                        src={
-                          typeof member.image === 'object' && member.image?.url
-                            ? member.image.url
-                            : '/placeholder.svg?height=400&width=400&text=Team+Member'
-                        }
-                        alt={`${member.name}`}
+                      <PayloadImage
+                        media={member.image}
+                        variant="avatar"
+                        alt={member.name}
                         fill
                         className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
                       />

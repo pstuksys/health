@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { mediaToUrl } from '@/lib/media'
+import { PayloadImage } from '@/app/(frontend)/components/ui/payload-image'
 import { Page } from '@/payload-types'
 
 type ParallaxHeroProps = Extract<NonNullable<Page['blocks']>[number], { blockType: 'parallaxHero' }>
@@ -17,7 +17,6 @@ export function ParallaxHero({
 }: ParallaxHeroProps) {
   const sectionRef = useRef<HTMLElement | null>(null)
   const [offsetY, setOffsetY] = useState(0)
-  const bgUrl = mediaToUrl(backgroundImage)
 
   useEffect(() => {
     let ticking = false
@@ -42,13 +41,14 @@ export function ParallaxHero({
   return (
     <section ref={sectionRef} className="relative h-[80vh] overflow-hidden">
       <div
-        className="absolute inset-0 w-full h-[160%] bg-cover bg-center bg-no-repeat"
+        className="absolute inset-0 w-full h-[160%]"
         style={{
-          backgroundImage: `url(${bgUrl})`,
           transform: `translate3d(0, ${offsetY}px, 0)`,
           willChange: 'transform',
         }}
-      />
+      >
+        <PayloadImage media={backgroundImage} variant="hero" alt="Hero background" fill />
+      </div>
 
       <div className="absolute inset-0 bg-ds-dark-blue/40" />
 

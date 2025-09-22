@@ -1,9 +1,8 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import { Button } from '@/app/(frontend)/components/ui/button'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
+import { PayloadImage } from '@/app/(frontend)/components/ui/payload-image'
 import { cn } from '@/lib/utils'
-import { mediaToUrl } from '@/lib/media'
 import type { Media } from '@/payload-types'
 
 type CTAButton = {
@@ -48,12 +47,13 @@ export function MediaBlock({
           )}
         >
           <div className={cn('relative', !isImageLeft && 'lg:col-start-2')}>
-            <Image
-              src={mediaToUrl(image)}
+            <PayloadImage
+              media={image}
+              variant="card"
               alt={title}
               width={600}
               height={400}
-              className="w-full h-auto rounded-lg shadow-lg"
+              className="w-full h-auto rounded-lg shadow-lg object-cover"
             />
           </div>
           <div className={cn('space-y-6', !isImageLeft && 'lg:col-start-1')}>
