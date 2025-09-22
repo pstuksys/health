@@ -2,8 +2,8 @@
 
 import { Calendar, Settings, Shield } from 'lucide-react'
 import type { Page } from '@/payload-types'
-import { mediaToUrl } from '@/lib/media'
 import { CMSLink } from '../ui'
+import { PayloadImage } from '../ui/payload-image'
 import { resolveLinkHref } from '@/lib/navigation'
 
 type ServicesBannerBlockProps = Extract<
@@ -35,15 +35,14 @@ export function ServicesBannerBlock({
     >
       {/* Background Image */}
       {backgroundImage && (
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed sm:bg-scroll"
-          style={{
-            backgroundImage: `url('${mediaToUrl(backgroundImage)}')`,
-            backgroundAttachment: 'fixed',
-            backgroundPosition: 'center center',
-            backgroundSize: 'cover',
-          }}
-        >
+        <div className="absolute inset-0">
+          <PayloadImage
+            media={backgroundImage}
+            variant="hero"
+            alt="Service banner background"
+            fill
+            className="object-cover"
+          />
           {/* Responsive overlay for better text readability */}
           <div className="absolute inset-0 bg-black/30 sm:bg-black/20 lg:bg-black/10" />
         </div>

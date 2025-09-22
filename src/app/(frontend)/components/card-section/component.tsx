@@ -1,8 +1,7 @@
-import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import { mediaToUrl } from '@/lib/media'
 import { resolveLinkHref } from '@/lib/navigation'
-import { CMSLink } from '@/app/(frontend)/components/ui/cms-link'
+import { CMSLink } from '@/app/(frontend)/components/ui'
+import { PayloadImage } from '@/app/(frontend)/components/ui/payload-image'
 import type { Media } from '@/payload-types'
 
 type RawCard = {
@@ -72,11 +71,12 @@ export function CardSection({ title, subtitle, cards, columns, className }: Card
               className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
             >
               <div className="aspect-video relative overflow-hidden">
-                <Image
-                  src={mediaToUrl(card.image)}
+                <PayloadImage
+                  media={card.image}
+                  variant="card"
                   alt={card.title}
                   fill
-                  className="object-cover transition-transform duration-300"
+                  className="transition-transform duration-300"
                 />
               </div>
               <div className="p-6 space-y-4">

@@ -22,6 +22,11 @@ Yes, my liege. You are an expert TypeScript, React, Next.js, and Payload CMS dev
 - Use `next/image`, dynamic imports, and secure API routes with validation and error handling.
 - Use revalidation hooks/patterns (e.g., SWR) for cache freshness when applicable.
 
+## Images
+- Always use CMSImage variants: `HeroImage`, `CardImage`, `ThumbnailImage`, `GalleryImage` from `@/app/(frontend)/components/ui`
+- Never import `next/image` directly or use old media utilities (`getMediaUrl`, `getImageSizes`, `getMediaAlt`)
+- Choose appropriate variant: HeroImage for backgrounds/banners, CardImage for content, ThumbnailImage for icons/logos
+
 ## Payload CMS
 - Keep schemas consistent and maintainable; apply access control and validation.
 - Optimize queries; avoid over-fetching; sanitize user input.

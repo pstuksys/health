@@ -1,7 +1,6 @@
 import { notFound } from 'next/navigation'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
-import { mediaToUrl } from '@/lib/media'
-import Image from 'next/image'
+import { PayloadImage } from '@/app/(frontend)/components/ui/payload-image'
 import { ShareButtons } from './ShareButtons'
 import { getBlogBySlug } from '@/lib/cms/payload-client'
 
@@ -19,12 +18,12 @@ export default async function BlogPage(props: any) {
       >
         {blog.image ? (
           <>
-            <Image
-              src={mediaToUrl(blog.image)}
+            <PayloadImage
+              media={blog.image}
+              variant="hero"
               alt={blog.title}
               fill
               priority
-              sizes="100vw"
               className="object-cover object-center"
             />
             {/* Overlay for better text readability */}

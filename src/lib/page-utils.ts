@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import type { Page } from '@/payload-types'
-import { mediaToUrl } from './media'
+import { getMediaUrl } from './media'
 import { getPage } from './cms/payload-client'
 import { draftMode } from 'next/headers'
 
@@ -23,7 +23,7 @@ export async function generatePageMetadata(
 
   const title = page.meta?.title ?? page.title
   const description = page.meta?.description ?? undefined
-  const imageUrl = mediaToUrl(page.meta?.image)
+  const imageUrl = getMediaUrl(page.meta?.image, 'hero')
 
   return {
     title,

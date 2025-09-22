@@ -1,6 +1,5 @@
-import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import { mediaToUrl } from '@/lib/media'
+import { PayloadImage } from '@/app/(frontend)/components/ui/payload-image'
 import type { Page } from '@/payload-types'
 
 // Extract the partnersBlock type from Page blocks
@@ -35,11 +34,10 @@ export function PartnersBlock({ title, partners, layout = 'grid', className }: P
                     <div
                       className={`${isSvgLogo ? 'h-20 w-40' : 'h-24 w-48'} flex items-center justify-center p-2`}
                     >
-                      <Image
-                        src={mediaToUrl(partner.logo) || '/placeholder.svg'}
-                        alt={
-                          (typeof partner.logo === 'object' && partner.logo?.alt) || 'Partner logo'
-                        }
+                      <PayloadImage
+                        media={partner.logo}
+                        variant="thumbnail"
+                        alt="Partner logo"
                         width={isSvgLogo ? 160 : 192}
                         height={isSvgLogo ? 80 : 96}
                         className={`${isSvgLogo ? 'max-h-full max-w-full' : 'h-full w-full'} object-contain opacity-60 hover:opacity-100 transition-opacity duration-200`}
@@ -69,9 +67,10 @@ export function PartnersBlock({ title, partners, layout = 'grid', className }: P
                 <div
                   className={`${isSvgLogo ? 'h-20 w-40' : 'h-24 w-48'} flex items-center justify-center p-2`}
                 >
-                  <Image
-                    src={mediaToUrl(partner.logo) || '/placeholder.svg'}
-                    alt={(typeof partner.logo === 'object' && partner.logo?.alt) || 'Partner logo'}
+                  <PayloadImage
+                    media={partner.logo}
+                    variant="thumbnail"
+                    alt="Partner logo"
                     width={isSvgLogo ? 160 : 192}
                     height={isSvgLogo ? 80 : 96}
                     className={`${isSvgLogo ? 'max-h-full max-w-full' : 'h-full w-full'} object-contain opacity-60 hover:opacity-100 transition-opacity duration-200`}

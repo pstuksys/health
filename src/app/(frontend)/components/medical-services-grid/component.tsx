@@ -1,9 +1,8 @@
 'use client'
 
 import * as LucideIcons from 'lucide-react'
-import Image from 'next/image'
 import type { Page } from '@/payload-types'
-import { mediaToUrl } from '@/lib/media'
+import { PayloadImage } from '@/app/(frontend)/components/ui/payload-image'
 
 type MedicalServicesGridProps = Extract<
   NonNullable<Page['blocks']>[number],
@@ -48,8 +47,7 @@ export function MedicalServicesGrid({
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
           {(services || []).map((service, index) => {
             const IconComponent = iconMap[service.icon || 'scan'] || LucideIcons.Scan
-            const backgroundImageUrl = mediaToUrl(service.backgroundImage)
-            const hasBackgroundImage = backgroundImageUrl !== '/placeholder.svg'
+            const hasBackgroundImage = Boolean(service.backgroundImage)
 
             return (
               <div
@@ -61,12 +59,12 @@ export function MedicalServicesGrid({
                 {/* Background Image using Next.js Image */}
                 {hasBackgroundImage && (
                   <div className="absolute inset-0 rounded-lg overflow-hidden">
-                    <Image
-                      src={backgroundImageUrl}
-                      alt={service.name || 'Medical service'}
+                    <PayloadImage
+                      media={service.backgroundImage}
+                      variant="card"
+                      alt={service.name || 'Service background'}
                       fill
                       className="object-cover"
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 25vw, 20vw"
                     />
                   </div>
                 )}

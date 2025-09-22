@@ -1,12 +1,11 @@
 'use client'
 
 import { CheckCircle, Users, Shield, TrendingUp, Clock } from 'lucide-react'
-import Image from 'next/image'
 import type { Page } from '@/payload-types'
-import { mediaToUrl } from '@/lib/media'
 import { resolveLinkHref } from '@/lib/navigation'
 import { Button } from '../ui/button'
 import { CMSLink } from '../ui'
+import { PayloadImage } from '../ui/payload-image'
 
 type CorporateHealthProps = Extract<
   NonNullable<Page['blocks']>[number],
@@ -18,8 +17,6 @@ export function CorporateHealth({
   whyFocusSection,
   servicesSection,
 }: CorporateHealthProps) {
-  const heroImageUrl = mediaToUrl(heroSection?.image)
-
   return (
     <div className="min-h-screen bg-ds-light-neutral">
       {/* Hero Section */}
@@ -27,12 +24,12 @@ export function CorporateHealth({
         <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div className="order-2 lg:order-1">
             <div className="relative w-full h-[400px] lg:h-[500px] rounded-lg overflow-hidden shadow-lg">
-              <Image
-                src={heroImageUrl || '/placeholder.svg'}
+              <PayloadImage
+                media={heroSection?.image}
+                variant="hero"
                 alt={heroSection?.imageAlt || 'Professional workplace wellness and sleep health'}
                 fill
                 className="object-cover"
-                sizes="(max-width: 1024px) 100vw, 50vw"
               />
             </div>
           </div>

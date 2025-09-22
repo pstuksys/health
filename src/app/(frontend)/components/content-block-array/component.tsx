@@ -1,8 +1,7 @@
-import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { CMSLink } from '../ui'
+import { PayloadImage } from '../ui/payload-image'
 import { resolveLinkHref } from '@/lib/navigation'
-import { mediaToUrl } from '@/lib/media'
 import type { Page } from '@/payload-types'
 
 type ContentBlockArrayProps = Extract<
@@ -28,7 +27,6 @@ export function ContentBlockArray({
 
         <div className="space-y-4 md:space-y-1">
           {contentBlocks.map((block, index) => {
-            const imageUrl = mediaToUrl(block.image as any)
             const isImageLeft = block.imagePosition === 'left'
             const shouldAlternate = layout === 'alternating' && index % 2 === 1
 
@@ -88,15 +86,15 @@ export function ContentBlockArray({
                 </div>
 
                 {/* Image Block */}
-                {imageUrl && (
+                {block.image && (
                   <div className="w-full md:w-1/2 lg:w-1/2">
                     <div className="relative w-full h-64 md:h-[400px] lg:h-[400px] overflow-hidden shadow-lg">
-                      <Image
-                        src={imageUrl}
-                        alt=""
+                      <PayloadImage
+                        media={block.image}
+                        variant="card"
+                        alt={block.title || ''}
                         fill
                         className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 50vw"
                       />
                     </div>
                   </div>
