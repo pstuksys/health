@@ -218,7 +218,7 @@ export function ActigraphyBlock(props: ActigraphyBlockProps) {
               </div>
               <p className="text-sm opacity-80 text-white">
                 To learn more about actigraphy or to refer a patient, contact our team to discuss
-                whether this assessment is right for you or your patient's needs.
+                whether this assessment is right for you or your patient&apos;s needs.
               </p>
             </CardContent>
           </Card>

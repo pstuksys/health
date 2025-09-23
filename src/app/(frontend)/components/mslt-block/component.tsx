@@ -169,8 +169,8 @@ export function MSLTBlock(props: MSLTBlockProps) {
               </div>
               <p className="mt-8 text-sm text-ds-pastille-green">
                 It is often used when patients report unrefreshing sleep, sudden sleep attacks, or
-                ongoing daytime fatigue that isn't explained by other conditions or overnight sleep
-                studies alone.
+                ongoing daytime fatigue that isn&apos;t explained by other conditions or overnight
+                sleep studies alone.
               </p>
             </CardContent>
           </Card>

@@ -50,4 +50,8 @@ declare module 'lucide-react' {
   export const Truck: React.FC<React.SVGProps<SVGSVGElement>>
   export const Monitor: React.FC<React.SVGProps<SVGSVGElement>>
   export const Home: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Video: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Waves: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Eye: React.FC<React.SVGProps<SVGSVGElement>>
+  export const EyeOff: React.FC<React.SVGProps<SVGSVGElement>>
 }
