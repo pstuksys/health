@@ -44,6 +44,9 @@ import { actigraphyBlockFields } from '../app/(frontend)/components/actigraphy-b
 import { vpsgBlockFields } from '../app/(frontend)/components/vpsg-block/config'
 import { vpsgEegBlockFields } from '../app/(frontend)/components/vpsg-eeg-block/config'
 import { respiratoryPolygrophyBlockFields } from '../app/(frontend)/components/respiratory-polygrophy-block/config'
+import { heroBannerBlockFields } from '../app/(frontend)/components/hero-banner-block/config'
+import { partnershipBenefitsBlockFields } from '../app/(frontend)/components/partnership-benefits-block/config'
+import { highlightSectionBlockFields } from '../app/(frontend)/components/highlight-section-block/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -210,6 +213,24 @@ const respiratoryPolygrophyBlock: Block = {
   fields: respiratoryPolygrophyBlockFields,
 }
 
+const heroBannerBlock: Block = {
+  slug: 'heroBannerBlock',
+  dbName: 'hero_banner_block',
+  fields: heroBannerBlockFields,
+}
+
+const partnershipBenefitsBlock: Block = {
+  slug: 'partnershipBenefitsBlock',
+  dbName: 'partnership_benefits_block',
+  fields: partnershipBenefitsBlockFields,
+}
+
+const highlightSectionBlock: Block = {
+  slug: 'highlightSectionBlock',
+  dbName: 'highlight_section_block',
+  fields: highlightSectionBlockFields,
+}
+
 // All available page blocks
 const pageBlocks: Block[] = [
   contentBlock,
@@ -257,6 +278,9 @@ const pageBlocks: Block[] = [
   vpsgBlock,
   vpsgEegBlock,
   respiratoryPolygrophyBlock,
+  heroBannerBlock,
+  partnershipBenefitsBlock,
+  highlightSectionBlock,
 ]
 
 export const Pages: CollectionConfig = {

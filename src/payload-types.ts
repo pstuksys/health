@@ -3004,6 +3004,69 @@ export interface Page {
             blockName?: string | null;
             blockType: 'respiratoryPolygrophyBlock';
           }
+        | {
+            title: string;
+            /**
+             * Short supporting paragraphs
+             */
+            paragraphs?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            image?: (number | null) | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'heroBannerBlock';
+          }
+        | {
+            title: string;
+            benefits?:
+              | {
+                  title: string;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            image?: (number | null) | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'partnershipBenefitsBlock';
+          }
+        | {
+            title: string;
+            description?: string | null;
+            cta?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            image?: (number | null) | Media;
+            /**
+             * Optional overlay text displayed on the image
+             */
+            overlayText?: {
+              main?: string | null;
+              subtitle?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'highlightSectionBlock';
+          }
       )[]
     | null;
   meta?: {
@@ -5135,6 +5198,66 @@ export interface PagesSelect<T extends boolean = true> {
                       | {
                           href?: T;
                         };
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        heroBannerBlock?:
+          | T
+          | {
+              title?: T;
+              paragraphs?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              image?: T;
+              id?: T;
+              blockName?: T;
+            };
+        partnershipBenefitsBlock?:
+          | T
+          | {
+              title?: T;
+              benefits?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              image?: T;
+              id?: T;
+              blockName?: T;
+            };
+        highlightSectionBlock?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              image?: T;
+              overlayText?:
+                | T
+                | {
+                    main?: T;
+                    subtitle?: T;
                   };
               id?: T;
               blockName?: T;

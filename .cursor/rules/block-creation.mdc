@@ -23,6 +23,7 @@ Use these rules when creating/updating content blocks (Payload CMS) and their Re
 - Provide sensible defaults in `config.ts` so the UI renders nicely with no CMS content.
 - Prefer `richText` for paragraphs/inline links instead of multiple paragraph fields.
 - Links: use a simple link model with `linkType` (internal/external) + `internal` relationship group + `external.href` group, and resolve with `resolveLinkHref`.
+- CTA fields pattern (recommended): under a `cta` group include `label` (text), `linkType` (select: internal/external, default internal), `internal.relation` (relationship to ['pages','blogs']), and `external.href` (text). Use `admin.condition` to show `internal` only when `linkType === 'internal'` and `external` only when `linkType === 'external'`.
 - Keep icons static in components; do not expose icon selection in config.
 - When section ordering is fixed, don’t store a `type` field—map by array order in the component (e.g., first card, second card).
 
@@ -31,6 +32,7 @@ Use these rules when creating/updating content blocks (Payload CMS) and their Re
 - Use box shadows on cards: `shadow-md hover:shadow-lg`.
 - Remove unnecessary background colors on sections unless explicitly intended.
 - Preserve existing `<a>` tag classNames when converting to CMS-driven links; use `resolveLinkHref`.
+- CTAs/links: render with `CMSLink` and compute `href` via `resolveLinkHref({ linkType, internal, external })`. Pass `external={linkType === 'external'}` so external links open safely. Keep size/variant consistent (e.g., `variant="primary"`, `size="lg"`).
 - For rich text: import `RichText` and `isLexicalEditorState` from `src/app/(frontend)/components/ui/rich-text` and render only when data is Lexical.
 
 ### Wiring
@@ -52,5 +54,6 @@ Use these rules when creating/updating content blocks (Payload CMS) and their Re
 
 ### Example Utilities
 - Link resolution: `resolveLinkHref` from `src/lib/navigation`.
+- CMS link component: `CMSLink` from `src/app/(frontend)/components/ui/cms-link`.
 - Rich text renderer: `RichText` from `src/app/(frontend)/components/ui/rich-text`.
 
