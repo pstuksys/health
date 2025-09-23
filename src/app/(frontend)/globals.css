@@ -148,6 +148,26 @@ body.mobile-menu-open {
   @apply font-light leading-tight mb-4 mt-4;
 }
 
+/* Optional color layer for rich text headings */
+.rich-text-headings-blue h1,
+.rich-text-headings-blue h2,
+.rich-text-headings-blue h3,
+.rich-text-headings-blue h4,
+.rich-text-headings-blue h5,
+.rich-text-headings-blue h6 {
+  @apply text-ds-dark-blue;
+}
+
+/* Opt-out inside hero sections */
+.hero-section .rich-text-headings-blue h1,
+.hero-section .rich-text-headings-blue h2,
+.hero-section .rich-text-headings-blue h3,
+.hero-section .rich-text-headings-blue h4,
+.hero-section .rich-text-headings-blue h5,
+.hero-section .rich-text-headings-blue h6 {
+  color: inherit;
+}
+
 .hero-section .rich-text-content h1 {
   @apply text-2xl sm:text-3xl lg:text-4xl;
 }

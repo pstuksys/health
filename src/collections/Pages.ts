@@ -30,6 +30,20 @@ import { contentBlockV2Fields } from '../app/(frontend)/components/content-block
 import { patientsSleepFields } from '../app/(frontend)/components/patients-sleep/config'
 import { corporateHealthFields } from '../app/(frontend)/components/corporate-health/config'
 import { occupationalHealthFields } from '../app/(frontend)/components/occupational-health/config'
+import { cpapBlockFields } from '../app/(frontend)/components/cpap-block/config'
+import { sleepApneaIntroStepsFields } from '../app/(frontend)/components/sleep-apnea/components/intro-steps/config'
+import { sleepApneaTestOptionsFields } from '../app/(frontend)/components/sleep-apnea/components/test-options/config'
+import { sleepApneaReportIncludesFields } from '../app/(frontend)/components/sleep-apnea/components/report-includes/config'
+import { sleepApneaAboutHSTFields } from '../app/(frontend)/components/sleep-apnea/components/about-hst/config'
+import { sleepApneaWhyIPDFields } from '../app/(frontend)/components/sleep-apnea/components/why-ipd/config'
+import { sleepApneaAfterTestFields } from '../app/(frontend)/components/sleep-apnea/components/after-test/config'
+import { cbtiBlockFields } from '../app/(frontend)/components/cbti-block/config'
+import { msltBlockFields } from '../app/(frontend)/components/mslt-block/config'
+import { mwtBlockFields } from '../app/(frontend)/components/mwt-block/config'
+import { actigraphyBlockFields } from '../app/(frontend)/components/actigraphy-block/config'
+import { vpsgBlockFields } from '../app/(frontend)/components/vpsg-block/config'
+import { vpsgEegBlockFields } from '../app/(frontend)/components/vpsg-eeg-block/config'
+import { respiratoryPolygrophyBlockFields } from '../app/(frontend)/components/respiratory-polygrophy-block/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -125,6 +139,76 @@ const occupationalHealthBlock: Block = {
   dbName: 'occupational_health',
   fields: occupationalHealthFields,
 }
+const cpapBlock: Block = {
+  slug: 'cpapBlock',
+  dbName: 'cpap_block',
+  fields: cpapBlockFields,
+}
+const sleepApneaIntroStepsBlock: Block = {
+  slug: 'sleepApneaIntroSteps',
+  dbName: 'sleep_apnea_intro_steps',
+  fields: sleepApneaIntroStepsFields,
+}
+const sleepApneaTestOptionsBlock: Block = {
+  slug: 'sleepApneaTestOptions',
+  dbName: 'sleep_apnea_test_options',
+  fields: sleepApneaTestOptionsFields,
+}
+const sleepApneaReportIncludesBlock: Block = {
+  slug: 'sleepApneaReportIncludes',
+  dbName: 'sleep_apnea_report_includes',
+  fields: sleepApneaReportIncludesFields,
+}
+const sleepApneaAboutHSTBlock: Block = {
+  slug: 'sleepApneaAboutHST',
+  dbName: 'sleep_apnea_about_hst',
+  fields: sleepApneaAboutHSTFields,
+}
+const sleepApneaWhyIPDBlock: Block = {
+  slug: 'sleepApneaWhyIPD',
+  dbName: 'sleep_apnea_why_ipd',
+  fields: sleepApneaWhyIPDFields,
+}
+const sleepApneaAfterTestBlock: Block = {
+  slug: 'sleepApneaAfterTest',
+  dbName: 'sleep_apnea_after_test',
+  fields: sleepApneaAfterTestFields,
+}
+const cbtiBlock: Block = {
+  slug: 'cbtiBlock',
+  dbName: 'cbti_block',
+  fields: cbtiBlockFields,
+}
+const msltBlock: Block = {
+  slug: 'msltBlock',
+  dbName: 'mslt_block',
+  fields: msltBlockFields,
+}
+const mwtBlock: Block = {
+  slug: 'mwtBlock',
+  dbName: 'mwt_block',
+  fields: mwtBlockFields,
+}
+const actigraphyBlock: Block = {
+  slug: 'actigraphyBlock',
+  dbName: 'actigraphy_block',
+  fields: actigraphyBlockFields,
+}
+const vpsgBlock: Block = {
+  slug: 'vpsgBlock',
+  dbName: 'vpsg_block',
+  fields: vpsgBlockFields,
+}
+const vpsgEegBlock: Block = {
+  slug: 'vpsgEegBlock',
+  dbName: 'vpsg_eeg_block',
+  fields: vpsgEegBlockFields,
+}
+const respiratoryPolygrophyBlock: Block = {
+  slug: 'respiratoryPolygrophyBlock',
+  dbName: 'respiratory_polygrophy_block',
+  fields: respiratoryPolygrophyBlockFields,
+}
 
 // All available page blocks
 const pageBlocks: Block[] = [
@@ -159,6 +243,20 @@ const pageBlocks: Block[] = [
   patientsSleepBlock,
   corporateHealthBlock,
   occupationalHealthBlock,
+  cpapBlock,
+  sleepApneaIntroStepsBlock,
+  sleepApneaTestOptionsBlock,
+  sleepApneaReportIncludesBlock,
+  sleepApneaAboutHSTBlock,
+  sleepApneaWhyIPDBlock,
+  sleepApneaAfterTestBlock,
+  cbtiBlock,
+  msltBlock,
+  mwtBlock,
+  actigraphyBlock,
+  vpsgBlock,
+  vpsgEegBlock,
+  respiratoryPolygrophyBlock,
 ]
 
 export const Pages: CollectionConfig = {

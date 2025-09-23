@@ -1,0 +1,56 @@
+---
+globs: **/*.ts,**/*.tsx
+description: Conventions for creating Payload CMS content blocks and wiring them into the app
+---
+## Block Creation Rules
+
+Use these rules when creating/updating content blocks (Payload CMS) and their React components.
+
+### Structure
+- Each block lives under `src/app/(frontend)/components/<block-name>/` (or nested folders for feature areas).
+- Inside each block folder:
+  - `component.tsx`: React UI. Export the component directly.
+  - `config.ts`: Payload block fields. Export the fields array directly.
+- Do NOT add `index.ts` or README files for blocks.
+
+### Types & Safety
+- Run `pnpm payload generate:types` after schema edits.
+- Import generated types from `@/payload-types` and use `Extract<...>` to strongly-type block props.
+- Never use `any`. Prefer precise types or `unknown` with narrowing.
+
+### Payload Config Guidelines
+- Define a `Block` in `src/collections/Pages.ts` with `slug`, optional `dbName`, and `fields` from the block’s `config.ts`.
+- Provide sensible defaults in `config.ts` so the UI renders nicely with no CMS content.
+- Prefer `richText` for paragraphs/inline links instead of multiple paragraph fields.
+- Links: use a simple link model with `linkType` (internal/external) + `internal` relationship group + `external.href` group, and resolve with `resolveLinkHref`.
+- Keep icons static in components; do not expose icon selection in config.
+- When section ordering is fixed, don’t store a `type` field—map by array order in the component (e.g., first card, second card).
+
+### Rendering Guidelines
+- Use `shadcn/ui` primitives (e.g., `Card`, `Badge`) and Tailwind tokens (e.g., `ds-dark-blue`, `ds-accent-yellow`).
+- Use box shadows on cards: `shadow-md hover:shadow-lg`.
+- Remove unnecessary background colors on sections unless explicitly intended.
+- Preserve existing `<a>` tag classNames when converting to CMS-driven links; use `resolveLinkHref`.
+- For rich text: import `RichText` and `isLexicalEditorState` from `src/app/(frontend)/components/ui/rich-text` and render only when data is Lexical.
+
+### Wiring
+- In `src/collections/Pages.ts`:
+  - Import the block’s `fields` and include in `pageBlocks`.
+- In `src/app/(frontend)/components/RenderBlocks.tsx`:
+  - Import the component and map the block slug to `({ ...b }) => <Component {...b} />`.
+- After wiring, regenerate Payload types and fix any TypeScript errors.
+
+### Styling
+- Match existing design language: premium, calm palette; light typography (`font-light`) for headings; `text-pretty`/`text-balance` where appropriate.
+- Keep badges `bg-ds-accent-yellow text-white border-0` for emphasis when needed.
+
+### Do/Don’t
+- Do: Keep components data-driven with clear fallbacks in `config.ts`.
+- Do: Normalize select options from Payload when necessary before rendering.
+- Don’t: Add README or `index.ts` files for blocks.
+- Don’t: Duplicate heading/subtitle fallbacks across blocks—prefer config defaults.
+
+### Example Utilities
+- Link resolution: `resolveLinkHref` from `src/lib/navigation`.
+- Rich text renderer: `RichText` from `src/app/(frontend)/components/ui/rich-text`.
+

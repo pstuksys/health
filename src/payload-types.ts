@@ -1773,6 +1773,1237 @@ export interface Page {
             blockName?: string | null;
             blockType: 'occupationalHealth';
           }
+        | {
+            /**
+             * Main heading for the CPAP comparison section
+             */
+            title?: string | null;
+            /**
+             * Subtitle text displayed below the main title
+             */
+            subtitle?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cpapBlock';
+          }
+        | {
+            title?: string | null;
+            subtitle?: string | null;
+            items: {
+              number: string;
+              title: string;
+              description?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+              buttonText?: string | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sleepApneaIntroSteps';
+          }
+        | {
+            title?: string | null;
+            items: {
+              key?: string | null;
+              icon?: ('home' | 'activity' | 'monitor') | null;
+              title: string;
+              badges?:
+                | {
+                    text?: string | null;
+                    tone?: ('filled' | 'subtle' | 'neutral') | null;
+                    id?: string | null;
+                  }[]
+                | null;
+              description?: string | null;
+              linkTypePrimary?: ('internal' | 'external') | null;
+              primaryInternal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              primaryExternal?: {
+                href?: string | null;
+              };
+              primaryText?: string | null;
+              linkTypeSecondary?: ('internal' | 'external') | null;
+              secondaryInternal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              secondaryExternal?: {
+                href?: string | null;
+              };
+              secondaryText?: string | null;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sleepApneaTestOptions';
+          }
+        | {
+            title?: string | null;
+            features?:
+              | {
+                  text: string;
+                  wide?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            reviewCard?: {
+              title?: string | null;
+              text?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sleepApneaReportIncludes';
+          }
+        | {
+            title?: string | null;
+            subtitle?: string | null;
+            steps?:
+              | {
+                  number?: string | null;
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            booking?: {
+              title?: string | null;
+              options?:
+                | {
+                    value?: string | null;
+                    id?: string | null;
+                  }[]
+                | null;
+              submitText?: string | null;
+              note?: string | null;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sleepApneaAboutHST';
+          }
+        | {
+            title?: string | null;
+            subtitle?: string | null;
+            items?:
+              | {
+                  title: string;
+                  text?: string | null;
+                  wide?: boolean | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sleepApneaWhyIPD';
+          }
+        | {
+            title?: string | null;
+            subtitle?: string | null;
+            sections?:
+              | {
+                  title?: string | null;
+                  richText?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: string;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sleepApneaAfterTest';
+          }
+        | {
+            heroTitle?: string | null;
+            heroSubtitle?: string | null;
+            whatIsTitle?: string | null;
+            whatIsRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            programTitle?: string | null;
+            programIntroRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            programFeatures?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            techniques?:
+              | {
+                  title?: string | null;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            whyTitle?: string | null;
+            whyRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaTitle?: string | null;
+            ctaDescription?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaPrimary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            ctaSecondary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            ctaImage?: (number | null) | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cbtiBlock';
+          }
+        | {
+            heroTitle?: string | null;
+            heroSubtitle?: string | null;
+            whatIsTitle?: string | null;
+            whatIsRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            involveTitle?: string | null;
+            involveIntroRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            testSteps?:
+              | {
+                  title?: string | null;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            involveDetailRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            whyTitle?: string | null;
+            whyIntroRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            conditions?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            whoTitle?: string | null;
+            symptoms?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            whoConclusionRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ipdTitle?: string | null;
+            ipdRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaTitle?: string | null;
+            ctaDescription?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaPrimary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            ctaSecondary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            ctaImage?: (number | null) | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'msltBlock';
+          }
+        | {
+            heroTitle?: string | null;
+            heroSubtitle?: string | null;
+            whatIsTitle?: string | null;
+            whatIsRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            importanceTitle?: string | null;
+            importanceIntroRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            testBenefits?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            whyCardTitle?: string | null;
+            whyCardDescription?: string | null;
+            whoTitle?: string | null;
+            whoRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            happensTitle?: string | null;
+            happensIntroRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            testSteps?:
+              | {
+                  title?: string | null;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            happensDetailRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ipdTitle?: string | null;
+            ipdRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaTitle?: string | null;
+            ctaDescription?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaPrimary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            ctaSecondary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            ctaImage?: (number | null) | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'mwtBlock';
+          }
+        | {
+            heroTitle?: string | null;
+            heroSubtitle?: string | null;
+            whatIsTitle?: string | null;
+            whatIsRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            whyTitle?: string | null;
+            whyIntroRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            reasons?:
+              | {
+                  title?: string | null;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            features?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            ipdTitle?: string | null;
+            ipdRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaTitle?: string | null;
+            ctaDescription?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaPrimary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            ctaSecondary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            ctaImage?: (number | null) | Media;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'actigraphyBlock';
+          }
+        | {
+            heroTitle?: string | null;
+            heroSubtitle?: string | null;
+            heroPrimary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            heroSecondary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            whatIsTitle?: string | null;
+            whatIsRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            monitoringAspects?:
+              | {
+                  label?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            whyTitle?: string | null;
+            whyIntroRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            whyCards?:
+              | {
+                  title?: string | null;
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            conditionsTitle?: string | null;
+            conditions?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            ctaBgImage?: (number | null) | Media;
+            ctaTitle?: string | null;
+            ctaLeftRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaPrimary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            ctaSecondary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'vpsgBlock';
+          }
+        | {
+            heroTitle?: string | null;
+            heroSubtitle?: string | null;
+            heroPrimary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            heroSecondary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            importanceTitle?: string | null;
+            importanceRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            whenTitle?: string | null;
+            whenIntroRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            whenReasons?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            measuresTitle?: string | null;
+            measuresIntroRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            measures?:
+              | {
+                  category?: string | null;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            measuresFootnoteRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            howTitle?: string | null;
+            howSteps?:
+              | {
+                  title?: string | null;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            reportingTitle?: string | null;
+            reportingText?: string | null;
+            whyChooseTitle?: string | null;
+            whyChoose?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            ctaBgImage?: (number | null) | Media;
+            ctaTitle?: string | null;
+            ctaRightTopRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaRightBottomRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaPrimary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            ctaSecondary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'vpsgEegBlock';
+          }
+        | {
+            heroTitle?: string | null;
+            heroSubtitle?: string | null;
+            heroPrimary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            heroSecondary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            whatIsTitle?: string | null;
+            whatIsParagraph1?: string | null;
+            whatIsParagraph2?: string | null;
+            measuresTitle?: string | null;
+            testMeasures?:
+              | {
+                  icon?: string | null;
+                  title?: string | null;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            whyTitle?: string | null;
+            whyParagraph1?: string | null;
+            whyParagraph2?: string | null;
+            whoTitle?: string | null;
+            whoIntro?: string | null;
+            symptoms?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            howTitle?: string | null;
+            howParagraph1?: string | null;
+            howParagraph2?: string | null;
+            benefits?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            ctaTitle?: string | null;
+            ctaParagraph1?: string | null;
+            ctaParagraph2?: string | null;
+            ctaPrimary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            ctaSecondary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'respiratoryPolygrophyBlock';
+          }
       )[]
     | null;
   meta?: {
@@ -3156,6 +4387,753 @@ export interface PagesSelect<T extends boolean = true> {
                           linkType?: T;
                           internal?: T;
                           external?: T;
+                        };
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cpapBlock?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        sleepApneaIntroSteps?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              items?:
+                | T
+                | {
+                    number?: T;
+                    title?: T;
+                    description?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                    buttonText?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        sleepApneaTestOptions?:
+          | T
+          | {
+              title?: T;
+              items?:
+                | T
+                | {
+                    key?: T;
+                    icon?: T;
+                    title?: T;
+                    badges?:
+                      | T
+                      | {
+                          text?: T;
+                          tone?: T;
+                          id?: T;
+                        };
+                    description?: T;
+                    linkTypePrimary?: T;
+                    primaryInternal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    primaryExternal?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                    primaryText?: T;
+                    linkTypeSecondary?: T;
+                    secondaryInternal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    secondaryExternal?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                    secondaryText?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        sleepApneaReportIncludes?:
+          | T
+          | {
+              title?: T;
+              features?:
+                | T
+                | {
+                    text?: T;
+                    wide?: T;
+                    id?: T;
+                  };
+              reviewCard?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        sleepApneaAboutHST?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              steps?:
+                | T
+                | {
+                    number?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              booking?:
+                | T
+                | {
+                    title?: T;
+                    options?:
+                      | T
+                      | {
+                          value?: T;
+                          id?: T;
+                        };
+                    submitText?: T;
+                    note?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        sleepApneaWhyIPD?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    wide?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        sleepApneaAfterTest?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              sections?:
+                | T
+                | {
+                    title?: T;
+                    richText?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cbtiBlock?:
+          | T
+          | {
+              heroTitle?: T;
+              heroSubtitle?: T;
+              whatIsTitle?: T;
+              whatIsRichText?: T;
+              programTitle?: T;
+              programIntroRichText?: T;
+              programFeatures?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              techniques?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              whyTitle?: T;
+              whyRichText?: T;
+              ctaTitle?: T;
+              ctaDescription?: T;
+              ctaPrimary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              ctaSecondary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              ctaImage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        msltBlock?:
+          | T
+          | {
+              heroTitle?: T;
+              heroSubtitle?: T;
+              whatIsTitle?: T;
+              whatIsRichText?: T;
+              involveTitle?: T;
+              involveIntroRichText?: T;
+              testSteps?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              involveDetailRichText?: T;
+              whyTitle?: T;
+              whyIntroRichText?: T;
+              conditions?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              whoTitle?: T;
+              symptoms?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              whoConclusionRichText?: T;
+              ipdTitle?: T;
+              ipdRichText?: T;
+              ctaTitle?: T;
+              ctaDescription?: T;
+              ctaPrimary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              ctaSecondary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              ctaImage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        mwtBlock?:
+          | T
+          | {
+              heroTitle?: T;
+              heroSubtitle?: T;
+              whatIsTitle?: T;
+              whatIsRichText?: T;
+              importanceTitle?: T;
+              importanceIntroRichText?: T;
+              testBenefits?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              whyCardTitle?: T;
+              whyCardDescription?: T;
+              whoTitle?: T;
+              whoRichText?: T;
+              happensTitle?: T;
+              happensIntroRichText?: T;
+              testSteps?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              happensDetailRichText?: T;
+              ipdTitle?: T;
+              ipdRichText?: T;
+              ctaTitle?: T;
+              ctaDescription?: T;
+              ctaPrimary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              ctaSecondary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              ctaImage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        actigraphyBlock?:
+          | T
+          | {
+              heroTitle?: T;
+              heroSubtitle?: T;
+              whatIsTitle?: T;
+              whatIsRichText?: T;
+              whyTitle?: T;
+              whyIntroRichText?: T;
+              reasons?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              features?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              ipdTitle?: T;
+              ipdRichText?: T;
+              ctaTitle?: T;
+              ctaDescription?: T;
+              ctaPrimary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              ctaSecondary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              ctaImage?: T;
+              id?: T;
+              blockName?: T;
+            };
+        vpsgBlock?:
+          | T
+          | {
+              heroTitle?: T;
+              heroSubtitle?: T;
+              heroPrimary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              heroSecondary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              whatIsTitle?: T;
+              whatIsRichText?: T;
+              monitoringAspects?:
+                | T
+                | {
+                    label?: T;
+                    id?: T;
+                  };
+              whyTitle?: T;
+              whyIntroRichText?: T;
+              whyCards?:
+                | T
+                | {
+                    title?: T;
+                    text?: T;
+                    id?: T;
+                  };
+              conditionsTitle?: T;
+              conditions?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              ctaBgImage?: T;
+              ctaTitle?: T;
+              ctaLeftRichText?: T;
+              ctaPrimary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              ctaSecondary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        vpsgEegBlock?:
+          | T
+          | {
+              heroTitle?: T;
+              heroSubtitle?: T;
+              heroPrimary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              heroSecondary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              importanceTitle?: T;
+              importanceRichText?: T;
+              whenTitle?: T;
+              whenIntroRichText?: T;
+              whenReasons?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              measuresTitle?: T;
+              measuresIntroRichText?: T;
+              measures?:
+                | T
+                | {
+                    category?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              measuresFootnoteRichText?: T;
+              howTitle?: T;
+              howSteps?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              reportingTitle?: T;
+              reportingText?: T;
+              whyChooseTitle?: T;
+              whyChoose?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              ctaBgImage?: T;
+              ctaTitle?: T;
+              ctaRightTopRichText?: T;
+              ctaRightBottomRichText?: T;
+              ctaPrimary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              ctaSecondary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        respiratoryPolygrophyBlock?:
+          | T
+          | {
+              heroTitle?: T;
+              heroSubtitle?: T;
+              heroPrimary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              heroSecondary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              whatIsTitle?: T;
+              whatIsParagraph1?: T;
+              whatIsParagraph2?: T;
+              measuresTitle?: T;
+              testMeasures?:
+                | T
+                | {
+                    icon?: T;
+                    title?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              whyTitle?: T;
+              whyParagraph1?: T;
+              whyParagraph2?: T;
+              whoTitle?: T;
+              whoIntro?: T;
+              symptoms?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              howTitle?: T;
+              howParagraph1?: T;
+              howParagraph2?: T;
+              benefits?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              ctaTitle?: T;
+              ctaParagraph1?: T;
+              ctaParagraph2?: T;
+              ctaPrimary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              ctaSecondary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
                         };
                   };
               id?: T;

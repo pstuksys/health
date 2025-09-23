@@ -32,7 +32,21 @@ import { FormBlock } from './form-block/component'
 import { ContentBlockV2 } from './content-block-v2/component'
 import { CorporateHealth } from './corporate-health/component'
 import { OccupationalHealth } from './occupational-health/component'
+import { CPAPBlock } from './cpap-block/component'
 import { PatientsSleep } from './patients-sleep/component'
+import { SleepApneaIntroSteps } from './sleep-apnea/components/intro-steps/component'
+import { SleepApneaTestOptions } from './sleep-apnea/components/test-options/component'
+import { SleepApneaReportIncludes } from './sleep-apnea/components/report-includes/component'
+import { SleepApneaAboutHST } from './sleep-apnea/components/about-hst/component'
+import { SleepApneaWhyIPD } from './sleep-apnea/components/why-ipd/component'
+import { SleepApneaAfterTest } from './sleep-apnea/components/after-test/component'
+import { CBTIBlock } from './cbti-block/component'
+import { MSLTBlock } from './mslt-block/component'
+import { MWTBlock } from './mwt-block/component'
+import { ActigraphyBlock } from './actigraphy-block/component'
+import { VPSGBlock } from './vpsg-block/component'
+import { VPSGEEGBlock } from './vpsg-eeg-block/component'
+import { RespiratoryPolygrophyBlock } from './respiratory-polygrophy-block/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -160,6 +174,62 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   occupationalHealth: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'occupationalHealth' }>
     return <OccupationalHealth {...(b as any)} />
+  },
+  cpapBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'cpapBlock' }>
+    return <CPAPBlock {...b} />
+  },
+  sleepApneaIntroSteps: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'sleepApneaIntroSteps' }>
+    return <SleepApneaIntroSteps {...b} />
+  },
+  sleepApneaTestOptions: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'sleepApneaTestOptions' }>
+    return <SleepApneaTestOptions {...b} />
+  },
+  sleepApneaReportIncludes: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'sleepApneaReportIncludes' }>
+    return <SleepApneaReportIncludes {...(b as any)} />
+  },
+  sleepApneaAboutHST: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'sleepApneaAboutHST' }>
+    return <SleepApneaAboutHST {...(b as any)} />
+  },
+  sleepApneaWhyIPD: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'sleepApneaWhyIPD' }>
+    return <SleepApneaWhyIPD {...(b as any)} />
+  },
+  sleepApneaAfterTest: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'sleepApneaAfterTest' }>
+    return <SleepApneaAfterTest {...(b as any)} />
+  },
+  cbtiBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'cbtiBlock' }>
+    return <CBTIBlock {...b} />
+  },
+  msltBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'msltBlock' }>
+    return <MSLTBlock {...b} />
+  },
+  mwtBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'mwtBlock' }>
+    return <MWTBlock {...(b as any)} />
+  },
+  actigraphyBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'actigraphyBlock' }>
+    return <ActigraphyBlock {...(b as any)} />
+  },
+  vpsgBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'vpsgBlock' }>
+    return <VPSGBlock {...(b as any)} />
+  },
+  vpsgEegBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'vpsgEegBlock' }>
+    return <VPSGEEGBlock {...(b as any)} />
+  },
+  respiratoryPolygrophyBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'respiratoryPolygrophyBlock' }>
+    return <RespiratoryPolygrophyBlock {...(b as any)} />
   },
 }
 

@@ -17,6 +17,7 @@ export type RichTextProps = Omit<
  * Reusable wrapper around Payload's Lexical RichText renderer.
  * - Strongly typed via React.ComponentProps<typeof PayloadRichText>
  * - Keeps API parity with upstream while allowing local styling via className
+ * - Add a class for rich text content: 'rich-text-headings-blue' this will make h tags ds-dark-blue color.
  */
 export const RichText = memo(function RichText({ className, data, ...rest }: RichTextProps) {
   return (
