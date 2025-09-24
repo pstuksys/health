@@ -47,10 +47,25 @@ import { ActigraphyBlock } from './actigraphy-block/component'
 import { VPSGBlock } from './vpsg-block/component'
 import { VPSGEEGBlock } from './vpsg-eeg-block/component'
 import { RespiratoryPolygrophyBlock } from './respiratory-polygrophy-block/component'
+import HeroBannerBlock from './hero-banner-block/component'
+import PartnershipBenefitsBlock from './partnership-benefits-block/component'
+import HighlightSectionBlock from './highlight-section-block/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
 export const blockComponents: Record<string, (block: unknown) => JSX.Element> = {
+  heroBannerBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'heroBannerBlock' }>
+    return <HeroBannerBlock {...b} />
+  },
+  partnershipBenefitsBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'partnershipBenefitsBlock' }>
+    return <PartnershipBenefitsBlock {...b} />
+  },
+  highlightSectionBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'highlightSectionBlock' }>
+    return <HighlightSectionBlock {...b} />
+  },
   contentBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'contentBlock' }>
     return <ContentBlock {...b} />
