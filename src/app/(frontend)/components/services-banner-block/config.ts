@@ -45,6 +45,22 @@ export const servicesBannerBlockFields: Field[] = [
     admin: { description: 'Text color for the section' },
   },
   {
+    name: 'overlayDarkness',
+    type: 'select',
+    defaultValue: 'medium',
+    options: [
+      { label: 'None', value: 'none' },
+      { label: 'Light (10%)', value: 'light' },
+      { label: 'Medium (30%)', value: 'medium' },
+      { label: 'Dark (50%)', value: 'dark' },
+      { label: 'Very Dark (70%)', value: 'very-dark' },
+    ],
+    admin: {
+      description:
+        'Darkness of overlay when background image is present (for better text readability)',
+    },
+  },
+  {
     name: 'options',
     type: 'array',
     required: true,

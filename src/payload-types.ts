@@ -945,6 +945,10 @@ export interface Page {
              */
             textColor?: ('white' | 'gray-100' | 'ds-dark-blue') | null;
             /**
+             * Darkness of overlay when background image is present (for better text readability)
+             */
+            overlayDarkness?: ('none' | 'light' | 'medium' | 'dark' | 'very-dark') | null;
+            /**
              * Service option cards (1-3 options)
              */
             options: {
@@ -1490,9 +1494,9 @@ export interface Page {
                */
               icon?: ('brain' | 'heart' | 'lungs' | 'moon' | 'activity' | 'stethoscope' | 'baby') | null;
               /**
-               * Badge text (e.g., Gold Standard, Focused Test)
+               * Badge text (e.g., Gold Standard, Focused Test) - optional
                */
-              badge: string;
+              badge?: string | null;
               /**
                * Text for the button (e.g., Learn more, Book now)
                */
@@ -3996,6 +4000,7 @@ export interface PagesSelect<T extends boolean = true> {
               backgroundImage?: T;
               backgroundColor?: T;
               textColor?: T;
+              overlayDarkness?: T;
               options?:
                 | T
                 | {

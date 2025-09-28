@@ -18,7 +18,7 @@ export function ContentBlockArray({
   if (!contentBlocks || contentBlocks.length === 0) return null
 
   return (
-    <section className={cn('py-12 px-4 sm:px-4 lg:px-4')}>
+    <section className={cn('py-16 px-4 sm:px-4 lg:px-4')}>
       <div className="max-w-container mx-auto">
         {title && (
           <h2 className="text-3xl sm:text-4xl font-light leading-tight text-ds-dark-blue text-center mb-12">
@@ -26,7 +26,7 @@ export function ContentBlockArray({
           </h2>
         )}
 
-        <div className="space-y-4 md:space-y-1">
+        <div className="space-y-12 md:space-y-16 lg:space-y-20">
           {contentBlocks.map((block, index) => {
             const imageUrl = mediaToUrl(block.image as any)
             const isImageLeft = block.imagePosition === 'left'
@@ -90,13 +90,13 @@ export function ContentBlockArray({
                 {/* Image Block */}
                 {imageUrl && (
                   <div className="w-full md:w-1/2 lg:w-1/2">
-                    <div className="relative w-full h-64 md:h-[400px] lg:h-[400px] overflow-hidden shadow-lg">
+                    <div className="relative w-full aspect-[3/2] sm:aspect-[4/3] md:aspect-[4/3] overflow-hidden shadow-lg">
                       <Image
                         src={imageUrl}
                         alt=""
                         fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 50vw"
+                        className="object-cover object-center"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 50vw"
                       />
                     </div>
                   </div>
