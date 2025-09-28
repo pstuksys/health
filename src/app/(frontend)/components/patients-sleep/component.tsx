@@ -26,7 +26,7 @@ export function PatientsSleep({
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
-      const navHeight = 80 // Approximate height of the sticky navigation
+      const navHeight = 80 // Approx height of the sticky navigation
       const elementPosition = element.offsetTop - navHeight
       window.scrollTo({
         top: elementPosition,
