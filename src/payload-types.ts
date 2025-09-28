@@ -1494,9 +1494,9 @@ export interface Page {
                */
               icon?: ('brain' | 'heart' | 'lungs' | 'moon' | 'activity' | 'stethoscope' | 'baby') | null;
               /**
-               * Badge text (e.g., Gold Standard, Focused Test)
+               * Badge text (e.g., Gold Standard, Focused Test) - optional
                */
-              badge: string;
+              badge?: string | null;
               /**
                * Text for the button (e.g., Learn more, Book now)
                */

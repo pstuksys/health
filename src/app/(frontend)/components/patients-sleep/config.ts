@@ -69,8 +69,8 @@ export const patientsSleepFields: Field[] = [
       {
         name: 'badge',
         type: 'text',
-        required: true,
-        admin: { description: 'Badge text (e.g., Gold Standard, Focused Test)' },
+        required: false,
+        admin: { description: 'Badge text (e.g., Gold Standard, Focused Test) - optional' },
       },
       {
         name: 'buttonText',

@@ -130,12 +130,14 @@ export function PatientsSleep({
                   <CardHeader className="space-y-4">
                     <div className="flex items-start justify-between">
                       <IconComponent className="h-8 w-8 text-ds-dark-blue flex-shrink-0" />
-                      <Badge
-                        variant="secondary"
-                        className="text-xs bg-ds-accent-yellow text-white border-0 hover:bg-ds-accent-yellow/90"
-                      >
-                        {test.badge}
-                      </Badge>
+                      {test.badge && (
+                        <Badge
+                          variant="secondary"
+                          className="text-xs bg-ds-accent-yellow text-white border-0 hover:bg-ds-accent-yellow/90"
+                        >
+                          {test.badge}
+                        </Badge>
+                      )}
                     </div>
                     <CardTitle className="text-lg leading-tight text-ds-dark-blue font-semibold">
                       {test.title}
