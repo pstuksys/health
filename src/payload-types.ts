@@ -1490,10 +1490,6 @@ export interface Page {
                */
               bestFor: string;
               /**
-               * Icon for this sleep test
-               */
-              icon?: ('brain' | 'heart' | 'lungs' | 'moon' | 'activity' | 'stethoscope' | 'baby') | null;
-              /**
                * Badge text (e.g., Gold Standard, Focused Test) - optional
                */
               badge?: string | null;
@@ -4209,7 +4205,6 @@ export interface PagesSelect<T extends boolean = true> {
                     title?: T;
                     description?: T;
                     bestFor?: T;
-                    icon?: T;
                     badge?: T;
                     buttonText?: T;
                     linkType?: T;

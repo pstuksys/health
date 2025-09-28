@@ -5,24 +5,13 @@ import { Badge } from '@/components/ui/badge'
 import { CMSLink } from '@/components/ui/cms-link'
 import { ExpandableTable } from '@/components/expandable-table/component'
 import { resolveLinkHref } from '@/lib/navigation'
-import * as LucideIcons from 'lucide-react'
+import { ArrowRight, Baby, Phone } from 'lucide-react'
 import type { Page } from '@/payload-types'
 
 type PatientsSleepProps = Extract<
   NonNullable<Page['blocks']>[number],
   { blockType: 'patientsSleep' }
 >
-
-// Icon mapping for different sleep tests
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  brain: LucideIcons.Brain,
-  heart: LucideIcons.Heart,
-  lungs: LucideIcons.BriefcaseMedical,
-  moon: LucideIcons.Moon,
-  activity: LucideIcons.Activity,
-  stethoscope: LucideIcons.Stethoscope,
-  baby: LucideIcons.Baby,
-}
 
 export function PatientsSleep({
   backgroundColor,
@@ -102,7 +91,6 @@ export function PatientsSleep({
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {(sleepTests || []).map((test, index) => {
-              const IconComponent = iconMap[test.icon || 'brain'] || LucideIcons.Brain
               const buttonHref = test.linkType
                 ? resolveLinkHref({
                     linkType: test.linkType,
@@ -123,73 +111,76 @@ export function PatientsSleep({
                 : '#'
 
               return (
-                <Card
-                  key={test.id || index}
-                  className="h-full hover:shadow-lg transition-shadow border-0 shadow-md flex flex-col"
-                >
-                  <CardHeader className="space-y-4">
-                    <div className="flex items-start justify-between">
-                      <IconComponent className="h-8 w-8 text-ds-dark-blue flex-shrink-0" />
-                      {test.badge && (
-                        <Badge
-                          variant="secondary"
-                          className="text-xs bg-ds-accent-yellow text-white border-0 hover:bg-ds-accent-yellow/90"
-                        >
-                          {test.badge}
-                        </Badge>
-                      )}
-                    </div>
-                    <CardTitle className="text-lg leading-tight text-ds-dark-blue font-semibold">
-                      {test.title}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4 flex-1 flex flex-col">
-                    <CardDescription className="text-sm leading-relaxed text-ds-pastille-green font-light">
-                      {test.description}
-                    </CardDescription>
-                    <div className="space-y-2 flex-1">
-                      <p className="text-sm font-semibold text-ds-dark-blue">Best for:</p>
-                      <p className="text-sm text-ds-pastille-green leading-relaxed font-light">
-                        {test.bestFor}
-                      </p>
-                    </div>
-                    <CMSLink
-                      href={buttonHref}
-                      size="sm"
-                      className="w-full group bg-ds-dark-blue hover:bg-ds-dark-blue/90 text-white font-semibold transition-colors mt-auto"
-                      external={test.linkType === 'external'}
-                    >
-                      {test.buttonText || 'Learn more'}
-                      <LucideIcons.ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </CMSLink>
-                  </CardContent>
-                </Card>
+                <>
+                  <Card
+                    key={test.id || index}
+                    className="h-full hover:shadow-lg transition-shadow border-0 shadow-md flex flex-col"
+                  >
+                    <CardHeader className="space-y-4">
+                      <div className="flex items-start justify-end">
+                        {test.badge && (
+                          <Badge
+                            variant="secondary"
+                            className="text-xs bg-ds-accent-yellow text-white border-0 hover:bg-ds-accent-yellow/90"
+                          >
+                            {test.badge}
+                          </Badge>
+                        )}
+                      </div>
+                      <CardTitle className="text-lg leading-tight text-ds-dark-blue font-semibold">
+                        {test.title}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4 flex-1 flex flex-col">
+                      <CardDescription className="text-sm leading-relaxed text-ds-pastille-green font-light">
+                        {test.description}
+                      </CardDescription>
+                      <div className="space-y-2 flex-1">
+                        <p className="text-sm font-semibold text-ds-dark-blue">Best for:</p>
+                        <p className="text-sm text-ds-pastille-green leading-relaxed font-light">
+                          {test.bestFor}
+                        </p>
+                      </div>
+                      <CMSLink
+                        href={buttonHref}
+                        size="sm"
+                        className="w-full group bg-ds-dark-blue hover:bg-ds-dark-blue/90 text-white font-semibold transition-colors mt-auto"
+                        external={test.linkType === 'external'}
+                      >
+                        {test.buttonText || 'Learn more'}
+                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </CMSLink>
+                    </CardContent>
+                  </Card>
+                </>
               )
             })}
+
+            {/* Pediatric Section - As last card */}
+            {pediatricSection?.enabled && (
+              <Card className="h-full bg-gradient-to-r from-ds-dark-blue/5 to-ds-pastille-green/5 border-0 shadow-md flex flex-col">
+                <CardHeader className="space-y-4">
+                  <div className="flex items-start justify-center">
+                    <Baby className="h-8 w-8 text-ds-dark-blue flex-shrink-0" />
+                  </div>
+                  <CardTitle className="text-lg leading-tight text-ds-dark-blue font-semibold text-center">
+                    {pediatricSection.title || 'Paediatric Sleep Testing'}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4 flex-1 flex flex-col">
+                  <CardDescription className="text-sm leading-relaxed text-ds-pastille-green font-light">
+                    {pediatricSection.description ||
+                      'IPD provides gentle, home-based sleep studies for children of all ages. Our experienced team helps families prepare, ensures a comfortable experience, and delivers reliable results.'}
+                  </CardDescription>
+                  <p className="text-xs text-ds-pastille-green leading-relaxed font-light mt-auto">
+                    {pediatricSection.additionalText ||
+                      "Our paediatric team is here to help if you have questions about your child's sleep test or want advice on which service is best."}
+                  </p>
+                </CardContent>
+              </Card>
+            )}
           </div>
         </section>
-
-        {/* Pediatric Section */}
-        {pediatricSection?.enabled && (
-          <section className="bg-gradient-to-r from-ds-dark-blue/5 to-ds-pastille-green/5 rounded-lg p-8">
-            <div className="flex items-start gap-6">
-              <LucideIcons.Baby className="h-12 w-12 text-ds-dark-blue flex-shrink-0 mt-1" />
-              <div className="space-y-4">
-                <h2 className="text-2xl font-light text-ds-dark-blue">
-                  {pediatricSection.title || 'Paediatric Sleep Testing'}
-                </h2>
-                <p className="text-ds-pastille-green leading-relaxed font-light">
-                  {pediatricSection.description ||
-                    'IPD provides gentle, home-based sleep studies for children of all ages. Our experienced team helps families prepare, ensures a comfortable experience, and delivers reliable results.'}
-                </p>
-                <p className="text-sm text-ds-pastille-green font-light">
-                  {pediatricSection.additionalText ||
-                    "Our paediatric team is here to help if you have questions about your child's sleep test or want advice on which service is best."}
-                </p>
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* CTA Section */}
         {ctaSection?.enabled && (
@@ -233,7 +224,7 @@ export function PatientsSleep({
                 {ctaSection.buttonText || 'Contact us to book your sleep study'}
               </CMSLink>
               <div className="flex items-center gap-2 text-sm text-ds-pastille-green font-light">
-                <LucideIcons.Phone className="h-4 w-4" />
+                <Phone className="h-4 w-4" />
                 <span>{ctaSection.phoneText || 'Or call our friendly team for advice'}</span>
               </div>
             </div>
