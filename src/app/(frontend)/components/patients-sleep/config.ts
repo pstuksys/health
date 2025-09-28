@@ -52,21 +52,6 @@ export const patientsSleepFields: Field[] = [
         admin: { description: 'What this test is best for' },
       },
       {
-        name: 'icon',
-        type: 'select',
-        defaultValue: 'brain',
-        options: [
-          { label: 'Brain', value: 'brain' },
-          { label: 'Heart', value: 'heart' },
-          { label: 'Lungs', value: 'lungs' },
-          { label: 'Moon', value: 'moon' },
-          { label: 'Activity', value: 'activity' },
-          { label: 'Stethoscope', value: 'stethoscope' },
-          { label: 'Baby', value: 'baby' },
-        ],
-        admin: { description: 'Icon for this sleep test' },
-      },
-      {
         name: 'badge',
         type: 'text',
         required: false,
