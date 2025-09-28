@@ -1736,6 +1736,10 @@ export interface Page {
                 | null;
             };
             journeySection?: {
+              /**
+               * If enabled, hides the Patient Journey section
+               */
+              disableView?: boolean | null;
               title?: string | null;
               description?: string | null;
             };
@@ -4394,6 +4398,7 @@ export interface PagesSelect<T extends boolean = true> {
               journeySection?:
                 | T
                 | {
+                    disableView?: T;
                     title?: T;
                     description?: T;
                   };
