@@ -57,23 +57,23 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   ALTER TABLE "medical_services_services" ALTER COLUMN "icon" SET DATA TYPE "public"."enum_medical_services_services_icon" USING "icon"::"public"."enum_medical_services_services_icon";
   ALTER TABLE "_medical_services_v_services" ALTER COLUMN "icon" SET DATA TYPE text;
   ALTER TABLE "_medical_services_v_services" ALTER COLUMN "icon" SET DEFAULT 'FileText'::text;
-  -- Normalize view table icon values as well prior to casting
-  UPDATE "_medical_services_v_services" SET "icon" = CASE lower("icon")
-    WHEN 'scan' THEN 'Scan'
-    WHEN 'activity' THEN 'Activity'
-    WHEN 'zap' THEN 'Activity'
-    WHEN 'heart' THEN 'Heart'
-    WHEN 'stethoscope' THEN 'Stethoscope'
-    WHEN 'check' THEN 'UserCheck'
-    WHEN 'calendar' THEN 'Calendar'
-    WHEN 'settings' THEN 'Settings'
-    WHEN 'shield' THEN 'Shield'
-    ELSE 'FileText'
-  END;
   DROP TYPE "public"."enum__medical_services_v_services_icon";
   CREATE TYPE "public"."enum__medical_services_v_services_icon" AS ENUM('FileText', 'PhoneCall', 'Beaker', 'SquareActivity', 'Activity', 'Heart', 'Scan', 'Stethoscope', 'Brain', 'Moon', 'Baby', 'TrendingUp', 'HeartHandshake', 'ClipboardList', 'UserCheck', 'List', 'UserPlus', 'BriefcaseMedical', 'BarChart3', 'Building', 'Building2');
   ALTER TABLE "_medical_services_v_services" ALTER COLUMN "icon" SET DEFAULT 'FileText'::"public"."enum__medical_services_v_services_icon";
-  ALTER TABLE "_medical_services_v_services" ALTER COLUMN "icon" SET DATA TYPE "public"."enum__medical_services_v_services_icon" USING "icon"::"public"."enum__medical_services_v_services_icon";
+  ALTER TABLE "_medical_services_v_services" ALTER COLUMN "icon" SET DATA TYPE "public"."enum__medical_services_v_services_icon" USING (
+    CASE lower("icon")
+      WHEN 'scan' THEN 'Scan'
+      WHEN 'activity' THEN 'Activity'
+      WHEN 'zap' THEN 'Activity'
+      WHEN 'heart' THEN 'Heart'
+      WHEN 'stethoscope' THEN 'Stethoscope'
+      WHEN 'check' THEN 'UserCheck'
+      WHEN 'calendar' THEN 'Calendar'
+      WHEN 'settings' THEN 'Settings'
+      WHEN 'shield' THEN 'Shield'
+      ELSE 'FileText'
+    END
+  )::"public"."enum__medical_services_v_services_icon";
   ALTER TABLE "sleep_assessment_steps_steps" ALTER COLUMN "icon" SET DEFAULT 'FileText';
   ALTER TABLE "sleep_assessment_steps" ALTER COLUMN "main_button_text" DROP DEFAULT;
   ALTER TABLE "_sleep_assessment_steps_v_steps" ALTER COLUMN "icon" SET DEFAULT 'FileText';
