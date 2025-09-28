@@ -228,6 +228,12 @@ export const occupationalHealthFields: Field[] = [
     type: 'group',
     fields: [
       {
+        name: 'disableView',
+        type: 'checkbox',
+        defaultValue: false,
+        admin: { description: 'If enabled, hides the Patient Journey section' },
+      },
+      {
         name: 'title',
         type: 'text',
         required: false,

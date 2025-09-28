@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import type { Page } from '@/payload-types'
 import { useIsMobile } from '@/hooks/use-is-mobile'
-import { useSwipe } from '@/lib/hooks/use-swipe'
+import { useSwipe } from '@/hooks/use-swipe'
 
 type TestimonialsProps = Extract<NonNullable<Page['blocks']>[number], { blockType: 'testimonials' }>
 

@@ -147,32 +147,34 @@ export function OccupationalHealth({
       </section>
 
       {/* Patient Journey Section */}
-      <section className="py-16 lg:py-20 bg-white">
-        <div className="max-w-container mx-auto px-4">
-          <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl lg:text-4xl font-light text-ds-dark-blue">
-              {journeySection?.title || 'Patient Journey'}
-            </h2>
-            <p className="text-lg text-ds-pastille-green leading-relaxed max-w-3xl mx-auto font-light">
-              {journeySection?.description ||
-                'Our comprehensive patient pathway ensures thorough assessment and appropriate treatment options for sleep disorders.'}
-            </p>
-          </div>
+      {!journeySection?.disableView && (
+        <section className="py-16 lg:py-20 bg-white">
+          <div className="max-w-container mx-auto px-4">
+            <div className="text-center space-y-4 mb-16">
+              <h2 className="text-3xl lg:text-4xl font-light text-ds-dark-blue">
+                {journeySection?.title || 'Patient Journey'}
+              </h2>
+              <p className="text-lg text-ds-pastille-green leading-relaxed max-w-3xl mx-auto font-light">
+                {journeySection?.description ||
+                  'Our comprehensive patient pathway ensures thorough assessment and appropriate treatment options for sleep disorders.'}
+              </p>
+            </div>
 
-          <div className="max-w-4xl mx-auto">
-            <div className="flex justify-center">
-              <Image
-                src="/ipd-diagram.avif"
-                alt="Patient Journey Diagram"
-                width={800}
-                height={400}
-                className="max-w-full h-auto"
-                priority
-              />
+            <div className="max-w-4xl mx-auto">
+              <div className="flex justify-center">
+                <Image
+                  src="/ipd-diagram.avif"
+                  alt="Patient Journey Diagram"
+                  width={800}
+                  height={400}
+                  className="max-w-full h-auto"
+                  priority
+                />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Occupational Health Pathway Section */}
       <section className="py-16 lg:py-24 bg-ds-light-neutral">

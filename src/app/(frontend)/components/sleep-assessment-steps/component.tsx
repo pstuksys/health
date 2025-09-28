@@ -1,5 +1,6 @@
 import { Card } from '@/components/ui/card'
-import { FileText, PhoneCall, Beaker, ArrowRight, SquareActivity } from 'lucide-react'
+import { FileText, ArrowRight } from 'lucide-react'
+import { iconMap, type IconKey } from '@/lib/icons/icon-map'
 import { CMSLink } from '../ui'
 import { resolveLinkHref } from '@/lib/navigation'
 import type { Page } from '@/payload-types'
@@ -8,16 +9,6 @@ type SleepAssessmentStepsProps = Extract<
   NonNullable<Page['blocks']>[number],
   { blockType: 'sleepAssessmentSteps' }
 >
-
-// Icon mapping
-const iconMap = {
-  FileText,
-  PhoneCall,
-  Beaker,
-  SquareActivity,
-}
-
-type IconKey = keyof typeof iconMap
 
 export function SleepAssessmentSteps({
   title,
@@ -49,6 +40,7 @@ export function SleepAssessmentSteps({
   })
 
   const mainButtonIsExternal = mainButtonLinkType === 'external'
+  const hasValidMainButton = mainButtonText && mainButtonHref
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
@@ -63,10 +55,8 @@ export function SleepAssessmentSteps({
       </div>
 
       <div className="relative mb-12">
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-6 items-stretch">
           {stepsToRender.map((step) => {
-            const Icon = iconMap[(step as any).icon as IconKey] || FileText
-
             // Use the utility function to resolve the href
             const href = resolveLinkHref({
               linkType: (step as any).linkType,
@@ -85,35 +75,48 @@ export function SleepAssessmentSteps({
                 : null,
             })
 
+            const iconKey = (step as any)?.icon as IconKey
+            const Icon = iconMap[iconKey] || FileText
+
             const isExternal = (step as any).linkType === 'external'
-            const buttonText = (step as any).buttonText || 'Learn More'
+            const buttonText = (step as any).buttonText
+            const hasValidButton = buttonText && href
+
             return (
               <Card
-                key={step.number}
-                className="p-6 bg-white border border-gray-200 hover:shadow-md transition-shadow"
+                key={`${step.number}-${step.title}`}
+                className="p-6 bg-white border border-gray-200 hover:shadow-md transition-shadow h-full"
               >
-                <div className="flex items-start gap-4">
+                <div className="flex items-start gap-4 h-full">
                   <div className="flex-shrink-0">
                     <div className="w-10 h-10 bg-ds-accent-yellow text-white rounded-full flex items-center justify-center font-bold text-lg">
                       {step.number}
                     </div>
                   </div>
 
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-ds-dark-blue mb-2">{step.title}</h3>
-                    <Icon className="w-5 h-5 text-gray-400 mb-3" />
+                  <div className="flex-1 grid grid-rows-[auto,1fr,auto] h-full min-h-0">
+                    <div>
+                      <h3 className="text-xl font-semibold text-ds-dark-blue mb-2">{step.title}</h3>
+                      <Icon className="w-5 h-5 text-gray-400 mb-3" />
+                    </div>
 
-                    <p className="text-gray-600 mb-4 leading-relaxed">{step.description}</p>
+                    <p className="text-ds-pastille-green mb-4 leading-relaxed min-h-0">
+                      {step.description}
+                    </p>
 
-                    <CMSLink
-                      variant="default"
-                      className="border border-1 border-ds-dark-blue text-ds-dark-blue bg-gray-50 hover:bg-transparent hover:text-ds-accent-yellow hover:border-ds-accent-yellow"
-                      href={href}
-                      external={isExternal}
-                    >
-                      {buttonText}
-                      <ArrowRight className="w-4 h-4 ml-2" />
-                    </CMSLink>
+                    {hasValidButton && (
+                      <div>
+                        <CMSLink
+                          variant="default"
+                          className="border border-1 border-ds-dark-blue text-ds-dark-blue bg-gray-50 hover:bg-transparent hover:text-ds-accent-yellow hover:border-ds-accent-yellow"
+                          href={href}
+                          external={isExternal}
+                        >
+                          {buttonText}
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </CMSLink>
+                      </div>
+                    )}
                   </div>
                 </div>
               </Card>
@@ -130,16 +133,18 @@ export function SleepAssessmentSteps({
         </div>
       </div>
 
-      <div className="text-center">
-        <CMSLink
-          size="sm"
-          className="bg-ds-accent-yellow hover:bg-ds-accent-yellow text-white px-8 py-3 text-lg font-medium"
-          href={mainButtonHref}
-          external={mainButtonIsExternal}
-        >
-          {mainButtonText || 'Take a few minutes to complete sleep assessment'}
-        </CMSLink>
-      </div>
+      {hasValidMainButton && (
+        <div className="text-center">
+          <CMSLink
+            size="sm"
+            className="bg-ds-accent-yellow hover:bg-ds-accent-yellow text-white px-8 py-3 text-lg font-medium"
+            href={mainButtonHref}
+            external={mainButtonIsExternal}
+          >
+            {mainButtonText}
+          </CMSLink>
+        </div>
+      )}
     </div>
   )
 }

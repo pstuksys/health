@@ -24,7 +24,7 @@ Use these rules when creating/updating content blocks (Payload CMS) and their Re
 - Prefer `richText` for paragraphs/inline links instead of multiple paragraph fields.
 - Links: use a simple link model with `linkType` (internal/external) + `internal` relationship group + `external.href` group, and resolve with `resolveLinkHref`.
 - CTA fields pattern (recommended): under a `cta` group include `label` (text), `linkType` (select: internal/external, default internal), `internal.relation` (relationship to ['pages','blogs']), and `external.href` (text). Use `admin.condition` to show `internal` only when `linkType === 'internal'` and `external` only when `linkType === 'external'`.
-- Keep icons static in components; do not expose icon selection in config.
+- Icons: by default keep icons static in components. If editor selection is needed, expose an `icon` field using the shared registry `src/lib/icons/icon-map.ts` and generate it with `createIconSelectField({ name: 'icon' })`.
 - When section ordering is fixed, don’t store a `type` field—map by array order in the component (e.g., first card, second card).
 
 ### Rendering Guidelines
@@ -56,4 +56,9 @@ Use these rules when creating/updating content blocks (Payload CMS) and their Re
 - Link resolution: `resolveLinkHref` from `src/lib/navigation`.
 - CMS link component: `CMSLink` from `src/app/(frontend)/components/ui/cms-link`.
 - Rich text renderer: `RichText` from `src/app/(frontend)/components/ui/rich-text`.
+
+### Icons
+- Use the shared icon registry `src/lib/icons/icon-map.ts` when exposing icon selection in CMS.
+- In configs, prefer `createIconSelectField({ name: 'icon' })` to generate a `select` with consistent options.
+- In components, import `{ iconMap, type IconKey }` and render with `const Icon = iconMap[icon as IconKey]`.
 
