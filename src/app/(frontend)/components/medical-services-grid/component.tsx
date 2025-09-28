@@ -1,6 +1,6 @@
 'use client'
 
-import * as LucideIcons from 'lucide-react'
+import { iconMap, type IconKey } from '@/lib/icons/icon-map'
 import Image from 'next/image'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from '@/lib/media'
@@ -9,19 +9,6 @@ type MedicalServicesGridProps = Extract<
   NonNullable<Page['blocks']>[number],
   { blockType: 'medicalServicesGrid' }
 >
-
-// Icon mapping for different medical services
-const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
-  scan: LucideIcons.Scan,
-  activity: LucideIcons.Activity,
-  zap: LucideIcons.Zap,
-  heart: LucideIcons.Heart,
-  stethoscope: LucideIcons.Stethoscope,
-  check: LucideIcons.Check,
-  calendar: LucideIcons.Calendar,
-  settings: LucideIcons.Settings,
-  shield: LucideIcons.Shield,
-}
 
 export function MedicalServicesGrid({
   title,
@@ -37,17 +24,24 @@ export function MedicalServicesGrid({
         {/* Header */}
         {(title || subtitle) && (
           <div className="text-center mb-12">
-            {subtitle && <h2 className="text-lg font-medium text-gray-600 mb-2">{subtitle}</h2>}
             {title && (
               <h1 className="text-3xl md:text-4xl font-light text-ds-dark-blue">{title}</h1>
             )}
+            {subtitle && <h2 className="text-lg font-medium text-ds-dark-blue mb-2">{subtitle}</h2>}
           </div>
         )}
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
           {(services || []).map((service, index) => {
-            const IconComponent = iconMap[service.icon || 'scan'] || LucideIcons.Scan
+            const rawIcon = (service as any)?.icon
+            let iconKey: IconKey = 'Scan'
+            if (typeof rawIcon === 'string') {
+              const pascal = (rawIcon.slice(0, 1).toUpperCase() + rawIcon.slice(1)) as IconKey
+              if (pascal in iconMap) iconKey = pascal
+              else if (rawIcon in iconMap) iconKey = rawIcon as IconKey
+            }
+            const IconComponent = iconMap[iconKey] || iconMap.Scan
             const backgroundImageUrl = mediaToUrl(service.backgroundImage)
             const hasBackgroundImage = backgroundImageUrl !== '/placeholder.svg'
 
@@ -94,7 +88,7 @@ export function MedicalServicesGrid({
                   )}
 
                   <h3
-                    className={`font-semibold uppercase tracking-wide ${
+                    className={`font-semibold uppercase tracking-wide break-words hyphens-auto text-pretty ${
                       hasBackgroundImage
                         ? 'text-white text-xl md:text-2xl'
                         : 'text-blue-900 text-lg'

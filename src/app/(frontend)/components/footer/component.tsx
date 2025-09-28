@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils'
 
 import { FaFacebook, FaLinkedin, FaTwitter, FaMailBulk, FaPhone, FaArrowUp } from 'react-icons/fa'
 import { Button } from '../ui/button'
+import { Building } from 'lucide-react'
 
 type SocialLink = { platform?: string; href: string }
 type FooterLink = { label: string; href: string }
@@ -146,7 +147,17 @@ export function Footer({
                   </span>
                 </button>
               )}
-              {contact?.address && <p className="whitespace-pre-line">{contact.address}</p>}
+              {contact?.address && (
+                <button
+                  className="flex items-center gap-2 hover:text-ds-accent-yellow transition-colors duration-200 cursor-pointer group text-left"
+                  aria-label="Copy address to clipboard"
+                >
+                  <Building className="w-[18px] h-[18px] flex-shrink-0 group-hover:text-ds-accent-yellow transition-colors duration-200" />
+                  <span className="whitespace-pre-line group-hover:text-ds-accent-yellow transition-colors duration-200">
+                    {contact.address}
+                  </span>
+                </button>
+              )}
             </div>
           </div>
         </div>

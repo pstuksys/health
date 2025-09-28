@@ -639,23 +639,5 @@ export const Pages: CollectionConfig = {
         },
       ],
     },
-    {
-      name: 'hideHeader',
-      type: 'checkbox',
-      defaultValue: false,
-      admin: { description: 'Hide the page header', position: 'sidebar' },
-    },
-    {
-      name: 'hideFooter',
-      type: 'checkbox',
-      defaultValue: false,
-      admin: { description: 'Hide the page footer', position: 'sidebar' },
-    },
-    {
-      name: 'fullWidth',
-      type: 'checkbox',
-      defaultValue: false,
-      admin: { description: 'Use full width layout instead of container', position: 'sidebar' },
-    },
   ],
 }

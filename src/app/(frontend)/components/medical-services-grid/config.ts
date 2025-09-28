@@ -1,4 +1,5 @@
 import type { Field } from 'payload'
+import { createIconSelectField } from '@/lib/icons/icon-map'
 
 export const medicalServicesGridFields: Field[] = [
   {
@@ -33,23 +34,12 @@ export const medicalServicesGridFields: Field[] = [
     maxRows: 8,
     admin: { description: 'Medical service cards (1-8 services)' },
     fields: [
-      {
+      createIconSelectField({
         name: 'icon',
-        type: 'select',
-        defaultValue: 'scan',
-        options: [
-          { label: 'Scan (MRI)', value: 'scan' },
-          { label: 'Activity (Ultrasound)', value: 'activity' },
-          { label: 'Zap (DEXA)', value: 'zap' },
-          { label: 'Heart (Body Composition)', value: 'heart' },
-          { label: 'Stethoscope (ECG)', value: 'stethoscope' },
-          { label: 'Check (Lab)', value: 'check' },
-          { label: 'Calendar (Appointments)', value: 'calendar' },
-          { label: 'Settings (Administration)', value: 'settings' },
-          { label: 'Shield (Insurance)', value: 'shield' },
-        ],
-        admin: { description: 'Icon for this medical service' },
-      },
+        label: 'Icon',
+        required: true,
+        description: 'Icon for this medical service',
+      }),
       {
         name: 'name',
         type: 'text',

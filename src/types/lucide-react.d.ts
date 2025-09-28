@@ -23,7 +23,6 @@ declare module 'lucide-react' {
   export const Heart: React.FC<React.SVGProps<SVGSVGElement>>
   export const Scan: React.FC<React.SVGProps<SVGSVGElement>>
   export const Stethoscope: React.FC<React.SVGProps<SVGSVGElement>>
-  //  FileText, PhoneCall, Beaker,
   export const FileText: React.FC<React.SVGProps<SVGSVGElement>>
   export const PhoneCall: React.FC<React.SVGProps<SVGSVGElement>>
   export const Beaker: React.FC<React.SVGProps<SVGSVGElement>>
@@ -54,4 +53,7 @@ declare module 'lucide-react' {
   export const Waves: React.FC<React.SVGProps<SVGSVGElement>>
   export const Eye: React.FC<React.SVGProps<SVGSVGElement>>
   export const EyeOff: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Building: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Build: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Building2: React.FC<React.SVGProps<SVGSVGElement>>
 }

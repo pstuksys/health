@@ -1,4 +1,5 @@
 import { Field } from 'payload'
+import { createIconSelectField } from '@/lib/icons/icon-map'
 
 export const sleepAssessmentStepsFields: Field[] = [
   {
@@ -24,11 +25,11 @@ export const sleepAssessmentStepsFields: Field[] = [
     name: 'steps',
     type: 'array',
     label: 'Assessment Steps',
-    minRows: 4,
+    minRows: 2,
     maxRows: 4,
     required: true,
     admin: {
-      description: 'Exactly 4 steps in the sleep assessment process',
+      description: '2-4 steps in the sleep assessment process',
     },
     fields: [
       {
@@ -61,9 +62,9 @@ export const sleepAssessmentStepsFields: Field[] = [
         name: 'buttonText',
         type: 'text',
         label: 'Button Text',
-        required: true,
         admin: {
-          description: 'Text displayed on the action button',
+          description:
+            'Text displayed on the action button (optional - button will be hidden if not provided)',
         },
       },
       {
@@ -113,42 +114,21 @@ export const sleepAssessmentStepsFields: Field[] = [
           condition: (data, siblingData) => siblingData?.linkType === 'external',
         },
       },
-      {
+      createIconSelectField({
         name: 'icon',
-        type: 'select',
         label: 'Icon',
         required: true,
-        options: [
-          {
-            label: 'File Text (Document)',
-            value: 'FileText',
-          },
-          {
-            label: 'Phone Call',
-            value: 'PhoneCall',
-          },
-          {
-            label: 'Beaker (Lab Test)',
-            value: 'Beaker',
-          },
-          {
-            label: 'Square Activity (Results)',
-            value: 'SquareActivity',
-          },
-        ],
-        admin: {
-          description: 'Choose an icon to represent this step',
-        },
-      },
+        description: 'Choose an icon to represent this step',
+      }),
     ],
   },
   {
     name: 'mainButtonText',
     type: 'text',
     label: 'Main Button Text',
-    defaultValue: 'Take a few minutes to complete sleep assessment',
     admin: {
-      description: 'Text for the main call-to-action button at the bottom',
+      description:
+        'Text for the main call-to-action button at the bottom (optional - button will be hidden if not provided)',
     },
   },
   {
@@ -168,6 +148,7 @@ export const sleepAssessmentStepsFields: Field[] = [
     defaultValue: 'internal',
     admin: {
       description: 'Choose whether the main button links internally or externally',
+      condition: (_data, siblingData) => siblingData?.mainButtonText,
     },
   },
   {
@@ -176,7 +157,8 @@ export const sleepAssessmentStepsFields: Field[] = [
     relationTo: 'pages',
     label: 'Main Button Internal Link',
     admin: {
-      condition: (data, siblingData) => siblingData?.mainButtonLinkType === 'internal',
+      condition: (_data, siblingData) =>
+        siblingData?.mainButtonText && siblingData?.mainButtonLinkType === 'internal',
       description: 'Select a page for the main button to link to',
     },
   },
@@ -185,7 +167,8 @@ export const sleepAssessmentStepsFields: Field[] = [
     type: 'text',
     label: 'Main Button External URL',
     admin: {
-      condition: (data, siblingData) => siblingData?.mainButtonLinkType === 'external',
+      condition: (_data, siblingData) =>
+        siblingData?.mainButtonText && siblingData?.mainButtonLinkType === 'external',
       description: 'Enter the full URL for the main button (https://example.com)',
     },
   },
@@ -195,7 +178,8 @@ export const sleepAssessmentStepsFields: Field[] = [
     label: 'Open Main Button in New Tab',
     defaultValue: false,
     admin: {
-      condition: (data, siblingData) => siblingData?.mainButtonLinkType === 'external',
+      condition: (_data, siblingData) =>
+        siblingData?.mainButtonText && siblingData?.mainButtonLinkType === 'external',
     },
   },
 ]

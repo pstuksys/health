@@ -1013,9 +1013,28 @@ export interface Page {
               /**
                * Icon for this medical service
                */
-              icon?:
-                | ('scan' | 'activity' | 'zap' | 'heart' | 'stethoscope' | 'check' | 'calendar' | 'settings' | 'shield')
-                | null;
+              icon:
+                | 'FileText'
+                | 'PhoneCall'
+                | 'Beaker'
+                | 'SquareActivity'
+                | 'Activity'
+                | 'Heart'
+                | 'Scan'
+                | 'Stethoscope'
+                | 'Brain'
+                | 'Moon'
+                | 'Baby'
+                | 'TrendingUp'
+                | 'HeartHandshake'
+                | 'ClipboardList'
+                | 'UserCheck'
+                | 'List'
+                | 'UserPlus'
+                | 'BriefcaseMedical'
+                | 'BarChart3'
+                | 'Building'
+                | 'Building2';
               /**
                * Name of the medical service (e.g., MRI, ULTRASOUND)
                */
@@ -1190,7 +1209,7 @@ export interface Page {
              */
             subtitle?: string | null;
             /**
-             * Exactly 4 steps in the sleep assessment process
+             * 2-4 steps in the sleep assessment process
              */
             steps: {
               /**
@@ -1206,9 +1225,9 @@ export interface Page {
                */
               description?: string | null;
               /**
-               * Text displayed on the action button
+               * Text displayed on the action button (optional - button will be hidden if not provided)
                */
-              buttonText: string;
+              buttonText?: string | null;
               /**
                * Choose whether the link is internal or external
                */
@@ -1225,11 +1244,32 @@ export interface Page {
               /**
                * Choose an icon to represent this step
                */
-              icon: 'FileText' | 'PhoneCall' | 'Beaker' | 'SquareActivity';
+              icon:
+                | 'FileText'
+                | 'PhoneCall'
+                | 'Beaker'
+                | 'SquareActivity'
+                | 'Activity'
+                | 'Heart'
+                | 'Scan'
+                | 'Stethoscope'
+                | 'Brain'
+                | 'Moon'
+                | 'Baby'
+                | 'TrendingUp'
+                | 'HeartHandshake'
+                | 'ClipboardList'
+                | 'UserCheck'
+                | 'List'
+                | 'UserPlus'
+                | 'BriefcaseMedical'
+                | 'BarChart3'
+                | 'Building'
+                | 'Building2';
               id?: string | null;
             }[];
             /**
-             * Text for the main call-to-action button at the bottom
+             * Text for the main call-to-action button at the bottom (optional - button will be hidden if not provided)
              */
             mainButtonText?: string | null;
             /**
@@ -3077,18 +3117,6 @@ export interface Page {
      */
     image?: (number | null) | Media;
   };
-  /**
-   * Hide the page header
-   */
-  hideHeader?: boolean | null;
-  /**
-   * Hide the page footer
-   */
-  hideFooter?: boolean | null;
-  /**
-   * Use full width layout instead of container
-   */
-  fullWidth?: boolean | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -5270,9 +5298,6 @@ export interface PagesSelect<T extends boolean = true> {
         description?: T;
         image?: T;
       };
-  hideHeader?: T;
-  hideFooter?: T;
-  fullWidth?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
