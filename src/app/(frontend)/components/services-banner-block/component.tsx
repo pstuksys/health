@@ -24,14 +24,35 @@ export function ServicesBannerBlock({
   backgroundImage,
   backgroundColor,
   textColor,
+  overlayDarkness,
   options,
 }: ServicesBannerBlockProps) {
   const bgColor = backgroundColor || 'slate-800'
   const textColorClass = textColor || 'white'
 
+  // Map overlay darkness to Tailwind classes
+  const getOverlayClass = (darkness: string | null | undefined) => {
+    switch (darkness) {
+      case 'none':
+        return 'bg-transparent'
+      case 'light':
+        return 'bg-black/10'
+      case 'medium':
+        return 'bg-black/30'
+      case 'dark':
+        return 'bg-black/50'
+      case 'very-dark':
+        return 'bg-black/70'
+      default:
+        return 'bg-black/30' // Default medium
+    }
+  }
+
   return (
     <section
-      className={`relative min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px] bg-${bgColor} overflow-hidden`}
+      className={`relative min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px] overflow-hidden ${
+        !backgroundImage ? `bg-${bgColor}` : 'bg-gray-900'
+      }`}
     >
       {/* Background Image */}
       {backgroundImage && (
@@ -44,8 +65,8 @@ export function ServicesBannerBlock({
             backgroundSize: 'cover',
           }}
         >
-          {/* Responsive overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/30 sm:bg-black/20 lg:bg-black/10" />
+          {/* Dynamic overlay for better text readability */}
+          <div className={`absolute inset-0 ${getOverlayClass(overlayDarkness)}`} />
         </div>
       )}
 

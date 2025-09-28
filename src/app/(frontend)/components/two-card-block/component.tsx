@@ -32,12 +32,13 @@ export function TwoCardBlock({ title, subtitle, items }: TwoCardBlockProps) {
             >
               <CardContent className="!p-0">
                 <div className="p-0 md:p-4">
-                  <div className="relative w-full h-48 md:h-56 overflow-hidden rounded-none md:rounded-lg">
+                  <div className="relative w-full aspect-[4/3] overflow-hidden rounded-none md:rounded-lg">
                     <Image
                       src={mediaToUrl(item.image)}
                       alt={item.title}
                       fill
-                      className="object-cover"
+                      className="object-cover object-center"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                   </div>
                 </div>
