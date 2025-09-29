@@ -41,7 +41,7 @@ export function CallToActionBannerBlock(props: CallToActionBannerBlockProps) {
         <div className="absolute inset-0 bg-black/60 z-10" />
         <Card className="relative z-20 bg-transparent border-0 text-white">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl text-balance text-white">{ctaTitle || ''}</CardTitle>
+            <CardTitle className="text-2xl text-balance text-white">{ctaTitle || ' '}</CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-6">
             {ctaDescription && isLexicalEditorState(ctaDescription) ? (
