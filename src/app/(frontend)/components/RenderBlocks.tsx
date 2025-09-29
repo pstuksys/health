@@ -50,6 +50,10 @@ import { RespiratoryPolygrophyBlock } from './respiratory-polygrophy-block/compo
 import HeroBannerBlock from './hero-banner-block/component'
 import PartnershipBenefitsBlock from './partnership-benefits-block/component'
 import HighlightSectionBlock from './highlight-section-block/component'
+import { SplitInfoGridBlock } from './split-info-grid-block/component'
+import { CardListBannerBlock } from './card-list-banner-block/component'
+import { CardBannerBlock } from './card-banner-block/component'
+import { SplitInfoListBlock } from './split-info-list-block/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -65,6 +69,22 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   highlightSectionBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'highlightSectionBlock' }>
     return <HighlightSectionBlock {...b} />
+  },
+  splitInfoGridBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'splitInfoGridBlock' }>
+    return <SplitInfoGridBlock {...b} />
+  },
+  splitInfoListBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'splitInfoListBlock' }>
+    return <SplitInfoListBlock {...b} />
+  },
+  cardListBannerBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'cardListBannerBlock' }>
+    return <CardListBannerBlock {...b} />
+  },
+  cardBannerBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'cardBannerBlock' }>
+    return <CardBannerBlock {...b} />
   },
   contentBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'contentBlock' }>
