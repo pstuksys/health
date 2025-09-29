@@ -47,6 +47,10 @@ import { respiratoryPolygrophyBlockFields } from '../app/(frontend)/components/r
 import { heroBannerBlockFields } from '../app/(frontend)/components/hero-banner-block/config'
 import { partnershipBenefitsBlockFields } from '../app/(frontend)/components/partnership-benefits-block/config'
 import { highlightSectionBlockFields } from '../app/(frontend)/components/highlight-section-block/config'
+import { splitInfoListBlockFields } from '../app/(frontend)/components/split-info-list-block/config'
+import { cardListBannerBlockFields } from '../app/(frontend)/components/card-list-banner-block/config'
+import { cardBannerBlockFields } from '../app/(frontend)/components/card-banner-block/config'
+import { splitInfoGridBlockFields } from '../app/(frontend)/components/split-info-grid-block/config'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -231,6 +235,30 @@ const highlightSectionBlock: Block = {
   fields: highlightSectionBlockFields,
 }
 
+const splitInfoGridBlock: Block = {
+  slug: 'splitInfoGridBlock',
+  dbName: 'split_info_grid_block',
+  fields: splitInfoGridBlockFields,
+}
+
+const splitInfoListBlock: Block = {
+  slug: 'splitInfoListBlock',
+  dbName: 'split_info_list_block',
+  fields: splitInfoListBlockFields,
+}
+
+const cardListBannerBlock: Block = {
+  slug: 'cardListBannerBlock',
+  dbName: 'card_list_banner_block',
+  fields: cardListBannerBlockFields,
+}
+
+const cardBannerBlock: Block = {
+  slug: 'cardBannerBlock',
+  dbName: 'card_banner_block',
+  fields: cardBannerBlockFields,
+}
+
 // All available page blocks
 const pageBlocks: Block[] = [
   contentBlock,
@@ -281,6 +309,10 @@ const pageBlocks: Block[] = [
   heroBannerBlock,
   partnershipBenefitsBlock,
   highlightSectionBlock,
+  splitInfoGridBlock,
+  splitInfoListBlock,
+  cardListBannerBlock,
+  cardBannerBlock,
 ]
 
 export const Pages: CollectionConfig = {

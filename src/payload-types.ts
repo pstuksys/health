@@ -1038,7 +1038,11 @@ export interface Page {
                 | 'BriefcaseMedical'
                 | 'BarChart3'
                 | 'Building'
-                | 'Building2';
+                | 'Building2'
+                | 'Eye'
+                | 'Waves'
+                | 'Monitor'
+                | 'Video';
               /**
                * Name of the medical service (e.g., MRI, ULTRASOUND)
                */
@@ -1269,7 +1273,11 @@ export interface Page {
                 | 'BriefcaseMedical'
                 | 'BarChart3'
                 | 'Building'
-                | 'Building2';
+                | 'Building2'
+                | 'Eye'
+                | 'Waves'
+                | 'Monitor'
+                | 'Video';
               id?: string | null;
             }[];
             /**
@@ -3110,6 +3118,155 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'highlightSectionBlock';
+          }
+        | {
+            leftTitle?: string | null;
+            leftRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            rightItems?:
+              | {
+                  label?: string | null;
+                  /**
+                   * Pick an icon for this item
+                   */
+                  icon?:
+                    | (
+                        | 'FileText'
+                        | 'PhoneCall'
+                        | 'Beaker'
+                        | 'SquareActivity'
+                        | 'Activity'
+                        | 'Heart'
+                        | 'Scan'
+                        | 'Stethoscope'
+                        | 'Brain'
+                        | 'Moon'
+                        | 'Baby'
+                        | 'TrendingUp'
+                        | 'HeartHandshake'
+                        | 'ClipboardList'
+                        | 'UserCheck'
+                        | 'List'
+                        | 'UserPlus'
+                        | 'BriefcaseMedical'
+                        | 'BarChart3'
+                        | 'Building'
+                        | 'Building2'
+                        | 'Eye'
+                        | 'Waves'
+                        | 'Monitor'
+                        | 'Video'
+                      )
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'splitInfoGridBlock';
+          }
+        | {
+            leftTitle?: string | null;
+            leftRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            listItems?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'splitInfoListBlock';
+          }
+        | {
+            title?: string | null;
+            introRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            conclusionRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            items?:
+              | {
+                  text?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cardListBannerBlock';
+          }
+        | {
+            title?: string | null;
+            richText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cardBannerBlock';
           }
       )[]
     | null;
@@ -5292,6 +5449,58 @@ export interface PagesSelect<T extends boolean = true> {
                     main?: T;
                     subtitle?: T;
                   };
+              id?: T;
+              blockName?: T;
+            };
+        splitInfoGridBlock?:
+          | T
+          | {
+              leftTitle?: T;
+              leftRichText?: T;
+              rightItems?:
+                | T
+                | {
+                    label?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        splitInfoListBlock?:
+          | T
+          | {
+              leftTitle?: T;
+              leftRichText?: T;
+              listItems?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cardListBannerBlock?:
+          | T
+          | {
+              title?: T;
+              introRichText?: T;
+              conclusionRichText?: T;
+              items?:
+                | T
+                | {
+                    text?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cardBannerBlock?:
+          | T
+          | {
+              title?: T;
+              richText?: T;
               id?: T;
               blockName?: T;
             };
