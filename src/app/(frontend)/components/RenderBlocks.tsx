@@ -53,6 +53,7 @@ import HighlightSectionBlock from './highlight-section-block/component'
 import { SplitInfoGridBlock } from './split-info-grid-block/component'
 import { CardListBannerBlock } from './card-list-banner-block/component'
 import { CardBannerBlock } from './card-banner-block/component'
+import { CallToActionBannerBlock } from './call-to-action-banner-block/component'
 import { SplitInfoListBlock } from './split-info-list-block/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
@@ -85,6 +86,10 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   cardBannerBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'cardBannerBlock' }>
     return <CardBannerBlock {...b} />
+  },
+  callToActionBannerBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'callToActionBannerBlock' }>
+    return <CallToActionBannerBlock {...b} />
   },
   contentBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'contentBlock' }>

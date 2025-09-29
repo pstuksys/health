@@ -50,6 +50,7 @@ import { highlightSectionBlockFields } from '../app/(frontend)/components/highli
 import { splitInfoListBlockFields } from '../app/(frontend)/components/split-info-list-block/config'
 import { cardListBannerBlockFields } from '../app/(frontend)/components/card-list-banner-block/config'
 import { cardBannerBlockFields } from '../app/(frontend)/components/card-banner-block/config'
+import { callToActionBannerBlockFields } from '../app/(frontend)/components/call-to-action-banner-block/config'
 import { splitInfoGridBlockFields } from '../app/(frontend)/components/split-info-grid-block/config'
 
 // Safely extract authenticated user's role without using `any`
@@ -259,6 +260,12 @@ const cardBannerBlock: Block = {
   fields: cardBannerBlockFields,
 }
 
+const callToActionBannerBlock: Block = {
+  slug: 'callToActionBannerBlock',
+  dbName: 'call_to_action_banner_block',
+  fields: callToActionBannerBlockFields,
+}
+
 // All available page blocks
 const pageBlocks: Block[] = [
   contentBlock,
@@ -313,6 +320,7 @@ const pageBlocks: Block[] = [
   splitInfoListBlock,
   cardListBannerBlock,
   cardBannerBlock,
+  callToActionBannerBlock,
 ]
 
 export const Pages: CollectionConfig = {
