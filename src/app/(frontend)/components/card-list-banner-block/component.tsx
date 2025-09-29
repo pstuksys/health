@@ -37,7 +37,7 @@ export function CardListBannerBlock(props: CardListBannerBlockProps) {
             {introRichText && isLexicalEditorState(introRichText) ? (
               <RichText
                 data={introRichText as unknown}
-                className="leading-relaxed text-ds-pastille-green"
+                className="leading-relaxed text-ds-pastille-green rich-text-headings-blue"
               />
             ) : null}
 
@@ -53,7 +53,7 @@ export function CardListBannerBlock(props: CardListBannerBlockProps) {
             {conclusionRichText && isLexicalEditorState(conclusionRichText) ? (
               <RichText
                 data={conclusionRichText as unknown}
-                className="leading-relaxed text-ds-pastille-green font-medium"
+                className="leading-relaxed text-ds-pastille-green font-medium rich-text-headings-blue"
               />
             ) : null}
           </CardContent>
