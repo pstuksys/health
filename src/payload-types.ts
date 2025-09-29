@@ -3268,6 +3268,79 @@ export interface Page {
             blockName?: string | null;
             blockType: 'cardBannerBlock';
           }
+        | {
+            ctaImage?: (number | null) | Media;
+            ctaTitle?: string | null;
+            ctaDescription?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            ctaPrimary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            ctaSecondary?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                href?: string | null;
+              };
+            };
+            footerRichText?: {
+              root: {
+                type: string;
+                children: {
+                  type: string;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'callToActionBannerBlock';
+          }
       )[]
     | null;
   meta?: {
@@ -5501,6 +5574,48 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               title?: T;
               richText?: T;
+              id?: T;
+              blockName?: T;
+            };
+        callToActionBannerBlock?:
+          | T
+          | {
+              ctaImage?: T;
+              ctaTitle?: T;
+              ctaDescription?: T;
+              ctaPrimary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              ctaSecondary?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              footerRichText?: T;
               id?: T;
               blockName?: T;
             };
