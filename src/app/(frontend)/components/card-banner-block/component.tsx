@@ -26,7 +26,7 @@ export function CardBannerBlock(props: CardBannerBlockProps) {
             {richText && isLexicalEditorState(richText) ? (
               <RichText
                 data={richText as unknown}
-                className="text-ds-pastille-green text-lg leading-relaxed"
+                className="text-ds-pastille-green text-lg leading-relaxed rich-text-headings-blue"
               />
             ) : null}
           </CardContent>
