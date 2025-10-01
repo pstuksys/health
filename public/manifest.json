@@ -1,0 +1,21 @@
+{
+  "name": "Health & Wellness Platform",
+  "short_name": "Health Platform",
+  "description": "Your comprehensive health and wellness platform for sleep disorders, diagnostics, treatments, and lifestyle tips.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3d426a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["health", "wellness", "medical"],
+  "lang": "en",
+  "dir": "ltr"
+}

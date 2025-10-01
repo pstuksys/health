@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import * as LucideIcons from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { RichText } from '../ui/rich-text'
@@ -23,6 +23,17 @@ export function ScrollableCards({ title, subtitle, cards, className }: Scrollabl
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set())
   const [isVisible, setIsVisible] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
+
+  // Memoize icon components to avoid repeated lookups
+  const iconComponents = useMemo(() => {
+    const components: Record<string, any> = {}
+    cards.forEach((card) => {
+      if (card.icon && !components[card.icon]) {
+        components[card.icon] = (LucideIcons as any)[card.icon]
+      }
+    })
+    return components
+  }, [cards])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -69,12 +80,18 @@ export function ScrollableCards({ title, subtitle, cards, className }: Scrollabl
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+      <div
+        className={`grid gap-6 md:gap-8 ${
+          cards.length <= 2
+            ? 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto'
+            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+        }`}
+      >
         {(cards || []).map((card, index) => (
           <article
             key={card.id || `${card.title}-${index}`}
             data-index={index}
-            className={`w-full bg-white rounded-lg border border-ds-pastille-green/40 overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ${
+            className={`w-full bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 ${
               visibleCards.has(index)
                 ? 'opacity-100 translate-y-0 scale-100'
                 : 'opacity-0 translate-y-8 scale-95'
@@ -86,9 +103,9 @@ export function ScrollableCards({ title, subtitle, cards, className }: Scrollabl
               {card.icon && (
                 <div className="flex items-center justify-center p-6 md:p-8">
                   {(() => {
-                    const IconComponent = (LucideIcons as any)[card.icon!]
+                    const IconComponent = iconComponents[card.icon!]
                     return IconComponent ? (
-                      <IconComponent className="w-16 h-16 md:w-20 md:h-20 text-ds-pastille-green" />
+                      <IconComponent className="w-16 h-16 md:w-20 md:h-20 text-ds-accent-yellow" />
                     ) : null
                   })()}
                 </div>
@@ -96,11 +113,11 @@ export function ScrollableCards({ title, subtitle, cards, className }: Scrollabl
 
               {/* Content Section */}
               <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
-                <h3 className="text-center text-xl md:text-2xl font-light text-ds-dark-blue mb-4 leading-tight">
+                <h3 className="text-center text-xl md:text-2xl text-ds-dark-blue mb-4 leading-tight font-semibold">
                   {card.title}
                 </h3>
 
-                <div className="text-gray-600 leading-relaxed prose prose-sm md:prose-base max-w-none">
+                <div className="text-ds-pastille-green leading-relaxed prose prose-sm md:prose-base max-w-none">
                   <RichText data={card.content} />
                 </div>
               </div>
