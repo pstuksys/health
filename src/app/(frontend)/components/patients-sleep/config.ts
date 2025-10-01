@@ -48,8 +48,8 @@ export const patientsSleepFields: Field[] = [
       {
         name: 'bestFor',
         type: 'textarea',
-        required: true,
-        admin: { description: 'What this test is best for' },
+        required: false,
+        admin: { description: 'What this test is best for (optional)' },
       },
       {
         name: 'badge',
@@ -61,8 +61,10 @@ export const patientsSleepFields: Field[] = [
         name: 'buttonText',
         type: 'text',
         required: false,
-        defaultValue: 'Learn more',
-        admin: { description: 'Text for the button (e.g., Learn more, Book now)' },
+        admin: {
+          description:
+            'Text for the button (e.g., Learn more, Book now) - leave empty to hide button',
+        },
       },
       {
         name: 'linkType',
@@ -72,7 +74,11 @@ export const patientsSleepFields: Field[] = [
           { label: 'External', value: 'external' },
         ],
         defaultValue: 'internal',
-        admin: { description: 'Type of link' },
+        admin: {
+          condition: (data, siblingData) =>
+            siblingData?.buttonText && siblingData.buttonText.trim() !== '',
+          description: 'Type of link',
+        },
       },
       {
         name: 'internalLink',
@@ -80,7 +86,10 @@ export const patientsSleepFields: Field[] = [
         relationTo: 'pages',
         required: false,
         admin: {
-          condition: (data, siblingData) => siblingData?.linkType === 'internal',
+          condition: (data, siblingData) =>
+            siblingData?.buttonText &&
+            siblingData.buttonText.trim() !== '' &&
+            siblingData?.linkType === 'internal',
           description: 'Select a page to link to',
         },
       },
@@ -89,7 +98,10 @@ export const patientsSleepFields: Field[] = [
         type: 'text',
         required: false,
         admin: {
-          condition: (data, siblingData) => siblingData?.linkType === 'external',
+          condition: (data, siblingData) =>
+            siblingData?.buttonText &&
+            siblingData.buttonText.trim() !== '' &&
+            siblingData?.linkType === 'external',
           description: 'External URL (e.g., https://example.com)',
         },
       },
