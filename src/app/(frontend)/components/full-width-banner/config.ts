@@ -15,6 +15,10 @@ export const fullWidthBannerFields: Field[] = [
         name: 'linkType',
         type: 'radio',
         defaultValue: 'internal',
+        admin: {
+          condition: (_, siblingData) =>
+            siblingData?.buttonText && siblingData?.buttonText.trim() !== '',
+        },
         options: [
           { label: 'Internal', value: 'internal' },
           { label: 'External', value: 'external' },
@@ -23,7 +27,12 @@ export const fullWidthBannerFields: Field[] = [
       {
         name: 'internal',
         type: 'group',
-        admin: { condition: (_, siblingData) => siblingData?.linkType === 'internal' },
+        admin: {
+          condition: (_, siblingData) =>
+            siblingData?.buttonText &&
+            siblingData?.buttonText.trim() !== '' &&
+            siblingData?.linkType === 'internal',
+        },
         fields: [
           {
             name: 'relation',
@@ -35,10 +44,25 @@ export const fullWidthBannerFields: Field[] = [
       {
         name: 'external',
         type: 'group',
-        admin: { condition: (_, siblingData) => siblingData?.linkType === 'external' },
+        admin: {
+          condition: (_, siblingData) =>
+            siblingData?.buttonText &&
+            siblingData?.buttonText.trim() !== '' &&
+            siblingData?.linkType === 'external',
+        },
         fields: [{ name: 'href', type: 'text' }],
       },
-      { name: 'openInNewTab', type: 'checkbox', defaultValue: false },
+      {
+        name: 'openInNewTab',
+        type: 'checkbox',
+        defaultValue: false,
+        admin: {
+          condition: (_, siblingData) =>
+            siblingData?.buttonText &&
+            siblingData?.buttonText.trim() !== '' &&
+            siblingData?.linkType === 'external',
+        },
+      },
     ],
   },
   // Single item fields (when carousel is disabled)
@@ -62,7 +86,12 @@ export const fullWidthBannerFields: Field[] = [
     name: 'linkType',
     type: 'radio',
     defaultValue: 'internal',
-    admin: { condition: (_, siblingData) => siblingData?.enableCarousel !== true },
+    admin: {
+      condition: (_, siblingData) =>
+        siblingData?.enableCarousel !== true &&
+        siblingData?.buttonText &&
+        siblingData?.buttonText.trim() !== '',
+    },
     options: [
       { label: 'Internal', value: 'internal' },
       { label: 'External', value: 'external' },
@@ -73,7 +102,10 @@ export const fullWidthBannerFields: Field[] = [
     type: 'group',
     admin: {
       condition: (_, siblingData) =>
-        siblingData?.linkType === 'internal' && siblingData?.enableCarousel !== true,
+        siblingData?.enableCarousel !== true &&
+        siblingData?.buttonText &&
+        siblingData?.buttonText.trim() !== '' &&
+        siblingData?.linkType === 'internal',
     },
     fields: [
       {
@@ -88,7 +120,10 @@ export const fullWidthBannerFields: Field[] = [
     type: 'group',
     admin: {
       condition: (_, siblingData) =>
-        siblingData?.linkType === 'external' && siblingData?.enableCarousel !== true,
+        siblingData?.enableCarousel !== true &&
+        siblingData?.buttonText &&
+        siblingData?.buttonText.trim() !== '' &&
+        siblingData?.linkType === 'external',
     },
     fields: [{ name: 'href', type: 'text' }],
   },
@@ -96,7 +131,13 @@ export const fullWidthBannerFields: Field[] = [
     name: 'openInNewTab',
     type: 'checkbox',
     defaultValue: false,
-    admin: { condition: (_, siblingData) => siblingData?.enableCarousel !== true },
+    admin: {
+      condition: (_, siblingData) =>
+        siblingData?.enableCarousel !== true &&
+        siblingData?.buttonText &&
+        siblingData?.buttonText.trim() !== '' &&
+        siblingData?.linkType === 'external',
+    },
   },
   { name: 'backgroundImage', type: 'upload', relationTo: 'media', required: true },
 ]

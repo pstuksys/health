@@ -70,25 +70,30 @@ export function SleepAssessmentFeatures({
 
   const featuresToRender = features && features.length > 0 ? features : defaultFeatures
 
-  // Resolve CTA button href using utility function
-  const ctaButtonHref = resolveLinkHref({
-    linkType: ctaButtonLinkType,
-    internal: ctaButtonInternal
-      ? {
-          relation: {
-            relationTo: 'pages',
-            value: ctaButtonInternal,
-          },
-        }
-      : null,
-    external: ctaButtonExternal
-      ? {
-          href: ctaButtonExternal,
-        }
-      : null,
-  })
+  // Check if CTA button should be displayed
+  const shouldShowCTA = ctaButtonText && ctaButtonText.trim() !== ''
 
-  const ctaButtonIsExternal = ctaButtonLinkType === 'external'
+  // Resolve CTA button href using utility function (only if CTA should be shown)
+  const ctaButtonHref = shouldShowCTA
+    ? resolveLinkHref({
+        linkType: ctaButtonLinkType,
+        internal: ctaButtonInternal
+          ? {
+              relation: {
+                relationTo: 'pages',
+                value: ctaButtonInternal,
+              },
+            }
+          : null,
+        external: ctaButtonExternal
+          ? {
+              href: ctaButtonExternal,
+            }
+          : null,
+      })
+    : ''
+
+  const ctaButtonIsExternal = shouldShowCTA && ctaButtonLinkType === 'external'
   const ctaButtonNewTab = ctaButtonIsExternal && ctaButtonOpenInNewTab
 
   return (
@@ -105,7 +110,17 @@ export function SleepAssessmentFeatures({
       </div>
 
       {/* Features Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div
+        className={`grid gap-6 mb-12 ${
+          featuresToRender.length === 1
+            ? 'grid-cols-1 max-w-md mx-auto'
+            : featuresToRender.length === 2
+              ? 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto'
+              : featuresToRender.length === 3
+                ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto'
+                : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+        }`}
+      >
         {featuresToRender.map((feature, index) => {
           const Icon = iconMap[feature.icon as IconKey] || Clock
           return (
@@ -128,21 +143,22 @@ export function SleepAssessmentFeatures({
         })}
       </div>
 
-      {/* CTA Section */}
-      <div className="text-center">
-        <CMSLink
-          size="sm"
-          className="bg-ds-accent-yellow hover:bg-ds-accent-yellow text-white px-8 py-3 text-base font-medium mb-4"
-          href={ctaButtonHref}
-          external={ctaButtonIsExternal}
-        >
-          {ctaButtonText || 'Start Your Free Sleep Assessment'}
-        </CMSLink>
-        <p className="text-sm text-ds-pastille-green">
-          {bottomText ||
-            'We analyse your answers and calculate your risk for obstructive sleep apnoea or insomnia.'}
-        </p>
-      </div>
+      {/* CTA Section - Only show if CTA button text is provided */}
+      {shouldShowCTA && (
+        <div className="text-center">
+          <CMSLink
+            size="sm"
+            className="bg-ds-accent-yellow hover:bg-ds-accent-yellow text-white px-8 py-3 text-base font-medium mb-4"
+            href={ctaButtonHref}
+            external={ctaButtonIsExternal || false}
+          >
+            {ctaButtonText}
+          </CMSLink>
+          {bottomText && bottomText.trim() !== '' && (
+            <p className="text-sm text-ds-pastille-green">{bottomText}</p>
+          )}
+        </div>
+      )}
     </div>
   )
 }

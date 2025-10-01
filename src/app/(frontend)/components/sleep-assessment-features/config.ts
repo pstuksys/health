@@ -119,6 +119,8 @@ export const sleepAssessmentFeaturesFields: Field[] = [
     ],
     defaultValue: 'internal',
     admin: {
+      condition: (_data, siblingData) =>
+        siblingData?.ctaButtonText && siblingData?.ctaButtonText.trim() !== '',
       description: 'Choose whether the CTA button links internally or externally',
     },
   },
@@ -128,7 +130,10 @@ export const sleepAssessmentFeaturesFields: Field[] = [
     relationTo: 'pages',
     label: 'CTA Button Internal Link',
     admin: {
-      condition: (data, siblingData) => siblingData?.ctaButtonLinkType === 'internal',
+      condition: (_data, siblingData) =>
+        siblingData?.ctaButtonText &&
+        siblingData?.ctaButtonText.trim() !== '' &&
+        siblingData?.ctaButtonLinkType === 'internal',
       description: 'Select a page for the CTA button to link to',
     },
   },
@@ -137,7 +142,10 @@ export const sleepAssessmentFeaturesFields: Field[] = [
     type: 'text',
     label: 'CTA Button External URL',
     admin: {
-      condition: (data, siblingData) => siblingData?.ctaButtonLinkType === 'external',
+      condition: (_data, siblingData) =>
+        siblingData?.ctaButtonText &&
+        siblingData?.ctaButtonText.trim() !== '' &&
+        siblingData?.ctaButtonLinkType === 'external',
       description: 'Enter the full URL for the CTA button (https://example.com)',
     },
   },
@@ -147,15 +155,16 @@ export const sleepAssessmentFeaturesFields: Field[] = [
     label: 'Open CTA Button in New Tab',
     defaultValue: false,
     admin: {
-      condition: (data, siblingData) => siblingData?.ctaButtonLinkType === 'external',
+      condition: (_data, siblingData) =>
+        siblingData?.ctaButtonText &&
+        siblingData?.ctaButtonText.trim() !== '' &&
+        siblingData?.ctaButtonLinkType === 'external',
     },
   },
   {
     name: 'bottomText',
     type: 'text',
     label: 'Bottom Text',
-    defaultValue:
-      'We analyse your answers and calculate your risk for obstructive sleep apnoea or insomnia.',
     admin: {
       description: 'Small text displayed below the CTA button',
     },

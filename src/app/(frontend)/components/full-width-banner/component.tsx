@@ -105,10 +105,7 @@ export function FullWidthBanner({
 
   return (
     <section
-      className={cn(
-        'relative w-full overflow-hidden',
-        enableCarousel ? 'h-96 min-h-96' : 'h-64 lg:h-72',
-      )}
+      className="relative w-full overflow-hidden h-96 sm:h-[28rem] md:h-[32rem] lg:h-[36rem] xl:h-[40rem]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={onTouchStart}
@@ -124,6 +121,11 @@ export function FullWidthBanner({
           className="object-cover"
           sizes="100vw"
           priority
+          style={{
+            aspectRatio: '3/4',
+            objectFit: 'cover',
+            objectPosition: 'center 30%',
+          }}
         />
       </div>
 
@@ -154,13 +156,8 @@ export function FullWidthBanner({
         </div>
       )}
 
-      <div className="relative z-20 flex flex-col items-center justify-center h-full px-4 py-8 text-center text-white">
-        <div
-          className={cn(
-            'flex flex-col items-center justify-center max-w-5xl w-full',
-            enableCarousel ? 'space-y-4 lg:space-y-6' : 'space-y-3 lg:space-y-4',
-          )}
-        >
+      <div className="relative z-20 flex flex-col items-center justify-center h-full px-4 py-8 sm:py-12 md:py-16 lg:py-20 text-center text-white">
+        <div className="flex flex-col items-center justify-center max-w-5xl w-full space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8">
           <h2
             className={cn(
               'font-light max-w-4xl transition-opacity duration-300 leading-tight',
@@ -202,15 +199,15 @@ export function FullWidthBanner({
               className={cn(
                 'font-light max-w-3xl opacity-90 transition-opacity duration-300 leading-relaxed',
                 enableCarousel
-                  ? 'text-xs sm:text-sm lg:text-base max-h-16 overflow-hidden line-clamp-3'
-                  : 'text-sm sm:text-base lg:text-lg line-clamp-3',
+                  ? 'text-xs sm:text-sm lg:text-base min-h-16'
+                  : 'text-sm sm:text-base lg:text-lg',
               )}
             >
               {currentContent.subtitle}
             </p>
           )}
           {currentContent.buttonText && (
-            <div className={cn('pt-2', enableCarousel && 'pt-4')}>
+            <div className="pt-4 sm:pt-6 md:pt-8">
               <CMSLink
                 variant="primary"
                 href={currentContent.href}
