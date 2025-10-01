@@ -1483,15 +1483,15 @@ export interface Page {
                */
               description: string;
               /**
-               * What this test is best for
+               * What this test is best for (optional)
                */
-              bestFor: string;
+              bestFor?: string | null;
               /**
                * Badge text (e.g., Gold Standard, Focused Test) - optional
                */
               badge?: string | null;
               /**
-               * Text for the button (e.g., Learn more, Book now)
+               * Text for the button (e.g., Learn more, Book now) - leave empty to hide button
                */
               buttonText?: string | null;
               /**

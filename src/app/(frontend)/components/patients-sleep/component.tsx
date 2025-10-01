@@ -135,21 +135,25 @@ export function PatientsSleep({
                       <CardDescription className="text-sm leading-relaxed text-ds-pastille-green font-light">
                         {test.description}
                       </CardDescription>
-                      <div className="space-y-2 flex-1">
-                        <p className="text-sm font-semibold text-ds-dark-blue">Best for:</p>
-                        <p className="text-sm text-ds-pastille-green leading-relaxed font-light">
-                          {test.bestFor}
-                        </p>
-                      </div>
-                      <CMSLink
-                        href={buttonHref}
-                        size="sm"
-                        className="w-full group bg-ds-dark-blue hover:bg-ds-dark-blue/90 text-white font-semibold transition-colors mt-auto"
-                        external={test.linkType === 'external'}
-                      >
-                        {test.buttonText || 'Learn more'}
-                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </CMSLink>
+                      {test.bestFor && (
+                        <div className="space-y-2 flex-1">
+                          <p className="text-sm font-semibold text-ds-dark-blue">Best for:</p>
+                          <p className="text-sm text-ds-pastille-green leading-relaxed font-light">
+                            {test.bestFor}
+                          </p>
+                        </div>
+                      )}
+                      {test.buttonText && test.buttonText.trim() !== '' && (
+                        <CMSLink
+                          href={buttonHref}
+                          size="sm"
+                          className="w-full group bg-ds-dark-blue hover:bg-ds-dark-blue/90 text-white font-semibold transition-colors mt-auto"
+                          external={test.linkType === 'external'}
+                        >
+                          {test.buttonText}
+                          <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                        </CMSLink>
+                      )}
                     </CardContent>
                   </Card>
                 </>
