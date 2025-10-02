@@ -140,6 +140,78 @@ export const contentBlockArrayFields: Field[] = [
           },
         ],
       },
+      {
+        name: 'btn2Text',
+        type: 'text',
+        required: false,
+        admin: {
+          description: 'Text for the second button (optional)',
+        },
+      },
+      {
+        name: 'btn2LinkType',
+        type: 'radio',
+        required: true,
+        defaultValue: 'external',
+        dbName: 'btn2_link_type',
+        options: [
+          { label: 'Internal', value: 'internal' },
+          { label: 'External', value: 'external' },
+        ],
+        admin: {
+          description: 'Choose whether to link to an internal page or external URL',
+          condition: (_, siblingData) => Boolean(siblingData?.btn2Text),
+        },
+      },
+      {
+        name: 'btn2Internal',
+        type: 'group',
+        admin: {
+          condition: (_, siblingData) =>
+            siblingData?.btn2LinkType === 'internal' && Boolean(siblingData?.btn2Text),
+        },
+        fields: [
+          {
+            name: 'relationTo',
+            type: 'select',
+            required: true,
+            dbName: 'rel_to',
+            options: [
+              { label: 'Page', value: 'pages' },
+              { label: 'Blog', value: 'blogs' },
+            ],
+            admin: {
+              description: 'Type of content to link to',
+            },
+          },
+          {
+            name: 'value',
+            type: 'text',
+            required: true,
+            admin: {
+              description: 'Slug of the page or blog to link to',
+            },
+          },
+        ],
+      },
+      {
+        name: 'btn2External',
+        type: 'group',
+        admin: {
+          condition: (_, siblingData) =>
+            siblingData?.btn2LinkType === 'external' && Boolean(siblingData?.btn2Text),
+        },
+        fields: [
+          {
+            name: 'href',
+            type: 'text',
+            required: true,
+            admin: {
+              description: 'External URL (e.g., https://example.com)',
+            },
+          },
+        ],
+      },
     ],
   },
 ]

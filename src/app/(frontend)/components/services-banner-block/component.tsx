@@ -19,6 +19,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 }
 
 export function ServicesBannerBlock({
+  id,
   title,
   subtitle,
   backgroundImage,
@@ -50,6 +51,7 @@ export function ServicesBannerBlock({
 
   return (
     <section
+      id={id || 'ServicesBannerBlock'}
       className={`relative min-h-[400px] sm:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px] overflow-hidden ${
         !backgroundImage ? `bg-${bgColor}` : 'bg-gray-900'
       }`}

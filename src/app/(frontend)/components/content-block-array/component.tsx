@@ -62,27 +62,53 @@ export function ContentBlockArray({
                     <p className="text-ds-pastille-green text-base lg:text-lg leading-relaxed mb-6">
                       {block.description}
                     </p>
-                    {block.buttonText && (
-                      <CMSLink
-                        href={resolveLinkHref({
-                          linkType: block.linkType || 'external',
-                          internal: block.internal
-                            ? {
-                                relation: {
-                                  relationTo: block.internal.relationTo,
-                                  value: { slug: block.internal.value },
-                                },
-                              }
-                            : undefined,
-                          external: block.external,
-                        })}
-                        variant="ghost"
-                        size="lg"
-                        external={block.linkType === 'external'}
-                        className="!text-ds-dark-blue hover:!text-ds-accent-yellow"
-                      >
-                        {block.buttonText}
-                      </CMSLink>
+                    {(block.buttonText || block.btn2Text) && (
+                      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                        {block.buttonText && (
+                          <CMSLink
+                            href={resolveLinkHref({
+                              linkType: block.linkType || 'external',
+                              internal: block.internal
+                                ? {
+                                    relation: {
+                                      relationTo: block.internal.relationTo,
+                                      value: { slug: block.internal.value },
+                                    },
+                                  }
+                                : undefined,
+                              external: block.external,
+                            })}
+                            variant="ghost"
+                            size="lg"
+                            external={block.linkType === 'external'}
+                            className="!text-ds-dark-blue hover:!text-ds-accent-yellow"
+                          >
+                            {block.buttonText}
+                          </CMSLink>
+                        )}
+                        {block.btn2Text && (
+                          <CMSLink
+                            href={resolveLinkHref({
+                              linkType: block.btn2LinkType || 'external',
+                              internal: block.btn2Internal
+                                ? {
+                                    relation: {
+                                      relationTo: block.btn2Internal.relationTo,
+                                      value: { slug: block.btn2Internal.value },
+                                    },
+                                  }
+                                : undefined,
+                              external: block.btn2External,
+                            })}
+                            variant="ghost"
+                            size="lg"
+                            external={block.btn2LinkType === 'external'}
+                            className="!text-ds-dark-blue hover:!text-ds-accent-yellow"
+                          >
+                            {block.btn2Text}
+                          </CMSLink>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
