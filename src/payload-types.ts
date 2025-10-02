@@ -260,7 +260,7 @@ export interface Page {
   /**
    * Text color scheme for hero content
    */
-  heroTextColor?: ('auto' | 'light' | 'dark') | null;
+  heroTextColor?: ('auto' | 'light' | 'dark' | 'green' | 'yellow') | null;
   /**
    * Add a gradient overlay for better text readability
    */

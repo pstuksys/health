@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import Image from 'next/image'
 import { ChevronDown } from 'lucide-react'
 import { CMSLink } from '@/app/(frontend)/components/ui/cms-link'
+import { getHeroTextColorClass, type HeroTextColor } from '@/lib/hero-config'
 import { cn } from '@/lib/utils'
 import { ConsistentHTML } from '../safe-html/component'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
@@ -18,7 +19,7 @@ type HeroSectionProps = {
   ctaButton?: CTAButton
   secondaryCTA?: CTAButton
   gradientOverlay?: boolean
-  textColor?: 'auto' | 'light' | 'dark'
+  textColor?: HeroTextColor
   ctaAlignment?: 'left' | 'center' | 'right'
   fullHeight?: boolean
   showStatsCard?: boolean
@@ -49,6 +50,11 @@ export function HeroSection({
   const [isVisible, setIsVisible] = useState(false)
   const [hasScrolled, setHasScrolled] = useState(false)
 
+  // Memoize text color class to avoid recalculating multiple times
+  const textColorClass = useMemo(() => {
+    return getHeroTextColorClass(textColor, Boolean(backgroundImage || gradientOverlay))
+  }, [textColor, backgroundImage, gradientOverlay])
+
   // Trigger fade-in animation on mount
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -78,20 +84,6 @@ export function HeroSection({
         nextElement.scrollIntoView({ behavior: 'smooth' })
       }
     }
-  }
-  // Map text color values to CSS classes
-  const getTextColorClass = (isTitle: boolean = true) => {
-    if (textColor === 'light') {
-      return isTitle ? 'text-white' : 'text-gray-200'
-    }
-    if (textColor === 'dark') {
-      return isTitle ? 'text-ds-dark-blue' : 'text-ds-pastille-green'
-    }
-    // Auto - based on background
-    if (backgroundImage || gradientOverlay) {
-      return isTitle ? 'text-white' : 'text-gray-200'
-    }
-    return isTitle ? 'text-ds-dark-blue' : 'text-ds-pastille-green'
   }
 
   // Map CTA alignment to CSS classes
@@ -150,9 +142,8 @@ export function HeroSection({
                 <RichText
                   data={subtitle}
                   className={cn(
-                    '',
-                    // 'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
-                    getTextColorClass(false),
+                    'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
+                    textColorClass,
                   )}
                 />
               ) : (
@@ -161,7 +152,7 @@ export function HeroSection({
                   html={(typeof subtitle === 'string' ? subtitle : '') || ''}
                   className={cn(
                     'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
-                    getTextColorClass(false),
+                    textColorClass,
                   )}
                 />
               ))}
@@ -192,9 +183,6 @@ export function HeroSection({
                     className={cn(
                       'w-full sm:w-auto text-center',
                       'border-white text-white hover:bg-white hover:text-ds-dark-blue',
-                      // getTextColorClass(false) === 'text-white'
-                      // ? 'border-white text-white hover:bg-white hover:text-ds-dark-blue'
-                      // : 'border-ds-dark-blue text-ds-dark-blue hover:bg-ds-dark-blue hover:text-white',
                     )}
                     external={secondaryCTA.href.startsWith('http')}
                   >
@@ -233,18 +221,13 @@ export function HeroSection({
             )}
             aria-label="Scroll to next section"
           >
-            <span
-              className={cn(
-                'text-sm font-light tracking-wider uppercase',
-                getTextColorClass(false),
-              )}
-            >
+            <span className={cn('text-sm font-light tracking-wider uppercase', textColorClass)}>
               Scroll
             </span>
             <ChevronDown
               className={cn(
                 'w-6 h-6 animate-bounce',
-                getTextColorClass(false).replace('text-gray-200', 'text-white'),
+                textColorClass.replace('text-gray-200', 'text-white'),
               )}
             />
           </button>

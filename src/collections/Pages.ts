@@ -1,4 +1,5 @@
 import type { CollectionConfig, Block } from 'payload'
+import { HERO_TEXT_COLOR_OPTIONS } from '../lib/hero-config'
 import { contentBlockFields } from '../app/(frontend)/components/content-block/config'
 import { cardSectionFields } from '../app/(frontend)/components/card-section/config'
 import { mediaBlockFields } from '../app/(frontend)/components/media-block/config'
@@ -431,11 +432,7 @@ export const Pages: CollectionConfig = {
               name: 'heroTextColor',
               type: 'select',
               label: 'Hero Text Color',
-              options: [
-                { label: 'Auto (based on background)', value: 'auto' },
-                { label: 'Light (white/light)', value: 'light' },
-                { label: 'Dark (dark text)', value: 'dark' },
-              ],
+              options: HERO_TEXT_COLOR_OPTIONS,
               defaultValue: 'auto',
               admin: {
                 description: 'Text color scheme for hero content',

@@ -2,6 +2,7 @@ import React, { JSX } from 'react'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from '@/lib/media'
 import { resolveLinkHref } from '@/lib/navigation'
+import { normalizeHeroTextColor, type HeroTextColor } from '@/lib/hero-config'
 import { ContentBlock } from './content-block/component'
 import { CardSection } from './card-section/component'
 import { MediaBlock } from './media-block/component'
@@ -335,10 +336,7 @@ export function deriveGlobalHeroProps(page: Page) {
 
   // Extract hero configuration from Pages collection fields with proper type narrowing
   const rawTextColor = (page as any)?.heroTextColor
-  const heroTextColor: 'auto' | 'light' | 'dark' =
-    rawTextColor === 'auto' || rawTextColor === 'light' || rawTextColor === 'dark'
-      ? rawTextColor
-      : 'auto'
+  const heroTextColor: HeroTextColor = normalizeHeroTextColor(rawTextColor)
 
   const heroGradientOverlay = Boolean((page as any)?.heroGradientOverlay)
 
