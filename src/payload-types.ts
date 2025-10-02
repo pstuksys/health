@@ -260,7 +260,7 @@ export interface Page {
   /**
    * Text color scheme for hero content
    */
-  heroTextColor?: ('auto' | 'light' | 'dark') | null;
+  heroTextColor?: ('auto' | 'light' | 'dark' | 'green' | 'yellow') | null;
   /**
    * Add a gradient overlay for better text readability
    */
@@ -560,13 +560,13 @@ export interface Page {
             blockType: 'aboutUsSection';
           }
         | {
+            id?: string | null;
             title: string;
             layout?: ('grid' | 'carousel') | null;
             partners: {
               logo: number | Media;
               id?: string | null;
             }[];
-            id?: string | null;
             blockName?: string | null;
             blockType: 'partnersBlock';
           }
@@ -913,6 +913,7 @@ export interface Page {
             blockType: 'singleCard';
           }
         | {
+            id?: string | null;
             /**
              * Main heading for the services banner section
              */
@@ -982,7 +983,6 @@ export interface Page {
               };
               id?: string | null;
             }[];
-            id?: string | null;
             blockName?: string | null;
             blockType: 'servicesBannerBlock';
           }
@@ -1098,6 +1098,30 @@ export interface Page {
                 value: string;
               };
               external?: {
+                /**
+                 * External URL (e.g., https://example.com)
+                 */
+                href: string;
+              };
+              /**
+               * Text for the second button (optional)
+               */
+              btn2Text?: string | null;
+              /**
+               * Choose whether to link to an internal page or external URL
+               */
+              btn2LinkType?: ('internal' | 'external') | null;
+              btn2Internal?: {
+                /**
+                 * Type of content to link to
+                 */
+                relationTo: 'pages' | 'blogs';
+                /**
+                 * Slug of the page or blog to link to
+                 */
+                value: string;
+              };
+              btn2External?: {
                 /**
                  * External URL (e.g., https://example.com)
                  */
@@ -3330,6 +3354,65 @@ export interface Page {
             blockName?: string | null;
             blockType: 'callToActionBannerBlock';
           }
+        | {
+            /**
+             * Main heading for the grid cards section
+             */
+            title?: string | null;
+            /**
+             * Subtitle text below the main title (optional)
+             */
+            subtitle?: string | null;
+            /**
+             * Grid cards (1-12 cards)
+             */
+            cards: {
+              /**
+               * Title of the card
+               */
+              title: string;
+              /**
+               * Description of the card
+               */
+              description: string;
+              /**
+               * What this card is best for (optional)
+               */
+              bestFor?: string | null;
+              /**
+               * Badge text (e.g., Gold Standard, Featured) - optional
+               */
+              badge?: string | null;
+              /**
+               * Text for the button (e.g., Learn more, Book now) - leave empty to hide button
+               */
+              buttonText?: string | null;
+              /**
+               * Type of link
+               */
+              linkType?: ('internal' | 'external') | null;
+              /**
+               * Select a page to link to
+               */
+              internalLink?: (number | null) | Page;
+              /**
+               * External URL (e.g., https://example.com)
+               */
+              externalLink?: string | null;
+              id?: string | null;
+            }[];
+            /**
+             * Number of columns in the grid
+             */
+            gridColumns?: ('2' | '3' | '4') | null;
+            /**
+             * Background color for the section
+             */
+            backgroundColor?: ('white' | 'ds-light-neutral' | 'blue-50' | 'green-50') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'gridCards';
+          }
       )[]
     | null;
   meta?: {
@@ -3906,6 +3989,7 @@ export interface PagesSelect<T extends boolean = true> {
         partnersBlock?:
           | T
           | {
+              id?: T;
               title?: T;
               layout?: T;
               partners?:
@@ -3914,7 +3998,6 @@ export interface PagesSelect<T extends boolean = true> {
                     logo?: T;
                     id?: T;
                   };
-              id?: T;
               blockName?: T;
             };
         partnersTextBlock?:
@@ -4197,6 +4280,7 @@ export interface PagesSelect<T extends boolean = true> {
         servicesBannerBlock?:
           | T
           | {
+              id?: T;
               title?: T;
               subtitle?: T;
               backgroundImage?: T;
@@ -4227,7 +4311,6 @@ export interface PagesSelect<T extends boolean = true> {
                         };
                     id?: T;
                   };
-              id?: T;
               blockName?: T;
             };
         medicalServicesGrid?:
@@ -4269,6 +4352,19 @@ export interface PagesSelect<T extends boolean = true> {
                           value?: T;
                         };
                     external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                    btn2Text?: T;
+                    btn2LinkType?: T;
+                    btn2Internal?:
+                      | T
+                      | {
+                          relationTo?: T;
+                          value?: T;
+                        };
+                    btn2External?:
                       | T
                       | {
                           href?: T;
@@ -5592,6 +5688,29 @@ export interface PagesSelect<T extends boolean = true> {
                         };
                   };
               footerRichText?: T;
+              id?: T;
+              blockName?: T;
+            };
+        gridCards?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              cards?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    bestFor?: T;
+                    badge?: T;
+                    buttonText?: T;
+                    linkType?: T;
+                    internalLink?: T;
+                    externalLink?: T;
+                    id?: T;
+                  };
+              gridColumns?: T;
+              backgroundColor?: T;
               id?: T;
               blockName?: T;
             };

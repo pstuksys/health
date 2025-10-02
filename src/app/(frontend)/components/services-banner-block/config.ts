@@ -2,6 +2,13 @@ import type { Field } from 'payload'
 
 export const servicesBannerBlockFields: Field[] = [
   {
+    name: 'id',
+    type: 'text',
+    required: false,
+    defaultValue: 'ServicesBannerBlock',
+    admin: { description: 'Unique identifier for anchor linking (e.g., #services)' },
+  },
+  {
     name: 'title',
     type: 'text',
     required: false,

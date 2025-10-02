@@ -6,7 +6,7 @@ import type { Page } from '@/payload-types'
 // Extract the partnersBlock type from Page blocks
 type PartnersBlockType = NonNullable<Page['blocks']>[number] & { blockType: 'partnersBlock' }
 
-type PartnersBlockProps = Omit<PartnersBlockType, 'blockType' | 'blockName' | 'id'> & {
+type PartnersBlockProps = Omit<PartnersBlockType, 'blockType' | 'blockName'> & {
   className?: string
 }
 
@@ -18,10 +18,16 @@ const isSvg = (logo: any): boolean => {
   return false
 }
 
-export function PartnersBlock({ title, partners, layout = 'grid', className }: PartnersBlockProps) {
+export function PartnersBlock({
+  id,
+  title,
+  partners,
+  layout = 'grid',
+  className,
+}: PartnersBlockProps) {
   if (layout === 'carousel') {
     return (
-      <section className={cn('py-6 px-4 sm:px-4 lg:px-4', className)}>
+      <section id={id || 'PartnersBlock'} className={cn('py-6 px-4 sm:px-4 lg:px-4', className)}>
         <div className="max-w-container mx-auto">
           <h2 className="text-3xl sm:text-4xl font-light leading-tight text-ds-dark-blue text-center mb-12">
             {title}
@@ -56,7 +62,7 @@ export function PartnersBlock({ title, partners, layout = 'grid', className }: P
   }
 
   return (
-    <section className={cn('py-6 px-4 sm:px-4 lg:px-4', className)}>
+    <section id={id || 'PartnersBlock'} className={cn('py-6 px-4 sm:px-4 lg:px-4', className)}>
       <div className="max-w-container mx-auto">
         <h2 className="text-3xl sm:text-4xl font-light leading-tight text-ds-dark-blue text-center mb-12">
           {title}

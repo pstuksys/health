@@ -1,4 +1,5 @@
 import type { CollectionConfig, Block } from 'payload'
+import { HERO_TEXT_COLOR_OPTIONS } from '../lib/hero-config'
 import { contentBlockFields } from '../app/(frontend)/components/content-block/config'
 import { cardSectionFields } from '../app/(frontend)/components/card-section/config'
 import { mediaBlockFields } from '../app/(frontend)/components/media-block/config'
@@ -11,7 +12,7 @@ import { testimonialsFields } from '../app/(frontend)/components/testimonials/co
 import { teamCardsFields } from '../app/(frontend)/components/team-cards/config'
 import { blogPostCardsFields } from '../app/(frontend)/components/blog-post-cards/config'
 import { carouselFields } from '../app/(frontend)/components/carousel/config'
-import { twoCardBlockFields } from '../app/(frontend)/components/two-card-block'
+import { twoCardBlockFields } from '../app/(frontend)/components/two-card-block/config'
 import { scrollPostCardsFields } from '../app/(frontend)/components/scroll-post-cards/config'
 import { scrollableCards } from '../app/(frontend)/components/scrollable-cards/config'
 import { fullWidthBannerFields } from '../app/(frontend)/components/full-width-banner/config'
@@ -51,6 +52,7 @@ import { splitInfoListBlockFields } from '../app/(frontend)/components/split-inf
 import { cardListBannerBlockFields } from '../app/(frontend)/components/card-list-banner-block/config'
 import { cardBannerBlockFields } from '../app/(frontend)/components/card-banner-block/config'
 import { callToActionBannerBlockFields } from '../app/(frontend)/components/call-to-action-banner-block/config'
+import { gridCardsFields } from '../app/(frontend)/components/grid-cards/config'
 import { splitInfoGridBlockFields } from '../app/(frontend)/components/split-info-grid-block/config'
 
 // Safely extract authenticated user's role without using `any`
@@ -266,6 +268,12 @@ const callToActionBannerBlock: Block = {
   fields: callToActionBannerBlockFields,
 }
 
+const gridCardsBlock: Block = {
+  slug: 'gridCards',
+  dbName: 'grid_cards',
+  fields: gridCardsFields,
+}
+
 // All available page blocks
 const pageBlocks: Block[] = [
   contentBlock,
@@ -321,6 +329,7 @@ const pageBlocks: Block[] = [
   cardListBannerBlock,
   cardBannerBlock,
   callToActionBannerBlock,
+  gridCardsBlock,
 ]
 
 export const Pages: CollectionConfig = {
@@ -423,11 +432,7 @@ export const Pages: CollectionConfig = {
               name: 'heroTextColor',
               type: 'select',
               label: 'Hero Text Color',
-              options: [
-                { label: 'Auto (based on background)', value: 'auto' },
-                { label: 'Light (white/light)', value: 'light' },
-                { label: 'Dark (dark text)', value: 'dark' },
-              ],
+              options: HERO_TEXT_COLOR_OPTIONS,
               defaultValue: 'auto',
               admin: {
                 description: 'Text color scheme for hero content',

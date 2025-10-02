@@ -2,6 +2,7 @@ import React, { JSX } from 'react'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from '@/lib/media'
 import { resolveLinkHref } from '@/lib/navigation'
+import { normalizeHeroTextColor, type HeroTextColor } from '@/lib/hero-config'
 import { ContentBlock } from './content-block/component'
 import { CardSection } from './card-section/component'
 import { MediaBlock } from './media-block/component'
@@ -15,7 +16,7 @@ import { BlogPostCards } from './blog-post-cards/component'
 import { Carousel } from './carousel/component'
 import { ScrollPostCards } from './scroll-post-cards/component'
 import { ScrollableCards } from './scrollable-cards/component'
-import { TwoCardBlock } from './two-card-block'
+import { TwoCardBlock } from './two-card-block/component'
 import { TeamCards } from './team-cards/component'
 import { FullWidthBanner } from './full-width-banner/component'
 import { ParallaxHero } from './parallax-hero/component'
@@ -55,6 +56,7 @@ import { CardListBannerBlock } from './card-list-banner-block/component'
 import { CardBannerBlock } from './card-banner-block/component'
 import { CallToActionBannerBlock } from './call-to-action-banner-block/component'
 import { SplitInfoListBlock } from './split-info-list-block/component'
+import { GridCards } from './grid-cards/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -90,6 +92,10 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   callToActionBannerBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'callToActionBannerBlock' }>
     return <CallToActionBannerBlock {...b} />
+  },
+  gridCards: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'gridCards' }>
+    return <GridCards {...b} />
   },
   contentBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'contentBlock' }>
@@ -330,10 +336,7 @@ export function deriveGlobalHeroProps(page: Page) {
 
   // Extract hero configuration from Pages collection fields with proper type narrowing
   const rawTextColor = (page as any)?.heroTextColor
-  const heroTextColor: 'auto' | 'light' | 'dark' =
-    rawTextColor === 'auto' || rawTextColor === 'light' || rawTextColor === 'dark'
-      ? rawTextColor
-      : 'auto'
+  const heroTextColor: HeroTextColor = normalizeHeroTextColor(rawTextColor)
 
   const heroGradientOverlay = Boolean((page as any)?.heroGradientOverlay)
 
