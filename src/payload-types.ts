@@ -1797,6 +1797,10 @@ export interface Page {
                 | null;
             };
             servicesSection?: {
+              /**
+               * If enabled, hides the Services section
+               */
+              disableView?: boolean | null;
               title?: string | null;
               description?: string | null;
               services?:
@@ -1819,6 +1823,10 @@ export interface Page {
                 | null;
             };
             ctaSection?: {
+              /**
+               * If enabled, hides the CTA section
+               */
+              disableView?: boolean | null;
               title?: string | null;
               description?: string | null;
               primaryCta?: {
@@ -4738,6 +4746,7 @@ export interface PagesSelect<T extends boolean = true> {
               servicesSection?:
                 | T
                 | {
+                    disableView?: T;
                     title?: T;
                     description?: T;
                     services?:
@@ -4768,6 +4777,7 @@ export interface PagesSelect<T extends boolean = true> {
               ctaSection?:
                 | T
                 | {
+                    disableView?: T;
                     title?: T;
                     description?: T;
                     primaryCta?:

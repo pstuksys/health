@@ -267,111 +267,117 @@ export function OccupationalHealth({
       </section>
 
       {/* Related Services Section */}
-      <section className="bg-white py-16">
-        <div className="max-w-container mx-auto px-4">
-          <div className="text-center space-y-4 mb-12">
-            <h2 className="text-3xl lg:text-4xl font-light text-ds-dark-blue">
-              {servicesSection?.title || 'Related Pages'}
-            </h2>
-            <p className="text-lg text-ds-pastille-green font-light">
-              {servicesSection?.description ||
-                'Explore our comprehensive range of sleep diagnostic services'}
-            </p>
-          </div>
+      {!servicesSection?.disableView && (
+        <section className="bg-white py-16">
+          <div className="max-w-container mx-auto px-4">
+            <div className="text-center space-y-4 mb-12">
+              <h2 className="text-3xl lg:text-4xl font-light text-ds-dark-blue">
+                {servicesSection?.title || 'Related Pages'}
+              </h2>
+              <p className="text-lg text-ds-pastille-green font-light">
+                {servicesSection?.description ||
+                  'Explore our comprehensive range of sleep diagnostic services'}
+              </p>
+            </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {(
-              servicesSection?.services || [
-                {
-                  icon: 'stethoscope',
-                  title: 'MWT',
-                  description: 'Maintenance of Wakefulness Testing',
-                },
-                { icon: 'file-text', title: 'PSG', description: 'Polysomnography Sleep Studies' },
-                { icon: 'heart-handshake', title: 'CPAP', description: 'CPAP Therapy Services' },
-              ]
-            ).map((service, index) => {
-              const IconComponent =
-                service.icon === 'stethoscope'
-                  ? Stethoscope
-                  : service.icon === 'file-text'
-                    ? FileText
-                    : service.icon === 'heart-handshake'
-                      ? HeartHandshake
-                      : Stethoscope
+            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              {(
+                servicesSection?.services || [
+                  {
+                    icon: 'stethoscope',
+                    title: 'MWT',
+                    description: 'Maintenance of Wakefulness Testing',
+                  },
+                  { icon: 'file-text', title: 'PSG', description: 'Polysomnography Sleep Studies' },
+                  { icon: 'heart-handshake', title: 'CPAP', description: 'CPAP Therapy Services' },
+                ]
+              ).map((service, index) => {
+                const IconComponent =
+                  service.icon === 'stethoscope'
+                    ? Stethoscope
+                    : service.icon === 'file-text'
+                      ? FileText
+                      : service.icon === 'heart-handshake'
+                        ? HeartHandshake
+                        : Stethoscope
 
-              return (
-                <div
-                  key={index}
-                  className="bg-white p-6 rounded-lg border border-ds-pastille-green/20 shadow-sm text-center flex flex-col"
-                >
-                  <IconComponent className="h-12 w-12 text-ds-dark-blue mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-ds-dark-blue mb-2">{service.title}</h3>
-                  <p className="text-ds-pastille-green mb-4 font-light flex-grow">
-                    {service.description}
-                  </p>
-                  {service.cta ? (
-                    <CMSLink
-                      href={resolveHref(service.cta)}
-                      variant="outline"
-                      className="text-white bg-ds-accent-yellow hover:text-white mt-auto"
-                      external={service.cta.linkType === 'external'}
-                    >
-                      {service.cta.text || 'Learn More'} →
-                    </CMSLink>
-                  ) : (
-                    <Button
-                      variant="outline"
-                      className="text-ds-dark-blue bg-transparent border-0 mt-auto"
-                    >
-                      Learn More →
-                    </Button>
-                  )}
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action Section */}
-      <section className="bg-ds-light-neutral py-16">
-        <div className="max-w-container mx-auto px-4 text-center">
-          <div className="max-w-2xl mx-auto space-y-6">
-            <h2 className="text-3xl lg:text-4xl font-light text-ds-dark-blue">
-              {ctaSection?.title || 'Ready to Improve Workplace Safety?'}
-            </h2>
-            <p className="text-lg text-ds-pastille-green leading-relaxed font-light">
-              {ctaSection?.description ||
-                'Start referring employees for comprehensive sleep assessments and help reduce fatigue-related workplace incidents while improving overall productivity.'}
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              {ctaSection?.primaryCta && (
-                <CMSLink
-                  href={resolveHref(ctaSection.primaryCta)}
-                  variant="primary"
-                  size="lg"
-                  className="px-8 py-3 text-lg"
-                  external={ctaSection.primaryCta.linkType === 'external'}
-                >
-                  {ctaSection.primaryCta.text || 'Make a Referral'}
-                </CMSLink>
-              )}
-              {ctaSection?.secondaryCta && (
-                <CMSLink
-                  href={resolveHref(ctaSection.secondaryCta)}
-                  variant="outline"
-                  size="lg"
-                  className="px-8 py-3 text-lg bg-transparent border-ds-pastille-green text-ds-pastille-green hover:bg-ds-pastille-green hover:text-white"
-                  external={ctaSection.secondaryCta.linkType === 'external'}
-                >
-                  {ctaSection.secondaryCta.text || 'Download OH Toolkit'}
-                </CMSLink>
-              )}
+                return (
+                  <div
+                    key={index}
+                    className="bg-white p-6 rounded-lg border border-ds-pastille-green/20 shadow-sm text-center flex flex-col"
+                  >
+                    <IconComponent className="h-12 w-12 text-ds-dark-blue mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-ds-dark-blue mb-2">
+                      {service.title}
+                    </h3>
+                    <p className="text-ds-pastille-green mb-4 font-light flex-grow">
+                      {service.description}
+                    </p>
+                    {service.cta ? (
+                      <CMSLink
+                        href={resolveHref(service.cta)}
+                        variant="outline"
+                        className="text-white bg-ds-accent-yellow hover:text-white mt-auto"
+                        external={service.cta.linkType === 'external'}
+                      >
+                        {service.cta.text || 'Learn More'} →
+                      </CMSLink>
+                    ) : (
+                      <Button
+                        variant="outline"
+                        className="text-ds-dark-blue bg-transparent border-0 mt-auto"
+                      >
+                        Learn More →
+                      </Button>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* Call to Action Section */}
+      {!ctaSection?.disableView && (
+        <section className="bg-ds-light-neutral py-16">
+          <div className="max-w-container mx-auto px-4 text-center">
+            <div className="max-w-2xl mx-auto space-y-6">
+              <h2 className="text-3xl lg:text-4xl font-light text-ds-dark-blue">
+                {ctaSection?.title || 'Ready to Improve Workplace Safety?'}
+              </h2>
+              <p className="text-lg text-ds-pastille-green leading-relaxed font-light">
+                {ctaSection?.description ||
+                  'Start referring employees for comprehensive sleep assessments and help reduce fatigue-related workplace incidents while improving overall productivity.'}
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                {ctaSection?.primaryCta && (
+                  <CMSLink
+                    href={resolveHref(ctaSection.primaryCta)}
+                    variant="primary"
+                    size="lg"
+                    className="px-8 py-3 text-lg"
+                    external={ctaSection.primaryCta.linkType === 'external'}
+                  >
+                    {ctaSection.primaryCta.text || 'Make a Referral'}
+                  </CMSLink>
+                )}
+                {ctaSection?.secondaryCta && (
+                  <CMSLink
+                    href={resolveHref(ctaSection.secondaryCta)}
+                    variant="outline"
+                    size="lg"
+                    className="px-8 py-3 text-lg bg-transparent border-ds-pastille-green text-ds-pastille-green hover:bg-ds-pastille-green hover:text-white"
+                    external={ctaSection.secondaryCta.linkType === 'external'}
+                  >
+                    {ctaSection.secondaryCta.text || 'Download OH Toolkit'}
+                  </CMSLink>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   )
 }
