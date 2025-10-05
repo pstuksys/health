@@ -1896,6 +1896,66 @@ export interface Page {
              * Subtitle text displayed below the main title
              */
             subtitle?: string | null;
+            serviceCards?:
+              | {
+                  /**
+                   * Service card title
+                   */
+                  title: string;
+                  /**
+                   * Service card description
+                   */
+                  description: string;
+                  badge?: {
+                    /**
+                     * Badge text (e.g., "Most Popular", "One-Time Payment")
+                     */
+                    text?: string | null;
+                    /**
+                     * Badge style variant
+                     */
+                    variant?: ('default' | 'secondary' | 'outline') | null;
+                  };
+                  /**
+                   * Card border color
+                   */
+                  borderColor?:
+                    | ('border-ds-dark-blue/20' | 'border-ds-pastille-green/20' | 'border-ds-accent-yellow/20')
+                    | null;
+                  /**
+                   * List of features for this service
+                   */
+                  features?:
+                    | {
+                        /**
+                         * Feature description
+                         */
+                        text: string;
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            trustIndicators?: {
+              /**
+               * Section title
+               */
+              title?: string | null;
+              /**
+               * Section subtitle
+               */
+              subtitle?: string | null;
+              items?:
+                | {
+                    /**
+                     * Trust indicator text
+                     */
+                    text: string;
+                    id?: string | null;
+                  }[]
+                | null;
+            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'cpapBlock';
@@ -4867,6 +4927,38 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               title?: T;
               subtitle?: T;
+              serviceCards?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    badge?:
+                      | T
+                      | {
+                          text?: T;
+                          variant?: T;
+                        };
+                    borderColor?: T;
+                    features?:
+                      | T
+                      | {
+                          text?: T;
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              trustIndicators?:
+                | T
+                | {
+                    title?: T;
+                    subtitle?: T;
+                    items?:
+                      | T
+                      | {
+                          text?: T;
+                          id?: T;
+                        };
+                  };
               id?: T;
               blockName?: T;
             };
