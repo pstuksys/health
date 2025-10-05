@@ -19,6 +19,12 @@ export const sleepApneaReportIncludesFields: Field[] = [
     ],
   },
   {
+    name: 'disableReviewCard',
+    type: 'checkbox',
+    defaultValue: false,
+    admin: { description: 'Hide the review card section' },
+  },
+  {
     name: 'reviewCard',
     type: 'group',
     fields: [

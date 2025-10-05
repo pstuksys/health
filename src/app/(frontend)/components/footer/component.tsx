@@ -6,12 +6,12 @@ import { cn } from '@/lib/utils'
 import { FaFacebook, FaLinkedin, FaTwitter, FaMailBulk, FaPhone, FaArrowUp } from 'react-icons/fa'
 import { Button } from '../ui/button'
 import { Building } from 'lucide-react'
+import { CQCRatingCard } from '../footer-card/component'
 
 type SocialLink = { platform?: string; href: string }
 type FooterLink = { label: string; href: string }
 
 type FooterProps = {
-  about: string
   socialLinks: SocialLink[]
   navLinks: FooterLink[]
   legalLinks: FooterLink[]
@@ -19,14 +19,7 @@ type FooterProps = {
   className?: string
 }
 
-export function Footer({
-  about,
-  socialLinks,
-  navLinks,
-  legalLinks,
-  contact,
-  className,
-}: FooterProps) {
+export function Footer({ socialLinks, navLinks, legalLinks, contact, className }: FooterProps) {
   const handleEmailClick = () => {
     if (contact?.email) {
       window.location.href = `mailto:${contact.email}`
@@ -43,13 +36,6 @@ export function Footer({
     <footer className={cn('bg-gradient-primary text-white py-12 shadow-lg', className)}>
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* About */}
-          {about && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold text-white">About Us</h3>
-              <p className="text-gray-300 font-light text-sm md:text-md leading-relaxed">{about}</p>
-            </div>
-          )}
           {/* Social links */}
           {socialLinks.length > 0 && (
             <div className="space-y-4">
@@ -113,7 +99,6 @@ export function Footer({
             )}
           </div>
           {/* Contact */}
-
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Contact</h3>
             <div className="space-y-2 text-gray-300 font-light overflow-hidden">
@@ -159,6 +144,10 @@ export function Footer({
                 </button>
               )}
             </div>
+          </div>
+          {/* CQC Rating Card */}
+          <div className="flex md:justify-end">
+            <CQCRatingCard />
           </div>
         </div>
         {/* Copyright && Back to top button */}

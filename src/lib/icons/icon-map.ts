@@ -26,6 +26,7 @@ import {
   Waves,
   Monitor,
   Video,
+  Check,
 } from 'lucide-react'
 import type { Field } from 'payload'
 
@@ -57,6 +58,7 @@ export type IconKey =
   | 'Waves'
   | 'Monitor'
   | 'Video'
+  | 'Check'
 
 export const iconMap: Record<IconKey, LucideIcon> = {
   FileText,
@@ -84,6 +86,7 @@ export const iconMap: Record<IconKey, LucideIcon> = {
   Waves,
   Monitor,
   Video,
+  Check,
 }
 
 type CreateIconSelectFieldArgs = {

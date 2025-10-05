@@ -39,6 +39,7 @@ import { Footer } from './globals/Footer'
 import { buttonBlockFields } from './app/(frontend)/components/button-block/config'
 import { formBlockFields } from './app/(frontend)/components/form-block/config'
 import { iconTextBlockFields } from './app/(frontend)/components/icon-text-block/config'
+import { imageBlockFields } from './app/(frontend)/components/image-block/config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -56,6 +57,10 @@ const richTextBlocks = [
   {
     slug: 'iconTextBlock',
     fields: iconTextBlockFields,
+  },
+  {
+    slug: 'imageBlock',
+    fields: imageBlockFields,
   },
 ]
 
