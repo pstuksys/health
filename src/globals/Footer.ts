@@ -6,11 +6,6 @@ export const Footer: GlobalConfig = {
   hooks: {},
   fields: [
     {
-      name: 'about',
-      type: 'textarea',
-      label: 'About',
-    },
-    {
       type: 'row',
       fields: [
         {

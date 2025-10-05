@@ -4,6 +4,8 @@ import { iconMap, type IconKey } from '@/lib/icons/icon-map'
 import Image from 'next/image'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from '@/lib/media'
+import { resolveLinkHref } from '@/lib/navigation'
+import Link from 'next/link'
 
 type MedicalServicesGridProps = Extract<
   NonNullable<Page['blocks']>[number],
@@ -45,13 +47,19 @@ export function MedicalServicesGrid({
             const backgroundImageUrl = mediaToUrl(service.backgroundImage)
             const hasBackgroundImage = backgroundImageUrl !== '/placeholder.svg'
 
-            return (
-              <div
-                key={service.id || index}
-                className={`relative rounded-lg text-center shadow-sm hover:shadow-md transition-shadow min-h-[200px] ${
-                  hasBackgroundImage ? '' : 'bg-white'
-                }`}
-              >
+            // Handle link configuration
+            const linkHref = service.link
+              ? resolveLinkHref({
+                  linkType: service.link.linkType,
+                  internal: service.link.internal,
+                  external: service.link.external,
+                })
+              : null
+            const shouldOpenInNewTab = service.link?.openInNewTab || false
+            const hasLink = linkHref && linkHref !== '#'
+
+            const CardContent = () => (
+              <>
                 {/* Background Image using Next.js Image */}
                 {hasBackgroundImage && (
                   <div className="absolute inset-0 rounded-lg overflow-hidden">
@@ -97,6 +105,42 @@ export function MedicalServicesGrid({
                     {service.name}
                   </h3>
                 </div>
+              </>
+            )
+
+            return (
+              <div key={service.id || index}>
+                {hasLink ? (
+                  shouldOpenInNewTab ? (
+                    <a
+                      href={linkHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`relative rounded-lg text-center shadow-sm hover:shadow-md transition-shadow min-h-[200px] block ${
+                        hasBackgroundImage ? '' : 'bg-white'
+                      } ${hasLink ? 'cursor-pointer' : ''}`}
+                    >
+                      <CardContent />
+                    </a>
+                  ) : (
+                    <Link
+                      href={linkHref}
+                      className={`relative rounded-lg text-center shadow-sm hover:shadow-md transition-shadow min-h-[200px] block ${
+                        hasBackgroundImage ? '' : 'bg-white'
+                      } ${hasLink ? 'cursor-pointer' : ''}`}
+                    >
+                      <CardContent />
+                    </Link>
+                  )
+                ) : (
+                  <div
+                    className={`relative rounded-lg text-center shadow-sm hover:shadow-md transition-shadow min-h-[200px] ${
+                      hasBackgroundImage ? '' : 'bg-white'
+                    }`}
+                  >
+                    <CardContent />
+                  </div>
+                )}
               </div>
             )
           })}

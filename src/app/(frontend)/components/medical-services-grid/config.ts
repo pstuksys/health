@@ -59,6 +59,62 @@ export const medicalServicesGridFields: Field[] = [
         required: false,
         admin: { description: 'Optional background image for the service card' },
       },
+      {
+        name: 'link',
+        type: 'group',
+        admin: { description: 'Optional link configuration for the service card' },
+        fields: [
+          {
+            name: 'linkType',
+            type: 'select',
+            defaultValue: 'internal',
+            options: [
+              { label: 'Internal Page', value: 'internal' },
+              { label: 'External URL', value: 'external' },
+            ],
+            admin: { description: 'Choose whether to link to an internal page or external URL' },
+          },
+          {
+            name: 'internal',
+            type: 'group',
+            admin: {
+              condition: (data, siblingData) => siblingData?.linkType === 'internal',
+              description: 'Select an internal page to link to',
+            },
+            fields: [
+              {
+                name: 'relation',
+                type: 'relationship',
+                relationTo: ['pages', 'blogs'],
+                required: false,
+                admin: { description: 'Select a page or blog post to link to' },
+              },
+            ],
+          },
+          {
+            name: 'external',
+            type: 'group',
+            admin: {
+              condition: (data, siblingData) => siblingData?.linkType === 'external',
+              description: 'Enter an external URL to link to',
+            },
+            fields: [
+              {
+                name: 'href',
+                type: 'text',
+                required: false,
+                admin: { description: 'External URL (e.g., https://example.com)' },
+              },
+            ],
+          },
+          {
+            name: 'openInNewTab',
+            type: 'checkbox',
+            defaultValue: false,
+            admin: { description: 'Open link in a new tab/window' },
+          },
+        ],
+      },
     ],
   },
 ]

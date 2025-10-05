@@ -59,7 +59,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         />
         <main className="min-h-screen">{children}</main>
         <Footer
-          about={footer?.about ?? ''}
           socialLinks={socialLinks}
           navLinks={footerNavLinks}
           legalLinks={footerLegalLinks}

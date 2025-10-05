@@ -1031,7 +1031,8 @@ export interface Page {
                 | 'Eye'
                 | 'Waves'
                 | 'Monitor'
-                | 'Video';
+                | 'Video'
+                | 'Check';
               /**
                * Name of the medical service (e.g., MRI, ULTRASOUND)
                */
@@ -1044,6 +1045,45 @@ export interface Page {
                * Optional background image for the service card
                */
               backgroundImage?: (number | null) | Media;
+              /**
+               * Optional link configuration for the service card
+               */
+              link?: {
+                /**
+                 * Choose whether to link to an internal page or external URL
+                 */
+                linkType?: ('internal' | 'external') | null;
+                /**
+                 * Select an internal page to link to
+                 */
+                internal?: {
+                  /**
+                   * Select a page or blog post to link to
+                   */
+                  relation?:
+                    | ({
+                        relationTo: 'pages';
+                        value: number | Page;
+                      } | null)
+                    | ({
+                        relationTo: 'blogs';
+                        value: number | Blog;
+                      } | null);
+                };
+                /**
+                 * Enter an external URL to link to
+                 */
+                external?: {
+                  /**
+                   * External URL (e.g., https://example.com)
+                   */
+                  href?: string | null;
+                };
+                /**
+                 * Open link in a new tab/window
+                 */
+                openInNewTab?: boolean | null;
+              };
               id?: string | null;
             }[];
             id?: string | null;
@@ -1290,7 +1330,8 @@ export interface Page {
                 | 'Eye'
                 | 'Waves'
                 | 'Monitor'
-                | 'Video';
+                | 'Video'
+                | 'Check';
               id?: string | null;
             }[];
             /**
@@ -1949,6 +1990,10 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
+            /**
+             * Hide the review card section
+             */
+            disableReviewCard?: boolean | null;
             reviewCard?: {
               title?: string | null;
               text?: string | null;
@@ -3190,6 +3235,7 @@ export interface Page {
                         | 'Waves'
                         | 'Monitor'
                         | 'Video'
+                        | 'Check'
                       )
                     | null;
                   id?: string | null;
@@ -4334,6 +4380,22 @@ export interface PagesSelect<T extends boolean = true> {
                     name?: T;
                     available?: T;
                     backgroundImage?: T;
+                    link?:
+                      | T
+                      | {
+                          linkType?: T;
+                          internal?:
+                            | T
+                            | {
+                                relation?: T;
+                              };
+                          external?:
+                            | T
+                            | {
+                                href?: T;
+                              };
+                          openInNewTab?: T;
+                        };
                     id?: T;
                   };
               id?: T;
@@ -4894,6 +4956,7 @@ export interface PagesSelect<T extends boolean = true> {
                     wide?: T;
                     id?: T;
                   };
+              disableReviewCard?: T;
               reviewCard?:
                 | T
                 | {
@@ -6043,7 +6106,6 @@ export interface Header {
  */
 export interface Footer {
   id: number;
-  about?: string | null;
   navigationLinks?:
     | {
         label: string;
@@ -6154,7 +6216,6 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
-  about?: T;
   navigationLinks?:
     | T
     | {
