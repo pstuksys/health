@@ -1,5 +1,4 @@
 import { Field } from 'payload'
-import { createIconSelectField } from '@/lib/icons/icon-map'
 
 export const sleepAssessmentStepsFields: Field[] = [
   {
@@ -114,12 +113,6 @@ export const sleepAssessmentStepsFields: Field[] = [
           condition: (data, siblingData) => siblingData?.linkType === 'external',
         },
       },
-      createIconSelectField({
-        name: 'icon',
-        label: 'Icon',
-        required: true,
-        description: 'Choose an icon to represent this step',
-      }),
     ],
   },
   {

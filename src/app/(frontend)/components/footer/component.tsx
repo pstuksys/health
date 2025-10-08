@@ -2,6 +2,7 @@
 import type React from 'react'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
+import { useEffect } from 'react'
 
 import { FaFacebook, FaLinkedin, FaTwitter, FaMailBulk, FaPhone, FaArrowUp } from 'react-icons/fa'
 import { Button } from '../ui/button'
@@ -32,6 +33,20 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
     }
   }
 
+  useEffect(() => {
+    // Check if Doctify script is already loaded
+    const existingScript = document.querySelector('script[src*="doctify.com"]')
+    if (existingScript) return
+
+    // Load Doctify script only once
+    const script = document.createElement('script')
+    script.src =
+      'https://www.doctify.com/get-script?widget_container_id=0v6ey52e&type=micro-star-widget&tenant=athena-uk&language=en&profileType=practice&layoutType=layoutI&slugs=independent-physiological-diagnostics&background=white'
+    script.async = true
+    script.defer = true
+    document.head.appendChild(script)
+  }, [])
+
   return (
     <footer className={cn('bg-gradient-primary text-white py-12 shadow-lg', className)}>
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
@@ -58,6 +73,8 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
                   </li>
                 ))}
               </ul>
+              {/* Doctify Badge */}
+              <div id="0v6ey52e"></div>
             </div>
           )}
           <div className="flex flex-col gap-4 md:gap-8">

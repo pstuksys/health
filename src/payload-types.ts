@@ -1302,36 +1302,6 @@ export interface Page {
                */
               external?: string | null;
               openInNewTab?: boolean | null;
-              /**
-               * Choose an icon to represent this step
-               */
-              icon:
-                | 'FileText'
-                | 'PhoneCall'
-                | 'Beaker'
-                | 'SquareActivity'
-                | 'Activity'
-                | 'Heart'
-                | 'Scan'
-                | 'Stethoscope'
-                | 'Brain'
-                | 'Moon'
-                | 'Baby'
-                | 'TrendingUp'
-                | 'HeartHandshake'
-                | 'ClipboardList'
-                | 'UserCheck'
-                | 'List'
-                | 'UserPlus'
-                | 'BriefcaseMedical'
-                | 'BarChart3'
-                | 'Building'
-                | 'Building2'
-                | 'Eye'
-                | 'Waves'
-                | 'Monitor'
-                | 'Video'
-                | 'Check';
               id?: string | null;
             }[];
             /**
@@ -4555,7 +4525,6 @@ export interface PagesSelect<T extends boolean = true> {
                     internal?: T;
                     external?: T;
                     openInNewTab?: T;
-                    icon?: T;
                     id?: T;
                   };
               mainButtonText?: T;
