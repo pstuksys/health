@@ -55,7 +55,7 @@ export function TwoCardBlock({ title, subtitle, items }: TwoCardBlockProps) {
                   <div className="flex flex-col [@media(min-width:420px)]:flex-row gap-3">
                     {(item.links || []).map((link, linkIndex) => {
                       const href = resolveLinkHref(link)
-                      const isExternal = link.linkType === 'external'
+                      const isExternal = link.linkType === 'external' && !href.startsWith('#')
                       return (
                         <CMSLink
                           key={linkIndex}

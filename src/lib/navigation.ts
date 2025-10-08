@@ -77,8 +77,13 @@ export const resolveLinkHref = (linkData: {
   if (linkData.linkType === 'external') {
     const href = linkData.external?.href ?? '#'
 
-    // If the href is just '#' or empty, return it as is
-    if (!href || href === '#') {
+    // If the href is empty, return '#'
+    if (!href) {
+      return '#'
+    }
+
+    // If the href starts with #, it's an anchor link for same-page navigation
+    if (href.startsWith('#')) {
       return href
     }
 
