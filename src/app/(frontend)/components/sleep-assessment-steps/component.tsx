@@ -1,6 +1,5 @@
 import { Card } from '@/components/ui/card'
-import { FileText, ArrowRight } from 'lucide-react'
-import { iconMap, type IconKey } from '@/lib/icons/icon-map'
+import { ArrowRight } from 'lucide-react'
 import { CMSLink } from '../ui'
 import { resolveLinkHref } from '@/lib/navigation'
 import type { Page } from '@/payload-types'
@@ -75,9 +74,6 @@ export function SleepAssessmentSteps({
                 : null,
             })
 
-            const iconKey = (step as any)?.icon as IconKey
-            const Icon = iconMap[iconKey] || FileText
-
             const isExternal = (step as any).linkType === 'external'
             const buttonText = (step as any).buttonText
             const hasValidButton = buttonText && href
@@ -97,7 +93,6 @@ export function SleepAssessmentSteps({
                   <div className="flex-1 grid grid-rows-[auto,1fr,auto] h-full min-h-0">
                     <div>
                       <h3 className="text-xl font-semibold text-ds-dark-blue mb-2">{step.title}</h3>
-                      <Icon className="w-5 h-5 text-gray-400 mb-3" />
                     </div>
 
                     <p className="text-ds-pastille-green mb-4 leading-relaxed min-h-0">
