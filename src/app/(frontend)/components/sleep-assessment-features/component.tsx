@@ -100,7 +100,7 @@ export function SleepAssessmentFeatures({
     <div className="max-w-container mx-auto px-4 py-12">
       {/* Header Section */}
       <div className="text-center mb-12">
-        <h1 className="text-3xl sm:text-4xl font-light leading-tight text-ds-dark-blue mb-4">
+        <h1 className="text-3xl sm:text-4xl font-semibold leading-tight text-ds-dark-blue mb-4">
           {title || 'Free Online Sleep Assessment'}
         </h1>
         <p className="text-lg font-light leading-relaxed text-ds-pastille-green max-w-3xl mx-auto">

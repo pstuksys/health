@@ -105,7 +105,7 @@ export function FullWidthBanner({
 
   return (
     <section
-      className="relative w-full overflow-hidden h-96 sm:h-[28rem] md:h-[32rem] lg:h-[36rem] xl:h-[40rem]"
+      className="relative w-full overflow-hidden h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[28rem]"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={onTouchStart}
@@ -122,9 +122,8 @@ export function FullWidthBanner({
           sizes="100vw"
           priority
           style={{
-            aspectRatio: '3/4',
             objectFit: 'cover',
-            objectPosition: 'center 30%',
+            objectPosition: 'center 25%',
           }}
         />
       </div>
@@ -212,7 +211,7 @@ export function FullWidthBanner({
                 variant="primary"
                 href={currentContent.href}
                 className="transition-opacity duration-300"
-                size="sm"
+                size="md"
               >
                 {currentContent.buttonText}
               </CMSLink>

@@ -13,7 +13,7 @@ export function TwoCardBlock({ title, subtitle, items }: TwoCardBlockProps) {
   return (
     <section className="w-full py-8 md:py-16 px-4">
       <div className="max-w-container mx-auto">
-        <div className="text-center mb-12">
+        <div className="text-center mb-8 md:mb-12 px-4">
           {title && (
             <h2 className="text-3xl md:text-4xl font-light text-ds-dark-blue mb-4">{title}</h2>
           )}
@@ -24,15 +24,15 @@ export function TwoCardBlock({ title, subtitle, items }: TwoCardBlockProps) {
           )}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {(items || []).map((item, index) => (
             <Card
               key={index}
               className="border-0 md:border border-ds-pastille-green/20 md:rounded-md bg-white shadow-xl rounded-sm md:shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
             >
               <CardContent className="!p-0">
-                <div className="p-0 md:p-4">
-                  <div className="relative w-full aspect-[4/3] overflow-hidden rounded-none md:rounded-lg">
+                <div className="p-4 md:p-4">
+                  <div className="relative w-full h-[300px] overflow-hidden rounded-lg">
                     <Image
                       src={mediaToUrl(item.image)}
                       alt={item.title}
