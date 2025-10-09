@@ -27,27 +27,4 @@ export const sleepApneaAboutHSTFields: Field[] = [
       },
     ],
   },
-  {
-    name: 'booking',
-    type: 'group',
-    fields: [
-      { name: 'title', type: 'text', defaultValue: 'Book your appointment' },
-      {
-        name: 'options',
-        type: 'array',
-        fields: [{ name: 'value', type: 'text' }],
-        defaultValue: [
-          { value: 'Home Sleep Apnoea Test (HST)' },
-          { value: 'Respiratory Polygraphy (RP)' },
-          { value: 'Video Polysomnography (vPSG)' },
-        ],
-      },
-      { name: 'submitText', type: 'text', defaultValue: 'Book Appointment' },
-      {
-        name: 'note',
-        type: 'textarea',
-        defaultValue: "We'll confirm availability and next steps by email or phone.",
-      },
-    ],
-  },
 ]

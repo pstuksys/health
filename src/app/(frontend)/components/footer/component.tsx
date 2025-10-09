@@ -177,7 +177,7 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
               if (typeof window !== 'undefined') window.scrollTo({ top: 0, behavior: 'smooth' })
             }}
             aria-label="Back to top"
-            className="hidden sm:inline-flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 text-ds-dark-blue rounded-full shadow-lg bg-ds-accent-yellow  p-3 hover:scale-[1.03] hover:brightness-110 active:brightness-95 transition-all duration-200 py-3"
+            className="hidden sm:inline-flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 text-ds-dark-blue rounded-full shadow-lg bg-ds-accent-yellow p-3 hover:scale-[1.03] hover:bg-ds-accent-yellow/90 active:bg-ds-accent-yellow/80 transition-all duration-200 py-3"
           >
             <span className="block select-none" aria-hidden>
               <FaArrowUp className="h-4 w-4" />

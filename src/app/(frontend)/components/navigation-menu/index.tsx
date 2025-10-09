@@ -178,7 +178,7 @@ export function NavigationMenu({
           <div className="md:hidden">
             <button
               onClick={toggleMobileMenu}
-              className="text-white hover:text-ds-pastille-green p-2"
+              className="text-white hover:text-ds-accent-yellow p-2 transition-colors duration-200"
               aria-label="Toggle mobile menu"
             >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
