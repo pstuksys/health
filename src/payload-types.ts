@@ -2042,17 +2042,6 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
-            booking?: {
-              title?: string | null;
-              options?:
-                | {
-                    value?: string | null;
-                    id?: string | null;
-                  }[]
-                | null;
-              submitText?: string | null;
-              note?: string | null;
-            };
             id?: string | null;
             blockName?: string | null;
             blockType: 'sleepApneaAboutHST';
@@ -5038,19 +5027,6 @@ export interface PagesSelect<T extends boolean = true> {
                     number?: T;
                     text?: T;
                     id?: T;
-                  };
-              booking?:
-                | T
-                | {
-                    title?: T;
-                    options?:
-                      | T
-                      | {
-                          value?: T;
-                          id?: T;
-                        };
-                    submitText?: T;
-                    note?: T;
                   };
               id?: T;
               blockName?: T;

@@ -24,11 +24,11 @@ export function TwoCardBlock({ title, subtitle, items }: TwoCardBlockProps) {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:flex md:flex-row gap-8 md:justify-center md:items-center">
           {(items || []).map((item, index) => (
             <Card
               key={index}
-              className="border-0 md:border border-ds-pastille-green/20 md:rounded-md bg-white shadow-xl rounded-sm md:shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden"
+              className="border-0 md:border border-ds-pastille-green/20 md:rounded-md bg-white shadow-xl rounded-sm md:shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden w-full md:max-w-[400px]"
             >
               <CardContent className="!p-0">
                 <div className="p-4 md:p-4">
