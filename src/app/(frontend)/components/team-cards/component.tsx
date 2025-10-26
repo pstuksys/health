@@ -117,7 +117,7 @@ export function TeamCards({
                   {/* Name and Description */}
                   <div className="flex-1 text-center md:text-left">
                     <div
-                      className={`md:max-w-[400px] ${
+                      className={`md:max-w-[550px] ${
                         (member.imagePosition || 'left') === 'right'
                           ? 'md:ml-auto md:mr-0'
                           : 'md:mr-auto'
