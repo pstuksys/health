@@ -117,7 +117,7 @@ export function NavigationItems({
               <div className="py-1">
                 {hiddenItems.map((item, i) => (
                   <div key={`more-${item.label}-${i}`}>
-                    {item.linkType === 'internal' || item.linkType === 'external' ? (
+                    {item.linkType === 'internal' || item.linkType === 'external' || item.href ? (
                       <Link
                         href={resolveUrl(item)}
                         className={cn(
