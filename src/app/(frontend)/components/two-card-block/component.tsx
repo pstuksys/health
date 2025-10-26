@@ -24,13 +24,13 @@ export function TwoCardBlock({ title, subtitle, items }: TwoCardBlockProps) {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:flex md:flex-row gap-8 md:justify-center md:items-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:justify-center max-w-[850px] mx-auto">
           {(items || []).map((item, index) => (
             <Card
               key={index}
-              className="border-0 md:border border-ds-pastille-green/20 md:rounded-md bg-white shadow-xl rounded-sm md:shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden w-full md:max-w-[400px]"
+              className="border-0 md:border border-ds-pastille-green/20 md:rounded-md bg-white shadow-xl rounded-sm md:shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden w-full flex flex-col"
             >
-              <CardContent className="!p-0">
+              <CardContent className="!p-0 flex flex-col flex-1">
                 <div className="p-4 md:p-4">
                   <div className="relative w-full h-[300px] overflow-hidden rounded-lg">
                     <Image
@@ -43,12 +43,12 @@ export function TwoCardBlock({ title, subtitle, items }: TwoCardBlockProps) {
                   </div>
                 </div>
 
-                <div className="px-4 md:px-6 pb-4 md:pb-6 pt-0">
+                <div className="px-4 md:px-6 pb-4 md:pb-6 pt-0 flex flex-col flex-1">
                   <h3 className="text-xl md:text-2xl font-semibold text-ds-dark-blue mb-3">
                     {item.title}
                   </h3>
 
-                  <p className="text-ds-pastille-green/80 font-light mb-6 leading-relaxed">
+                  <p className="text-ds-pastille-green/80 font-light mb-6 leading-relaxed flex-1">
                     {item.description}
                   </p>
 
