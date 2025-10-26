@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
@@ -13,6 +13,9 @@ import { MobileNavigation } from './components/MobileNavigation'
 import { NavigationItems } from './components/NavigationItems'
 import { useResponsiveNavigation } from '../../../../hooks/useResponsiveNavigation'
 import { findNavigationItem, getFirstCategoryTitle } from '../../../../lib/navigationUtils'
+
+// Constants
+const MEGA_MENU_HIDE_DELAY = 150 // milliseconds
 
 // Extract types from Header interface
 type NavigationItem = NonNullable<Header['navigation']>[number]
@@ -57,44 +60,82 @@ export function NavigationMenu({
     logoRef,
   })
 
-  // Event handlers
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen)
-  }
+  // Event handlers - memoized for performance
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen((prev) => !prev)
+  }, [])
 
-  const handleCategoryClick = (categoryTitle: string) => {
+  const toggleMoreMenu = useCallback(() => {
+    setShowMoreMenu((prev) => !prev)
+  }, [])
+
+  const handleCategoryClick = useCallback((categoryTitle: string) => {
     setSelectedCategory(categoryTitle)
-  }
+  }, [])
 
-  const handleMouseEnter = (itemLabel: string) => {
-    if (hoverTimeoutRef.current) {
-      clearTimeout(hoverTimeoutRef.current)
-    }
+  const handleMouseEnter = useCallback(
+    (itemLabel: string) => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current)
+      }
 
-    const item = findNavigationItem(items, itemLabel)
-    if (item?.megaMenu?.categories) {
-      setHoveredItem(itemLabel)
-      setSelectedCategory(getFirstCategoryTitle(item.megaMenu))
-      setIsMegaMenuVisible(true)
-    }
-  }
+      const item = findNavigationItem(items, itemLabel)
+      if (item?.megaMenu?.categories) {
+        setHoveredItem(itemLabel)
+        setSelectedCategory(getFirstCategoryTitle(item.megaMenu))
+        setIsMegaMenuVisible(true)
+        setShowMoreMenu(false) // Close More menu when opening mega menu
+      }
+    },
+    [items],
+  )
 
-  const handleMouseLeave = () => {
+  const handleMouseLeave = useCallback(() => {
     hoverTimeoutRef.current = setTimeout(() => {
       setIsMegaMenuVisible(false)
       setHoveredItem(null)
       setSelectedCategory(null)
-    }, 150) // 150ms delay to prevent disappearing too quickly
-  }
+    }, MEGA_MENU_HIDE_DELAY)
+  }, [])
 
-  const handleMoreItemClick = (item: NavigationItem) => {
-    handleMouseEnter(item.label)
-  }
+  const handleMoreItemClick = useCallback(
+    (item: NavigationItem) => {
+      handleMouseEnter(item.label)
+      setShowMoreMenu(false)
+    },
+    [handleMouseEnter],
+  )
 
-  // Close mega menu when clicking outside
+  const clearHoverTimeout = useCallback(() => {
+    if (hoverTimeoutRef.current) {
+      clearTimeout(hoverTimeoutRef.current)
+    }
+  }, [])
+
+  // Close mega menu and More menu when clicking outside or pressing Escape
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (megaMenuRef.current && !megaMenuRef.current.contains(event.target as Node)) {
+      const target = event.target as Node
+
+      // Close mega menu if clicking outside
+      if (megaMenuRef.current && !megaMenuRef.current.contains(target)) {
+        setIsMegaMenuVisible(false)
+        setHoveredItem(null)
+        setSelectedCategory(null)
+      }
+
+      // Close More menu if clicking outside
+      if (moreButtonRef.current && !moreButtonRef.current.contains(target)) {
+        const isClickInsideMoreMenu = (target as Element).closest('[data-more-menu]')
+        if (!isClickInsideMoreMenu) {
+          setShowMoreMenu(false)
+        }
+      }
+    }
+
+    const handleEscapeKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setShowMoreMenu(false)
         setIsMegaMenuVisible(false)
         setHoveredItem(null)
         setSelectedCategory(null)
@@ -102,8 +143,11 @@ export function NavigationMenu({
     }
 
     document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleEscapeKey)
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleEscapeKey)
     }
   }, [])
 
@@ -148,7 +192,7 @@ export function NavigationMenu({
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:block relative flex-1 mx-8 min-w-0 overflow-hidden">
+          <div className="hidden md:block relative flex-1 mx-8 min-w-0">
             <NavigationItems
               visibleItems={visibleItems}
               hiddenItems={hiddenItems}
@@ -158,7 +202,7 @@ export function NavigationMenu({
               navItemsRef={navItemsRef}
               moreButtonRef={moreButtonRef}
               showMoreMenu={showMoreMenu}
-              onToggleMoreMenu={() => setShowMoreMenu(!showMoreMenu)}
+              onToggleMoreMenu={toggleMoreMenu}
             />
           </div>
 
@@ -194,11 +238,7 @@ export function NavigationMenu({
         selectedCategory={selectedCategory}
         items={items}
         onCategoryClick={handleCategoryClick}
-        onMouseEnter={() => {
-          if (hoverTimeoutRef.current) {
-            clearTimeout(hoverTimeoutRef.current)
-          }
-        }}
+        onMouseEnter={clearHoverTimeout}
         onMouseLeave={handleMouseLeave}
         megaMenuRef={megaMenuRef}
       />

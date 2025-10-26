@@ -105,7 +105,7 @@ export function FullWidthBanner({
 
   return (
     <section
-      className="relative w-full overflow-hidden h-72 sm:h-80 md:h-96 lg:h-[28rem] xl:h-[28rem]"
+      className="relative w-full overflow-hidden h-64 sm:h-72 md:h-80 lg:h-96 xl:h-96"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       onTouchStart={onTouchStart}
@@ -155,8 +155,8 @@ export function FullWidthBanner({
         </div>
       )}
 
-      <div className="relative z-20 flex flex-col items-center justify-center h-full px-4 py-8 sm:py-12 md:py-16 lg:py-20 text-center text-white">
-        <div className="flex flex-col items-center justify-center max-w-5xl w-full space-y-4 sm:space-y-5 md:space-y-6 lg:space-y-8">
+      <div className="relative z-20 flex flex-col items-center justify-center h-full px-4 py-6 sm:py-8 md:py-12 lg:py-14 text-center text-white">
+        <div className="flex flex-col items-center justify-center max-w-5xl w-full space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
           <h2
             className={cn(
               'font-light max-w-4xl transition-opacity duration-300 leading-tight',
@@ -206,7 +206,7 @@ export function FullWidthBanner({
             </p>
           )}
           {currentContent.buttonText && (
-            <div className="pt-4 sm:pt-6 md:pt-8">
+            <div className="pt-2 sm:pt-3 md:pt-4">
               <CMSLink
                 variant="primary"
                 href={currentContent.href}
