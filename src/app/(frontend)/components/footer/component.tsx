@@ -4,18 +4,15 @@ import { cn } from '@/lib/utils'
 import { useCallback, useState } from 'react'
 
 import { FaFacebook, FaLinkedin, FaTwitter, FaMailBulk, FaPhone, FaArrowUp } from 'react-icons/fa'
+import { FaXTwitter } from 'react-icons/fa6'
 import type { IconType } from 'react-icons'
 import { Button } from '../ui/button'
 import { Building } from 'lucide-react'
 import { CQCRatingCard } from '../footer-card/component'
 import { useDoctifyWidget } from '@/hooks/use-doctify-widget'
+import type { Footer as FooterType } from '@/payload-types'
 
-type SocialPlatform = 'facebook' | 'twitter' | 'linkedin'
-
-type SocialLink = {
-  platform: SocialPlatform
-  href: string
-}
+type SocialPlatform = 'facebook' | 'twitter' | 'linkedin' | 'x'
 
 type FooterLink = {
   label: string
@@ -23,7 +20,7 @@ type FooterLink = {
 }
 
 type FooterProps = {
-  socialLinks: SocialLink[]
+  socialLinks: NonNullable<FooterType['socialLinks']>
   navLinks: FooterLink[]
   legalLinks: FooterLink[]
   contact?: {
@@ -45,6 +42,7 @@ const HOVER_TEXT_CLASSES = 'hover:text-ds-accent-yellow' as const
 const SOCIAL_ICON_MAP: Record<SocialPlatform, IconType> = {
   facebook: FaFacebook,
   twitter: FaTwitter,
+  x: FaXTwitter,
   linkedin: FaLinkedin,
 }
 
@@ -82,33 +80,35 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
       <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Social links */}
-          {socialLinks.length > 0 && (
+          {socialLinks && socialLinks.length > 0 && (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-white">Follow Us</h3>
               <ul className="flex items-center gap-4">
-                {socialLinks.map((link) => {
-                  const Icon = SOCIAL_ICON_MAP[link.platform]
-                  const platformName =
-                    link.platform.charAt(0).toUpperCase() + link.platform.slice(1)
+                {socialLinks
+                  .filter((link) => link.platform && link.url)
+                  .map((link) => {
+                    const platform = link.platform as SocialPlatform
+                    const Icon = SOCIAL_ICON_MAP[platform]
+                    const platformName = platform.charAt(0).toUpperCase() + platform.slice(1)
 
-                  return (
-                    <li key={link.platform}>
-                      <Link
-                        href={link.href}
-                        className={cn(
-                          'text-gray-300 inline-flex items-center justify-center rounded-full p-2 hover:bg-white/10',
-                          HOVER_TEXT_CLASSES,
-                          TRANSITION_CLASSES,
-                        )}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label={`Follow us on ${platformName}`}
-                      >
-                        <Icon size={ICON_SIZE_LARGE} />
-                      </Link>
-                    </li>
-                  )
-                })}
+                    return (
+                      <li key={link.id ?? platform}>
+                        <Link
+                          href={link.url!}
+                          className={cn(
+                            'text-gray-300 inline-flex items-center justify-center rounded-full p-2 hover:bg-white/10',
+                            HOVER_TEXT_CLASSES,
+                            TRANSITION_CLASSES,
+                          )}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label={`Follow us on ${platformName}`}
+                        >
+                          <Icon size={ICON_SIZE_LARGE} />
+                        </Link>
+                      </li>
+                    )
+                  })}
               </ul>
               {/* Doctify Badge - Wrapped with key to prevent React reconciliation issues */}
               <div key="doctify-widget-wrapper" ref={containerRef}>

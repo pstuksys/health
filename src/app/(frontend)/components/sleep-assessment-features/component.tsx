@@ -39,7 +39,7 @@ export function SleepAssessmentFeatures({
   ctaButtonLinkType,
   ctaButtonInternal,
   ctaButtonExternal,
-  ctaButtonOpenInNewTab,
+  // ctaButtonOpenInNewTab,
   bottomText,
 }: SleepAssessmentFeaturesProps) {
   // Default features as fallback
@@ -94,7 +94,7 @@ export function SleepAssessmentFeatures({
     : ''
 
   const ctaButtonIsExternal = shouldShowCTA && ctaButtonLinkType === 'external'
-  const ctaButtonNewTab = ctaButtonIsExternal && ctaButtonOpenInNewTab
+  // const ctaButtonNewTab = ctaButtonIsExternal && ctaButtonOpenInNewTab
 
   return (
     <div className="max-w-container mx-auto px-4 py-12">

@@ -327,36 +327,33 @@ export function hasHeroBlock(blocks: Page['blocks'] | null | undefined): boolean
 }
 
 export function deriveGlobalHeroProps(page: Page) {
-  // Ensure consistent rendering between server and client
-  const titleHtml = page?.title ? String(page.title).trim() : ''
   // Prefer raw Lexical content for RichText; fallback to plain description string
   const subtitleRaw: Page['content'] | string =
     page?.content ?? (page?.meta?.description ?? '').trim()
-  const bg = mediaToUrl((page as any)?.heroBackground ?? (page?.meta?.image as any))
+  const bg = mediaToUrl(page?.heroBackground ?? page?.meta?.image)
 
-  // Extract hero configuration from Pages collection fields with proper type narrowing
-  const rawTextColor = (page as any)?.heroTextColor
-  const heroTextColor: HeroTextColor = normalizeHeroTextColor(rawTextColor)
+  // Extract hero configuration from Pages collection fields with proper type safety
+  const heroTextColor: HeroTextColor = normalizeHeroTextColor(page?.heroTextColor)
 
-  const heroGradientOverlay = Boolean((page as any)?.heroGradientOverlay)
+  const heroGradientOverlay = Boolean(page?.heroGradientOverlay)
 
   // Extract CTA button data
-  const heroCTAButton = (page as any)?.heroCTAButton
-  const heroSecondaryCTA = (page as any)?.heroSecondaryCTA
+  const heroCTAButton = page?.heroCTAButton
+  const heroSecondaryCTA = page?.heroSecondaryCTA
 
-  // Extract CTA alignment
-  const rawCTAAlignment = (page as any)?.heroCTAAlignment
+  // Extract CTA alignment with type narrowing
+  const rawCTAAlignment = page?.heroCTAAlignment
   const heroCTAAlignment: 'left' | 'center' | 'right' =
     rawCTAAlignment === 'left' || rawCTAAlignment === 'center' || rawCTAAlignment === 'right'
       ? rawCTAAlignment
       : 'left'
 
   // Extract full height setting
-  const heroFullHeight = Boolean((page as any)?.heroFullHeight)
+  const heroFullHeight = Boolean(page?.heroFullHeight)
 
   // Extract statistics card settings
-  const showHeroStatsCard = Boolean((page as any)?.showHeroStatsCard)
-  const heroStatsCard = (page as any)?.heroStatsCard
+  const showHeroStatsCard = Boolean(page?.showHeroStatsCard)
+  const heroStatsCard = page?.heroStatsCard
 
   const ctaButton = heroCTAButton
     ? {
@@ -382,7 +379,6 @@ export function deriveGlobalHeroProps(page: Page) {
     : undefined
 
   return {
-    title: titleHtml,
     subtitle: subtitleRaw,
     backgroundImage: bg,
     ctaButton,
