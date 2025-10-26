@@ -39,7 +39,6 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
     whyChooseTitle,
     whyChoose,
     ctaBgImage,
-    ctaTitle,
     ctaRightTopRichText,
     ctaRightBottomRichText,
     ctaPrimary,

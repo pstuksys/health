@@ -19,11 +19,6 @@ export interface TransformedFooterLink {
   href: string
 }
 
-export interface TransformedSocialLink {
-  platform: string
-  href: string
-}
-
 /**
  * Transform navigation items from Payload CMS format to a cleaner structure
  */
@@ -87,19 +82,5 @@ export function transformFooterLegalLinks(
   return legalLinks.map((link) => ({
     label: link.label ?? '',
     href: resolveUrl(link),
-  }))
-}
-
-/**
- * Transform footer social links
- */
-export function transformFooterSocialLinks(
-  socialLinks: Footer['socialLinks'],
-): TransformedSocialLink[] {
-  if (!socialLinks) return []
-
-  return socialLinks.map((social) => ({
-    platform: social.platform ?? '',
-    href: social.url ?? '#',
   }))
 }

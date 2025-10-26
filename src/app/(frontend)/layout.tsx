@@ -37,14 +37,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const items = header?.navigation ? transformNavigationItems(header.navigation) : []
 
   // Transform footer data
-  const { transformFooterNavLinks, transformFooterLegalLinks, transformFooterSocialLinks } =
-    await import('@/lib/navigation-transformers')
+  const { transformFooterNavLinks, transformFooterLegalLinks } = await import(
+    '@/lib/navigation-transformers'
+  )
 
   const footerNavLinks = footer?.navigationLinks
     ? transformFooterNavLinks(footer.navigationLinks)
     : []
   const footerLegalLinks = footer?.legalLinks ? transformFooterLegalLinks(footer.legalLinks) : []
-  const socialLinks = footer?.socialLinks ? transformFooterSocialLinks(footer.socialLinks) : []
 
   return (
     <html lang="en" className={`${poppins.variable} antialiased`}>
@@ -59,7 +59,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         />
         <main className="min-h-screen">{children}</main>
         <Footer
-          socialLinks={socialLinks}
+          socialLinks={footer?.socialLinks ?? []}
           navLinks={footerNavLinks}
           legalLinks={footerLegalLinks}
           contact={{

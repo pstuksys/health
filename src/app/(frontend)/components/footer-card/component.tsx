@@ -3,7 +3,7 @@ import { ArrowRight } from 'lucide-react'
 
 export function CQCRatingCard() {
   return (
-    <div className="w-full max-w-[200px] h-[290px] border border-gray-200 overflow-hidden bg-white">
+    <div className="w-full max-w-[200px] h-fit border border-gray-200 overflow-hidden bg-white">
       {/* CQC Logo Header */}
       <div className="p-2">
         <img src="/care-quality.svg" alt="Care Quality Commission" className="w-32 h-auto" />
@@ -15,7 +15,7 @@ export function CQCRatingCard() {
       </div>
 
       {/* Rating Section */}
-      <div className="p-2 space-y-2 bg-gray-100 mx-2 mb-2">
+      <div className="p-2 space-y-1.5 bg-gray-100 mx-2 mb-2">
         <h4 className="text-ds-dark-blue font-bold text-sm">CQC overall rating</h4>
 
         <div className="flex items-center gap-4">

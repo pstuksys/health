@@ -55,3 +55,33 @@ export function normalizeHeroTextColor(rawValue: unknown): HeroTextColor {
   }
   return 'auto'
 }
+
+/**
+ * Hero alignment type
+ */
+export type HeroAlignment = 'left' | 'center' | 'right'
+
+/**
+ * Get alignment classes for hero content (text and buttons)
+ * Includes max-width constraint for better readability
+ */
+export function getHeroAlignmentClasses(alignment: HeroAlignment) {
+  switch (alignment) {
+    case 'center':
+      return {
+        text: 'mx-auto text-center',
+        buttons: 'justify-center',
+      }
+    case 'right':
+      return {
+        text: 'ml-auto text-right',
+        buttons: 'justify-end',
+      }
+    case 'left':
+    default:
+      return {
+        text: 'mr-auto text-left',
+        buttons: 'justify-start',
+      }
+  }
+}

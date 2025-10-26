@@ -4,7 +4,12 @@ import { useEffect, useState, useMemo } from 'react'
 import Image from 'next/image'
 import { ChevronDown } from 'lucide-react'
 import { CMSLink } from '@/app/(frontend)/components/ui/cms-link'
-import { getHeroTextColorClass, type HeroTextColor } from '@/lib/hero-config'
+import {
+  getHeroTextColorClass,
+  getHeroAlignmentClasses,
+  type HeroTextColor,
+  type HeroAlignment,
+} from '@/lib/hero-config'
 import { cn } from '@/lib/utils'
 import { ConsistentHTML } from '../safe-html/component'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
@@ -13,28 +18,20 @@ import type { Page } from '@/payload-types'
 type CTAButton = { label: string; href: string; variant?: 'primary' | 'secondary' }
 
 type HeroSectionProps = {
-  title: string
   subtitle?: Page['content'] | string
   backgroundImage?: string
   ctaButton?: CTAButton
   secondaryCTA?: CTAButton
   gradientOverlay?: boolean
   textColor?: HeroTextColor
-  ctaAlignment?: 'left' | 'center' | 'right'
+  ctaAlignment?: HeroAlignment
   fullHeight?: boolean
   showStatsCard?: boolean
-  statsCard?: {
-    title?: string
-    statisticLabel?: string
-    statisticValue?: string
-    description?: string
-    progressPercentage?: number
-  }
+  statsCard?: Page['heroStatsCard']
   className?: string
 }
 
 export function HeroSection({
-  title: _title,
   subtitle,
   backgroundImage,
   ctaButton,
@@ -54,6 +51,11 @@ export function HeroSection({
   const textColorClass = useMemo(() => {
     return getHeroTextColorClass(textColor, Boolean(backgroundImage || gradientOverlay))
   }, [textColor, backgroundImage, gradientOverlay])
+
+  // Memoize alignment classes
+  const alignmentClasses = useMemo(() => {
+    return getHeroAlignmentClasses(ctaAlignment)
+  }, [ctaAlignment])
 
   // Trigger fade-in animation on mount
   useEffect(() => {
@@ -83,19 +85,6 @@ export function HeroSection({
       if (nextElement) {
         nextElement.scrollIntoView({ behavior: 'smooth' })
       }
-    }
-  }
-
-  // Map CTA alignment to CSS classes
-  const getCTAAlignmentClass = () => {
-    switch (ctaAlignment) {
-      case 'center':
-        return 'justify-center'
-      case 'right':
-        return 'justify-end'
-      case 'left':
-      default:
-        return 'justify-start'
     }
   }
 
@@ -142,8 +131,9 @@ export function HeroSection({
                 <RichText
                   data={subtitle}
                   className={cn(
-                    'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
+                    'text-lg sm:text-xl font-light leading-relaxed mb-8',
                     textColorClass,
+                    alignmentClasses.text,
                   )}
                 />
               ) : (
@@ -151,8 +141,9 @@ export function HeroSection({
                   as="p"
                   html={(typeof subtitle === 'string' ? subtitle : '') || ''}
                   className={cn(
-                    'text-lg sm:text-xl font-light leading-relaxed mb-8 max-w-2xl',
+                    'text-lg sm:text-xl font-light leading-relaxed mb-8',
                     textColorClass,
+                    alignmentClasses.text,
                   )}
                 />
               ))}
@@ -161,7 +152,7 @@ export function HeroSection({
               <div
                 className={cn(
                   'flex flex-col sm:flex-row gap-4 w-full sm:w-auto',
-                  getCTAAlignmentClass(),
+                  alignmentClasses.buttons,
                 )}
               >
                 {ctaButton?.label && ctaButton?.href && (
@@ -197,11 +188,11 @@ export function HeroSection({
           {showStatsCard && statsCard && (
             <div className="flex lg:justify-end mt-8 lg:mt-0">
               <SleepDisorderStatsCard
-                title={statsCard.title}
-                statisticLabel={statsCard.statisticLabel}
-                statisticValue={statsCard.statisticValue}
-                description={statsCard.description}
-                progressPercentage={statsCard.progressPercentage}
+                title={statsCard.title ?? undefined}
+                statisticLabel={statsCard.statisticLabel ?? undefined}
+                statisticValue={statsCard.statisticValue ?? undefined}
+                description={statsCard.description ?? undefined}
+                progressPercentage={statsCard.progressPercentage ?? undefined}
                 className="w-full max-w-sm"
               />
             </div>
@@ -226,8 +217,8 @@ export function HeroSection({
             </span>
             <ChevronDown
               className={cn(
-                'w-6 h-6 animate-bounce',
-                textColorClass.replace('text-gray-200', 'text-white'),
+                'w-6 h-6',
+                textColorClass === 'text-gray-200' ? 'text-white' : textColorClass,
               )}
             />
           </button>
