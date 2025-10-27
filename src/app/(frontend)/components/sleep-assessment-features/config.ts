@@ -53,7 +53,7 @@ export const sleepAssessmentFeaturesFields: Field[] = [
         name: 'icon',
         type: 'select',
         label: 'Icon',
-        required: true,
+        required: false,
         options: [
           {
             label: 'Clock (Quick & Easy)',
@@ -89,7 +89,7 @@ export const sleepAssessmentFeaturesFields: Field[] = [
           },
         ],
         admin: {
-          description: 'Choose an icon to represent this feature',
+          description: 'Choose an icon to represent this feature (optional)',
         },
       },
     ],

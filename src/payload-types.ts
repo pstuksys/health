@@ -1347,17 +1347,20 @@ export interface Page {
                */
               description: string;
               /**
-               * Choose an icon to represent this feature
+               * Choose an icon to represent this feature (optional)
                */
-              icon:
-                | 'Clock'
-                | 'Shield'
-                | 'CheckCircle'
-                | 'Users'
-                | 'FileText'
-                | 'PhoneCall'
-                | 'Beaker'
-                | 'SquareActivity';
+              icon?:
+                | (
+                    | 'Clock'
+                    | 'Shield'
+                    | 'CheckCircle'
+                    | 'Users'
+                    | 'FileText'
+                    | 'PhoneCall'
+                    | 'Beaker'
+                    | 'SquareActivity'
+                  )
+                | null;
               id?: string | null;
             }[];
             /**
@@ -1904,6 +1907,23 @@ export interface Page {
                         id?: string | null;
                       }[]
                     | null;
+                  /**
+                   * Button text for this service card (optional)
+                   */
+                  ctaButtonText?: string | null;
+                  /**
+                   * Choose whether the CTA button links internally or externally
+                   */
+                  ctaButtonLinkType?: ('internal' | 'external') | null;
+                  /**
+                   * Select a page for the CTA button to link to
+                   */
+                  ctaButtonInternal?: (number | null) | Page;
+                  /**
+                   * Enter the full URL for the CTA button (https://example.com)
+                   */
+                  ctaButtonExternal?: string | null;
+                  ctaButtonOpenInNewTab?: boolean | null;
                   id?: string | null;
                 }[]
               | null;
@@ -4903,6 +4923,11 @@ export interface PagesSelect<T extends boolean = true> {
                           text?: T;
                           id?: T;
                         };
+                    ctaButtonText?: T;
+                    ctaButtonLinkType?: T;
+                    ctaButtonInternal?: T;
+                    ctaButtonExternal?: T;
+                    ctaButtonOpenInNewTab?: T;
                     id?: T;
                   };
               trustIndicators?:

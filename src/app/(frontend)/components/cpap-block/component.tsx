@@ -2,6 +2,8 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { CMSLink } from '@/app/(frontend)/components/ui'
+import { resolveLinkHref } from '@/lib/navigation'
 import { cn } from '@/lib/utils'
 import { Check } from 'lucide-react'
 import type { Page } from '@/payload-types'
@@ -43,6 +45,9 @@ function CPAPServiceCard({
   badge,
   features,
   borderColor,
+  ctaButtonText,
+  ctaButtonHref,
+  ctaButtonIsExternal,
   className,
 }: {
   title: string
@@ -50,12 +55,17 @@ function CPAPServiceCard({
   badge?: { text: string; variant: 'default' | 'secondary' | 'outline' }
   features: Array<{ icon: React.ComponentType<{ className?: string }>; text: string }>
   borderColor: string
+  ctaButtonText?: string | null
+  ctaButtonHref?: string
+  ctaButtonIsExternal?: boolean
   className?: string
 }) {
+  const shouldShowButton = ctaButtonText && ctaButtonText.trim() !== ''
+
   return (
     <Card
       className={cn(
-        'relative border-2 bg-card hover:shadow-lg transition-shadow',
+        'relative border-2 bg-card hover:shadow-lg transition-shadow flex flex-col',
         borderColor,
         className,
       )}
@@ -68,18 +78,30 @@ function CPAPServiceCard({
         {badge && (
           <Badge
             variant={badge.variant}
-            className="w-fit mx-auto mt-2 bg-ds-accent-yellow text-white border-0 hover:bg-ds-accent-yellow/90"
+            className="w-fit mx-auto mt-4 bg-ds-accent-yellow text-white border-0 hover:bg-ds-accent-yellow/90 text-base font-semibold px-4 py-1.5"
           >
             {badge.text}
           </Badge>
         )}
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-3">
+      <CardContent className="space-y-4 flex-grow flex flex-col">
+        <div className="space-y-3 flex-grow">
           {features.map((feature) => (
             <FeatureItem key={feature.text} text={feature.text} />
           ))}
         </div>
+        {shouldShowButton && (
+          <div className="mt-6 pt-4">
+            <CMSLink
+              size="lg"
+              className="w-full bg-ds-dark-blue hover:bg-ds-dark-blue/90 text-white px-6 py-3 text-base font-medium rounded-md transition-colors"
+              href={ctaButtonHref || '#'}
+              external={ctaButtonIsExternal || false}
+            >
+              {ctaButtonText}
+            </CMSLink>
+          </div>
+        )}
       </CardContent>
     </Card>
   )
@@ -115,6 +137,32 @@ export function CPAPBlock({
               const features =
                 card.features?.map((feature) => ({ icon: Check, text: feature.text })) || []
 
+              // Check if button should be displayed for this card
+              const shouldShowButton = card.ctaButtonText && card.ctaButtonText.trim() !== ''
+
+              // Resolve button href for this card
+              const buttonHref = shouldShowButton
+                ? resolveLinkHref({
+                    linkType: card.ctaButtonLinkType || undefined,
+                    internal: card.ctaButtonInternal
+                      ? {
+                          relation: {
+                            relationTo: 'pages',
+                            value: card.ctaButtonInternal,
+                          },
+                        }
+                      : null,
+                    external: card.ctaButtonExternal
+                      ? {
+                          href: card.ctaButtonExternal,
+                        }
+                      : null,
+                  })
+                : ''
+
+              const buttonIsExternal =
+                (shouldShowButton && card.ctaButtonLinkType === 'external') || false
+
               return (
                 <CPAPServiceCard
                   key={card.title}
@@ -123,6 +171,9 @@ export function CPAPBlock({
                   badge={badge}
                   features={features}
                   borderColor={card.borderColor || 'border-ds-dark-blue/20'}
+                  ctaButtonText={card.ctaButtonText}
+                  ctaButtonHref={buttonHref}
+                  ctaButtonIsExternal={buttonIsExternal}
                 />
               )
             })}
