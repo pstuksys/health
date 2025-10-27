@@ -100,6 +100,72 @@ export const cpapBlockFields: Field[] = [
           description: 'List of features for this service',
         },
       },
+      {
+        name: 'ctaButtonText',
+        type: 'text',
+        label: 'CTA Button Text',
+        admin: {
+          description: 'Button text for this service card (optional)',
+        },
+      },
+      {
+        name: 'ctaButtonLinkType',
+        type: 'radio',
+        label: 'CTA Button Link Type',
+        options: [
+          {
+            label: 'Internal Link',
+            value: 'internal',
+          },
+          {
+            label: 'External Link',
+            value: 'external',
+          },
+        ],
+        defaultValue: 'internal',
+        admin: {
+          condition: (_data, siblingData) =>
+            siblingData?.ctaButtonText && siblingData?.ctaButtonText.trim() !== '',
+          description: 'Choose whether the CTA button links internally or externally',
+        },
+      },
+      {
+        name: 'ctaButtonInternal',
+        type: 'relationship',
+        relationTo: 'pages',
+        label: 'CTA Button Internal Link',
+        admin: {
+          condition: (_data, siblingData) =>
+            siblingData?.ctaButtonText &&
+            siblingData.ctaButtonText.trim() !== '' &&
+            siblingData.ctaButtonLinkType === 'internal',
+          description: 'Select a page for the CTA button to link to',
+        },
+      },
+      {
+        name: 'ctaButtonExternal',
+        type: 'text',
+        label: 'CTA Button External URL',
+        admin: {
+          condition: (_data, siblingData) =>
+            siblingData?.ctaButtonText &&
+            siblingData?.ctaButtonText.trim() !== '' &&
+            siblingData?.ctaButtonLinkType === 'external',
+          description: 'Enter the full URL for the CTA button (https://example.com)',
+        },
+      },
+      {
+        name: 'ctaButtonOpenInNewTab',
+        type: 'checkbox',
+        label: 'Open CTA Button in New Tab',
+        defaultValue: false,
+        admin: {
+          condition: (_data, siblingData) =>
+            siblingData?.ctaButtonText &&
+            siblingData?.ctaButtonText.trim() !== '' &&
+            siblingData?.ctaButtonLinkType === 'external',
+        },
+      },
     ],
     defaultValue: [
       {

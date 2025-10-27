@@ -122,16 +122,18 @@ export function SleepAssessmentFeatures({
         }`}
       >
         {featuresToRender.map((feature, index) => {
-          const Icon = iconMap[feature.icon as IconKey] || Clock
+          const Icon = feature.icon ? iconMap[feature.icon as IconKey] : null
           return (
             <div
               key={index}
               className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 text-center hover:shadow-md transition-shadow"
             >
-              {/* Icon */}
-              <div className="w-12 h-12 bg-ds-accent-yellow rounded-full flex items-center justify-center mx-auto mb-4">
-                <Icon className="w-6 h-6 text-white" />
-              </div>
+              {/* Icon - Only render if icon exists */}
+              {Icon && (
+                <div className="w-12 h-12 bg-ds-accent-yellow rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Icon className="w-6 h-6 text-white" />
+                </div>
+              )}
 
               {/* Title */}
               <h3 className="text-lg font-semibold text-ds-dark-blue mb-3">{feature.title}</h3>
