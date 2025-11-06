@@ -17,6 +17,9 @@ importers:
       '@payloadcms/db-vercel-postgres':
         specifier: 3.50.0
         version: 3.50.0(@types/pg@8.11.6)(payload@3.50.0(bufferutil@4.0.9)(graphql@16.11.0)(typescript@5.7.3)(utf-8-validate@6.0.5))
+      '@payloadcms/email-resend':
+        specifier: 3.50.0
+        version: 3.50.0(payload@3.50.0(bufferutil@4.0.9)(graphql@16.11.0)(typescript@5.7.3)(utf-8-validate@6.0.5))
       '@payloadcms/next':
         specifier: 3.50.0
         version: 3.50.0(@types/react@19.1.0)(graphql@16.11.0)(monaco-editor@0.52.2)(next@15.3.2(@babel/core@7.28.0)(@playwright/test@1.50.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(payload@3.50.0(bufferutil@4.0.9)(graphql@16.11.0)(typescript@5.7.3)(utf-8-validate@6.0.5))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.7.3)
@@ -47,6 +50,9 @@ importers:
       '@radix-ui/react-slot':
         specifier: ^1.2.3
         version: 1.2.3(@types/react@19.1.0)(react@19.1.0)
+      botid:
+        specifier: ^1.5.10
+        version: 1.5.10(next@15.3.2(@babel/core@7.28.0)(@playwright/test@1.50.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0)
       class-variance-authority:
         specifier: ^0.7.1
         version: 0.7.1
@@ -1552,6 +1558,12 @@ packages:
     peerDependencies:
       payload: 3.50.0
 
+  '@payloadcms/email-resend@3.50.0':
+    resolution: {integrity: sha512-EzEeNfZSxm/c+hBdz/SbXXA9lSHetIMEo0qcpjudJSoBH4mzvj0woNsEx6+D7F8fKDpMfd3K1NB68B86r6lOrQ==}
+    engines: {node: ^18.20.2 || >=20.9.0}
+    peerDependencies:
+      payload: 3.50.0
+
   '@payloadcms/graphql@3.50.0':
     resolution: {integrity: sha512-BrhtTaEOmnK2fbBOMbr1sbOh0hTI6pl9fZ0Y+PzlS9/2SjjDJBe1xv2v6YjhujklTaU0GaKLs6xFHA8u+ppoAQ==}
     hasBin: true
@@ -2606,6 +2618,17 @@ packages:
 
   body-scroll-lock@4.0.0-beta.0:
     resolution: {integrity: sha512-a7tP5+0Mw3YlUJcGAKUqIBkYYGlYxk2fnCasq/FUph1hadxlTRjF+gAcZksxANnaMnALjxEddmSi/H3OR8ugcQ==}
+
+  botid@1.5.10:
+    resolution: {integrity: sha512-hhgty1u0CxozqTqLbTQMtYBwmWdzWZTAsBCvN7/qhkN3fM7MlXacmmcMoyc0f+vV+U6RRoLYdlo32td+PhJyew==}
+    peerDependencies:
+      next: '*'
+      react: ^18.0.0 || ^19.0.0
+    peerDependenciesMeta:
+      next:
+        optional: true
+      react:
+        optional: true
 
   bowser@2.12.0:
     resolution: {integrity: sha512-HcOcTudTeEWgbHh0Y1Tyb6fdeR71m4b/QACf0D4KswGTsNeIJQmg38mRENZPAYPZvGFN3fk3604XbQEPdxXdKg==}
@@ -6990,6 +7013,10 @@ snapshots:
       nodemailer: 6.9.16
       payload: 3.50.0(bufferutil@4.0.9)(graphql@16.11.0)(typescript@5.7.3)(utf-8-validate@6.0.5)
 
+  '@payloadcms/email-resend@3.50.0(payload@3.50.0(bufferutil@4.0.9)(graphql@16.11.0)(typescript@5.7.3)(utf-8-validate@6.0.5))':
+    dependencies:
+      payload: 3.50.0(bufferutil@4.0.9)(graphql@16.11.0)(typescript@5.7.3)(utf-8-validate@6.0.5)
+
   '@payloadcms/graphql@3.50.0(graphql@16.11.0)(payload@3.50.0(bufferutil@4.0.9)(graphql@16.11.0)(typescript@5.7.3)(utf-8-validate@6.0.5))(typescript@5.7.3)':
     dependencies:
       graphql: 16.11.0
@@ -8278,6 +8305,11 @@ snapshots:
   binary-extensions@2.3.0: {}
 
   body-scroll-lock@4.0.0-beta.0: {}
+
+  botid@1.5.10(next@15.3.2(@babel/core@7.28.0)(@playwright/test@1.50.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4))(react@19.1.0):
+    optionalDependencies:
+      next: 15.3.2(@babel/core@7.28.0)(@playwright/test@1.50.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(sass@1.77.4)
+      react: 19.1.0
 
   bowser@2.12.0: {}
 

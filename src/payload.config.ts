@@ -23,6 +23,7 @@ import {
   AlignFeature,
   IndentFeature,
 } from '@payloadcms/richtext-lexical'
+import { resendAdapter } from '@payloadcms/email-resend'
 import path from 'path'
 import { buildConfig } from 'payload'
 import { fileURLToPath } from 'url'
@@ -64,11 +65,19 @@ const richTextBlocks = [
   },
 ]
 
+const emailAdapter = resendAdapter({
+  apiKey: process.env.RESEND_API_KEY || '',
+  defaultFromAddress: process.env.RESEND_EMAIL_RECEIVER || 'noreply@resend.dev',
+  defaultFromName: process.env.RESEND_FROM_NAME || 'IPDiagnostics Team',
+})
+
 // Environment variable validation
 const requiredEnvVars = {
   BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN || '',
   PAYLOAD_SECRET: process.env.PAYLOAD_SECRET || '',
   POSTGRES_URL: process.env.POSTGRES_URL || '',
+  RESEND_API_KEY: process.env.RESEND_API_KEY || '',
+  RESEND_EMAIL_RECEIVER: process.env.RESEND_EMAIL_RECEIVER || '',
 }
 
 // Check for missing environment variables only in production
@@ -83,6 +92,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 export default buildConfig({
+  email: emailAdapter,
   serverURL: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   localization: {
     // locales: ['en', 'es', 'de'],
