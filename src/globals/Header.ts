@@ -83,32 +83,56 @@ export const Header: GlobalConfig = {
               type: 'array',
               fields: [
                 { name: 'title', type: 'text', required: true },
+                /**
+                 * Legacy category items (kept for reference)
+                 *
+                 * {
+                 *   name: 'items',
+                 *   type: 'array',
+                 *   fields: [
+                 *     { name: 'label', type: 'text', required: true },
+                 *     {
+                 *       name: 'linkType',
+                 *       type: 'radio',
+                 *       defaultValue: 'internal',
+                 *       options: [
+                 *         { label: 'Internal', value: 'internal' },
+                 *         { label: 'External', value: 'external' },
+                 *       ],
+                 *     },
+                 *     {
+                 *       name: 'page',
+                 *       type: 'relationship',
+                 *       relationTo: ['pages', 'blogs'],
+                 *       admin: { condition: (_, s) => s?.linkType === 'internal' },
+                 *     },
+                 *     {
+                 *       name: 'href',
+                 *       type: 'text',
+                 *       admin: { condition: (_, s) => s?.linkType === 'external' },
+                 *     },
+                 *   ],
+                 * },
+                 */
                 {
-                  name: 'items',
-                  type: 'array',
-                  fields: [
-                    { name: 'label', type: 'text', required: true },
-                    {
-                      name: 'linkType',
-                      type: 'radio',
-                      defaultValue: 'internal',
-                      options: [
-                        { label: 'Internal', value: 'internal' },
-                        { label: 'External', value: 'external' },
-                      ],
-                    },
-                    {
-                      name: 'page',
-                      type: 'relationship',
-                      relationTo: ['pages', 'blogs'],
-                      admin: { condition: (_, s) => s?.linkType === 'internal' },
-                    },
-                    {
-                      name: 'href',
-                      type: 'text',
-                      admin: { condition: (_, s) => s?.linkType === 'external' },
-                    },
+                  name: 'linkType',
+                  type: 'radio',
+                  defaultValue: 'internal',
+                  options: [
+                    { label: 'Internal', value: 'internal' },
+                    { label: 'External', value: 'external' },
                   ],
+                },
+                {
+                  name: 'page',
+                  type: 'relationship',
+                  relationTo: ['pages', 'blogs'],
+                  admin: { condition: (_, s) => s?.linkType === 'internal' },
+                },
+                {
+                  name: 'href',
+                  type: 'text',
+                  admin: { condition: (_, s) => s?.linkType === 'external' },
                 },
               ],
             },

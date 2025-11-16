@@ -6124,23 +6124,17 @@ export interface Header {
           categories?:
             | {
                 title: string;
-                items?:
-                  | {
-                      label: string;
-                      linkType?: ('internal' | 'external') | null;
-                      page?:
-                        | ({
-                            relationTo: 'pages';
-                            value: number | Page;
-                          } | null)
-                        | ({
-                            relationTo: 'blogs';
-                            value: number | Blog;
-                          } | null);
-                      href?: string | null;
-                      id?: string | null;
-                    }[]
-                  | null;
+                linkType?: ('internal' | 'external') | null;
+                page?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+                href?: string | null;
                 id?: string | null;
               }[]
             | null;
@@ -6252,15 +6246,9 @@ export interface HeaderSelect<T extends boolean = true> {
                 | T
                 | {
                     title?: T;
-                    items?:
-                      | T
-                      | {
-                          label?: T;
-                          linkType?: T;
-                          page?: T;
-                          href?: T;
-                          id?: T;
-                        };
+                    linkType?: T;
+                    page?: T;
+                    href?: T;
                     id?: T;
                   };
               featured?:
