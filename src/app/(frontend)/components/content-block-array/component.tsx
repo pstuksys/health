@@ -81,7 +81,7 @@ export function ContentBlockArray({
                             variant="ghost"
                             size="lg"
                             external={block.linkType === 'external'}
-                            className="!text-ds-dark-blue hover:!text-ds-accent-yellow"
+                            className="hover:!text-ds-dark-blue !text-ds-accent-yellow"
                           >
                             {block.buttonText}
                           </CMSLink>
@@ -103,7 +103,7 @@ export function ContentBlockArray({
                             variant="ghost"
                             size="lg"
                             external={block.btn2LinkType === 'external'}
-                            className="!text-ds-dark-blue hover:!text-ds-accent-yellow"
+                            className="hover:!text-ds-dark-blue !text-ds-accent-yellow"
                           >
                             {block.btn2Text}
                           </CMSLink>

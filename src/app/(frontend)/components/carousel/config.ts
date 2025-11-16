@@ -46,9 +46,23 @@ export const carouselFields: Field[] = [
       },
     ],
   },
-  { name: 'slidesToShow', type: 'number', defaultValue: 1, min: 1, max: 6 },
   { name: 'autoplay', type: 'checkbox', defaultValue: false },
-  { name: 'autoplayInterval', type: 'number', defaultValue: 5000 },
+  {
+    name: 'autoplayInterval',
+    type: 'select',
+    defaultValue: '5000',
+    required: true,
+    options: [
+      { label: '3 seconds', value: '3000' },
+      { label: '5 seconds', value: '5000' },
+      { label: '8 seconds', value: '8000' },
+      { label: '10 seconds', value: '10000' },
+      { label: '15 seconds', value: '15000' },
+    ],
+    admin: {
+      condition: (_, siblingData) => Boolean(siblingData?.autoplay),
+    },
+  },
   { name: 'showArrows', type: 'checkbox', defaultValue: true },
   { name: 'showDots', type: 'checkbox', defaultValue: true },
 ]

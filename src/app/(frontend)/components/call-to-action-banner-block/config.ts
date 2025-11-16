@@ -4,6 +4,7 @@ export const callToActionBannerBlockFields: Field[] = [
   { name: 'ctaImage', type: 'upload', relationTo: 'media' },
   { name: 'ctaTitle', type: 'text', defaultValue: 'Expert Sleep Diagnostics from IPD' },
   { name: 'ctaDescription', type: 'richText' },
+  { name: 'fullWidth', type: 'checkbox', defaultValue: false },
   {
     name: 'ctaPrimary',
     type: 'group',

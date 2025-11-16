@@ -15,6 +15,7 @@ export function SingleCard({
   image,
   imagePosition = 'left',
   enableBackground = false,
+  enableLink = false,
   linkType,
   internal,
   external,
@@ -26,6 +27,7 @@ export function SingleCard({
   | 'image'
   | 'imagePosition'
   | 'enableBackground'
+  | 'enableLink'
   | 'linkType'
   | 'internal'
   | 'external'
@@ -50,7 +52,7 @@ export function SingleCard({
         <div
           className={cn(
             'grid grid-cols-1 md:grid-cols-2 gap-8 items-center rounded-2xl p-6',
-            enableBackground && 'border bg-[#f3f5f7]',
+            enableBackground && 'bg-[#f3f5f7]',
           )}
         >
           <div
@@ -68,7 +70,7 @@ export function SingleCard({
                 {subtitle as any}
               </p>
             )}
-            {href && cta?.text && (
+            {Boolean(enableLink) && href && cta?.text && (
               <CMSLink href={href} variant={(cta?.variant as any) ?? 'primary'}>
                 {cta.text}
               </CMSLink>

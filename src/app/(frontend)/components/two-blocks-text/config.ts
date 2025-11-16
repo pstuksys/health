@@ -30,12 +30,13 @@ export const twoBlocksTextFields: Field[] = [
     name: 'rightBlock',
     type: 'group',
     label: 'Right Block',
+    required: false,
     fields: [
       {
         name: 'title',
         type: 'text',
         label: 'Title',
-        required: true,
+        required: false,
       },
       {
         name: 'content',
@@ -44,5 +45,11 @@ export const twoBlocksTextFields: Field[] = [
         required: false,
       },
     ],
+  },
+  {
+    name: 'disableBackground',
+    type: 'checkbox',
+    label: 'Disable Background Color',
+    defaultValue: false,
   },
 ]

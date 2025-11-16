@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { cn } from '@/lib/utils'
 import { isLexicalEditorState, RichText } from '@/app/(frontend)/components/ui/rich-text'
+import { hasNonEmptyLexicalContent } from '@/lib/richtext-utils'
 import type { Page } from '@/payload-types'
 
 type TwoBlocksTextProps = Extract<
@@ -10,7 +11,7 @@ type TwoBlocksTextProps = Extract<
   { blockType: 'twoBlocksText' }
 >
 
-export function TwoBlocksText({ leftBlock, rightBlock }: TwoBlocksTextProps) {
+export function TwoBlocksText({ leftBlock, rightBlock, disableBackground }: TwoBlocksTextProps) {
   const [isVisible, setIsVisible] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -25,10 +26,24 @@ export function TwoBlocksText({ leftBlock, rightBlock }: TwoBlocksTextProps) {
     return () => observer.disconnect()
   }, [])
 
+  const hasRightBlockContent =
+    (rightBlock?.title && rightBlock.title.trim().length > 0) ||
+    (rightBlock?.content &&
+      isLexicalEditorState(rightBlock.content) &&
+      hasNonEmptyLexicalContent(rightBlock.content))
+
   return (
-    <section ref={sectionRef} className="bg-ds-light-neutral p-4 md:p-4">
+    <section
+      ref={sectionRef}
+      className={cn(disableBackground ? '' : 'bg-ds-light-neutral', 'px-4 md:px-4 py-6 md:py-6')}
+    >
       <div className="max-w-container mx-auto overflow-hidden">
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 lg:gap-12 items-start">
+        <div
+          className={cn(
+            'grid grid-cols-1 gap-8 lg:gap-12 items-start',
+            hasRightBlockContent ? 'lg:grid-cols-[2fr_3fr]' : 'lg:grid-cols-1',
+          )}
+        >
           {/* Left Block */}
           <div
             className={cn(
@@ -55,27 +70,29 @@ export function TwoBlocksText({ leftBlock, rightBlock }: TwoBlocksTextProps) {
           </div>
 
           {/* Right Block */}
-          <div
-            className={cn(
-              'bg-ds-dark-blue rounded-3xl p-8 md:p-10 lg:p-12 transition-all duration-700 ease-out',
-              isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8',
-            )}
-          >
-            {rightBlock?.title && (
-              <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white mb-6 leading-tight">
-                {rightBlock.title}
-              </h2>
-            )}
-
-            <div className="space-y-6 text-white">
-              {rightBlock?.content && isLexicalEditorState(rightBlock.content) && (
-                <RichText
-                  data={rightBlock.content as unknown}
-                  className="text-base md:text-lg leading-relaxed font-light max-w-none prose-p:text-white prose-strong:text-ds-accent-yellow prose-em:text-ds-accent-yellow"
-                />
+          {hasRightBlockContent ? (
+            <div
+              className={cn(
+                'bg-ds-dark-blue rounded-3xl p-8 md:p-10 lg:p-12 transition-all duration-700 ease-out',
+                isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8',
               )}
+            >
+              {rightBlock?.title && (
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-light text-white mb-6 leading-tight">
+                  {rightBlock.title}
+                </h2>
+              )}
+
+              <div className="space-y-6 text-white">
+                {rightBlock?.content && isLexicalEditorState(rightBlock.content) && (
+                  <RichText
+                    data={rightBlock.content as unknown}
+                    className="text-base md:text-lg leading-relaxed font-light max-w-none prose-p:text-white prose-strong:text-ds-accent-yellow prose-em:text-ds-accent-yellow"
+                  />
+                )}
+              </div>
             </div>
-          </div>
+          ) : null}
         </div>
       </div>
     </section>

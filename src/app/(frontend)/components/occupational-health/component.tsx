@@ -13,27 +13,12 @@ import Image from 'next/image'
 import type { Page } from '@/payload-types'
 import { Button } from '../ui/button'
 import { CMSLink } from '../ui'
+import { resolveLinkHref } from '@/lib/navigation'
 
 type OccupationalHealthProps = Extract<
   NonNullable<Page['blocks']>[number],
   { blockType: 'occupationalHealth' }
 >
-
-// Simple helper to resolve link hrefs for this component
-const resolveHref = (linkData: any): string => {
-  if (linkData?.linkType === 'external') {
-    return linkData.external || '#'
-  }
-
-  if (linkData?.linkType === 'internal' && linkData.internal) {
-    // Handle direct relationship field
-    if (typeof linkData.internal === 'object' && linkData.internal.slug) {
-      return `/${linkData.internal.slug}`
-    }
-  }
-
-  return '#'
-}
 
 export function OccupationalHealth({
   heroSection,
@@ -50,14 +35,13 @@ export function OccupationalHealth({
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             <div className="space-y-6">
               <h1 className="text-4xl lg:text-5xl xl:text-6xl font-light leading-tight">
-                {heroSection?.title || 'Supporting Workforce Health'}
+                {heroSection?.title}
               </h1>
               <h2 className="text-2xl lg:text-3xl font-semibold text-ds-accent-yellow">
-                {heroSection?.subtitle || 'Through Expert Sleep Diagnostics'}
+                {heroSection?.subtitle}
               </h2>
               <p className="text-lg leading-relaxed opacity-90 font-light">
-                {heroSection?.description1 ||
-                  'Occupational health is the medical specialty dedicated to promoting employee wellbeing and managing work-related illnesses. By working closely with occupational health professionals, IPD provides the specialist sleep diagnostics and treatment services that enable organisations to maintain a healthy, safe, and productive workforce.'}
+                {heroSection?.description1}
               </p>
               <p className="text-lg leading-relaxed opacity-90 font-light">
                 {heroSection?.description2 ? (
@@ -66,12 +50,23 @@ export function OccupationalHealth({
                     such as{' '}
                     {heroSection?.osaLink ? (
                       <CMSLink
-                        href={resolveHref(heroSection.osaLink)}
+                        href={resolveLinkHref({
+                          linkType: heroSection.osaLink.linkType,
+                          internal: heroSection.osaLink.internal
+                            ? {
+                                relation: {
+                                  relationTo: 'pages',
+                                  value: heroSection.osaLink.internal.relation ?? undefined,
+                                },
+                              }
+                            : undefined,
+                          external: heroSection.osaLink.external,
+                        })}
                         className="text-ds-accent-yellow hover:text-ds-accent-yellow/80 font-medium"
                         external={heroSection.osaLink.linkType === 'external'}
                         variant="ghost"
                       >
-                        {heroSection.osaLink.text || 'Obstructive Sleep Apnoea'}
+                        {heroSection.osaLink.text}
                       </CMSLink>
                     ) : (
                       'Obstructive Sleep Apnoea'
@@ -80,45 +75,58 @@ export function OccupationalHealth({
                     This reduces fatigue-related risks in the workplace and supports a faster, safer
                     return to work.
                   </>
-                ) : (
-                  'At IPD, our rapid access pathways for assessing and managing sleep disorders such as Obstructive Sleep Apnoea help ensure employees receive swift, accurate diagnoses and timely treatment. This reduces fatigue-related risks in the workplace and supports a faster, safer return to work.'
-                )}
+                ) : null}
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 {heroSection?.primaryCta && (
                   <CMSLink
-                    href={resolveHref(heroSection.primaryCta)}
+                    href={resolveLinkHref({
+                      linkType: heroSection.primaryCta.linkType,
+                      internal: heroSection.primaryCta.internal
+                        ? {
+                            relation: {
+                              relationTo: 'pages',
+                              value: heroSection.primaryCta.internal.relation ?? undefined,
+                            },
+                          }
+                        : undefined,
+                      external: heroSection.primaryCta.external,
+                    })}
                     variant="primary"
                     size="lg"
                     className="px-8 py-3 text-lg"
                     external={heroSection.primaryCta.linkType === 'external'}
                   >
-                    {heroSection.primaryCta.text || 'Make Referral'}
+                    {heroSection.primaryCta.text}
                   </CMSLink>
                 )}
                 {heroSection?.secondaryCta && (
                   <CMSLink
-                    href={resolveHref(heroSection.secondaryCta)}
+                    href={resolveLinkHref({
+                      linkType: heroSection.secondaryCta.linkType,
+                      internal: heroSection.secondaryCta.internal
+                        ? {
+                            relation: {
+                              relationTo: 'pages',
+                              value: heroSection.secondaryCta.internal.relation ?? undefined,
+                            },
+                          }
+                        : undefined,
+                      external: heroSection.secondaryCta.external,
+                    })}
                     variant="outline"
                     size="lg"
                     className="border-white text-white hover:bg-white hover:text-ds-dark-blue px-8 py-3 text-lg bg-transparent"
                     external={heroSection.secondaryCta.linkType === 'external'}
                   >
-                    {heroSection.secondaryCta.text || 'Download OH Guide'}
+                    {heroSection.secondaryCta.text}
                   </CMSLink>
                 )}
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-6">
-              {(
-                heroSection?.statistics || [
-                  { icon: 'shield', value: '95%', description: 'Risk Reduction' },
-                  { icon: 'clock', value: '48h', description: 'Fast Track Results' },
-                  { icon: 'users', value: '1000+', description: 'Employee Studies' },
-                  { icon: 'trending-up', value: '30%', description: 'Productivity Increase' },
-                ]
-              ).map((stat, index) => {
+              {(heroSection?.statistics ?? []).map((stat, index) => {
                 const IconComponent =
                   stat.icon === 'shield'
                     ? Shield
@@ -152,11 +160,10 @@ export function OccupationalHealth({
           <div className="max-w-container mx-auto px-4">
             <div className="text-center space-y-4 mb-16">
               <h2 className="text-3xl lg:text-4xl font-light text-ds-dark-blue">
-                {journeySection?.title || 'Patient Journey'}
+                {journeySection?.title}
               </h2>
               <p className="text-lg text-ds-pastille-green leading-relaxed max-w-3xl mx-auto font-light">
-                {journeySection?.description ||
-                  'Our comprehensive patient pathway ensures thorough assessment and appropriate treatment options for sleep disorders.'}
+                {journeySection?.description}
               </p>
             </div>
 
@@ -181,57 +188,18 @@ export function OccupationalHealth({
         <div className="max-w-container mx-auto px-4">
           <div className="text-center space-y-4 mb-16">
             <h2 className="text-3xl lg:text-4xl font-light text-ds-dark-blue">
-              {pathwaySection?.title || 'Occupational Health Pathway'}
+              {pathwaySection?.title}
             </h2>
             <p className="text-lg text-ds-pastille-green leading-relaxed max-w-3xl mx-auto font-light">
-              {pathwaySection?.description ||
-                'Our streamlined pathway is designed specifically for occupational health professionals, ensuring swift assessment and management of sleep-related workplace risks.'}
+              {pathwaySection?.description}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {(
-              pathwaySection?.steps || [
-                {
-                  step: 1,
-                  title: 'Initial Assessment',
-                  description:
-                    'Have you identified an individual? Use our IPD assessment designed for GPs that includes validated sleep screening tools.',
-                  buttonText: 'Complete Assessment',
-                },
-                {
-                  step: 2,
-                  title: 'Sleep Study',
-                  description:
-                    'Patient undertakes a sleep study based on their symptoms - comprehensive diagnostic testing.',
-                  buttonText: 'Find Out More',
-                },
-                {
-                  step: 3,
-                  title: 'Expert Reporting',
-                  description:
-                    'You will receive a report scored by Clinical Sleep Physiologist and reported by a Consultant Sleep Physician.',
-                  buttonText: 'View Sample Report',
-                },
-                {
-                  step: 4,
-                  title: 'Patient Follow-up',
-                  description:
-                    'Arrange follow up with your patient to discuss results and next steps.',
-                  buttonText: 'Schedule Follow-up',
-                },
-                {
-                  step: 5,
-                  title: 'Ongoing Support',
-                  description:
-                    'If needed, IPD can support in arranging therapy and appointments with our nationwide network of consultant physicians.',
-                  buttonText: 'Access Support',
-                },
-              ]
-            ).map((pathwayStep, index) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8 lg:gap-4 max-w-6xl mx-auto">
+            {(pathwaySection?.steps ?? []).map((pathwayStep, index) => (
               <div
                 key={index}
-                className={`bg-white p-6 rounded-lg border border-ds-pastille-green/20 shadow-sm flex flex-col ${pathwayStep.step === 5 ? 'md:col-span-2 lg:col-span-1' : ''}`}
+                className={`bg-white p-6 rounded-lg border border-ds-pastille-green/20 shadow-sm flex flex-col lg:min-h-[260px] ${pathwayStep.step === 5 ? 'md:col-span-2 lg:col-span-1' : ''}`}
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="bg-ds-accent-yellow text-ds-dark-blue rounded-full w-10 h-10 flex items-center justify-center font-bold">
@@ -244,7 +212,18 @@ export function OccupationalHealth({
                 </p>
                 {pathwayStep.link ? (
                   <CMSLink
-                    href={resolveHref(pathwayStep.link)}
+                    href={resolveLinkHref({
+                      linkType: pathwayStep.link.linkType,
+                      internal: pathwayStep.link.internal
+                        ? {
+                            relation: {
+                              relationTo: 'pages',
+                              value: pathwayStep.link.internal.relation ?? undefined,
+                            },
+                          }
+                        : undefined,
+                      external: pathwayStep.link.external,
+                    })}
                     variant="outline"
                     size="sm"
                     className="w-full bg-ds-accent-yellow border-ds-accent-yellow text-white hover:ds-accent-yellow hover:text-white mt-auto"
@@ -272,26 +251,15 @@ export function OccupationalHealth({
           <div className="max-w-container mx-auto px-4">
             <div className="text-center space-y-4 mb-12">
               <h2 className="text-3xl lg:text-4xl font-light text-ds-dark-blue">
-                {servicesSection?.title || 'Related Pages'}
+                {servicesSection?.title}
               </h2>
               <p className="text-lg text-ds-pastille-green font-light">
-                {servicesSection?.description ||
-                  'Explore our comprehensive range of sleep diagnostic services'}
+                {servicesSection?.description}
               </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              {(
-                servicesSection?.services || [
-                  {
-                    icon: 'stethoscope',
-                    title: 'MWT',
-                    description: 'Maintenance of Wakefulness Testing',
-                  },
-                  { icon: 'file-text', title: 'PSG', description: 'Polysomnography Sleep Studies' },
-                  { icon: 'heart-handshake', title: 'CPAP', description: 'CPAP Therapy Services' },
-                ]
-              ).map((service, index) => {
+              {(servicesSection?.services ?? []).map((service, index) => {
                 const IconComponent =
                   service.icon === 'stethoscope'
                     ? Stethoscope
@@ -315,12 +283,23 @@ export function OccupationalHealth({
                     </p>
                     {service.cta ? (
                       <CMSLink
-                        href={resolveHref(service.cta)}
+                        href={resolveLinkHref({
+                          linkType: service.cta.linkType,
+                          internal: service.cta.internal
+                            ? {
+                                relation: {
+                                  relationTo: 'pages',
+                                  value: service.cta.internal.relation ?? undefined,
+                                },
+                              }
+                            : undefined,
+                          external: service.cta.external,
+                        })}
                         variant="outline"
                         className="text-white bg-ds-accent-yellow hover:text-white mt-auto"
                         external={service.cta.linkType === 'external'}
                       >
-                        {service.cta.text || 'Learn More'} →
+                        {service.cta.text} →
                       </CMSLink>
                     ) : (
                       <Button
@@ -344,33 +323,58 @@ export function OccupationalHealth({
           <div className="max-w-container mx-auto px-4 text-center">
             <div className="max-w-2xl mx-auto space-y-6">
               <h2 className="text-3xl lg:text-4xl font-light text-ds-dark-blue">
-                {ctaSection?.title || 'Ready to Improve Workplace Safety?'}
+                {ctaSection?.title}
               </h2>
               <p className="text-lg text-ds-pastille-green leading-relaxed font-light">
-                {ctaSection?.description ||
-                  'Start referring employees for comprehensive sleep assessments and help reduce fatigue-related workplace incidents while improving overall productivity.'}
+                {ctaSection?.description}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 {ctaSection?.primaryCta && (
                   <CMSLink
-                    href={resolveHref(ctaSection.primaryCta)}
+                    href={resolveLinkHref({
+                      linkType: ctaSection.primaryCta.linkType,
+                      internal: ctaSection.primaryCta.internal
+                        ? {
+                            relation: {
+                              relationTo: 'pages',
+                              value: ctaSection.primaryCta.internal ?? undefined,
+                            },
+                          }
+                        : undefined,
+                      external: ctaSection.primaryCta.external
+                        ? { href: ctaSection.primaryCta.external }
+                        : undefined,
+                    })}
                     variant="primary"
                     size="lg"
                     className="px-8 py-3 text-lg"
                     external={ctaSection.primaryCta.linkType === 'external'}
                   >
-                    {ctaSection.primaryCta.text || 'Make a Referral'}
+                    {ctaSection.primaryCta.text}
                   </CMSLink>
                 )}
                 {ctaSection?.secondaryCta && (
                   <CMSLink
-                    href={resolveHref(ctaSection.secondaryCta)}
+                    href={resolveLinkHref({
+                      linkType: ctaSection.secondaryCta.linkType,
+                      internal: ctaSection.secondaryCta.internal
+                        ? {
+                            relation: {
+                              relationTo: 'pages',
+                              value: ctaSection.secondaryCta.internal ?? undefined,
+                            },
+                          }
+                        : undefined,
+                      external: ctaSection.secondaryCta.external
+                        ? { href: ctaSection.secondaryCta.external }
+                        : undefined,
+                    })}
                     variant="outline"
                     size="lg"
                     className="px-8 py-3 text-lg bg-transparent border-ds-pastille-green text-ds-pastille-green hover:bg-ds-pastille-green hover:text-white"
                     external={ctaSection.secondaryCta.linkType === 'external'}
                   >
-                    {ctaSection.secondaryCta.text || 'Download OH Toolkit'}
+                    {ctaSection.secondaryCta.text}
                   </CMSLink>
                 )}
               </div>

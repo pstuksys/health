@@ -73,6 +73,10 @@ export const CorporateHealth = memo(function CorporateHealth({
     })
   }, [servicesSection?.ctaButton])
 
+  const leftServices = servicesSection?.leftServices || []
+  const rightServices = servicesSection?.rightServices || []
+  const servicesRowCount = Math.max(leftServices.length, rightServices.length)
+
   return (
     <div className="min-h-screen bg-ds-light-neutral">
       {/* Hero Section */}
@@ -177,59 +181,55 @@ export const CorporateHealth = memo(function CorporateHealth({
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
-              <div className="space-y-6">
-                {(servicesSection?.leftServices || []).map((service, index) => {
-                  const IconComponent = iconMap[service.icon as IconKey] || Users
-
-                  return (
+            <div className="grid md:grid-cols-2 gap-6 auto-rows-fr">
+              {Array.from({ length: servicesRowCount }).flatMap((_, idx) => {
+                const left = leftServices[idx]
+                const right = rightServices[idx]
+                return [
+                  left ? (
                     <div
-                      key={index}
-                      className="flex items-start gap-4 p-4 bg-white rounded-lg border border-ds-pastille-green/20 shadow-sm"
+                      key={`left-${idx}`}
+                      className="flex items-start gap-4 p-4 bg-white rounded-lg border border-ds-pastille-green/20 shadow-sm h-full"
                     >
-                      <IconComponent className="h-6 w-6 text-ds-accent-yellow mt-1 flex-shrink-0" />
+                      {(() => {
+                        const IconComponent = iconMap[left.icon as IconKey] || Users
+                        return (
+                          <IconComponent className="h-6 w-6 text-ds-accent-yellow mt-1 flex-shrink-0" />
+                        )
+                      })()}
                       <div>
-                        <h3 className="font-semibold text-ds-dark-blue mb-2">{service.title}</h3>
+                        <h3 className="font-semibold text-ds-dark-blue mb-2">{left.title}</h3>
                         <p className="text-ds-pastille-green text-sm font-light">
-                          {service.description}
+                          {left.description}
                         </p>
                       </div>
                     </div>
-                  )
-                })}
-              </div>
-
-              <div className="space-y-6">
-                {(servicesSection?.rightServices || []).map((service, index) => {
-                  const IconComponent = iconMap[service.icon as IconKey] || Users
-
-                  return (
+                  ) : (
+                    <div key={`left-empty-${idx}`} className="hidden md:block" />
+                  ),
+                  right ? (
                     <div
-                      key={index}
-                      className="flex items-start gap-4 p-4 bg-white rounded-lg border border-ds-pastille-green/20 shadow-sm"
+                      key={`right-${idx}`}
+                      className="flex items-start gap-4 p-4 bg-white rounded-lg border border-ds-pastille-green/20 shadow-sm h-full"
                     >
-                      <IconComponent className="h-6 w-6 text-ds-accent-yellow mt-1 flex-shrink-0" />
+                      {(() => {
+                        const IconComponent = iconMap[right.icon as IconKey] || Users
+                        return (
+                          <IconComponent className="h-6 w-6 text-ds-accent-yellow mt-1 flex-shrink-0" />
+                        )
+                      })()}
                       <div>
-                        <h3 className="font-semibold text-ds-dark-blue mb-2">{service.title}</h3>
+                        <h3 className="font-semibold text-ds-dark-blue mb-2">{right.title}</h3>
                         <p className="text-ds-pastille-green text-sm font-light">
-                          {service.description}
+                          {right.description}
                         </p>
                       </div>
                     </div>
-                  )
-                })}
-
-                <div className="bg-ds-pastille-green/10 p-4 rounded-lg border-l-4 border-ds-accent-yellow">
-                  <p className="text-sm text-ds-pastille-green font-light">
-                    <strong className="text-ds-dark-blue font-semibold">
-                      Complete Privacy Guaranteed:
-                    </strong>{' '}
-                    IPD guarantees complete privacy for all employees. Employers receive only
-                    anonymised, actionable insights, never individual health data. Helping you
-                    measure the impact on wellbeing and organisational performance.
-                  </p>
-                </div>
-              </div>
+                  ) : (
+                    <div key={`right-empty-${idx}`} className="hidden md:block" />
+                  ),
+                ]
+              })}
             </div>
 
             <div className="text-center mt-12">
