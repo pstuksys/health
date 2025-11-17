@@ -39,6 +39,7 @@ export function FullWidthBanner({
 }: FullWidthBannerProps) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
+  const [isFading, setIsFading] = useState(false)
 
   const bgUrl = mediaToUrl(backgroundImage)
 
@@ -69,12 +70,22 @@ export function FullWidthBanner({
   const totalSlides = resolvedCarouselItems.length
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev + 1) % totalSlides)
-  }, [totalSlides])
+    if (isFading || totalSlides === 0) return
+    setIsFading(true)
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % totalSlides)
+      setIsFading(false)
+    }, 300)
+  }, [isFading, totalSlides])
 
   const prevSlide = useCallback(() => {
-    setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides)
-  }, [totalSlides])
+    if (isFading || totalSlides === 0) return
+    setIsFading(true)
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev - 1 + totalSlides) % totalSlides)
+      setIsFading(false)
+    }, 300)
+  }, [isFading, totalSlides])
 
   // Use the swipe hook for touch navigation
   const { onTouchStart, onTouchMove, onTouchEnd } = useSwipe({
@@ -156,7 +167,12 @@ export function FullWidthBanner({
       )}
 
       <div className="relative z-20 flex flex-col items-center justify-center h-full px-4 py-6 sm:py-8 md:py-12 lg:py-14 text-center text-white">
-        <div className="flex flex-col items-center justify-center max-w-5xl w-full space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6">
+        <div
+          className={cn(
+            'flex flex-col items-center justify-center max-w-5xl w-full space-y-3 sm:space-y-4 md:space-y-5 lg:space-y-6 transition-opacity duration-300',
+            isFading ? 'opacity-0' : 'opacity-100',
+          )}
+        >
           <h2
             className={cn(
               'font-light max-w-4xl transition-opacity duration-300 leading-tight',
@@ -230,7 +246,14 @@ export function FullWidthBanner({
                 'w-2.5 h-2.5 md:w-3 md:h-3 rounded-full transition-all duration-300',
                 currentIndex === index ? 'bg-white scale-110' : 'bg-white/40 hover:bg-white/60',
               )}
-              onClick={() => setCurrentIndex(index)}
+              onClick={() => {
+                if (isFading || totalSlides === 0 || currentIndex === index) return
+                setIsFading(true)
+                setTimeout(() => {
+                  setCurrentIndex(index)
+                  setIsFading(false)
+                }, 300)
+              }}
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}

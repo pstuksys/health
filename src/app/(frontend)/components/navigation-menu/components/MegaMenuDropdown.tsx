@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Link from 'next/link'
 import { ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -24,25 +23,26 @@ interface MegaMenuDropdownProps {
 export function MegaMenuDropdown({
   isVisible,
   hoveredItem,
-  selectedCategory,
+  selectedCategory: _selectedCategory,
   items,
-  onCategoryClick,
+  onCategoryClick: _onCategoryClick,
   onMouseEnter,
   onMouseLeave,
   megaMenuRef,
 }: MegaMenuDropdownProps) {
-  const getDisplayedItems = (megaMenu: NavigationItem['megaMenu']) => {
-    if (!megaMenu?.categories) return []
-
-    if (selectedCategory) {
-      const category = megaMenu.categories.find((cat) => cat.title === selectedCategory)
-      return category?.items || []
-    }
-
-    // Default to first category's items
-    return megaMenu.categories[0]?.items || []
-  }
-
+  /**
+   * Legacy mega menu category item resolver (kept for reference)
+   *
+   * const getDisplayedItems = (megaMenu: NavigationItem['megaMenu']) => {
+   *   if (!megaMenu?.categories) return []
+   *   if (selectedCategory) {
+   *     const category = megaMenu.categories.find((cat) => cat.title === selectedCategory)
+   *     return category?.items || []
+   *   }
+   *   // Default to first category's items
+   *   return megaMenu.categories[0]?.items || []
+   * }
+   */
   if (!isVisible || !hoveredItem) return null
 
   const currentItem = items.find((item) => item.label === hoveredItem)
@@ -65,47 +65,74 @@ export function MegaMenuDropdown({
               {hoveredItem}
             </h3>
             <div className="space-y-2">
-              {megaMenu.categories.map((category) => (
-                <div key={category.title} className="group">
-                  <div
+              {megaMenu.categories.map((category) => {
+                const href = resolveUrl(category as any)
+                return (
+                  <Link
+                    key={category.title}
+                    href={href}
                     className={cn(
-                      'mega-menu-item flex items-center justify-between cursor-pointer transition-colors duration-200 px-4 py-3 rounded',
-                      selectedCategory === category.title
-                        ? 'text-ds-accent-yellow bg-ds-accent-yellow/10'
-                        : 'text-ds-dark-blue hover:text-ds-accent-yellow hover:bg-gray-100',
+                      'mega-menu-item flex items-center justify-between transition-colors duration-200 px-4 py-3 rounded text-ds-dark-blue hover:text-ds-accent-yellow hover:bg-gray-100',
                     )}
-                    onClick={() => onCategoryClick(category.title)}
                   >
                     <span className="text-sm font-light">{category.title}</span>
                     <ChevronRight className="h-4 w-4" />
-                  </div>
-                </div>
-              ))}
+                  </Link>
+                )
+              })}
+              {/**
+               * Legacy category selection UI (kept for reference)
+               *
+               * {megaMenu.categories.map((category) => (
+               *   <div key={category.title} className="group">
+               *     <div
+               *       className={cn(
+               *         'mega-menu-item flex items-center justify-between cursor-pointer transition-colors duration-200 px-4 py-3 rounded',
+               *         selectedCategory === category.title
+               *           ? 'text-ds-accent-yellow bg-ds-accent-yellow/10'
+               *           : 'text-ds-dark-blue hover:text-ds-accent-yellow hover:bg-gray-100',
+               *       )}
+               *       onClick={() => onCategoryClick(category.title)}
+               *     >
+               *       <span className="text-sm font-light">{category.title}</span>
+               *       <ChevronRight className="h-4 w-4" />
+               *     </div>
+               *   </div>
+               * ))}
+               */}
             </div>
           </div>
 
           {/* Items Panel */}
           <div className="w-2/3 p-6">
             <h4 className="text-ds-dark-blue font-semibold text-sm uppercase tracking-wide mb-4">
-              {selectedCategory || megaMenu.categories[0]?.title || hoveredItem.toUpperCase()}
+              {/* {hoveredItem.toUpperCase()} */}
+              FEATURED
             </h4>
-            <div className="grid grid-cols-2 gap-4">
-              {getDisplayedItems(megaMenu).map((subItem, index) => (
-                <Link
-                  key={index}
-                  href={resolveUrl(subItem)}
-                  className="mega-menu-item text-ds-dark-blue hover:text-ds-accent-yellow text-sm font-light py-1 transition-colors duration-200 block hover:bg-gray-50 px-2 -mx-2 rounded"
-                >
-                  {subItem.label}
-                </Link>
-              ))}
-            </div>
-
+            {/**
+             * Legacy items grid (kept for reference)
+             *
+             * <h4 className="text-ds-dark-blue font-semibold text-sm uppercase tracking-wide mb-4">
+             *   {selectedCategory || megaMenu.categories[0]?.title || hoveredItem.toUpperCase()}
+             * </h4>
+             * <div className="grid grid-cols-2 gap-4">
+             *   {getDisplayedItems(megaMenu).map((subItem, index) => (
+             *     <Link
+             *       key={index}
+             *       href={resolveUrl(subItem)}
+             *       className="mega-menu-item text-ds-dark-blue hover:text-ds-accent-yellow text-sm font-light py-1 transition-colors duration-200 block hover:bg-gray-50 px-2 -mx-2 rounded"
+             *     >
+             *       {subItem.label}
+             *     </Link>
+             *   ))}
+             * </div>
+             */}
             {/* Featured Items */}
             {megaMenu.featured && (
+              // border-t border-gray-200
               <div className="mt-6 pt-6 border-t border-gray-200">
-                <h5 className="text-ds-dark-blue font-medium text-sm mb-3">Featured</h5>
-                <div className="space-y-2">
+                {/* <h5 className="text-ds-dark-blue font-medium text-sm mb-3">Featured</h5> */}
+                <div className="space-y-4">
                   {megaMenu.featured.map((featured) => (
                     <Link
                       key={featured.label}

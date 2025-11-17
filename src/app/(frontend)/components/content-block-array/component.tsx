@@ -19,14 +19,14 @@ export function ContentBlockArray({
 
   return (
     <section className={cn('py-16 px-4 sm:px-4 lg:px-4')}>
-      <div className="max-w-container mx-auto">
+      <div className="max-w-7xl mx-auto">
         {title && (
           <h2 className="text-3xl sm:text-4xl font-light leading-tight text-ds-dark-blue text-center mb-12">
             {title}
           </h2>
         )}
 
-        <div className="space-y-12 md:space-y-16 lg:space-y-20">
+        <div className="space-y-12 ">
           {contentBlocks.map((block, index) => {
             const imageUrl = mediaToUrl(block.image as any)
             const isImageLeft = block.imagePosition === 'left'
@@ -81,7 +81,7 @@ export function ContentBlockArray({
                             variant="ghost"
                             size="lg"
                             external={block.linkType === 'external'}
-                            className="!text-ds-dark-blue hover:!text-ds-accent-yellow"
+                            className="hover:!text-ds-dark-blue !text-ds-accent-yellow"
                           >
                             {block.buttonText}
                           </CMSLink>
@@ -103,7 +103,7 @@ export function ContentBlockArray({
                             variant="ghost"
                             size="lg"
                             external={block.btn2LinkType === 'external'}
-                            className="!text-ds-dark-blue hover:!text-ds-accent-yellow"
+                            className="hover:!text-ds-dark-blue !text-ds-accent-yellow"
                           >
                             {block.btn2Text}
                           </CMSLink>
@@ -116,13 +116,23 @@ export function ContentBlockArray({
                 {/* Image Block */}
                 {imageUrl && (
                   <div className="w-full md:w-1/2 lg:w-1/2">
-                    <div className="relative w-full aspect-[3/2] sm:aspect-[4/3] md:aspect-[4/3] overflow-hidden shadow-lg">
+                    <div
+                      className={cn(
+                        'relative w-full aspect-[3/2] sm:aspect-[4/3] md:aspect-[4/3] max-w-[400px] max-[450px]:max-w-full md:max-w-[550px] lg:max-w-[550px] mx-auto overflow-hidden shadow-lg',
+                        actualImagePosition === 'right'
+                          ? 'md:ml-auto lg:ml-auto'
+                          : 'md:mr-auto lg:mr-auto',
+                      )}
+                    >
                       <Image
                         src={imageUrl}
                         alt=""
                         fill
-                        className="object-cover object-center"
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 50vw"
+                        className={cn(
+                          'object-cover',
+                          actualImagePosition === 'right' ? 'object-right' : 'object-left',
+                        )}
+                        sizes="(max-width: 450px) 100vw, (max-width: 640px) 400px, (max-width: 1024px) 50vw, 45vw"
                       />
                     </div>
                   </div>

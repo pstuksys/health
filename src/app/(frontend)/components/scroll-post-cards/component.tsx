@@ -150,7 +150,8 @@ export function ScrollPostCards({
             <article
               key={post.id || index}
               data-index={index}
-              className={`w-full bg-white rounded-lg border border-pastille-green/20 overflow-hidden shadow-sm hover:shadow-md transition-all duration-700 ${
+              // border border-pastille-green/20
+              className={`w-full bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-700 ${
                 visibleCards.has(index)
                   ? 'opacity-100 translate-y-0 scale-100'
                   : 'opacity-0 translate-y-8 scale-95'

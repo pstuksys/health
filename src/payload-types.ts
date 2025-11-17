@@ -638,6 +638,7 @@ export interface Page {
             members: {
               image: number | Media;
               name: string;
+              role?: string | null;
               description: string;
               linkedin?: string | null;
               imagePosition?: ('left' | 'right') | null;
@@ -778,9 +779,8 @@ export interface Page {
                   id?: string | null;
                 }[]
               | null;
-            slidesToShow?: number | null;
             autoplay?: boolean | null;
-            autoplayInterval?: number | null;
+            autoplayInterval?: ('3000' | '5000' | '8000' | '10000' | '15000') | null;
             showArrows?: boolean | null;
             showDots?: boolean | null;
             id?: string | null;
@@ -888,6 +888,7 @@ export interface Page {
             subtitle?: string | null;
             image: number | Media;
             enableBackground?: boolean | null;
+            enableLink?: boolean | null;
             imagePosition?: ('left' | 'right') | null;
             linkType?: ('internal' | 'external') | null;
             internal?: {
@@ -906,6 +907,9 @@ export interface Page {
             };
             cta?: {
               text?: string | null;
+              /**
+               * Controls button appearance: Primary (solid), Secondary (subtle), Outline (border), Ghost (text-only).
+               */
               variant?: ('primary' | 'secondary' | 'outline' | 'ghost') | null;
             };
             id?: string | null;
@@ -1193,8 +1197,8 @@ export interface Page {
                 [k: string]: unknown;
               } | null;
             };
-            rightBlock: {
-              title: string;
+            rightBlock?: {
+              title?: string | null;
               content?: {
                 root: {
                   type: string;
@@ -1211,6 +1215,7 @@ export interface Page {
                 [k: string]: unknown;
               } | null;
             };
+            disableBackground?: boolean | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'twoBlocksText';
@@ -3392,6 +3397,7 @@ export interface Page {
               };
               [k: string]: unknown;
             } | null;
+            fullWidth?: boolean | null;
             ctaPrimary?: {
               label?: string | null;
               linkType?: ('internal' | 'external') | null;
@@ -4152,6 +4158,7 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     image?: T;
                     name?: T;
+                    role?: T;
                     description?: T;
                     linkedin?: T;
                     imagePosition?: T;
@@ -4245,7 +4252,6 @@ export interface PagesSelect<T extends boolean = true> {
                         };
                     id?: T;
                   };
-              slidesToShow?: T;
               autoplay?: T;
               autoplayInterval?: T;
               showArrows?: T;
@@ -4349,6 +4355,7 @@ export interface PagesSelect<T extends boolean = true> {
               subtitle?: T;
               image?: T;
               enableBackground?: T;
+              enableLink?: T;
               imagePosition?: T;
               linkType?: T;
               internal?:
@@ -4499,6 +4506,7 @@ export interface PagesSelect<T extends boolean = true> {
                     title?: T;
                     content?: T;
                   };
+              disableBackground?: T;
               id?: T;
               blockName?: T;
             };
@@ -5790,6 +5798,7 @@ export interface PagesSelect<T extends boolean = true> {
               ctaImage?: T;
               ctaTitle?: T;
               ctaDescription?: T;
+              fullWidth?: T;
               ctaPrimary?:
                 | T
                 | {
@@ -6117,23 +6126,17 @@ export interface Header {
           categories?:
             | {
                 title: string;
-                items?:
-                  | {
-                      label: string;
-                      linkType?: ('internal' | 'external') | null;
-                      page?:
-                        | ({
-                            relationTo: 'pages';
-                            value: number | Page;
-                          } | null)
-                        | ({
-                            relationTo: 'blogs';
-                            value: number | Blog;
-                          } | null);
-                      href?: string | null;
-                      id?: string | null;
-                    }[]
-                  | null;
+                linkType?: ('internal' | 'external') | null;
+                page?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+                href?: string | null;
                 id?: string | null;
               }[]
             | null;
@@ -6245,15 +6248,9 @@ export interface HeaderSelect<T extends boolean = true> {
                 | T
                 | {
                     title?: T;
-                    items?:
-                      | T
-                      | {
-                          label?: T;
-                          linkType?: T;
-                          page?: T;
-                          href?: T;
-                          id?: T;
-                        };
+                    linkType?: T;
+                    page?: T;
+                    href?: T;
                     id?: T;
                   };
               featured?:

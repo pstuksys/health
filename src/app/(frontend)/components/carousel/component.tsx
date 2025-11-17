@@ -72,27 +72,13 @@ function CarouselCard({ item }: { item: ResolvedCarouselItem }) {
 }
 
 export function MedicalCarousel(props: MedicalCarouselProps) {
-  const {
-    title,
-    subtitle,
-    items,
-    slidesToShow,
-    autoplay,
-    autoplayInterval,
-    showArrows,
-    showDots,
-    className,
-  } = props
+  const { title, subtitle, items, autoplay, autoplayInterval, showArrows, showDots, className } =
+    props
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
 
-  const effectiveSlidesToShow = useMemo(() => {
-    return typeof slidesToShow === 'number' && slidesToShow > 0 ? slidesToShow : 1
-  }, [slidesToShow])
-
   const effectiveAutoplay = Boolean(autoplay ?? false)
-  const effectiveAutoplayInterval =
-    typeof autoplayInterval === 'number' && autoplayInterval > 0 ? autoplayInterval : 5000
+  const effectiveAutoplayInterval = Math.max(1, Number(autoplayInterval ?? 5000))
   const effectiveShowArrows = Boolean(showArrows ?? true)
   const effectiveShowDots = Boolean(showDots ?? true)
 
@@ -115,10 +101,7 @@ export function MedicalCarousel(props: MedicalCarouselProps) {
     })
   }, [items])
 
-  const pages = useMemo(
-    () => chunkItems(resolvedItems, Math.max(1, effectiveSlidesToShow)),
-    [resolvedItems, effectiveSlidesToShow],
-  )
+  const pages = useMemo(() => chunkItems(resolvedItems, 1), [resolvedItems])
   const totalSlides = pages.length
 
   const nextSlide = useCallback(() => {
@@ -218,11 +201,7 @@ export function MedicalCarousel(props: MedicalCarouselProps) {
                 {/* Desktop: Horizontal layout */}
                 <div className="hidden md:flex -mx-2">
                   {page.map((item, itemIdx) => (
-                    <div
-                      key={itemIdx}
-                      className="px-2"
-                      style={{ flex: `0 0 ${100 / Math.max(1, effectiveSlidesToShow)}%` }}
-                    >
+                    <div key={itemIdx} className="px-2" style={{ flex: '0 0 100%' }}>
                       <CarouselCard item={item} />
                     </div>
                   ))}

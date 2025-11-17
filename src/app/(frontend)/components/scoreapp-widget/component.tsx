@@ -22,75 +22,127 @@ export function ScoreAppWidget({
   autoHeight = true,
 }: ScoreAppWidgetProps) {
   const widgetRef = useRef<HTMLDivElement>(null)
+  const widgetInstanceRef = useRef<any>(null)
+  const isMountedRef = useRef(true)
 
   useEffect(() => {
+    isMountedRef.current = true
     // Initialize ScoreApp widget after script loads
     const initializeWidget = () => {
-      if (typeof window !== 'undefined' && (window as any).ScoreAppWidget && widgetRef.current) {
-        // Clear any existing widget data
-        const element = widgetRef.current
-        element.setAttribute('data-sa-url', scorecardUrl || '')
-        element.setAttribute('data-sa-view', displayMode || 'chat')
-
-        // Set display mode specific attributes
-        switch (displayMode) {
-          case 'chat':
-            if (buttonText) element.setAttribute('data-sa-button-text', buttonText)
-            element.setAttribute('data-sa-button-bg-color', '#faa636')
-            if (buttonColor) element.setAttribute('data-sa-button-color', buttonColor)
-            // Don't set icon attribute to remove icon completely
-            if (autoOpen) element.setAttribute('data-sa-auto-open', '1')
-            break
-          case 'popup':
-            if (size) element.setAttribute('data-sa-size', size)
-            if (preload) element.setAttribute('data-sa-preload', '1')
-            break
-          case 'slider':
-            if (size) element.setAttribute('data-sa-size', size)
-            if (position) element.setAttribute('data-sa-position', position)
-            break
-          case 'inline':
-            if (autoHeight) element.setAttribute('data-sa-auto-height', '1')
-            break
-        }
-
-        // Initialize the widget
-        ;(window as any).ScoreAppWidget.createFromElement(element)
-
-        // Fix mobile close button after widget loads
-        setTimeout(() => {
-          const closeButtons = document.querySelectorAll(
-            '.sa--popup-close, .sa--chat-close, .sa--slider-close',
-          )
-          closeButtons.forEach((button) => {
-            // Ensure proper touch handling on mobile
-            button.addEventListener(
-              'touchstart',
-              (e) => {
-                e.preventDefault()
-                e.stopPropagation()
-              },
-              { passive: false },
-            )
-
-            button.addEventListener(
-              'touchend',
-              (e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                // Trigger click event
-                ;(button as HTMLElement).click()
-              },
-              { passive: false },
-            )
-          })
-        }, 500)
+      // Only initialize if component is still mounted
+      if (
+        !isMountedRef.current ||
+        typeof window === 'undefined' ||
+        !(window as any).ScoreAppWidget ||
+        !widgetRef.current
+      ) {
+        return
       }
+
+      // IMPORTANT: Remove any existing ScoreApp widgets before initializing new one
+      // This prevents multiple widgets from appearing on different pages
+      const existingWidgets = document.querySelectorAll(
+        '.sa--chat, .sa--chat-button, .sa--slider, .sa--slider-button, .sa--popup',
+      )
+      existingWidgets.forEach((widget) => {
+        widget.remove()
+      })
+
+      // Clear any existing widget data
+      const element = widgetRef.current
+      element.setAttribute('data-sa-url', scorecardUrl || '')
+      element.setAttribute('data-sa-view', displayMode || 'chat')
+
+      // Set display mode specific attributes
+      switch (displayMode) {
+        case 'chat':
+          if (buttonText) element.setAttribute('data-sa-button-text', buttonText)
+          element.setAttribute('data-sa-button-bg-color', '#faa636')
+          if (buttonColor) element.setAttribute('data-sa-button-color', buttonColor)
+          // Don't set icon attribute to remove icon completely
+          if (autoOpen) element.setAttribute('data-sa-auto-open', '1')
+          break
+        case 'popup':
+          if (size) element.setAttribute('data-sa-size', size)
+          if (preload) element.setAttribute('data-sa-preload', '1')
+          break
+        case 'slider':
+          if (size) element.setAttribute('data-sa-size', size)
+          if (position) element.setAttribute('data-sa-position', position)
+          break
+        case 'inline':
+          if (autoHeight) element.setAttribute('data-sa-auto-height', '1')
+          break
+      }
+
+      // Initialize the widget and store the instance
+      widgetInstanceRef.current = (window as any).ScoreAppWidget.createFromElement(element)
+
+      // Fix mobile close button after widget loads
+      setTimeout(() => {
+        const closeButtons = document.querySelectorAll(
+          '.sa--popup-close, .sa--chat-close, .sa--slider-close',
+        )
+        closeButtons.forEach((button) => {
+          // Ensure proper touch handling on mobile
+          button.addEventListener(
+            'touchstart',
+            (e) => {
+              e.preventDefault()
+              e.stopPropagation()
+            },
+            { passive: false },
+          )
+
+          button.addEventListener(
+            'touchend',
+            (e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              // Trigger click event
+              ;(button as HTMLElement).click()
+            },
+            { passive: false },
+          )
+        })
+      }, 500)
     }
 
     // Small delay to ensure script is loaded
     const timer = setTimeout(initializeWidget, 100)
-    return () => clearTimeout(timer)
+
+    // Cleanup function to remove the widget when component unmounts
+    return () => {
+      isMountedRef.current = false
+      clearTimeout(timer)
+
+      // Remove all ScoreApp elements from the DOM
+      const removeScoreAppElements = () => {
+        // Remove chat widgets
+        const chatElements = document.querySelectorAll('.sa--chat, .sa--chat-button')
+        chatElements.forEach((el) => el.remove())
+
+        // Remove slider widgets
+        const sliderElements = document.querySelectorAll('.sa--slider, .sa--slider-button')
+        sliderElements.forEach((el) => el.remove())
+
+        // Remove popup widgets
+        const popupElements = document.querySelectorAll('.sa--popup, .sa--popup-overlay')
+        popupElements.forEach((el) => el.remove())
+
+        // Remove any backdrop/overlay elements
+        const overlays = document.querySelectorAll('.sa--overlay, .sa--backdrop')
+        overlays.forEach((el) => el.remove())
+
+        // Restore body scroll if it was disabled
+        document.body.style.overflow = ''
+      }
+
+      removeScoreAppElements()
+
+      // Clear the widget instance reference
+      widgetInstanceRef.current = null
+    }
   }, [
     scorecardUrl,
     displayMode,

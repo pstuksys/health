@@ -76,26 +76,61 @@ export function MobileNavigation({
                       {item.label}
                     </span>
                     {item.megaMenu && (
-                      <div className="space-y-4">
+                      <div className="space-y-2">
+                        {/* Categories are now direct links (no nested items) */}
                         {item.megaMenu.categories?.map((category) => (
-                          <div key={category.title} className="ml-4">
-                            <span className="text-ds-pastille-green text-base font-medium block py-2">
-                              {category.title}
-                            </span>
-                            <div className="ml-4 space-y-2">
-                              {category.items?.map((subItem, index) => (
-                                <Link
-                                  key={`${category.title}-${index}`}
-                                  href={resolveUrl(subItem)}
-                                  className="text-ds-dark-blue hover:text-ds-accent-yellow text-sm font-light block py-2 hover:bg-gray-50 px-3 -mx-3 rounded transition-all duration-200"
-                                  onClick={onClose}
-                                >
-                                  {subItem.label}
-                                </Link>
-                              ))}
-                            </div>
-                          </div>
+                          <Link
+                            key={category.title}
+                            href={resolveUrl(category as any)}
+                            className="text-ds-dark-blue hover:text-ds-accent-yellow text-base font-light block py-2 hover:bg-gray-50 px-3 -mx-3 rounded transition-all duration-200 ml-4"
+                            onClick={onClose}
+                          >
+                            {category.title}
+                          </Link>
                         ))}
+                        {/* Featured items section */}
+                        {item.megaMenu.featured && (
+                          <>
+                            <div className="border-t border-gray-200 mt-3 pt-3 ml-4">
+                              <span className="text-ds-pastille-green text-sm font-semibold block mb-2">
+                                Featured
+                              </span>
+                            </div>
+                            {item.megaMenu.featured.map((featured) => (
+                              <Link
+                                key={featured.label}
+                                href={resolveUrl(featured)}
+                                className="text-ds-accent-yellow hover:text-ds-dark-blue text-sm font-light block py-2 hover:bg-gray-50 px-3 -mx-3 rounded transition-all duration-200 ml-4"
+                                onClick={onClose}
+                              >
+                                {featured.label}
+                              </Link>
+                            ))}
+                          </>
+                        )}
+                        {/* Legacy nested items structure (commented out - no longer used)
+                        <div className="space-y-4">
+                          {item.megaMenu.categories?.map((category) => (
+                            <div key={category.title} className="ml-4">
+                              <span className="text-ds-pastille-green text-base font-medium block py-2">
+                                {category.title}
+                              </span>
+                              <div className="ml-4 space-y-2">
+                                {category.items?.map((subItem, index) => (
+                                  <Link
+                                    key={`${category.title}-${index}`}
+                                    href={resolveUrl(subItem)}
+                                    className="text-ds-dark-blue hover:text-ds-accent-yellow text-sm font-light block py-2 hover:bg-gray-50 px-3 -mx-3 rounded transition-all duration-200"
+                                    onClick={onClose}
+                                  >
+                                    {subItem.label}
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        */}
                       </div>
                     )}
                   </div>

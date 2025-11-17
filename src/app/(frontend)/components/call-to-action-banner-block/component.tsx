@@ -24,11 +24,21 @@ export function CallToActionBannerBlock(props: CallToActionBannerBlockProps) {
     ctaPrimary,
     ctaSecondary,
     footerRichText,
+    fullWidth,
   } = props as CallToActionBannerBlockProps
 
+  const isFullWidth = !!fullWidth
+
   return (
-    <section className={cn('w-full px-4 py-8', className)}>
-      <div className="relative overflow-hidden rounded-lg max-w-5xl mx-auto min-h-[360px] md:aspect-[2/1] grid place-items-center">
+    <section className={cn(isFullWidth ? 'w-full py-0' : 'w-full px-4 py-8', className)}>
+      <div
+        className={cn(
+          'relative overflow-hidden grid place-items-center',
+          isFullWidth
+            ? 'w-full h-64 sm:h-72 md:h-80 lg:h-96 xl:h-96'
+            : 'rounded-lg max-w-5xl mx-auto min-h-[360px] md:aspect-[2/1]',
+        )}
+      >
         {ctaImage ? (
           <Image
             src={mediaToUrl(ctaImage as any) || '/placeholder.svg'}

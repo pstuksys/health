@@ -25,7 +25,7 @@ export function SleepApneaAfterTest({
 
   return (
     <section className={cn('py-16', className)}>
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-container mx-auto px-4">
         <div className="text-center mb-12">
           {heading ? (
             <h1 className="text-3xl md:text-4xl font-light text-ds-dark-blue mb-6 text-balance">
