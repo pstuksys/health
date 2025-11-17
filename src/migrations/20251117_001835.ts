@@ -28,12 +28,33 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   
   DROP TABLE IF EXISTS "header_navigation_mega_menu_categories_items" CASCADE;
   
+  -- Convert autoplay_interval from numeric to enum with proper data mapping
   ALTER TABLE "pages_blocks_carousel" ALTER COLUMN "autoplay_interval" DROP DEFAULT;
-  ALTER TABLE "pages_blocks_carousel" ALTER COLUMN "autoplay_interval" SET DATA TYPE "public"."enum_pages_blocks_carousel_autoplay_interval" USING "autoplay_interval"::text::"public"."enum_pages_blocks_carousel_autoplay_interval";
+  ALTER TABLE "pages_blocks_carousel" ALTER COLUMN "autoplay_interval" SET DATA TYPE "public"."enum_pages_blocks_carousel_autoplay_interval" 
+  USING (
+    CASE 
+      WHEN "autoplay_interval" = 3 OR "autoplay_interval" = 3000 THEN '3000'
+      WHEN "autoplay_interval" = 5 OR "autoplay_interval" = 5000 THEN '5000'
+      WHEN "autoplay_interval" = 8 OR "autoplay_interval" = 8000 THEN '8000'
+      WHEN "autoplay_interval" = 10 OR "autoplay_interval" = 10000 THEN '10000'
+      WHEN "autoplay_interval" = 15 OR "autoplay_interval" = 15000 THEN '15000'
+      ELSE '5000'
+    END
+  )::"public"."enum_pages_blocks_carousel_autoplay_interval";
   ALTER TABLE "pages_blocks_carousel" ALTER COLUMN "autoplay_interval" SET DEFAULT '5000'::"public"."enum_pages_blocks_carousel_autoplay_interval";
   
   ALTER TABLE "_pages_v_blocks_carousel" ALTER COLUMN "autoplay_interval" DROP DEFAULT;
-  ALTER TABLE "_pages_v_blocks_carousel" ALTER COLUMN "autoplay_interval" SET DATA TYPE "public"."enum__pages_v_blocks_carousel_autoplay_interval" USING "autoplay_interval"::text::"public"."enum__pages_v_blocks_carousel_autoplay_interval";
+  ALTER TABLE "_pages_v_blocks_carousel" ALTER COLUMN "autoplay_interval" SET DATA TYPE "public"."enum__pages_v_blocks_carousel_autoplay_interval" 
+  USING (
+    CASE 
+      WHEN "autoplay_interval" = 3 OR "autoplay_interval" = 3000 THEN '3000'
+      WHEN "autoplay_interval" = 5 OR "autoplay_interval" = 5000 THEN '5000'
+      WHEN "autoplay_interval" = 8 OR "autoplay_interval" = 8000 THEN '8000'
+      WHEN "autoplay_interval" = 10 OR "autoplay_interval" = 10000 THEN '10000'
+      WHEN "autoplay_interval" = 15 OR "autoplay_interval" = 15000 THEN '15000'
+      ELSE '5000'
+    END
+  )::"public"."enum__pages_v_blocks_carousel_autoplay_interval";
   ALTER TABLE "_pages_v_blocks_carousel" ALTER COLUMN "autoplay_interval" SET DEFAULT '5000'::"public"."enum__pages_v_blocks_carousel_autoplay_interval";
   
   DO $$ BEGIN
