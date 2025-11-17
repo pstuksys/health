@@ -638,6 +638,7 @@ export interface Page {
             members: {
               image: number | Media;
               name: string;
+              role?: string | null;
               description: string;
               linkedin?: string | null;
               imagePosition?: ('left' | 'right') | null;
@@ -4157,6 +4158,7 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     image?: T;
                     name?: T;
+                    role?: T;
                     description?: T;
                     linkedin?: T;
                     imagePosition?: T;

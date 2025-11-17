@@ -58,7 +58,7 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
 
   return (
     <section className={cn('w-full py-16 md:py-20 px-4', className)}>
-      <div className="max-w-7xl mx-auto space-y-16">
+      <div className="mx-auto space-y-16">
         {/* Friendly Hero Section */}
         <div className="text-center space-y-8">
           <div className="flex justify-center mb-6">

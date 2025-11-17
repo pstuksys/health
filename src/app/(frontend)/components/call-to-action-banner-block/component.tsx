@@ -13,7 +13,6 @@ type CallToActionBannerBlockProps = Extract<
   { blockType: 'callToActionBannerBlock' }
 > & {
   className?: string
-  fullWidth?: boolean
 }
 
 export function CallToActionBannerBlock(props: CallToActionBannerBlockProps) {

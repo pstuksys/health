@@ -19,7 +19,7 @@ export function SleepApneaReportIncludes({
 }: ReportIncludesBlock & { className?: string }) {
   return (
     <section className={cn('py-16 mt-16 bg-ds-light-neutral/50', className)}>
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-container mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl font-semibold text-ds-dark-blue mb-6 text-balance">
             {title}

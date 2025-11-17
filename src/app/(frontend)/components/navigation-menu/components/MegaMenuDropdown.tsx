@@ -132,7 +132,7 @@ export function MegaMenuDropdown({
               // border-t border-gray-200
               <div className="mt-6 pt-6 border-t border-gray-200">
                 {/* <h5 className="text-ds-dark-blue font-medium text-sm mb-3">Featured</h5> */}
-                <div className="space-y-2">
+                <div className="space-y-4">
                   {megaMenu.featured.map((featured) => (
                     <Link
                       key={featured.label}

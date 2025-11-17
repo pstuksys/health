@@ -8,7 +8,7 @@ export interface TransformedNavigationItem {
   megaMenu?: {
     categories: Array<{
       title: string
-      items: Array<{ label: string; href: string }>
+      href: string
     }>
     featured: Array<{ label: string; href: string }>
   }
@@ -30,6 +30,23 @@ export function transformNavigationItems(
   return navigation.map((item) => {
     // Handle mega menu items
     if (item.hasMegaMenu && item.megaMenu) {
+      // New structure: categories are now direct links
+      const categories = (item.megaMenu.categories ?? []).map((cat) => ({
+        title: cat.title,
+        href: resolveUrl(cat as any),
+      }))
+
+      const featured = (item.megaMenu.featured ?? []).map((f) => ({
+        label: f.label,
+        href: resolveUrl(f),
+      }))
+
+      return {
+        label: item.label,
+        megaMenu: { categories, featured },
+      }
+
+      /* Legacy structure (commented out - categories had nested items)
       const categories = (item.megaMenu.categories ?? []).map((cat) => ({
         title: cat.title,
         items: (cat.items ?? []).map((sub) => ({
@@ -47,6 +64,7 @@ export function transformNavigationItems(
         label: item.label,
         megaMenu: { categories, featured },
       }
+      */
     }
 
     // Handle regular navigation items

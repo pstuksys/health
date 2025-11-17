@@ -12,7 +12,8 @@ import { MegaMenuDropdown } from './components/MegaMenuDropdown'
 import { MobileNavigation } from './components/MobileNavigation'
 import { NavigationItems } from './components/NavigationItems'
 import { useResponsiveNavigation } from '../../../../hooks/useResponsiveNavigation'
-import { findNavigationItem, getFirstCategoryTitle } from '../../../../lib/navigationUtils'
+import { findNavigationItem } from '../../../../lib/navigationUtils'
+// getFirstCategoryTitle - no longer needed (categories are now direct links, not nested items)
 
 // Constants
 const MEGA_MENU_HIDE_DELAY = 150 // milliseconds
@@ -82,7 +83,8 @@ export function NavigationMenu({
       const item = findNavigationItem(items, itemLabel)
       if (item?.megaMenu?.categories) {
         setHoveredItem(itemLabel)
-        setSelectedCategory(getFirstCategoryTitle(item.megaMenu))
+        // setSelectedCategory(getFirstCategoryTitle(item.megaMenu)) // No longer needed - categories are direct links
+        setSelectedCategory(null) // Keep for backwards compatibility with components
         setIsMegaMenuVisible(true)
         setShowMoreMenu(false) // Close More menu when opening mega menu
       }
