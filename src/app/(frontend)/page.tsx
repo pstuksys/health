@@ -3,7 +3,7 @@ import { HeroSection } from '@/app/(frontend)/components/hero-section/component'
 import { RenderBlocks, deriveGlobalHeroProps } from '@/app/(frontend)/components/RenderBlocks'
 import { getHomePage, generatePageMetadata } from '@/lib/page-utils'
 
-export const revalidate = 60 * 60 * 24
+export const revalidate = 86400
 
 // Header/Footer are fetched in layout; keep this page focused on content rendering
 
