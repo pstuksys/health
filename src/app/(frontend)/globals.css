@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .call-to-action-banner-block .width-container {
+    @apply w-full max-w-container mx-auto;
+  }
+}
+
 /* Custom navigation styles */
 .nav-item {
   @apply transition-all duration-200 ease-in-out;
@@ -448,6 +454,9 @@ body.mobile-menu-open {
 
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
   * {
     @apply border-border;
   }

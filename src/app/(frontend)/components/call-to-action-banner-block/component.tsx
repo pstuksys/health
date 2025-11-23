@@ -30,13 +30,11 @@ export function CallToActionBannerBlock(props: CallToActionBannerBlockProps) {
   const isFullWidth = !!fullWidth
 
   return (
-    <section className={cn(isFullWidth ? 'w-full py-0' : 'w-full px-4 py-8', className)}>
+    <section className={cn('call-to-action-banner-block w-full px-4 py-8', className)}>
       <div
         className={cn(
-          'relative overflow-hidden grid place-items-center',
-          isFullWidth
-            ? 'w-full h-64 sm:h-72 md:h-80 lg:h-96 xl:h-96'
-            : 'rounded-lg max-w-5xl mx-auto min-h-[360px] md:aspect-[2/1]',
+          'relative overflow-hidden grid place-items-center rounded-lg min-h-[360px]',
+          isFullWidth ? 'width-container md:min-h-[450px]' : 'max-w-5xl mx-auto md:aspect-[2/1]',
         )}
       >
         {ctaImage ? (

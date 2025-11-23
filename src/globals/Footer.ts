@@ -1,9 +1,16 @@
 import type { GlobalConfig } from 'payload'
+import { cacheTags, revalidateCacheTags } from '@/lib/cache-tags'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
   access: { read: () => true },
-  hooks: {},
+  hooks: {
+    afterChange: [
+      async () => {
+        await revalidateCacheTags(cacheTags.footer)
+      },
+    ],
+  },
   fields: [
     {
       type: 'row',

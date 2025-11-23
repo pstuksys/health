@@ -1,8 +1,28 @@
 import type { CollectionConfig } from 'payload'
+import type { Blog } from '@/payload-types'
+import { cacheTags, revalidateCacheTags } from '@/lib/cache-tags'
 
 export const Blogs: CollectionConfig = {
   slug: 'blogs',
-  hooks: {},
+  hooks: {
+    afterChange: [
+      async ({ doc }) => {
+        const blog = doc as Blog | undefined
+        if (blog?._status && blog._status !== 'published') return
+        const tags = [cacheTags.blogs, cacheTags.blog(blog?.slug ?? '')]
+        if (blog?.category) tags.push(cacheTags.blogCategory(blog.category))
+        await revalidateCacheTags(tags)
+      },
+    ],
+    afterDelete: [
+      async ({ doc }) => {
+        const blog = doc as Blog | undefined
+        const tags = [cacheTags.blogs, cacheTags.blog(blog?.slug ?? '')]
+        if (blog?.category) tags.push(cacheTags.blogCategory(blog.category))
+        await revalidateCacheTags(tags)
+      },
+    ],
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
@@ -58,6 +78,7 @@ export const Blogs: CollectionConfig = {
         { label: 'Diagnostics & Testing', value: 'diagnostics-testing' },
         { label: 'Therapies & Treatments', value: 'therapies-treatments' },
         { label: 'Lifestyle & Tips', value: 'lifestyle-tips' },
+        { label: 'Featured In', value: 'featured in' },
       ],
       admin: {
         description: 'Select the category that best fits this blog post',

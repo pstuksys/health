@@ -1,7 +1,9 @@
 import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
+import { unstable_cache } from 'next/cache'
 import type { Payload, Where } from 'payload'
 import type { Blog, Page, Header, Footer } from '@/payload-types'
+import { CACHE_REVALIDATE_SECONDS, cacheTags } from '@/lib/cache-tags'
 
 /**
  * Single source of truth for Payload CMS client
@@ -20,10 +22,9 @@ export async function getPayloadClient(): Promise<Payload> {
 /**
  * Fetch a page by slug with proper error handling
  */
-export async function getPage(slug: string, depth = 2): Promise<Page | null> {
+async function fetchPage(slug: string, depth = 2, draft = false): Promise<Page | null> {
   try {
     const payload = await getPayloadClient()
-    const { isEnabled } = await draftMode()
 
     const where = slug
       ? { slug: { equals: slug } }
@@ -38,7 +39,7 @@ export async function getPage(slug: string, depth = 2): Promise<Page | null> {
     const { docs } = await payload.find({
       collection: 'pages',
       where: where as unknown as Where,
-      draft: isEnabled,
+      draft,
       limit: 1,
       pagination: false,
       depth,
@@ -52,6 +53,19 @@ export async function getPage(slug: string, depth = 2): Promise<Page | null> {
   }
 }
 
+export async function getPage(slug: string, depth = 2): Promise<Page | null> {
+  const { isEnabled } = await draftMode()
+  if (isEnabled) return fetchPage(slug, depth, true)
+
+  const cacheKey = ['payload:getPage', slug || 'home', depth.toString()]
+  const cached = unstable_cache(() => fetchPage(slug, depth, false), cacheKey, {
+    revalidate: CACHE_REVALIDATE_SECONDS,
+    tags: [cacheTags.pages, cacheTags.page(slug)],
+  })
+
+  return cached()
+}
+
 /**
  * Fetch the home page (slug: '')
  */
@@ -62,14 +76,13 @@ export async function getHomePage(depth = 2): Promise<Page | null> {
 /**
  * Fetch blogs with proper error handling
  */
-export async function getBlogs(limit = 50): Promise<Blog[]> {
+async function fetchBlogs(limit = 50, draft = false): Promise<Blog[]> {
   try {
     const payload = await getPayloadClient()
-    const { isEnabled } = await draftMode()
 
     const { docs } = await payload.find({
       collection: 'blogs',
-      draft: isEnabled,
+      draft,
       sort: '-publishedAt',
       limit,
       pagination: false,
@@ -82,18 +95,63 @@ export async function getBlogs(limit = 50): Promise<Blog[]> {
   }
 }
 
+export async function getBlogs(limit = 50): Promise<Blog[]> {
+  const { isEnabled } = await draftMode()
+  if (isEnabled) return fetchBlogs(limit, true)
+
+  const cacheKey = ['payload:getBlogs', limit.toString()]
+  const cached = unstable_cache(() => fetchBlogs(limit, false), cacheKey, {
+    revalidate: CACHE_REVALIDATE_SECONDS,
+    tags: [cacheTags.blogs],
+  })
+
+  return cached()
+}
+
+async function fetchBlogsByCategory(category: string, limit = 12, draft = false): Promise<Blog[]> {
+  try {
+    const payload = await getPayloadClient()
+
+    const { docs } = await payload.find({
+      collection: 'blogs',
+      where: { category: { equals: category } },
+      draft,
+      sort: '-publishedAt',
+      limit,
+      pagination: false,
+    })
+
+    return JSON.parse(JSON.stringify(docs)) as Blog[]
+  } catch (error) {
+    console.error(`Failed to fetch blogs for category "${category}":`, error)
+    return []
+  }
+}
+
+export async function getBlogsByCategory(category: string, limit = 12): Promise<Blog[]> {
+  const { isEnabled } = await draftMode()
+  if (isEnabled) return fetchBlogsByCategory(category, limit, true)
+
+  const cacheKey = ['payload:getBlogsByCategory', category, limit.toString()]
+  const cached = unstable_cache(() => fetchBlogsByCategory(category, limit, false), cacheKey, {
+    revalidate: CACHE_REVALIDATE_SECONDS,
+    tags: [cacheTags.blogs, cacheTags.blogCategory(category)],
+  })
+
+  return cached()
+}
+
 /**
  * Fetch a single blog by slug
  */
-export async function getBlogBySlug(slug: string, depth = 2): Promise<Blog | null> {
+async function fetchBlogBySlug(slug: string, depth = 2, draft = false): Promise<Blog | null> {
   try {
     const payload = await getPayloadClient()
-    const { isEnabled } = await draftMode()
 
     const { docs } = await payload.find({
       collection: 'blogs',
       where: { slug: { equals: slug } },
-      draft: isEnabled,
+      draft,
       limit: 1,
       pagination: false,
       depth,
@@ -107,15 +165,31 @@ export async function getBlogBySlug(slug: string, depth = 2): Promise<Blog | nul
   }
 }
 
+export async function getBlogBySlug(slug: string, depth = 2): Promise<Blog | null> {
+  const { isEnabled } = await draftMode()
+  if (isEnabled) return fetchBlogBySlug(slug, depth, true)
+
+  const cacheKey = ['payload:getBlogBySlug', slug, depth.toString()]
+  const cached = unstable_cache(() => fetchBlogBySlug(slug, depth, false), cacheKey, {
+    revalidate: CACHE_REVALIDATE_SECONDS,
+    tags: [cacheTags.blogs, cacheTags.blog(slug)],
+  })
+
+  return cached()
+}
+
 /**
  * Fetch header global
  */
-export async function getHeader(): Promise<Header | null> {
+async function fetchHeader(draft = false): Promise<Header | null> {
   try {
     const payload = await getPayloadClient()
-    const header = (await payload.findGlobal({ slug: 'header', depth: 2 })) as Header
+    const header = (await payload.findGlobal({
+      slug: 'header',
+      depth: 2,
+      draft,
+    })) as Header
 
-    // Strip any circular refs coming from the local API internals
     const safe = JSON.parse(JSON.stringify(header))
     return safe ?? null
   } catch (error) {
@@ -124,21 +198,48 @@ export async function getHeader(): Promise<Header | null> {
   }
 }
 
+export async function getHeader(): Promise<Header | null> {
+  const { isEnabled } = await draftMode()
+  if (isEnabled) return fetchHeader(true)
+
+  const cached = unstable_cache(() => fetchHeader(false), ['payload:getHeader'], {
+    revalidate: CACHE_REVALIDATE_SECONDS,
+    tags: [cacheTags.header],
+  })
+
+  return cached()
+}
+
 /**
  * Fetch footer global
  */
-export async function getFooter(): Promise<Footer | null> {
+async function fetchFooter(draft = false): Promise<Footer | null> {
   try {
     const payload = await getPayloadClient()
-    const footer = (await payload.findGlobal({ slug: 'footer', depth: 2 })) as Footer
+    const footer = (await payload.findGlobal({
+      slug: 'footer',
+      depth: 2,
+      draft,
+    })) as Footer
 
-    // Strip any circular refs coming from the local API internals
     const safe = JSON.parse(JSON.stringify(footer))
     return safe ?? null
   } catch (error) {
     console.error('Failed to fetch footer:', error)
     return null
   }
+}
+
+export async function getFooter(): Promise<Footer | null> {
+  const { isEnabled } = await draftMode()
+  if (isEnabled) return fetchFooter(true)
+
+  const cached = unstable_cache(() => fetchFooter(false), ['payload:getFooter'], {
+    revalidate: CACHE_REVALIDATE_SECONDS,
+    tags: [cacheTags.footer],
+  })
+
+  return cached()
 }
 
 /**

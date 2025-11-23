@@ -1,9 +1,11 @@
 import { ScrollPostCards } from '@/app/(frontend)/components/scroll-post-cards/component'
 import type { Blog } from '@/payload-types'
 import { cn } from '@/lib/utils'
-import { getBlogs } from '@/lib/cms/payload-client'
+import { getBlogsByCategory } from '@/lib/cms/payload-client'
 
 // Define blog categories with proper typing
+const BLOGS_PER_CATEGORY = 12
+
 const BLOG_CATEGORIES = [
   { label: 'Sleep Disorders Hub', value: 'sleep-disorders', id: 'sleep-disorders' },
   { label: 'Diagnostics & Testing Hub', value: 'diagnostics-testing', id: 'diagnostics-testing' },
@@ -13,12 +15,25 @@ const BLOG_CATEGORIES = [
     id: 'therapies-treatments',
   },
   { label: 'Lifestyle & Tips Hub', value: 'lifestyle-tips', id: 'lifestyle-tips' },
+  { label: 'Featured In', value: 'featured in', id: 'featured' },
 ] as const
 
 export default async function BlogsPage() {
-  const blogs = await getBlogs(1000)
+  const categoryResults = await Promise.all(
+    BLOG_CATEGORIES.map((category) => getBlogsByCategory(category.value, BLOGS_PER_CATEGORY)),
+  )
 
-  if (!blogs || blogs.length === 0) {
+  const blogsByCategory = BLOG_CATEGORIES.reduce(
+    (acc, category, index) => {
+      acc[category.value] = categoryResults[index] ?? []
+      return acc
+    },
+    {} as Record<string, Blog[]>,
+  )
+
+  const hasBlogs = categoryResults.some((list) => list.length > 0)
+
+  if (!hasBlogs) {
     return (
       <main className="min-h-screen bg-ds-light-neutral">
         <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -30,15 +45,6 @@ export default async function BlogsPage() {
       </main>
     )
   }
-
-  // Group blogs by category
-  const blogsByCategory = BLOG_CATEGORIES.reduce(
-    (acc, category) => {
-      acc[category.value] = blogs.filter((blog) => blog.category === category.value)
-      return acc
-    },
-    {} as Record<string, Blog[]>,
-  )
 
   // Transform blogs to match the ScrollPostCards component format
   const transformBlog = (blog: Blog) => ({
@@ -75,7 +81,7 @@ export default async function BlogsPage() {
 
       {/* Category Navigation */}
       <section className="bg-white border-b border-gray-200 sticky top-0 z-30">
-        <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-container mx-auto px-4 sm:px-6 lg:px-8 scroll-smooth">
           <nav className="flex space-x-8 overflow-x-auto py-4" aria-label="Blog categories">
             {BLOG_CATEGORIES.map((category) => (
               <a
