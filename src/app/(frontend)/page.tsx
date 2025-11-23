@@ -3,9 +3,7 @@ import { HeroSection } from '@/app/(frontend)/components/hero-section/component'
 import { RenderBlocks, deriveGlobalHeroProps } from '@/app/(frontend)/components/RenderBlocks'
 import { getHomePage, generatePageMetadata } from '@/lib/page-utils'
 
-// Force dynamic rendering to prevent build-time database queries that cause PostgreSQL parsing errors
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export const revalidate = 60 * 60 * 24
 
 // Header/Footer are fetched in layout; keep this page focused on content rendering
 

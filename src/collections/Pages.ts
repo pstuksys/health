@@ -1,4 +1,5 @@
 import type { CollectionConfig, Block } from 'payload'
+import type { Page } from '@/payload-types'
 import { HERO_TEXT_COLOR_OPTIONS } from '../lib/hero-config'
 import { contentBlockFields } from '../app/(frontend)/components/content-block/config'
 import { cardSectionFields } from '../app/(frontend)/components/card-section/config'
@@ -54,6 +55,7 @@ import { cardBannerBlockFields } from '../app/(frontend)/components/card-banner-
 import { callToActionBannerBlockFields } from '../app/(frontend)/components/call-to-action-banner-block/config'
 import { gridCardsFields } from '../app/(frontend)/components/grid-cards/config'
 import { splitInfoGridBlockFields } from '../app/(frontend)/components/split-info-grid-block/config'
+import { cacheTags, revalidateCacheTags } from '@/lib/cache-tags'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -334,7 +336,21 @@ const pageBlocks: Block[] = [
 
 export const Pages: CollectionConfig = {
   slug: 'pages',
-  hooks: {},
+  hooks: {
+    afterChange: [
+      async ({ doc }) => {
+        const page = doc as Page | undefined
+        if (page?._status && page._status !== 'published') return
+        await revalidateCacheTags([cacheTags.pages, cacheTags.page(page?.slug ?? '')])
+      },
+    ],
+    afterDelete: [
+      async ({ doc }) => {
+        const page = doc as Page | undefined
+        await revalidateCacheTags([cacheTags.pages, cacheTags.page(page?.slug ?? '')])
+      },
+    ],
+  },
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],

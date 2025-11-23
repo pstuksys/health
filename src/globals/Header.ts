@@ -1,9 +1,16 @@
 import type { GlobalConfig } from 'payload'
+import { cacheTags, revalidateCacheTags } from '@/lib/cache-tags'
 
 export const Header: GlobalConfig = {
   slug: 'header',
   access: { read: () => true, update: () => true },
-  hooks: {},
+  hooks: {
+    afterChange: [
+      async () => {
+        await revalidateCacheTags(cacheTags.header)
+      },
+    ],
+  },
   fields: [
     {
       name: 'ctaButton',

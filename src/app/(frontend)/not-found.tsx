@@ -43,12 +43,12 @@ export default function NotFound() {
         <div className="mt-16 pt-8 border-t border-white/20">
           <p className="text-white/60 mb-4">You might be looking for:</p>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <Link
+            {/* <Link
               href="/services"
               className="text-ds-pastille-green hover:text-ds-accent-yellow transition-colors"
             >
               Our Services
-            </Link>
+            </Link> */}
             <Link
               href="/about"
               className="text-ds-pastille-green hover:text-ds-accent-yellow transition-colors"
@@ -56,13 +56,13 @@ export default function NotFound() {
               About Us
             </Link>
             <Link
-              href="/blog"
+              href="/blogs"
               className="text-ds-pastille-green hover:text-ds-accent-yellow transition-colors"
             >
               Blog
             </Link>
             <Link
-              href="/contact"
+              href="/contact-us"
               className="text-ds-pastille-green hover:text-ds-accent-yellow transition-colors"
             >
               Contact

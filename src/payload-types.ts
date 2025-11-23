@@ -3555,7 +3555,7 @@ export interface Blog {
   /**
    * Select the category that best fits this blog post
    */
-  category: 'sleep-disorders' | 'diagnostics-testing' | 'therapies-treatments' | 'lifestyle-tips';
+  category: 'sleep-disorders' | 'diagnostics-testing' | 'therapies-treatments' | 'lifestyle-tips' | 'featured in';
   readTime?: string | null;
   publishedAt?: string | null;
   meta?: {
