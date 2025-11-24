@@ -74,7 +74,7 @@ export function SleepApneaTestOptions({
           <h1 className="text-3xl md:text-4xl font-light text-ds-dark-blue mb-4">{header}</h1>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-8 mx-auto">
           {cards.map((card, idx) => {
             const Icon = iconMap[card.icon as keyof typeof iconMap] || Home
             const isHome = card.icon === 'home'

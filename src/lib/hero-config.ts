@@ -85,3 +85,43 @@ export function getHeroAlignmentClasses(alignment: HeroAlignment) {
       }
   }
 }
+
+export type HeroOverlayDarkness = 'none' | 'light' | 'medium' | 'dark' | 'very-dark'
+
+export const HERO_OVERLAY_DARKNESS_OPTIONS = [
+  { label: 'None', value: 'none' },
+  { label: 'Light (10%)', value: 'light' },
+  { label: 'Medium (30%)', value: 'medium' },
+  { label: 'Dark (50%)', value: 'dark' },
+  { label: 'Very Dark (70%)', value: 'very-dark' },
+]
+
+export function normalizeHeroOverlayDarkness(rawValue: unknown): HeroOverlayDarkness {
+  if (
+    rawValue === 'none' ||
+    rawValue === 'light' ||
+    rawValue === 'medium' ||
+    rawValue === 'dark' ||
+    rawValue === 'very-dark'
+  ) {
+    return rawValue
+  }
+  return 'medium'
+}
+
+export function getHeroOverlayClass(darkness?: HeroOverlayDarkness | null): string {
+  switch (darkness) {
+    case 'none':
+      return 'bg-transparent'
+    case 'light':
+      return 'bg-black/10'
+    case 'medium':
+      return 'bg-black/30'
+    case 'dark':
+      return 'bg-black/50'
+    case 'very-dark':
+      return 'bg-black/70'
+    default:
+      return 'bg-black/30'
+  }
+}

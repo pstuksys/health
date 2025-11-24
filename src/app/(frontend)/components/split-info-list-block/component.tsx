@@ -20,7 +20,7 @@ export function SplitInfoListBlock(props: SplitInfoListBlockProps) {
 
   return (
     <section className={cn('w-full py-16 px-4', className)}>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-container mx-auto">
         <div className="grid lg:grid-cols-3 gap-12">
           <div className="lg:col-span-1">
             <h2 className="text-3xl font-light mb-6 text-ds-dark-blue">

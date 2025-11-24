@@ -26,7 +26,7 @@ export function CardListBannerBlock(props: CardListBannerBlockProps) {
 
   return (
     <section className={cn('w-full py-8 px-4', className)}>
-      <div className=" mx-auto">
+      <div className="max-w-container mx-auto">
         <Card className="shadow-md hover:shadow-lg border-0 p-4">
           <CardHeader>
             <CardTitle className="text-2xl text-ds-dark-blue">

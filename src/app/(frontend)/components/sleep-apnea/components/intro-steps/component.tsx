@@ -30,7 +30,7 @@ export function SleepApneaIntroSteps({
         </div>
 
         {/* Steps */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 mx-auto">
           {items?.map((step) => {
             const href = resolveLinkHref({
               linkType: step.linkType,
