@@ -7,8 +7,10 @@ import { CMSLink } from '@/app/(frontend)/components/ui/cms-link'
 import {
   getHeroTextColorClass,
   getHeroAlignmentClasses,
+  getHeroOverlayClass,
   type HeroTextColor,
   type HeroAlignment,
+  type HeroOverlayDarkness,
 } from '@/lib/hero-config'
 import { cn } from '@/lib/utils'
 import { ConsistentHTML } from '../safe-html/component'
@@ -23,6 +25,7 @@ type HeroSectionProps = {
   ctaButton?: CTAButton
   secondaryCTA?: CTAButton
   gradientOverlay?: boolean
+  overlayDarkness?: HeroOverlayDarkness
   textColor?: HeroTextColor
   ctaAlignment?: HeroAlignment
   fullHeight?: boolean
@@ -37,6 +40,7 @@ export function HeroSection({
   ctaButton,
   secondaryCTA,
   gradientOverlay = false,
+  overlayDarkness = 'none',
   textColor = 'auto',
   ctaAlignment = 'left',
   fullHeight = false,
@@ -56,6 +60,10 @@ export function HeroSection({
   const alignmentClasses = useMemo(() => {
     return getHeroAlignmentClasses(ctaAlignment)
   }, [ctaAlignment])
+
+  const overlayClass = useMemo(() => {
+    return getHeroOverlayClass(overlayDarkness)
+  }, [overlayDarkness])
 
   // Trigger fade-in animation on mount
   useEffect(() => {
@@ -110,7 +118,7 @@ export function HeroSection({
             className="object-cover object-center"
           />
           {/* Subtle overlay for better text readability */}
-          <div className="absolute inset-0 bg-black/20" />
+          <div className={cn('absolute inset-0', overlayClass)} />
         </>
       )}
       {gradientOverlay && !backgroundImage && (

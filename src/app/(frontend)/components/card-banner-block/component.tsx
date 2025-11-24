@@ -17,7 +17,7 @@ export function CardBannerBlock(props: CardBannerBlockProps) {
 
   return (
     <section className={cn('w-full py-8 px-4', className)}>
-      <div className="mx-auto">
+      <div className="max-w-container mx-auto">
         <Card className="border-0 shadow-lg p-4">
           <CardHeader>
             <CardTitle className="text-2xl text-ds-dark-blue">{title || 'IPD Advantage'}</CardTitle>

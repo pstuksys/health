@@ -2,7 +2,12 @@ import React, { JSX } from 'react'
 import type { Page } from '@/payload-types'
 import { mediaToUrl } from '@/lib/media'
 import { resolveLinkHref } from '@/lib/navigation'
-import { normalizeHeroTextColor, type HeroTextColor } from '@/lib/hero-config'
+import {
+  normalizeHeroOverlayDarkness,
+  normalizeHeroTextColor,
+  type HeroOverlayDarkness,
+  type HeroTextColor,
+} from '@/lib/hero-config'
 import { ContentBlock } from './content-block/component'
 import { CardSection } from './card-section/component'
 import { MediaBlock } from './media-block/component'
@@ -336,6 +341,9 @@ export function deriveGlobalHeroProps(page: Page) {
   const heroTextColor: HeroTextColor = normalizeHeroTextColor(page?.heroTextColor)
 
   const heroGradientOverlay = Boolean(page?.heroGradientOverlay)
+  const heroOverlayDarkness: HeroOverlayDarkness = normalizeHeroOverlayDarkness(
+    page?.heroOverlayDarkness,
+  )
 
   // Extract CTA button data
   const heroCTAButton = page?.heroCTAButton
@@ -384,6 +392,7 @@ export function deriveGlobalHeroProps(page: Page) {
     ctaButton,
     secondaryCTA,
     gradientOverlay: heroGradientOverlay,
+    overlayDarkness: heroOverlayDarkness,
     textColor: heroTextColor,
     ctaAlignment: heroCTAAlignment,
     fullHeight: heroFullHeight,

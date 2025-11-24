@@ -28,7 +28,7 @@ export function SplitInfoGridBlock(props: SplitInfoGridBlockProps) {
 
   return (
     <section className={cn('w-full py-16 px-4', className)}>
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-container mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <div>
             <h2 className="text-3xl font-light mb-6 text-ds-dark-blue">{leftTitle || ''}</h2>

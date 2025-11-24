@@ -1,6 +1,6 @@
 import type { CollectionConfig, Block } from 'payload'
 import type { Page } from '@/payload-types'
-import { HERO_TEXT_COLOR_OPTIONS } from '../lib/hero-config'
+import { HERO_OVERLAY_DARKNESS_OPTIONS, HERO_TEXT_COLOR_OPTIONS } from '../lib/hero-config'
 import { contentBlockFields } from '../app/(frontend)/components/content-block/config'
 import { cardSectionFields } from '../app/(frontend)/components/card-section/config'
 import { mediaBlockFields } from '../app/(frontend)/components/media-block/config'
@@ -462,6 +462,17 @@ export const Pages: CollectionConfig = {
               defaultValue: false,
               admin: {
                 description: 'Add a gradient overlay for better text readability',
+                condition: (data) => data.showHero,
+              },
+            },
+            {
+              name: 'heroOverlayDarkness',
+              type: 'select',
+              label: 'Hero Overlay Darkness',
+              options: HERO_OVERLAY_DARKNESS_OPTIONS,
+              defaultValue: 'medium',
+              admin: {
+                description: 'Controls the darkness of the overlay when a background image is used',
                 condition: (data) => data.showHero,
               },
             },

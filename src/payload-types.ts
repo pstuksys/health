@@ -266,6 +266,10 @@ export interface Page {
    */
   heroGradientOverlay?: boolean | null;
   /**
+   * Controls the darkness of the overlay when a background image is used
+   */
+  heroOverlayDarkness?: ('none' | 'light' | 'medium' | 'dark' | 'very-dark') | null;
+  /**
    * Primary call-to-action button for the hero section
    */
   heroCTAButton?: {
@@ -3949,6 +3953,7 @@ export interface PagesSelect<T extends boolean = true> {
   showHero?: T;
   heroTextColor?: T;
   heroGradientOverlay?: T;
+  heroOverlayDarkness?: T;
   heroCTAButton?:
     | T
     | {
