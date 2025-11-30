@@ -62,8 +62,14 @@ import { CardBannerBlock } from './card-banner-block/component'
 import { CallToActionBannerBlock } from './call-to-action-banner-block/component'
 import { SplitInfoListBlock } from './split-info-list-block/component'
 import { GridCards } from './grid-cards/component'
+import { Button, type ButtonBlockProps } from './button/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
+
+type ButtonBlockData = ButtonBlockProps & {
+  blockType: 'button'
+  id?: string
+}
 
 export const blockComponents: Record<string, (block: unknown) => JSX.Element> = {
   heroBannerBlock: (block) => {
@@ -97,6 +103,10 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   callToActionBannerBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'callToActionBannerBlock' }>
     return <CallToActionBannerBlock {...b} />
+  },
+  button: (block) => {
+    const b = block as ButtonBlockData
+    return <Button {...b} />
   },
   gridCards: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'gridCards' }>

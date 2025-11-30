@@ -538,6 +538,55 @@ export interface Page {
             blockType: 'ctaBlock';
           }
         | {
+            /**
+             * Text displayed on the button
+             */
+            label: string;
+            /**
+             * Button style variant
+             */
+            variant: 'primary' | 'secondary' | 'outline' | 'ghost' | 'default';
+            /**
+             * Control the button dimensions
+             */
+            size: 'sm' | 'md' | 'lg' | 'xl';
+            /**
+             * Align the button inside its section
+             */
+            position: 'left' | 'center' | 'right';
+            /**
+             * Spacing maps to py-6, py-12, py-16, or py-32.
+             */
+            spacing: 'sm' | 'md' | 'lg' | 'xl';
+            /**
+             * Choose whether to link to an internal page or external URL
+             */
+            linkType: 'internal' | 'external';
+            internal?: {
+              /**
+               * Select a page or blog document to link to
+               */
+              relation:
+                | {
+                    relationTo: 'pages';
+                    value: number | Page;
+                  }
+                | {
+                    relationTo: 'blogs';
+                    value: number | Blog;
+                  };
+            };
+            external?: {
+              /**
+               * External URL (e.g., https://example.com)
+               */
+              href: string;
+            };
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'button';
+          }
+        | {
             title: string;
             content?: {
               root: {
@@ -4072,6 +4121,28 @@ export interface PagesSelect<T extends boolean = true> {
                   };
               align?: T;
               variant?: T;
+              id?: T;
+              blockName?: T;
+            };
+        button?:
+          | T
+          | {
+              label?: T;
+              variant?: T;
+              size?: T;
+              position?: T;
+              spacing?: T;
+              linkType?: T;
+              internal?:
+                | T
+                | {
+                    relation?: T;
+                  };
+              external?:
+                | T
+                | {
+                    href?: T;
+                  };
               id?: T;
               blockName?: T;
             };
