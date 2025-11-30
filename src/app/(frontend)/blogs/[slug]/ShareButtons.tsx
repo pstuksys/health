@@ -1,7 +1,28 @@
 'use client'
 
-import { useState } from 'react'
-import { Share2, Copy, Check, Twitter, Facebook, Linkedin } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Share2, Copy, Check, Facebook, Linkedin } from 'lucide-react'
+
+type IconProps = {
+  className?: string
+}
+
+function XMark({ className }: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 1200 1227"
+      className={className}
+      aria-hidden="true"
+      focusable="false"
+      role="img"
+    >
+      <path
+        fill="currentColor"
+        d="M996.178 0h193.833l-424.41 483.637L1200 1226.91H876.79L602.022 802.353 294.911 1226.91H101.078L561.64 703.61 0 0h336.833l249.842 356.32L996.178 0z"
+      />
+    </svg>
+  )
+}
 
 interface ShareButtonsProps {
   title: string
@@ -11,6 +32,13 @@ interface ShareButtonsProps {
 
 export function ShareButtons({ title, url, excerpt }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false)
+  const [canNativeShare, setCanNativeShare] = useState(false)
+
+  useEffect(() => {
+    if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
+      setCanNativeShare(true)
+    }
+  }, [])
 
   const handleCopyLink = async () => {
     try {
@@ -29,21 +57,18 @@ export function ShareButtons({ title, url, excerpt }: ShareButtonsProps) {
   }
 
   const shareLinks = {
-    twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
+    x: `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`,
     facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`,
     linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
   }
 
   const handleNativeShare = async () => {
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData)
-      } catch (err) {
-        console.error('Error sharing:', err)
-      }
-    } else {
-      // Fallback to copy link if native sharing is not available
-      handleCopyLink()
+    if (!canNativeShare) return
+
+    try {
+      await navigator.share(shareData)
+    } catch (err) {
+      console.error('Error sharing:', err)
     }
   }
 
@@ -56,14 +81,16 @@ export function ShareButtons({ title, url, excerpt }: ShareButtonsProps) {
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Native share button (mobile) */}
-          <button
-            onClick={handleNativeShare}
-            className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
-            aria-label="Share article"
-          >
-            <Share2 className="h-4 w-4" />
-            <span className="hidden sm:inline">Share</span>
-          </button>
+          {canNativeShare && (
+            <button
+              onClick={handleNativeShare}
+              className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
+              aria-label="Share article"
+            >
+              <Share2 className="h-4 w-4" />
+              <span className="hidden sm:inline">Share</span>
+            </button>
+          )}
 
           {/* Copy link button */}
           <button
@@ -86,14 +113,14 @@ export function ShareButtons({ title, url, excerpt }: ShareButtonsProps) {
 
           {/* Social media share buttons */}
           <a
-            href={shareLinks.twitter}
+            href={shareLinks.x}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-2 px-3 py-2 text-sm text-ds-pastille-green hover:text-ds-dark-blue transition-colors duration-200"
-            aria-label="Share on Twitter"
+            aria-label="Share on X"
           >
-            <Twitter className="h-4 w-4" />
-            <span className="hidden sm:inline">Twitter</span>
+            <XMark className="h-4 w-4" />
+            <span className="hidden sm:inline">Share on X</span>
           </a>
 
           <a

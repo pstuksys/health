@@ -59,7 +59,7 @@ export function ContentBlockArray({
                     <h3 className="text-2xl lg:text-3xl font-light text-ds-dark-blue mb-4">
                       {block.title}
                     </h3>
-                    <p className="text-ds-pastille-green text-base lg:text-lg leading-relaxed mb-6">
+                    <p className="text-ds-pastille-green text-base lg:text-lg leading-relaxed mb-6 text-left lg:text-justify hyphens-none text-pretty">
                       {block.description}
                     </p>
                     {(block.buttonText || block.btn2Text) && (

@@ -54,6 +54,7 @@ import { cardListBannerBlockFields } from '../app/(frontend)/components/card-lis
 import { cardBannerBlockFields } from '../app/(frontend)/components/card-banner-block/config'
 import { callToActionBannerBlockFields } from '../app/(frontend)/components/call-to-action-banner-block/config'
 import { gridCardsFields } from '../app/(frontend)/components/grid-cards/config'
+import { buttonFields } from '../app/(frontend)/components/button/config'
 import { splitInfoGridBlockFields } from '../app/(frontend)/components/split-info-grid-block/config'
 import { cacheTags, revalidateCacheTags } from '@/lib/cache-tags'
 
@@ -276,12 +277,18 @@ const gridCardsBlock: Block = {
   fields: gridCardsFields,
 }
 
+const buttonBlock: Block = {
+  slug: 'button',
+  fields: buttonFields,
+}
+
 // All available page blocks
 const pageBlocks: Block[] = [
   contentBlock,
   cardSectionBlock,
   mediaBlock,
   ctaBlock,
+  buttonBlock,
   aboutUsSectionBlock,
   partnersBlock,
   partnersTextBlock,
