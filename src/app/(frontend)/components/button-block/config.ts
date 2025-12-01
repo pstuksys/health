@@ -47,9 +47,11 @@ export const buttonBlockFields: Field[] = [
     options: [
       { label: 'Internal', value: 'internal' },
       { label: 'External', value: 'external' },
+      { label: 'IPD referral form download', value: 'ipd-referral-form' },
     ],
     admin: {
-      description: 'Choose whether to link to an internal page or external URL',
+      description:
+        'Choose whether to link to an internal page, external URL, or trigger the IPD referral form download',
     },
   },
   {
