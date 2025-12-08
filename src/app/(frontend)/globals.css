@@ -464,3 +464,26 @@ body.mobile-menu-open {
     @apply bg-background text-foreground;
   }
 }
+
+/* Partners marquee animation */
+@keyframes partners-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-100% / 3));
+  }
+}
+
+.partners-marquee-track {
+  animation: partners-marquee-scroll var(--marquee-duration, 20s) linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  contain: layout;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .partners-marquee-track {
+    animation: none;
+  }
+}

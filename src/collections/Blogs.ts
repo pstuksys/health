@@ -25,8 +25,9 @@ export const Blogs: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
-    preview: ({ slug }) => {
+    defaultColumns: ['title', 'linkType', 'category', '_status', 'updatedAt'],
+    preview: ({ slug, linkType, externalUrl }) => {
+      if (linkType === 'external') return (externalUrl as string) || null
       const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
       return `${base}/blogs/${slug ?? ''}?preview=true`
     },
@@ -53,11 +54,50 @@ export const Blogs: CollectionConfig = {
   fields: [
     { name: 'title', type: 'text', required: true },
     {
+      name: 'linkType',
+      type: 'select',
+      defaultValue: 'internal',
+      options: [
+        { label: 'Internal Blog Post', value: 'internal' },
+        { label: 'External Link', value: 'external' },
+      ],
+      admin: {
+        description: 'Choose whether this is a full blog post or a link to an external article',
+      },
+    },
+    {
+      name: 'externalUrl',
+      type: 'text',
+      label: 'External URL',
+      required: true,
+      admin: {
+        description: 'Full URL to the external article (opens in new tab)',
+        condition: (data) => data?.linkType === 'external',
+      },
+      validate: (value: string | null | undefined, { data }: { data: Partial<Blog> }) => {
+        if (data?.linkType !== 'external') return true
+        if (!value) return 'External URL is required for external links'
+        try {
+          new URL(value)
+          return true
+        } catch {
+          return 'Please enter a valid URL (e.g., https://example.com/article)'
+        }
+      },
+    },
+    {
       name: 'slug',
       type: 'text',
-      required: true,
       unique: true,
       index: true,
+      admin: {
+        condition: (data) => data?.linkType !== 'external',
+      },
+      validate: (value: string | null | undefined, { data }: { data: Partial<Blog> }) => {
+        if (data?.linkType === 'external') return true
+        if (!value) return 'Slug is required for internal blog posts'
+        return true
+      },
     },
     { name: 'excerpt', type: 'textarea' },
     {
@@ -66,8 +106,6 @@ export const Blogs: CollectionConfig = {
       relationTo: 'media',
       label: 'Featured Image',
     },
-    { name: 'content', type: 'richText', label: 'Content' },
-    { name: 'author', type: 'text', label: 'Author' },
     {
       name: 'category',
       type: 'select',
@@ -84,8 +122,37 @@ export const Blogs: CollectionConfig = {
         description: 'Select the category that best fits this blog post',
       },
     },
-    { name: 'readTime', type: 'text', label: 'Read Time (e.g., "5 min")' },
+    {
+      name: 'content',
+      type: 'richText',
+      label: 'Content',
+      admin: {
+        condition: (data) => data?.linkType !== 'external',
+      },
+    },
+    {
+      name: 'author',
+      type: 'text',
+      label: 'Author',
+      admin: {
+        condition: (data) => data?.linkType !== 'external',
+      },
+    },
+    {
+      name: 'readTime',
+      type: 'text',
+      label: 'Read Time (e.g., "5 min")',
+      admin: {
+        condition: (data) => data?.linkType !== 'external',
+      },
+    },
     // SEO fields will be provided by @payloadcms/plugin-seo; avoid duplicate 'meta' field name
-    { name: 'publishedAt', type: 'date' },
+    {
+      name: 'publishedAt',
+      type: 'date',
+      admin: {
+        condition: (data) => data?.linkType !== 'external',
+      },
+    },
   ],
 }

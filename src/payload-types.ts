@@ -615,7 +615,6 @@ export interface Page {
         | {
             id?: string | null;
             title: string;
-            layout?: ('grid' | 'carousel') | null;
             partners: {
               logo: number | Media;
               id?: string | null;
@@ -3586,9 +3585,21 @@ export interface Page {
 export interface Blog {
   id: number;
   title: string;
-  slug: string;
+  /**
+   * Choose whether this is a full blog post or a link to an external article
+   */
+  linkType?: ('internal' | 'external') | null;
+  /**
+   * Full URL to the external article (opens in new tab)
+   */
+  externalUrl?: string | null;
+  slug?: string | null;
   excerpt?: string | null;
   image?: (number | null) | Media;
+  /**
+   * Select the category that best fits this blog post
+   */
+  category: 'sleep-disorders' | 'diagnostics-testing' | 'therapies-treatments' | 'lifestyle-tips' | 'featured in';
   content?: {
     root: {
       type: string;
@@ -3605,10 +3616,6 @@ export interface Blog {
     [k: string]: unknown;
   } | null;
   author?: string | null;
-  /**
-   * Select the category that best fits this blog post
-   */
-  category: 'sleep-disorders' | 'diagnostics-testing' | 'therapies-treatments' | 'lifestyle-tips' | 'featured in';
   readTime?: string | null;
   publishedAt?: string | null;
   meta?: {
@@ -4166,7 +4173,6 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               id?: T;
               title?: T;
-              layout?: T;
               partners?:
                 | T
                 | {
@@ -5952,12 +5958,14 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface BlogsSelect<T extends boolean = true> {
   title?: T;
+  linkType?: T;
+  externalUrl?: T;
   slug?: T;
   excerpt?: T;
   image?: T;
+  category?: T;
   content?: T;
   author?: T;
-  category?: T;
   readTime?: T;
   publishedAt?: T;
   meta?:

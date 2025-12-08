@@ -1,4 +1,4 @@
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
 import { mediaToUrl } from '@/lib/media'
 import Image from 'next/image'
@@ -16,6 +16,11 @@ export default async function BlogPage(props: BlogPageParams) {
   const blog = await getBlogBySlug(slug, 2)
 
   if (!blog) return notFound()
+
+  // External blogs should redirect to their external URL
+  if (blog.linkType === 'external' && blog.externalUrl) {
+    redirect(blog.externalUrl)
+  }
 
   return (
     <main className="min-h-screen bg-white">
