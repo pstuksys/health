@@ -9,7 +9,6 @@ export const partnersBlockFields: Field[] = [
     admin: { description: 'Unique identifier for anchor linking (e.g., #partners)' },
   },
   { name: 'title', type: 'text', required: true },
-  { name: 'layout', type: 'select', options: ['grid', 'carousel'], defaultValue: 'grid' },
   {
     name: 'partners',
     type: 'array',

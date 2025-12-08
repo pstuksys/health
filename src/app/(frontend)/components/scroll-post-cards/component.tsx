@@ -12,9 +12,17 @@ type ScrollPostCardsProps = Extract<
   { blockType: 'scrollPostCards' }
 >
 
-function resolveBlogHref(post: any): string {
+type PostLinkInfo = {
+  href: string
+  isExternal: boolean
+}
+
+function resolveBlogLink(post: any): PostLinkInfo {
   if (post.linkType === 'external') {
-    return post.href ?? '#'
+    return {
+      href: post.externalUrl ?? post.href ?? '#',
+      isExternal: true,
+    }
   }
 
   // Internal link - resolve to proper URL
@@ -22,10 +30,13 @@ function resolveBlogHref(post: any): string {
     const rel = post.post
     const doc = rel?.value ?? rel
     const slug = doc?.slug ?? ''
-    return `/blogs/${slug}`
+    return {
+      href: `/blogs/${slug}`,
+      isExternal: false,
+    }
   }
 
-  return '#'
+  return { href: '#', isExternal: false }
 }
 
 export function ScrollPostCards({
@@ -124,33 +135,42 @@ export function ScrollPostCards({
 
                 <p className="text-gray-600 mb-6 leading-relaxed">{post.excerpt || ''}</p>
 
-                {!clickableCard && (
-                  <CMSLink href={resolveBlogHref(post)} variant="ghost" className="w-fit">
-                    Read More
-                    <svg
-                      className="ml-2 w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                {!clickableCard && (() => {
+                  const link = resolveBlogLink(post)
+                  return (
+                    <CMSLink
+                      href={link.href}
+                      variant="ghost"
+                      className="w-fit"
+                      external={link.isExternal}
                     >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </CMSLink>
-                )}
+                      Read More
+                      <svg
+                        className="ml-2 w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </CMSLink>
+                  )
+                })()}
               </div>
             </div>
           )
+
+          const link = resolveBlogLink(post)
 
           return (
             <article
               key={post.id || index}
               data-index={index}
-              // border border-pastille-green/20
               className={`w-full bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-700 ${
                 visibleCards.has(index)
                   ? 'opacity-100 translate-y-0 scale-100'
@@ -159,9 +179,10 @@ export function ScrollPostCards({
             >
               {clickableCard ? (
                 <Link
-                  href={resolveBlogHref(post)}
+                  href={link.href}
                   className="block hover:scale-101 transition-all duration-200"
-                  target="_self"
+                  target={link.isExternal ? '_blank' : '_self'}
+                  rel={link.isExternal ? 'noopener noreferrer' : undefined}
                 >
                   {cardContent}
                 </Link>

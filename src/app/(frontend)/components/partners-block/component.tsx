@@ -1,91 +1,106 @@
+import { memo } from 'react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import { mediaToUrl } from '@/lib/media'
-import type { Page } from '@/payload-types'
+import type { Media, Page } from '@/payload-types'
 
-// Extract the partnersBlock type from Page blocks
-type PartnersBlockType = NonNullable<Page['blocks']>[number] & { blockType: 'partnersBlock' }
+type PartnersBlockType = Extract<
+  NonNullable<Page['blocks']>[number],
+  { blockType: 'partnersBlock' }
+>
+type PartnerLogoMedia = PartnersBlockType['partners'][number]['logo']
+type Partner = PartnersBlockType['partners'][number]
 
 type PartnersBlockProps = Omit<PartnersBlockType, 'blockType' | 'blockName'> & {
   className?: string
 }
 
-// Helper function to check if a media item is an SVG
-const isSvg = (logo: any): boolean => {
-  if (typeof logo === 'object' && logo?.filename) {
-    return logo.filename.toLowerCase().endsWith('.svg')
-  }
-  return false
+function isSvg(logo: PartnerLogoMedia): logo is Media {
+  if (typeof logo !== 'object' || !logo?.filename) return false
+  return logo.filename.toLowerCase().endsWith('.svg')
 }
 
-export function PartnersBlock({
-  id,
-  title,
-  partners,
-  layout = 'grid',
-  className,
-}: PartnersBlockProps) {
-  if (layout === 'carousel') {
-    return (
-      <section id={id || 'PartnersBlock'} className={cn('py-6 px-4 sm:px-4 lg:px-4', className)}>
-        <div className="max-w-container mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-light leading-tight text-ds-dark-blue text-center mb-12">
-            {title}
-          </h2>
-          <div className="overflow-hidden">
-            <div className="flex animate-scroll space-x-8">
-              {[...partners, ...partners].map((partner, index) => {
-                const isSvgLogo = isSvg(partner.logo)
-                return (
-                  <div key={index} className="flex-shrink-0 flex items-center justify-center">
-                    <div
-                      className={`${isSvgLogo ? 'h-20 w-40' : 'h-24 w-48'} flex items-center justify-center p-2`}
-                    >
-                      <Image
-                        src={mediaToUrl(partner.logo) || '/placeholder.svg'}
-                        alt={
-                          (typeof partner.logo === 'object' && partner.logo?.alt) || 'Partner logo'
-                        }
-                        width={isSvgLogo ? 160 : 192}
-                        height={isSvgLogo ? 80 : 96}
-                        className={`${isSvgLogo ? 'max-h-full max-w-full' : 'h-full w-full'} object-contain opacity-60 hover:opacity-100 transition-opacity duration-200`}
-                      />
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-      </section>
-    )
-  }
+function getAltText(logo: PartnerLogoMedia): string {
+  return (typeof logo === 'object' && logo?.alt) || 'Partner logo'
+}
+
+const PartnerLogo = memo(function PartnerLogo({ partner }: { partner: Partner }) {
+  const svgLogo = isSvg(partner.logo)
 
   return (
-    <section id={id || 'PartnersBlock'} className={cn('py-6 px-4 sm:px-4 lg:px-4', className)}>
+    <div
+      className={cn(
+        'flex shrink-0 items-center justify-center p-2',
+        svgLogo ? 'h-20 w-40' : 'h-24 w-48',
+      )}
+    >
+      <Image
+        src={mediaToUrl(partner.logo) || '/placeholder.svg'}
+        alt={getAltText(partner.logo)}
+        width={svgLogo ? 160 : 192}
+        height={svgLogo ? 80 : 96}
+        sizes="192px"
+        loading="lazy"
+        decoding="async"
+        className={cn(
+          'object-contain opacity-60 grayscale hover:opacity-100 hover:grayscale-0',
+          svgLogo ? 'max-h-full max-w-full' : 'h-full w-full',
+        )}
+        draggable={false}
+      />
+    </div>
+  )
+})
+
+export function PartnersBlock({ id, title, partners = [], className }: PartnersBlockProps) {
+  const resolvedPartners = partners.filter(Boolean)
+
+  if (!resolvedPartners.length) {
+    return null
+  }
+
+  const marqueeDuration = Math.max(20, resolvedPartners.length * 4)
+
+  return (
+    <section id={id || 'PartnersBlock'} className={cn('py-6 px-4', className)}>
       <div className="max-w-container mx-auto">
         <h2 className="text-3xl sm:text-4xl font-light leading-tight text-ds-dark-blue text-center mb-12">
           {title}
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-8 items-center">
-          {partners.map((partner, index) => {
-            const isSvgLogo = isSvg(partner.logo)
-            return (
-              <div key={index} className="flex justify-center items-center">
-                <div
-                  className={`${isSvgLogo ? 'h-20 w-40' : 'h-24 w-48'} flex items-center justify-center p-2`}
-                >
-                  <Image
-                    src={mediaToUrl(partner.logo) || '/placeholder.svg'}
-                    alt={(typeof partner.logo === 'object' && partner.logo?.alt) || 'Partner logo'}
-                    width={isSvgLogo ? 160 : 192}
-                    height={isSvgLogo ? 80 : 96}
-                    className={`${isSvgLogo ? 'max-h-full max-w-full' : 'h-full w-full'} object-contain opacity-60 hover:opacity-100 transition-opacity duration-200`}
+        {/* Marquee container with mask-based fade edges (adapts to any background) */}
+        <div
+          className="relative overflow-hidden"
+          style={{
+            contain: 'layout style paint',
+            maskImage:
+              'linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent)',
+            WebkitMaskImage:
+              'linear-gradient(to right, transparent, black 48px, black calc(100% - 48px), transparent)',
+          }}
+        >
+          {/* Animated track: contains two identical content groups for seamless loop */}
+          <div
+            className="partners-marquee-track flex w-fit"
+            style={{ animationDuration: `${marqueeDuration}s` }}
+            role="list"
+            aria-label="Partner logos"
+          >
+            {/* Render 3 identical content groups for truly seamless infinite scroll */}
+            {[0, 1, 2].map((groupIndex) => (
+              <div
+                key={groupIndex}
+                className="flex shrink-0 items-center gap-8 pr-8"
+                aria-hidden={groupIndex > 0}
+              >
+                {resolvedPartners.map((partner, index) => (
+                  <PartnerLogo
+                    key={partner.id ? `${partner.id}-${groupIndex}` : `${groupIndex}-${index}`}
+                    partner={partner}
                   />
-                </div>
+                ))}
               </div>
-            )
-          })}
+            ))}
+          </div>
         </div>
       </div>
     </section>
