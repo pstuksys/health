@@ -669,6 +669,49 @@ export interface Page {
             blockType: 'expandableTable';
           }
         | {
+            /**
+             * Optional title for the table section
+             */
+            title?: string | null;
+            columns: {
+              /**
+               * Display text for the column header
+               */
+              header: string;
+              id?: string | null;
+            }[];
+            data: {
+              /**
+               * Rich text content for each cell in this row (should match the number of columns)
+               */
+              cells: {
+                /**
+                 * Rich text content for this table cell
+                 */
+                content: {
+                  root: {
+                    type: string;
+                    children: {
+                      type: string;
+                      version: number;
+                      [k: string]: unknown;
+                    }[];
+                    direction: ('ltr' | 'rtl') | null;
+                    format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                    indent: number;
+                    version: number;
+                  };
+                  [k: string]: unknown;
+                };
+                id?: string | null;
+              }[];
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'table';
+          }
+        | {
             title: string;
             testimonialType?: ('custom' | 'doctify') | null;
             testimonials?:
@@ -4208,6 +4251,30 @@ export interface PagesSelect<T extends boolean = true> {
                     title?: T;
                     content?: T;
                     details?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        table?:
+          | T
+          | {
+              title?: T;
+              columns?:
+                | T
+                | {
+                    header?: T;
+                    id?: T;
+                  };
+              data?:
+                | T
+                | {
+                    cells?:
+                      | T
+                      | {
+                          content?: T;
+                          id?: T;
+                        };
                     id?: T;
                   };
               id?: T;
