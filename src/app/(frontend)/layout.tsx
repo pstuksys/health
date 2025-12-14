@@ -5,7 +5,6 @@ import './globals.css'
 import { Footer } from './components/footer/component'
 import { getHeader, getFooter } from '@/lib/cms/payload-client'
 import { NavWithScroll } from './components/navigation-menu/components/NavWithScroll'
-// Navigation transformers are now handled in the cache functions
 import { siteMetadata } from '@/lib/metadata'
 
 const poppins = Poppins({
