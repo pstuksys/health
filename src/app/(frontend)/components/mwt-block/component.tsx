@@ -38,15 +38,18 @@ export function MWTBlock(props: MWTBlockProps) {
     ctaPrimary,
     ctaSecondary,
     ctaImage,
-  } = props as MWTBlockProps
+  } = props
 
   const stepIconMap = [Clock, Activity, Brain] as const
 
-  const benefitItems: string[] = Array.isArray(testBenefits)
-    ? (testBenefits as unknown[])
-        .map((b) => (typeof b === 'string' ? b : (b as any)?.text || ''))
-        .filter(Boolean)
-    : []
+  const benefitItems = (testBenefits ?? []).map((benefit) => benefit?.text ?? '').filter(Boolean)
+
+  const resolveButtonHref = (button?: MWTBlockProps['ctaPrimary']) =>
+    resolveLinkHref({
+      linkType: button?.linkType,
+      internal: button?.internal,
+      external: button?.external,
+    })
 
   return (
     <section className={cn('w-full py-16 md:py-20 px-4', className)}>
@@ -74,7 +77,7 @@ export function MWTBlock(props: MWTBlockProps) {
           <CardContent className="space-y-4">
             {whatIsRichText && isLexicalEditorState(whatIsRichText) ? (
               <RichText
-                data={whatIsRichText as unknown}
+                data={whatIsRichText}
                 className="text-ds-pastille-green text-lg leading-relaxed"
               />
             ) : null}
@@ -89,7 +92,7 @@ export function MWTBlock(props: MWTBlockProps) {
             </h2>
             {importanceIntroRichText && isLexicalEditorState(importanceIntroRichText) ? (
               <RichText
-                data={importanceIntroRichText as unknown}
+                data={importanceIntroRichText}
                 className="text-ds-pastille-green text-lg max-w-2xl mx-auto"
               />
             ) : null}
@@ -137,10 +140,10 @@ export function MWTBlock(props: MWTBlockProps) {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8">
-            {(testSteps || []).map((step, index) => {
+            {(testSteps ?? []).map((step, index) => {
               const Icon = stepIconMap[index % stepIconMap.length]
-              const title = (step as any)?.title as string | undefined
-              const description = (step as any)?.description as string | undefined
+              const title = step?.title ?? ''
+              const description = step?.description ?? ''
               return (
                 <Card key={index} className="h-full shadow-md hover:shadow-lg border-0">
                   <CardHeader>
@@ -161,7 +164,7 @@ export function MWTBlock(props: MWTBlockProps) {
 
           {happensDetailRichText && isLexicalEditorState(happensDetailRichText) ? (
             <p className="text-center text-ds-pastille-green">
-              <RichText data={happensDetailRichText as unknown} className="max-w-3xl mx-auto" />
+              <RichText data={happensDetailRichText} className="max-w-3xl mx-auto" />
             </p>
           ) : null}
         </div>
@@ -175,10 +178,7 @@ export function MWTBlock(props: MWTBlockProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             {whoRichText && isLexicalEditorState(whoRichText) ? (
-              <RichText
-                data={whoRichText as unknown}
-                className="text-ds-pastille-green leading-relaxed"
-              />
+              <RichText data={whoRichText} className="text-ds-pastille-green leading-relaxed" />
             ) : null}
           </CardContent>
         </Card>
@@ -192,10 +192,7 @@ export function MWTBlock(props: MWTBlockProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             {ipdRichText && isLexicalEditorState(ipdRichText) ? (
-              <RichText
-                data={ipdRichText as unknown}
-                className="text-ds-pastille-green leading-relaxed"
-              />
+              <RichText data={ipdRichText} className="text-ds-pastille-green leading-relaxed" />
             ) : null}
           </CardContent>
         </Card>
@@ -204,8 +201,8 @@ export function MWTBlock(props: MWTBlockProps) {
         <div className="relative overflow-hidden rounded-lg">
           {ctaImage ? (
             <Image
-              src={mediaToUrl(ctaImage as any) || '/placeholder.svg'}
-              alt={(ctaImage as any)?.alt || 'MWT'}
+              src={mediaToUrl(ctaImage) || '/placeholder.svg'}
+              alt={(ctaImage as { alt?: string | null })?.alt || 'MWT'}
               width={800}
               height={400}
               className="absolute inset-0 w-full h-full object-cover"
@@ -221,40 +218,30 @@ export function MWTBlock(props: MWTBlockProps) {
             <CardContent className="text-center space-y-6">
               {ctaDescription && isLexicalEditorState(ctaDescription) ? (
                 <RichText
-                  data={ctaDescription as unknown}
+                  data={ctaDescription}
                   className="text-lg opacity-90 max-w-2xl mx-auto text-pretty text-white"
                 />
               ) : null}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 {(() => {
-                  const btn = ctaPrimary as any
-                  const href = resolveLinkHref({
-                    linkType: btn?.linkType,
-                    internal: btn?.internal,
-                    external: btn?.external,
-                  })
-                  return btn?.label ? (
+                  const href = resolveButtonHref(ctaPrimary)
+                  return ctaPrimary?.label ? (
                     <a
                       href={href || '#'}
                       className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold text-white bg-ds-accent-yellow hover:opacity-90"
                     >
-                      {btn.label}
+                      {ctaPrimary.label}
                     </a>
                   ) : null
                 })()}
                 {(() => {
-                  const btn = ctaSecondary as any
-                  const href = resolveLinkHref({
-                    linkType: btn?.linkType,
-                    internal: btn?.internal,
-                    external: btn?.external,
-                  })
-                  return btn?.label ? (
+                  const href = resolveButtonHref(ctaSecondary)
+                  return ctaSecondary?.label ? (
                     <a
                       href={href || '#'}
                       className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold border border-white text-white hover:bg-white hover:text-black"
                     >
-                      {btn.label}
+                      {ctaSecondary.label}
                     </a>
                   ) : null
                 })()}

@@ -12,11 +12,9 @@ type SplitInfoListBlockProps = Extract<
 }
 
 export function SplitInfoListBlock(props: SplitInfoListBlockProps) {
-  const { className, leftTitle, leftRichText, listItems } = props as SplitInfoListBlockProps
+  const { className, leftTitle, leftRichText, listItems } = props
 
-  const items: string[] = Array.isArray(listItems)
-    ? (listItems as unknown[]).map((c) => (typeof c === 'string' ? c : (c as any)?.text || ''))
-    : []
+  const items = (listItems ?? []).map((item) => item?.text ?? '').filter(Boolean)
 
   return (
     <section className={cn('w-full py-16 px-4', className)}>
@@ -28,7 +26,7 @@ export function SplitInfoListBlock(props: SplitInfoListBlockProps) {
             </h2>
             {leftRichText && isLexicalEditorState(leftRichText) ? (
               <RichText
-                data={leftRichText as unknown}
+                data={leftRichText}
                 className="text-lg leading-relaxed text-ds-pastille-green rich-text-headings-blue"
               />
             ) : null}

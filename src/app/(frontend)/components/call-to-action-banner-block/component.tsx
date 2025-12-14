@@ -25,9 +25,15 @@ export function CallToActionBannerBlock(props: CallToActionBannerBlockProps) {
     ctaSecondary,
     footerRichText,
     fullWidth,
-  } = props as CallToActionBannerBlockProps
+  } = props
 
   const isFullWidth = !!fullWidth
+  const resolveButtonHref = (button?: CallToActionBannerBlockProps['ctaPrimary']) =>
+    resolveLinkHref({
+      linkType: button?.linkType,
+      internal: button?.internal,
+      external: button?.external,
+    })
 
   return (
     <section className={cn('call-to-action-banner-block w-full px-4 py-8', className)}>
@@ -39,8 +45,8 @@ export function CallToActionBannerBlock(props: CallToActionBannerBlockProps) {
       >
         {ctaImage ? (
           <Image
-            src={mediaToUrl(ctaImage as any) || '/placeholder.svg'}
-            alt={(ctaImage as any)?.alt || 'CTA'}
+            src={mediaToUrl(ctaImage) || '/placeholder.svg'}
+            alt={(ctaImage as { alt?: string | null })?.alt || 'CTA'}
             width={1200}
             height={600}
             className="absolute inset-0 w-full h-full object-cover object-center z-0"
@@ -54,41 +60,31 @@ export function CallToActionBannerBlock(props: CallToActionBannerBlockProps) {
           <CardContent className="text-center space-y-6">
             {ctaDescription && isLexicalEditorState(ctaDescription) ? (
               <RichText
-                data={ctaDescription as unknown}
+                data={ctaDescription}
                 className="text-lg opacity-90 max-w-2xl mx-auto text-pretty text-white"
               />
             ) : null}
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {(() => {
-                const btn = ctaPrimary as any
-                const href = resolveLinkHref({
-                  linkType: btn?.linkType,
-                  internal: btn?.internal,
-                  external: btn?.external,
-                })
-                return btn?.label ? (
+                const href = resolveButtonHref(ctaPrimary)
+                return ctaPrimary?.label ? (
                   <a
                     href={href || '#'}
                     className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold text-white bg-ds-accent-yellow hover:opacity-90"
                   >
-                    {btn.label}
+                    {ctaPrimary.label}
                   </a>
                 ) : null
               })()}
               {(() => {
-                const btn = ctaSecondary as any
-                const href = resolveLinkHref({
-                  linkType: btn?.linkType,
-                  internal: btn?.internal,
-                  external: btn?.external,
-                })
-                return btn?.label ? (
+                const href = resolveButtonHref(ctaSecondary)
+                return ctaSecondary?.label ? (
                   <a
                     href={href || '#'}
                     className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold border border-white text-white hover:bg-white hover:text-black"
                   >
-                    {btn.label}
+                    {ctaSecondary.label}
                   </a>
                 ) : null
               })()}
@@ -96,7 +92,7 @@ export function CallToActionBannerBlock(props: CallToActionBannerBlockProps) {
 
             {footerRichText && isLexicalEditorState(footerRichText) ? (
               <RichText
-                data={footerRichText as unknown}
+                data={footerRichText}
                 className="text-sm opacity-80 text-white max-w-2xl mx-auto"
               />
             ) : null}

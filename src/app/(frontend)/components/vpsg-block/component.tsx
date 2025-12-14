@@ -33,34 +33,37 @@ export function VPSGBlock(props: VPSGBlockProps) {
     ctaLeftRichText,
     ctaPrimary,
     ctaSecondary,
-  } = props as VPSGBlockProps
+  } = props
 
   const aspectIcons = [Brain, Eye, Activity, Heart, Waves, Stethoscope, Monitor, Video] as const
 
-  const aspectItems: string[] = Array.isArray(monitoringAspects)
-    ? (monitoringAspects as unknown[]).map((a) =>
-        typeof a === 'string' ? a : (a as any)?.label || '',
-      )
-    : []
+  const aspectItems = (monitoringAspects ?? []).map((aspect) => aspect?.label ?? '')
 
-  const conditionItems: string[] = Array.isArray(conditions)
-    ? (conditions as unknown[]).map((c) => (typeof c === 'string' ? c : (c as any)?.text || ''))
-    : []
+  const conditionItems = (conditions ?? []).map(({ text }) => text ?? '')
 
-  const whyCardItems: Array<{ title: string; text: string; icon: keyof typeof iconMap }> =
-    Array.isArray(whyCards)
-      ? (whyCards as unknown[]).map((c, i) => ({
-          title: (c as any)?.title || '',
-          text: (c as any)?.text || '',
-          icon: (['activity', 'video', 'brain'] as const)[i % 3],
-        }))
-      : []
+  const whyCardItems = (whyCards ?? []).map((card, index) => ({
+    title: card?.title ?? '',
+    text: card?.text ?? '',
+    icon: (['activity', 'video', 'brain'] as const)[index % 3],
+  }))
 
   const iconMap = {
     activity: Activity,
     video: Video,
     brain: Brain,
   }
+
+  const resolveButtonHref = (button?: VPSGBlockProps['ctaPrimary']) =>
+    resolveLinkHref({
+      linkType: button?.linkType,
+      internal: button?.internal,
+      external: button?.external,
+    })
+
+  const ctaImageAlt =
+    ctaBgImage && typeof ctaBgImage === 'object' && 'alt' in ctaBgImage
+      ? ((ctaBgImage as { alt?: string | null }).alt ?? 'vPSG')
+      : 'vPSG'
 
   return (
     <section className={cn('w-full py-16 md:py-20 px-4', className)}>
@@ -79,34 +82,24 @@ export function VPSGBlock(props: VPSGBlockProps) {
             ) : null}
             <div className="flex flex-col sm:flex-row gap-4">
               {(() => {
-                const btn = heroPrimary as any
-                const href = resolveLinkHref({
-                  linkType: btn?.linkType,
-                  internal: btn?.internal,
-                  external: btn?.external,
-                })
-                return btn?.label ? (
+                const href = resolveButtonHref(heroPrimary)
+                return heroPrimary?.label ? (
                   <a
                     href={href || '#'}
                     className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold text-white bg-ds-accent-yellow hover:opacity-90"
                   >
-                    {btn.label}
+                    {heroPrimary.label}
                   </a>
                 ) : null
               })()}
               {(() => {
-                const btn = heroSecondary as any
-                const href = resolveLinkHref({
-                  linkType: btn?.linkType,
-                  internal: btn?.internal,
-                  external: btn?.external,
-                })
-                return btn?.label ? (
+                const href = resolveButtonHref(heroSecondary)
+                return heroSecondary?.label ? (
                   <a
                     href={href || '#'}
                     className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold border border-ds-dark-blue text-ds-dark-blue hover:bg-ds-dark-blue hover:text-white"
                   >
-                    {btn.label}
+                    {heroSecondary.label}
                   </a>
                 ) : null
               })()}
@@ -138,7 +131,7 @@ export function VPSGBlock(props: VPSGBlockProps) {
             </h2>
             {whatIsRichText && isLexicalEditorState(whatIsRichText) ? (
               <RichText
-                data={whatIsRichText as unknown}
+                data={whatIsRichText}
                 className="text-ds-pastille-green text-lg leading-relaxed space-y-4"
               />
             ) : null}
@@ -169,10 +162,7 @@ export function VPSGBlock(props: VPSGBlockProps) {
               {whyTitle || 'Why Is It the Gold Standard?'}
             </h2>
             {whyIntroRichText && isLexicalEditorState(whyIntroRichText) ? (
-              <RichText
-                data={whyIntroRichText as unknown}
-                className="text-ds-pastille-green text-lg"
-              />
+              <RichText data={whyIntroRichText} className="text-ds-pastille-green text-lg" />
             ) : null}
           </div>
 
@@ -230,8 +220,8 @@ export function VPSGBlock(props: VPSGBlockProps) {
         <div className="relative overflow-hidden rounded-2xl">
           {ctaBgImage ? (
             <Image
-              src={mediaToUrl(ctaBgImage as any) || '/placeholder.svg'}
-              alt={(ctaBgImage as any)?.alt || 'vPSG'}
+              src={mediaToUrl(ctaBgImage) || '/placeholder.svg'}
+              alt={ctaImageAlt}
               width={1200}
               height={600}
               className="absolute inset-0 w-full h-full object-cover"
@@ -247,41 +237,31 @@ export function VPSGBlock(props: VPSGBlockProps) {
                 <div>
                   {ctaLeftRichText && isLexicalEditorState(ctaLeftRichText) ? (
                     <RichText
-                      data={ctaLeftRichText as unknown}
+                      data={ctaLeftRichText}
                       className="text-lg text-white/90 leading-relaxed mb-4"
                     />
                   ) : null}
                 </div>
                 <div className="space-y-4">
                   {(() => {
-                    const btn = ctaPrimary as any
-                    const href = resolveLinkHref({
-                      linkType: btn?.linkType,
-                      internal: btn?.internal,
-                      external: btn?.external,
-                    })
-                    return btn?.label ? (
+                    const href = resolveButtonHref(ctaPrimary)
+                    return ctaPrimary?.label ? (
                       <a
                         href={href || '#'}
                         className="block w-full px-6 py-3 rounded-md font-semibold text-white bg-ds-accent-yellow hover:opacity-90 text-center"
                       >
-                        {btn.label}
+                        {ctaPrimary.label}
                       </a>
                     ) : null
                   })()}
                   {(() => {
-                    const btn = ctaSecondary as any
-                    const href = resolveLinkHref({
-                      linkType: btn?.linkType,
-                      internal: btn?.internal,
-                      external: btn?.external,
-                    })
-                    return btn?.label ? (
+                    const href = resolveButtonHref(ctaSecondary)
+                    return ctaSecondary?.label ? (
                       <a
                         href={href || '#'}
                         className="block w-full px-6 py-3 rounded-md font-semibold border border-white text-white hover:bg-white hover:text-black text-center"
                       >
-                        {btn.label}
+                        {ctaSecondary.label}
                       </a>
                     ) : null
                   })()}

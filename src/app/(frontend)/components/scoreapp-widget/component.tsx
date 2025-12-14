@@ -9,6 +9,10 @@ type ScoreAppWidgetProps = Extract<
   { blockType: 'scoreAppWidget' }
 >
 
+type ScoreAppWidgetGlobal = {
+  createFromElement: (element: HTMLElement) => unknown
+}
+
 export function ScoreAppWidget({
   scorecardUrl,
   displayMode = 'chat',
@@ -22,7 +26,7 @@ export function ScoreAppWidget({
   autoHeight = true,
 }: ScoreAppWidgetProps) {
   const widgetRef = useRef<HTMLDivElement>(null)
-  const widgetInstanceRef = useRef<any>(null)
+  const widgetInstanceRef = useRef<unknown>(null)
   const isMountedRef = useRef(true)
 
   useEffect(() => {
@@ -33,7 +37,7 @@ export function ScoreAppWidget({
       if (
         !isMountedRef.current ||
         typeof window === 'undefined' ||
-        !(window as any).ScoreAppWidget ||
+        !(window as unknown as { ScoreAppWidget?: ScoreAppWidgetGlobal }).ScoreAppWidget ||
         !widgetRef.current
       ) {
         return
@@ -76,7 +80,9 @@ export function ScoreAppWidget({
       }
 
       // Initialize the widget and store the instance
-      widgetInstanceRef.current = (window as any).ScoreAppWidget.createFromElement(element)
+      widgetInstanceRef.current = (
+        window as unknown as { ScoreAppWidget?: ScoreAppWidgetGlobal }
+      ).ScoreAppWidget?.createFromElement(element)
 
       // Fix mobile close button after widget loads
       setTimeout(() => {

@@ -57,6 +57,7 @@ import { gridCardsFields } from '../app/(frontend)/components/grid-cards/config'
 import { buttonFields } from '../app/(frontend)/components/button/config'
 import { splitInfoGridBlockFields } from '../app/(frontend)/components/split-info-grid-block/config'
 import { cacheTags, revalidateCacheTags } from '@/lib/cache-tags'
+import { createCTAGroup } from '@/lib/fields/link'
 
 // Safely extract authenticated user's role without using `any`
 const getUserRoleFromReq = (req: unknown): 'viewer' | 'editor' | 'admin' | undefined => {
@@ -484,141 +485,27 @@ export const Pages: CollectionConfig = {
               },
             },
             {
-              name: 'heroCTAButton',
-              type: 'group',
-              label: 'Hero Primary Button',
+              ...createCTAGroup({
+                name: 'heroCTAButton',
+                label: 'Hero Primary Button',
+                defaultValue: 'internal',
+              }),
               admin: {
                 description: 'Primary call-to-action button for the hero section',
                 condition: (data) => data.showHero,
               },
-              fields: [
-                {
-                  name: 'label',
-                  type: 'text',
-                  required: false,
-                  admin: { description: 'Button text' },
-                },
-                {
-                  name: 'linkType',
-                  type: 'select',
-                  label: 'Link Type',
-                  options: [
-                    { label: 'Internal', value: 'internal' },
-                    { label: 'External', value: 'external' },
-                  ],
-                  defaultValue: 'internal',
-                  admin: { description: 'Choose between internal page/blog or external URL' },
-                },
-                {
-                  name: 'internal',
-                  type: 'group',
-                  label: 'Internal Link',
-                  admin: {
-                    description: 'Link to an internal page or blog post',
-                    condition: (data, siblingData) => siblingData?.linkType === 'internal',
-                  },
-                  fields: [
-                    {
-                      name: 'relation',
-                      type: 'relationship',
-                      label: 'Select Page or Blog',
-                      relationTo: ['pages', 'blogs'],
-                      required: false,
-                      admin: { description: 'Choose the page or blog to link to' },
-                    },
-                  ],
-                },
-                {
-                  name: 'external',
-                  type: 'group',
-                  label: 'External Link',
-                  admin: {
-                    description: 'Link to an external website',
-                    condition: (data, siblingData) => siblingData?.linkType === 'external',
-                  },
-                  fields: [
-                    {
-                      name: 'href',
-                      type: 'text',
-                      required: false,
-                      admin: { description: 'External URL (e.g., https://example.com)' },
-                    },
-                  ],
-                },
-                {
-                  name: 'variant',
-                  type: 'select',
-                  options: [
-                    { label: 'Primary', value: 'primary' },
-                    { label: 'Secondary', value: 'secondary' },
-                  ],
-                  defaultValue: 'primary',
-                  admin: { description: 'Button style variant' },
-                },
-              ],
             },
             {
-              name: 'heroSecondaryCTA',
-              type: 'group',
-              label: 'Hero Secondary Button',
+              ...createCTAGroup({
+                name: 'heroSecondaryCTA',
+                label: 'Hero Secondary Button',
+                defaultValue: 'internal',
+                withVariant: false,
+              }),
               admin: {
                 description: 'Secondary call-to-action button (optional)',
                 condition: (data) => data.showHero,
               },
-              fields: [
-                {
-                  name: 'label',
-                  type: 'text',
-                  admin: { description: 'Button text' },
-                },
-                {
-                  name: 'linkType',
-                  type: 'select',
-                  label: 'Link Type',
-                  options: [
-                    { label: 'Internal', value: 'internal' },
-                    { label: 'External', value: 'external' },
-                  ],
-                  defaultValue: 'internal',
-                  admin: { description: 'Choose between internal page/blog or external URL' },
-                },
-                {
-                  name: 'internal',
-                  type: 'group',
-                  label: 'Internal Link',
-                  admin: {
-                    description: 'Link to an internal page or blog post',
-                    condition: (data, siblingData) => siblingData?.linkType === 'internal',
-                  },
-                  fields: [
-                    {
-                      name: 'relation',
-                      type: 'relationship',
-                      label: 'Select Page or Blog',
-                      relationTo: ['pages', 'blogs'],
-                      required: false,
-                      admin: { description: 'Choose the page or blog to link to' },
-                    },
-                  ],
-                },
-                {
-                  name: 'external',
-                  type: 'group',
-                  label: 'External Link',
-                  admin: {
-                    description: 'Link to an external website',
-                    condition: (data, siblingData) => siblingData?.linkType === 'external',
-                  },
-                  fields: [
-                    {
-                      name: 'href',
-                      type: 'text',
-                      required: false,
-                      admin: { description: 'External URL (e.g., https://example.com)' },
-                    },
-                  ],
-                },
-              ],
             },
             {
               name: 'heroCTAAlignment',

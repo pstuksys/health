@@ -18,33 +18,42 @@ const globalLoadState = {
   isLoading: false,
   isLoaded: false,
   hasAttempted: false,
+  scriptUrl: '',
+}
+
+function findExistingScript(scriptUrl: string): HTMLScriptElement | null {
+  const scripts = Array.from(document.querySelectorAll<HTMLScriptElement>('script[src]'))
+  return scripts.find((s) => s.src === scriptUrl) ?? null
 }
 
 function loadDoctifyScript(scriptUrl: string, widgetId: string): Promise<void> {
   return new Promise((resolve, reject) => {
     // Check if script already exists in DOM
-    const existingScript = document.querySelector<HTMLScriptElement>(`script[src*="doctify.com"]`)
-
+    const existingScript = findExistingScript(scriptUrl)
     if (existingScript) {
-      // Script exists, just resolve
       resolve()
       return
     }
 
-    // Verify container exists
     const container = document.getElementById(widgetId)
     if (!container) {
       reject(new Error('Widget container not found'))
       return
     }
 
-    // Create script element
     const script = document.createElement('script')
     script.src = scriptUrl
     script.async = true
     script.defer = true
 
-    // Set up load handlers
+    const cleanup = (timeoutId?: number) => {
+      script.removeEventListener('load', onLoad)
+      script.removeEventListener('error', onError)
+      if (timeoutId) {
+        window.clearTimeout(timeoutId)
+      }
+    }
+
     const onLoad = () => {
       globalLoadState.isLoaded = true
       globalLoadState.isLoading = false
@@ -58,15 +67,15 @@ function loadDoctifyScript(scriptUrl: string, widgetId: string): Promise<void> {
       reject(new Error('Script failed to load'))
     }
 
-    const cleanup = () => {
-      script.removeEventListener('load', onLoad)
-      script.removeEventListener('error', onError)
-    }
+    const timeoutId = window.setTimeout(() => {
+      globalLoadState.isLoading = false
+      cleanup(timeoutId)
+      reject(new Error('Script load timed out'))
+    }, 10000)
 
     script.addEventListener('load', onLoad)
     script.addEventListener('error', onError)
 
-    // Append to document
     document.head.appendChild(script)
   })
 }
@@ -88,11 +97,6 @@ export function useDoctifyWidget({
       return
     }
 
-    // If already attempted and failed, don't retry
-    if (globalLoadState.hasAttempted && !globalLoadState.isLoaded) {
-      return
-    }
-
     // If already handling load for this instance, don't do it again
     if (hasLoadedRef.current) {
       return
@@ -104,9 +108,15 @@ export function useDoctifyWidget({
         return
       }
 
+      // Guard: require container to exist before attempting load
+      if (!containerRef.current) {
+        return
+      }
+
       hasLoadedRef.current = true
       globalLoadState.isLoading = true
       globalLoadState.hasAttempted = true
+      globalLoadState.scriptUrl = scriptUrl
 
       try {
         await loadDoctifyScript(scriptUrl, widgetId)
@@ -114,6 +124,7 @@ export function useDoctifyWidget({
       } catch (error) {
         console.warn('Doctify widget failed to load:', error)
         globalLoadState.isLoading = false
+        hasLoadedRef.current = false
       }
     }
 

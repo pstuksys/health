@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { CMSLink } from '@/components/ui/cms-link'
 import { ArrowRight } from 'lucide-react'
 
@@ -6,7 +7,14 @@ export function CQCRatingCard() {
     <div className="w-full max-w-[200px] h-fit border border-gray-200 overflow-hidden bg-white">
       {/* CQC Logo Header */}
       <div className="p-2">
-        <img src="/care-quality.svg" alt="Care Quality Commission" className="w-32 h-auto" />
+        <Image
+          src="/care-quality.svg"
+          alt="Care Quality Commission"
+          width={128}
+          height={48}
+          className="w-32 h-auto"
+          priority
+        />
       </div>
 
       {/* Organization Name */}

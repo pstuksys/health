@@ -64,7 +64,7 @@ export function ContentBlockV2({
       <div className="">
         <div className={containerClasses}>
           <div className={flexClasses}>
-            {columns.map((column: any, index: number) => {
+            {columns.map((column, index) => {
               if (!column.content || !isLexicalEditorState(column.content)) {
                 return null
               }

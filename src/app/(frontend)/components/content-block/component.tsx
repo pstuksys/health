@@ -30,7 +30,7 @@ export function ContentBlock({
     return () => observer.disconnect()
   }, [])
 
-  const imageUrl = mediaToUrl(image as any)
+  const imageUrl = mediaToUrl(image)
 
   if (layout === 'full') {
     return (
@@ -42,12 +42,12 @@ export function ContentBlock({
                 {title}
               </h2>
             )}
-            {content && isLexicalEditorState(content) && (
+            {content && isLexicalEditorState(content) ? (
               <RichText
-                data={content as unknown}
+                data={content}
                 className="text-lg font-light leading-relaxed text-ds-pastille-green max-w-none"
               />
-            )}
+            ) : null}
             {image && (
               <div
                 className={cn(
@@ -87,12 +87,12 @@ export function ContentBlock({
             <h2 className="text-3xl sm:text-4xl font-light leading-tight text-ds-dark-blue">
               {title}
             </h2>
-            {content && isLexicalEditorState(content) && (
+            {content && isLexicalEditorState(content) ? (
               <RichText
-                data={content as unknown}
+                data={content}
                 className="text-lg font-light leading-relaxed text-ds-pastille-green max-w-none"
               />
-            )}
+            ) : null}
           </div>
 
           {/* Image Column */}

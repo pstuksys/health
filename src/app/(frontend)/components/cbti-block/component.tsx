@@ -31,19 +31,18 @@ export function CBTIBlock(props: CBTIBlockProps) {
     ctaPrimary,
     ctaSecondary,
     ctaImage,
-  } = props as CBTIBlockProps
+  } = props
 
   const techniqueIconMap = [Brain, Moon, CheckCircle, Clock, Brain, Users] as const
 
-  const features: string[] = Array.isArray(programFeatures)
-    ? (programFeatures as unknown[])
-        .map((f) => {
-          if (typeof f === 'string') return f
-          const text = (f as any)?.text
-          return typeof text === 'string' ? text : ''
-        })
-        .filter(Boolean)
-    : []
+  const features = (programFeatures ?? []).map((feature) => feature?.text ?? '').filter(Boolean)
+
+  const resolveButtonHref = (button?: CBTIBlockProps['ctaPrimary']) =>
+    resolveLinkHref({
+      linkType: button?.linkType,
+      internal: button?.internal,
+      external: button?.external,
+    })
 
   return (
     <section className={cn('w-full py-16 md:py-20 px-4', className)}>
@@ -71,7 +70,7 @@ export function CBTIBlock(props: CBTIBlockProps) {
           <CardContent className="space-y-4">
             {whatIsRichText && isLexicalEditorState(whatIsRichText) ? (
               <RichText
-                data={whatIsRichText as unknown}
+                data={whatIsRichText}
                 className="text-ds-pastille-green text-lg leading-relaxed"
               />
             ) : null}
@@ -86,7 +85,7 @@ export function CBTIBlock(props: CBTIBlockProps) {
             </h2>
             {programIntroRichText && isLexicalEditorState(programIntroRichText) ? (
               <RichText
-                data={programIntroRichText as unknown}
+                data={programIntroRichText}
                 className="text-ds-pastille-green text-lg max-w-2xl mx-auto"
               />
             ) : null}
@@ -132,10 +131,10 @@ export function CBTIBlock(props: CBTIBlockProps) {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {(techniques || []).map((t, index) => {
+            {(techniques ?? []).map((technique, index) => {
               const Icon = techniqueIconMap[index % techniqueIconMap.length]
-              const title = (t as any)?.title as string | undefined
-              const description = (t as any)?.description as string | undefined
+              const title = technique?.title ?? ''
+              const description = technique?.description ?? ''
               return (
                 <Card key={index} className="h-full shadow-md hover:shadow-lg border-0">
                   <CardHeader>
@@ -169,10 +168,7 @@ export function CBTIBlock(props: CBTIBlockProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             {whyRichText && isLexicalEditorState(whyRichText) ? (
-              <RichText
-                data={whyRichText as unknown}
-                className="text-ds-pastille-green leading-relaxed"
-              />
+              <RichText data={whyRichText} className="text-ds-pastille-green leading-relaxed" />
             ) : null}
           </CardContent>
         </Card>
@@ -181,8 +177,8 @@ export function CBTIBlock(props: CBTIBlockProps) {
         <div className="relative overflow-hidden rounded-lg">
           {ctaImage ? (
             <Image
-              src={mediaToUrl(ctaImage as any) || '/placeholder.svg'}
-              alt={(ctaImage as any)?.alt || 'CBTi'}
+              src={mediaToUrl(ctaImage) || '/placeholder.svg'}
+              alt={(ctaImage as { alt?: string | null })?.alt || 'CBTi'}
               width={800}
               height={400}
               className="absolute inset-0 w-full h-full object-cover"
@@ -196,40 +192,30 @@ export function CBTIBlock(props: CBTIBlockProps) {
             <CardContent className="text-center space-y-6">
               {ctaDescription && isLexicalEditorState(ctaDescription) ? (
                 <RichText
-                  data={ctaDescription as unknown}
+                  data={ctaDescription}
                   className="text-lg opacity-90 max-w-2xl mx-auto text-pretty text-white"
                 />
               ) : null}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 {(() => {
-                  const btn = ctaPrimary as any
-                  const href = resolveLinkHref({
-                    linkType: btn?.linkType,
-                    internal: btn?.internal,
-                    external: btn?.external,
-                  })
-                  return btn?.label ? (
+                  const href = resolveButtonHref(ctaPrimary)
+                  return ctaPrimary?.label ? (
                     <a
                       href={href || '#'}
                       className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold text-white bg-ds-accent-yellow hover:opacity-90"
                     >
-                      {btn.label}
+                      {ctaPrimary.label}
                     </a>
                   ) : null
                 })()}
                 {(() => {
-                  const btn = ctaSecondary as any
-                  const href = resolveLinkHref({
-                    linkType: btn?.linkType,
-                    internal: btn?.internal,
-                    external: btn?.external,
-                  })
-                  return btn?.label ? (
+                  const href = resolveButtonHref(ctaSecondary)
+                  return ctaSecondary?.label ? (
                     <a
                       href={href || '#'}
                       className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold border border-white text-white hover:bg-white hover:text-black"
                     >
-                      {btn.label}
+                      {ctaSecondary.label}
                     </a>
                   ) : null
                 })()}

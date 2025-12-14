@@ -32,14 +32,14 @@ export default function HighlightSectionBlock(props: HighlightSectionBlockProps)
             {cta?.label && (
               <CMSLink
                 href={resolveLinkHref({
-                  linkType: (cta as any)?.linkType,
-                  internal: (cta as any)?.internal,
-                  external: (cta as any)?.external,
+                  linkType: cta.linkType,
+                  internal: cta.internal,
+                  external: cta.external,
                 })}
                 variant="primary"
                 size="lg"
                 className="text-lg font-semibold px-8 py-4 w-full sm:w-auto"
-                external={(cta as any)?.linkType === 'external'}
+                external={cta.linkType === 'external'}
               >
                 {cta.label}
               </CMSLink>

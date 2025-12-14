@@ -50,11 +50,18 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
     ctaParagraph2,
     ctaPrimary,
     ctaSecondary,
-  } = props as RPBlockProps
+  } = props
 
-  const measures = Array.isArray(testMeasures) ? (testMeasures as any[]) : []
-  const symptomItems = Array.isArray(symptoms) ? (symptoms as any[]) : []
-  const benefitItems = Array.isArray(benefits) ? (benefits as any[]) : []
+  const measures = Array.isArray(testMeasures) ? testMeasures : []
+  const symptomItems = Array.isArray(symptoms) ? symptoms : []
+  const benefitItems = Array.isArray(benefits) ? benefits : []
+
+  const resolveButtonHref = (button?: RPBlockProps['ctaPrimary']) =>
+    resolveLinkHref({
+      linkType: button?.linkType,
+      internal: button?.internal,
+      external: button?.external,
+    })
 
   return (
     <section className={cn('w-full py-16 md:py-20 px-4', className)}>
@@ -83,34 +90,24 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {(() => {
-              const btn = heroPrimary as any
-              const href = resolveLinkHref({
-                linkType: btn?.linkType,
-                internal: btn?.internal,
-                external: btn?.external,
-              })
-              return btn?.label ? (
+              const href = resolveButtonHref(heroPrimary)
+              return heroPrimary?.label ? (
                 <a
                   href={href || '#'}
                   className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold text-white bg-ds-accent-yellow hover:opacity-90"
                 >
-                  {btn.label}
+                  {heroPrimary.label}
                 </a>
               ) : null
             })()}
             {(() => {
-              const btn = heroSecondary as any
-              const href = resolveLinkHref({
-                linkType: btn?.linkType,
-                internal: btn?.internal,
-                external: btn?.external,
-              })
-              return btn?.label ? (
+              const href = resolveButtonHref(heroSecondary)
+              return heroSecondary?.label ? (
                 <a
                   href={href || '#'}
                   className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold border border-ds-dark-blue text-ds-dark-blue hover:bg-ds-dark-blue hover:text-white"
                 >
-                  {btn.label}
+                  {heroSecondary.label}
                 </a>
               ) : null
             })()}
@@ -157,8 +154,8 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {measures.map((m, index) => {
-              const iconName = String((m as any)?.icon || '').toLowerCase()
+            {measures.map((measure, index) => {
+              const iconName = (measure.icon ?? '').toLowerCase()
               const Icon =
                 iconName === 'stethoscope'
                   ? Stethoscope
@@ -177,8 +174,8 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
                   <div className="w-12 h-12 mx-auto rounded-full flex items-center justify-center mb-4 bg-ds-accent-yellow text-white">
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="font-semibold mb-2 text-ds-dark-blue">{(m as any)?.title}</h3>
-                  <p className="text-sm text-ds-pastille-green">{(m as any)?.description}</p>
+                  <h3 className="font-semibold mb-2 text-ds-dark-blue">{measure.title}</h3>
+                  <p className="text-sm text-ds-pastille-green">{measure.description}</p>
                 </Card>
               )
             })}
@@ -220,15 +217,13 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
           </div>
 
           <div className="grid md:grid-cols-2 gap-4 max-w-4xl mx-auto">
-            {symptomItems.map((s, index) => (
+            {symptomItems.map((symptom, index) => (
               <div
                 key={index}
                 className="flex items-start gap-3 p-4 rounded-lg bg-white border border-gray-100"
               >
                 <CheckCircle className="h-5 w-5 mt-0.5 flex-shrink-0 text-ds-accent-yellow" />
-                <span className="text-ds-pastille-green">
-                  {typeof s === 'string' ? s : (s as any)?.text}
-                </span>
+                <span className="text-ds-pastille-green">{symptom.text ?? ''}</span>
               </div>
             ))}
           </div>
@@ -276,7 +271,7 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              {benefitItems.map((b, index) => (
+              {benefitItems.map((benefit, index) => (
                 <div key={index} className="flex items-start gap-2">
                   <div className="text-ds-accent-yellow">
                     {index === 0 ? (
@@ -289,9 +284,7 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
                       <Users className="h-5 w-5" />
                     )}
                   </div>
-                  <span className="text-sm text-ds-pastille-green">
-                    {typeof b === 'string' ? b : (b as any)?.text}
-                  </span>
+                  <span className="text-sm text-ds-pastille-green">{benefit.text ?? ''}</span>
                 </div>
               ))}
             </div>
@@ -314,34 +307,24 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                 {(() => {
-                  const btn = ctaPrimary as any
-                  const href = resolveLinkHref({
-                    linkType: btn?.linkType,
-                    internal: btn?.internal,
-                    external: btn?.external,
-                  })
-                  return btn?.label ? (
+                  const href = resolveButtonHref(ctaPrimary)
+                  return ctaPrimary?.label ? (
                     <a
                       href={href || '#'}
                       className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold bg-ds-accent-yellow text-white hover:opacity-90"
                     >
-                      {btn.label}
+                      {ctaPrimary.label}
                     </a>
                   ) : null
                 })()}
                 {(() => {
-                  const btn = ctaSecondary as any
-                  const href = resolveLinkHref({
-                    linkType: btn?.linkType,
-                    internal: btn?.internal,
-                    external: btn?.external,
-                  })
-                  return btn?.label ? (
+                  const href = resolveButtonHref(ctaSecondary)
+                  return ctaSecondary?.label ? (
                     <a
                       href={href || '#'}
                       className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold bg-transparent border border-white text-white hover:bg-white hover:text-black"
                     >
-                      {btn.label}
+                      {ctaSecondary.label}
                     </a>
                   ) : null
                 })()}

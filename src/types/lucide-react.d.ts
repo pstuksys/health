@@ -58,4 +58,5 @@ declare module 'lucide-react' {
   export const Building2: React.FC<React.SVGProps<SVGSVGElement>>
   export const AlertCircle: React.FC<React.SVGProps<SVGSVGElement>>
   export const Loader2: React.FC<React.SVGProps<SVGSVGElement>>
+  export const HelpCircle: React.FC<React.SVGProps<SVGSVGElement>>
 }

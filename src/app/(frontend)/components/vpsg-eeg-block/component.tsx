@@ -43,35 +43,30 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
     ctaRightBottomRichText,
     ctaPrimary,
     ctaSecondary,
-  } = props as VPSGEEGBlockProps
+  } = props
 
   const measureIconMap = [Brain, Video, Activity] as const
 
-  const reasons: string[] = Array.isArray(whenReasons)
-    ? (whenReasons as unknown[])
-        .map((r) => (typeof r === 'string' ? r : (r as any)?.text || ''))
-        .filter(Boolean)
-    : []
+  const reasons = (whenReasons ?? []).map(({ text }) => text ?? '').filter(Boolean)
 
-  const measureItems: Array<{ category: string; description: string }> = Array.isArray(measures)
-    ? (measures as unknown[]).map((m) => ({
-        category: (m as any)?.category || '',
-        description: (m as any)?.description || '',
-      }))
-    : []
+  const measureItems = (measures ?? []).map((measure) => ({
+    category: measure?.category ?? '',
+    description: measure?.description ?? '',
+  }))
 
-  const howItems: Array<{ title: string; description: string }> = Array.isArray(howSteps)
-    ? (howSteps as unknown[]).map((s) => ({
-        title: (s as any)?.title || '',
-        description: (s as any)?.description || '',
-      }))
-    : []
+  const howItems = (howSteps ?? []).map((step) => ({
+    title: step?.title ?? '',
+    description: step?.description ?? '',
+  }))
 
-  const whyItems: string[] = Array.isArray(whyChoose)
-    ? (whyChoose as unknown[])
-        .map((w) => (typeof w === 'string' ? w : (w as any)?.text || ''))
-        .filter(Boolean)
-    : []
+  const whyItems = (whyChoose ?? []).map(({ text }) => text ?? '').filter(Boolean)
+
+  const resolveButtonHref = (button?: VPSGEEGBlockProps['ctaPrimary']) =>
+    resolveLinkHref({
+      linkType: button?.linkType,
+      internal: button?.internal,
+      external: button?.external,
+    })
 
   return (
     <section className={cn('w-full py-16 md:py-20 px-4', className)}>
@@ -108,34 +103,24 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {(() => {
-              const btn = heroPrimary as any
-              const href = resolveLinkHref({
-                linkType: btn?.linkType,
-                internal: btn?.internal,
-                external: btn?.external,
-              })
-              return btn?.label ? (
+              const href = resolveButtonHref(heroPrimary)
+              return heroPrimary?.label ? (
                 <a
                   href={href || '#'}
                   className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold text-white bg-ds-accent-yellow hover:opacity-90"
                 >
-                  {btn.label}
+                  {heroPrimary.label}
                 </a>
               ) : null
             })()}
             {(() => {
-              const btn = heroSecondary as any
-              const href = resolveLinkHref({
-                linkType: btn?.linkType,
-                internal: btn?.internal,
-                external: btn?.external,
-              })
-              return btn?.label ? (
+              const href = resolveButtonHref(heroSecondary)
+              return heroSecondary?.label ? (
                 <a
                   href={href || '#'}
                   className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold border border-ds-dark-blue text-ds-dark-blue hover:bg-ds-dark-blue hover:text-white"
                 >
-                  {btn.label}
+                  {heroSecondary.label}
                 </a>
               ) : null
             })()}
@@ -153,7 +138,7 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
             <CardContent className="text-center">
               {importanceRichText && isLexicalEditorState(importanceRichText) ? (
                 <RichText
-                  data={importanceRichText as unknown}
+                  data={importanceRichText}
                   className="text-ds-pastille-green text-lg leading-relaxed"
                 />
               ) : null}
@@ -169,7 +154,7 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
             </h2>
             {whenIntroRichText && isLexicalEditorState(whenIntroRichText) ? (
               <RichText
-                data={whenIntroRichText as unknown}
+                data={whenIntroRichText}
                 className="text-ds-pastille-green text-lg max-w-3xl mx-auto"
               />
             ) : null}
@@ -201,7 +186,7 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
             </h2>
             {measuresIntroRichText && isLexicalEditorState(measuresIntroRichText) ? (
               <RichText
-                data={measuresIntroRichText as unknown}
+                data={measuresIntroRichText}
                 className="text-ds-pastille-green text-lg max-w-3xl mx-auto"
               />
             ) : null}
@@ -232,7 +217,7 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
           {measuresFootnoteRichText && isLexicalEditorState(measuresFootnoteRichText) ? (
             <div className="text-center max-w-4xl mx-auto">
               <RichText
-                data={measuresFootnoteRichText as unknown}
+                data={measuresFootnoteRichText}
                 className="text-ds-pastille-green text-lg leading-relaxed"
               />
             </div>
@@ -288,8 +273,7 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
         <div className="relative overflow-hidden rounded-2xl">
           <Image
             src={
-              mediaToUrl(ctaBgImage as any) ||
-              '/professional-medical-testing-room-with-comfortable.jpg'
+              mediaToUrl(ctaBgImage) || '/professional-medical-testing-room-with-comfortable.jpg'
             }
             alt="Advanced neurophysiology testing facility"
             width={1200}
@@ -326,47 +310,34 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
                 <div className="space-y-4">
                   {ctaRightTopRichText && isLexicalEditorState(ctaRightTopRichText) ? (
                     <RichText
-                      data={ctaRightTopRichText as unknown}
+                      data={ctaRightTopRichText}
                       className="text-lg text-white/90 leading-relaxed"
                     />
                   ) : null}
                   {ctaRightBottomRichText && isLexicalEditorState(ctaRightBottomRichText) ? (
-                    <RichText
-                      data={ctaRightBottomRichText as unknown}
-                      className="text-white/80 mb-6"
-                    />
+                    <RichText data={ctaRightBottomRichText} className="text-white/80 mb-6" />
                   ) : null}
 
                   <div className="space-y-3">
                     {(() => {
-                      const btn = ctaPrimary as any
-                      const href = resolveLinkHref({
-                        linkType: btn?.linkType,
-                        internal: btn?.internal,
-                        external: btn?.external,
-                      })
-                      return btn?.label ? (
+                      const href = resolveButtonHref(ctaPrimary)
+                      return ctaPrimary?.label ? (
                         <a
                           href={href || '#'}
                           className="w-full block text-center font-semibold px-6 py-3 rounded-md text-white bg-ds-accent-yellow hover:opacity-90"
                         >
-                          {btn.label}
+                          {ctaPrimary.label}
                         </a>
                       ) : null
                     })()}
                     {(() => {
-                      const btn = ctaSecondary as any
-                      const href = resolveLinkHref({
-                        linkType: btn?.linkType,
-                        internal: btn?.internal,
-                        external: btn?.external,
-                      })
-                      return btn?.label ? (
+                      const href = resolveButtonHref(ctaSecondary)
+                      return ctaSecondary?.label ? (
                         <a
                           href={href || '#'}
                           className="w-full block text-center font-semibold px-6 py-3 rounded-md border border-white text-white hover:bg-white hover:text-black"
                         >
-                          {btn.label}
+                          {ctaSecondary.label}
                         </a>
                       ) : null
                     })()}

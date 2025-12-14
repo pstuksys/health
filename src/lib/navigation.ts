@@ -1,3 +1,5 @@
+import type { Footer, Header } from '@/payload-types'
+
 /**
  * Utility function to resolve page/blog relationships to URLs
  * Handles both Payload-style items (with linkType) and simple items (with direct href)
@@ -10,52 +12,20 @@ export const resolveUrl = (item: {
     value: { slug?: string | null } | number
   } | null
 }): string => {
-  // Handle direct href (simpler structure)
-  if (item.href && !item.linkType) {
-    return item.href
-  }
+  const linkType = item.linkType ?? (item.page ? 'internal' : item.href ? 'external' : undefined)
 
-  if (item.linkType === 'external' && item.href) {
-    const href = item.href
-
-    // If the href is just '#' or empty, return it as is
-    if (!href || href === '#') {
-      return href
-    }
-
-    // If the href already has a protocol (http://, https://, mailto:, tel:, etc.), return as is
-    if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(href)) {
-      return href
-    }
-
-    // If the href starts with //, it's a protocol-relative URL, return as is
-    if (href.startsWith('//')) {
-      return href
-    }
-
-    // If the href doesn't start with /, assume it's a relative path and make it absolute
-    if (!href.startsWith('/')) {
-      return `https://${href}`
-    }
-
-    // If it starts with /, it's an internal path, but we're treating it as external
-    // This might be a misconfiguration, but return as is
-    return href
-  }
-
-  if (item.linkType === 'internal' && item.page) {
-    const { relationTo, value } = item.page
-    if (relationTo === 'pages') {
-      const slug = typeof value === 'object' ? value.slug : ''
-      return `/${slug || ''}`
-    }
-    if (relationTo === 'blogs') {
-      const slug = typeof value === 'object' ? value.slug : ''
-      return `/blogs/${slug || ''}`
-    }
-  }
-
-  return '#'
+  return resolveLinkHref({
+    linkType,
+    internal: item.page
+      ? {
+          relation: {
+            relationTo: item.page.relationTo,
+            value: typeof item.page.value === 'object' ? item.page.value : undefined,
+          },
+        }
+      : undefined,
+    external: item.href ? { href: item.href } : undefined,
+  })
 }
 
 /**
@@ -119,4 +89,92 @@ export const resolveLinkHref = (linkData: {
   }
 
   return '#'
+}
+
+/**
+ * Find a navigation item by its label
+ */
+export const findNavigationItem = <T extends { label: string }>(
+  items: T[],
+  label: string,
+): T | undefined => {
+  return items.find((item) => item.label === label)
+}
+
+export interface TransformedNavigationItem {
+  label: string
+  href?: string
+  megaMenu?: {
+    categories: Array<{
+      title: string
+      href: string
+    }>
+    featured: Array<{ label: string; href: string }>
+  }
+}
+
+export interface TransformedFooterLink {
+  label: string
+  href: string
+}
+
+/**
+ * Transform navigation items from Payload CMS format to a cleaner structure
+ */
+export function transformNavigationItems(
+  navigation: Header['navigation'],
+): TransformedNavigationItem[] {
+  if (!navigation) return []
+
+  return navigation.map((item) => {
+    if (item.hasMegaMenu && item.megaMenu) {
+      const categories = (item.megaMenu.categories ?? []).map((cat) => ({
+        title: cat.title,
+        href: resolveUrl(cat),
+      }))
+
+      const featured = (item.megaMenu.featured ?? []).map((f) => ({
+        label: f.label,
+        href: resolveUrl(f),
+      }))
+
+      return {
+        label: item.label,
+        megaMenu: { categories, featured },
+      }
+    }
+
+    return {
+      label: item.label,
+      href: resolveUrl(item),
+    }
+  })
+}
+
+/**
+ * Transform footer navigation links
+ */
+export function transformFooterNavLinks(
+  navigationLinks: Footer['navigationLinks'],
+): TransformedFooterLink[] {
+  if (!navigationLinks) return []
+
+  return navigationLinks.map((link) => ({
+    label: link.label ?? '',
+    href: resolveUrl(link),
+  }))
+}
+
+/**
+ * Transform footer legal links
+ */
+export function transformFooterLegalLinks(
+  legalLinks: Footer['legalLinks'],
+): TransformedFooterLink[] {
+  if (!legalLinks) return []
+
+  return legalLinks.map((link) => ({
+    label: link.label ?? '',
+    href: resolveUrl(link),
+  }))
 }

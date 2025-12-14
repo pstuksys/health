@@ -33,13 +33,11 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const [header, footer] = await Promise.all([getHeader(), getFooter()])
 
   // Transform navigation data
-  const { transformNavigationItems } = await import('@/lib/navigation-transformers')
+  const { transformNavigationItems } = await import('@/lib/navigation')
   const items = header?.navigation ? transformNavigationItems(header.navigation) : []
 
   // Transform footer data
-  const { transformFooterNavLinks, transformFooterLegalLinks } = await import(
-    '@/lib/navigation-transformers'
-  )
+  const { transformFooterNavLinks, transformFooterLegalLinks } = await import('@/lib/navigation')
 
   const footerNavLinks = footer?.navigationLinks
     ? transformFooterNavLinks(footer.navigationLinks)

@@ -14,12 +14,14 @@ type ButtonBlockProps = {
   size: 'sm' | 'md' | 'lg'
   linkType: LinkType
   internal?: {
-    relationTo: 'pages' | 'blogs'
-    value: string
-  }
+    relation?: {
+      relationTo?: 'pages' | 'blogs'
+      value?: { slug?: string | null } | number
+    } | null
+  } | null
   external?: {
-    href: string
-  }
+    href?: string
+  } | null
 }
 
 export function ButtonBlock({
@@ -35,15 +37,8 @@ export function ButtonBlock({
       ? DOWNLOAD_LINKS[linkType]
       : resolveLinkHref({
           linkType,
-          internal: internal
-            ? {
-                relation: {
-                  relationTo: internal.relationTo,
-                  value: { slug: internal.value },
-                },
-              }
-            : undefined,
-          external,
+          internal: internal ?? undefined,
+          external: external ?? undefined,
         })
 
   return (

@@ -17,23 +17,20 @@ type PostLinkInfo = {
   isExternal: boolean
 }
 
-function resolveBlogLink(post: any): PostLinkInfo {
+function resolveBlogLink(post: NonNullable<ScrollPostCardsProps['posts']>[number]): PostLinkInfo {
   if (post.linkType === 'external') {
     return {
-      href: post.externalUrl ?? post.href ?? '#',
+      href: post.href ?? '#',
       isExternal: true,
     }
   }
 
   // Internal link - resolve to proper URL
-  if (post.post) {
-    const rel = post.post
-    const doc = rel?.value ?? rel
-    const slug = doc?.slug ?? ''
-    return {
-      href: `/blogs/${slug}`,
-      isExternal: false,
-    }
+  const relation = post.post
+  const value = relation?.value ?? relation
+  if (value && typeof value === 'object' && 'slug' in value) {
+    const slug = value.slug ?? ''
+    return { href: `/blogs/${slug}`, isExternal: false }
   }
 
   return { href: '#', isExternal: false }
@@ -135,32 +132,33 @@ export function ScrollPostCards({
 
                 <p className="text-gray-600 mb-6 leading-relaxed">{post.excerpt || ''}</p>
 
-                {!clickableCard && (() => {
-                  const link = resolveBlogLink(post)
-                  return (
-                    <CMSLink
-                      href={link.href}
-                      variant="ghost"
-                      className="w-fit"
-                      external={link.isExternal}
-                    >
-                      Read More
-                      <svg
-                        className="ml-2 w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                {!clickableCard &&
+                  (() => {
+                    const link = resolveBlogLink(post)
+                    return (
+                      <CMSLink
+                        href={link.href}
+                        variant="ghost"
+                        className="w-fit"
+                        external={link.isExternal}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </CMSLink>
-                  )
-                })()}
+                        Read More
+                        <svg
+                          className="ml-2 w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </CMSLink>
+                    )
+                  })()}
               </div>
             </div>
           )

@@ -31,11 +31,7 @@ export function SleepAssessmentSteps({
           },
         }
       : null,
-    external: mainButtonExternal
-      ? {
-          href: mainButtonExternal,
-        }
-      : null,
+    external: mainButtonExternal ? { href: mainButtonExternal } : null,
   })
 
   const mainButtonIsExternal = mainButtonLinkType === 'external'
@@ -56,26 +52,21 @@ export function SleepAssessmentSteps({
       <div className="relative mb-12">
         <div className="grid md:grid-cols-2 gap-6 items-stretch">
           {stepsToRender.map((step) => {
-            // Use the utility function to resolve the href
             const href = resolveLinkHref({
-              linkType: (step as any).linkType,
-              internal: (step as any).internal
+              linkType: step.linkType,
+              internal: step.internal
                 ? {
                     relation: {
                       relationTo: 'pages',
-                      value: (step as any).internal,
+                      value: step.internal,
                     },
                   }
                 : null,
-              external: (step as any).external
-                ? {
-                    href: (step as any).external,
-                  }
-                : null,
+              external: step.external ? { href: step.external } : null,
             })
 
-            const isExternal = (step as any).linkType === 'external'
-            const buttonText = (step as any).buttonText
+            const isExternal = step.linkType === 'external'
+            const buttonText = step.buttonText
             const hasValidButton = buttonText && href
 
             return (

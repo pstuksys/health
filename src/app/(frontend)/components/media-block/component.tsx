@@ -4,22 +4,9 @@ import { Button } from '@/app/(frontend)/components/ui/button'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
 import { cn } from '@/lib/utils'
 import { mediaToUrl } from '@/lib/media'
-import type { Media } from '@/payload-types'
+import type { ExtractBlock } from '@/types/blocks'
 
-type CTAButton = {
-  label?: string | null | undefined
-  href?: string | null | undefined
-}
-
-type MediaBlockProps = {
-  image?: number | Media | null | undefined
-  imagePosition?: 'left' | 'right' | null | undefined
-  title: string
-  content?: any // Lexical content
-  ctaButton?: CTAButton
-  backgroundColor?: 'default' | 'light' | 'dark' | null | undefined
-  className?: string
-}
+type MediaBlockProps = ExtractBlock<'mediaBlock'> & { className?: string }
 
 export function MediaBlock({
   image,

@@ -83,19 +83,18 @@ export function MedicalCarousel(props: MedicalCarouselProps) {
   const effectiveShowDots = Boolean(showDots ?? true)
 
   const resolvedItems = useMemo<ResolvedCarouselItem[]>(() => {
-    const rawItems = (items ?? []) as unknown[]
-    return rawItems.map((i: any) => {
-      const image = mediaToUrl(i.image as any)
+    return (items ?? []).map((item) => {
+      const image = mediaToUrl(item.image)
       const href = resolveLinkHref({
-        linkType: i.linkType,
-        internal: i.internal,
-        external: i.external,
+        linkType: item.linkType,
+        internal: item.internal,
+        external: item.external,
       })
       return {
         image,
-        title: i.title ?? '',
-        description: i.description ?? '',
-        buttonText: i.buttonText ?? 'Learn More',
+        title: item.title ?? '',
+        description: item.description ?? '',
+        buttonText: item.buttonText ?? 'Learn More',
         href: href === '#' ? undefined : href,
       }
     })
