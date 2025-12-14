@@ -9,6 +9,7 @@ import { aboutUsSectionFields } from '../app/(frontend)/components/about-us-sect
 import { partnersBlockFields } from '../app/(frontend)/components/partners-block/config'
 import { partnersTextBlockFields } from '../app/(frontend)/components/partners-text-block/config'
 import { expandableTableFields } from '../app/(frontend)/components/expandable-table/config'
+import { tableFields } from '../app/(frontend)/components/table/config'
 import { testimonialsFields } from '../app/(frontend)/components/testimonials/config'
 import { teamCardsFields } from '../app/(frontend)/components/team-cards/config'
 import { blogPostCardsFields } from '../app/(frontend)/components/blog-post-cards/config'
@@ -77,6 +78,7 @@ const aboutUsSectionBlock: Block = { slug: 'aboutUsSection', fields: aboutUsSect
 const partnersBlock: Block = { slug: 'partnersBlock', fields: partnersBlockFields }
 const partnersTextBlock: Block = { slug: 'partnersTextBlock', fields: partnersTextBlockFields }
 const expandableTableBlock: Block = { slug: 'expandableTable', fields: expandableTableFields }
+const tableBlock: Block = { slug: 'table', fields: tableFields }
 const testimonialsBlock: Block = { slug: 'testimonials', fields: testimonialsFields }
 const teamCardsBlock: Block = { slug: 'teamCards', fields: teamCardsFields }
 const blogPostCardsBlock: Block = { slug: 'blogPostCards', fields: blogPostCardsFields }
@@ -293,6 +295,7 @@ const pageBlocks: Block[] = [
   partnersBlock,
   partnersTextBlock,
   expandableTableBlock,
+  tableBlock,
   testimonialsBlock,
   teamCardsBlock,
   blogPostCardsBlock,

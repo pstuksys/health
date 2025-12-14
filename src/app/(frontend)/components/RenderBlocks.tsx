@@ -30,6 +30,7 @@ import { ServicesBannerBlock } from './services-banner-block/component'
 import { MedicalServicesGrid } from './medical-services-grid/component'
 import { ContentBlockArray } from './content-block-array/component'
 import { TwoBlocksText } from './two-blocks-text/component'
+import { TableBlock } from './table/component'
 import { ScoreAppWidget } from './scoreapp-widget/component'
 import { SleepAssessmentSteps } from './sleep-assessment-steps/component'
 import { SleepAssessmentFeatures } from './sleep-assessment-features/component'
@@ -143,6 +144,10 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   expandableTable: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'expandableTable' }>
     return <ExpandableTable {...b} />
+  },
+  table: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'table' }>
+    return <TableBlock {...b} />
   },
   testimonials: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'testimonials' }>
