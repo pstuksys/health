@@ -29,7 +29,10 @@ export function IconTextBlock({
   }
 
   // Get the Lucide icon component
-  const IconComponent = (LucideIcons as any)[icon] || (LucideIcons as any).HelpCircle
+  const IconComponent =
+    (icon && icon in LucideIcons
+      ? (LucideIcons as Record<string, React.ComponentType<{ className?: string }>>)[icon]
+      : undefined) || LucideIcons.HelpCircle
 
   // Icon size classes
   const getIconSizeClass = () => {

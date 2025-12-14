@@ -45,9 +45,8 @@ export function ExpandableTable({
     setActiveItem(activeItem === itemId ? null : itemId)
   }
 
-  const hasDetails = (item: any) => {
-    return item.details && isLexicalEditorState(item.details)
-  }
+  const hasDetails = (item: NonNullable<ExpandableTableProps['items']>[number]) =>
+    item.details && isLexicalEditorState(item.details)
 
   return (
     <section className="py-6 px-4 sm:px-4 lg:px-4">

@@ -2,41 +2,32 @@ import Link from 'next/link'
 import { Button } from '@/app/(frontend)/components/ui/button'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
 import { cn } from '@/lib/utils'
-import { getAlignmentClasses, type AlignmentType } from '@/lib/design-system'
+import { getAlignmentClasses } from '@/lib/design-system'
+import type { ExtractBlock } from '@/types/blocks'
 
-type CTAButton = {
-  label?: string | null | undefined
-  href?: string | null | undefined
-}
-
-type CTABlockProps = {
-  title?: any // Lexical content
-  description?: any // Lexical content
-  ctaButton?: CTAButton
-  align?: AlignmentType
-  variant?: 'default' | 'accent' | 'gradient'
-  className?: string
-}
+type CTABlockProps = ExtractBlock<'ctaBlock'> & { className?: string }
 
 export function CTABlock({
   title,
   description,
   ctaButton,
-  align = 'center',
-  variant = 'default',
+  align,
+  variant,
   className,
 }: CTABlockProps) {
-  const alignmentClasses = getAlignmentClasses(align)
+  const alignValue = align ?? 'center'
+  const variantValue = variant ?? 'default'
+  const alignmentClasses = getAlignmentClasses(alignValue)
   const getBackgroundClasses = () =>
-    variant === 'accent'
+    variantValue === 'accent'
       ? 'bg-ds-accent-yellow text-ds-dark-blue'
-      : variant === 'gradient'
+      : variantValue === 'gradient'
         ? 'bg-gradient-blue-green text-white'
         : 'bg-ds-light-neutral text-ds-dark-blue'
   const getButtonClasses = () =>
-    variant === 'accent'
+    variantValue === 'accent'
       ? 'bg-ds-dark-blue hover:bg-ds-dark-blue/90 text-white'
-      : variant === 'gradient'
+      : variantValue === 'gradient'
         ? 'bg-ds-accent-yellow hover:bg-ds-accent-yellow/90 text-ds-dark-blue'
         : 'bg-ds-accent-yellow hover:bg-ds-accent-yellow/90 text-ds-dark-blue'
 
@@ -53,8 +44,8 @@ export function CTABlock({
               data={description}
               className={cn(
                 'text-lg font-light leading-relaxed max-w-2xl',
-                variant === 'gradient' ? 'text-gray-200' : 'opacity-80',
-                align === 'center' && 'mx-auto',
+                variantValue === 'gradient' ? 'text-gray-200' : 'opacity-80',
+                alignValue === 'center' && 'mx-auto',
                 alignmentClasses,
               )}
             />

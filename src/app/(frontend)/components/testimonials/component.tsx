@@ -10,8 +10,20 @@ type TestimonialsProps = Omit<
   'doctifyConfig'
 >
 
+type DoctifyConfig = {
+  widgetId: string
+  tenant: string
+  language: string
+  profileType: string
+  layoutType: string
+  slugs: string
+  background: string
+  itemBackground: string
+  itemFrame: boolean
+}
+
 // Doctify Widget Component with Progressive Enhancement
-function DoctifyWidget({ config }: { config: any }) {
+function DoctifyWidget({ config }: { config: DoctifyConfig }) {
   useEffect(() => {
     const container = document.getElementById(config.widgetId)
     if (!container) return

@@ -3,7 +3,7 @@
 export function hasNonEmptyLexicalContent(state: unknown): boolean {
   try {
     const obj = typeof state === 'string' ? JSON.parse(state) : (state as Record<string, unknown>)
-    const root = obj && typeof obj === 'object' ? (obj as any).root : undefined
+    const root = obj && typeof obj === 'object' ? (obj as { root?: { children?: unknown[] } }).root : undefined
     if (!root || !Array.isArray(root.children)) return false
 
     function extractText(node: unknown): string {

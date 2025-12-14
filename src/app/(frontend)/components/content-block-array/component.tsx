@@ -28,7 +28,7 @@ export function ContentBlockArray({
 
         <div className="space-y-12 ">
           {contentBlocks.map((block, index) => {
-            const imageUrl = mediaToUrl(block.image as any)
+            const imageUrl = mediaToUrl(block.image)
             const isImageLeft = block.imagePosition === 'left'
             const shouldAlternate = layout === 'alternating' && index % 2 === 1
 
@@ -72,11 +72,14 @@ export function ContentBlockArray({
                                 ? {
                                     relation: {
                                       relationTo: block.internal.relationTo,
-                                      value: { slug: block.internal.value },
+                                      value:
+                                        typeof block.internal.value === 'string'
+                                          ? { slug: block.internal.value }
+                                          : block.internal.value,
                                     },
                                   }
-                                : undefined,
-                              external: block.external,
+                                : null,
+                              external: block.external ?? null,
                             })}
                             variant="ghost"
                             size="lg"
@@ -94,11 +97,14 @@ export function ContentBlockArray({
                                 ? {
                                     relation: {
                                       relationTo: block.btn2Internal.relationTo,
-                                      value: { slug: block.btn2Internal.value },
+                                      value:
+                                        typeof block.btn2Internal.value === 'string'
+                                          ? { slug: block.btn2Internal.value }
+                                          : block.btn2Internal.value,
                                     },
                                   }
-                                : undefined,
-                              external: block.btn2External,
+                                : null,
+                              external: block.btn2External ?? null,
                             })}
                             variant="ghost"
                             size="lg"

@@ -37,21 +37,22 @@ export function MSLTBlock(props: MSLTBlockProps) {
     ctaPrimary,
     ctaSecondary,
     ctaImage,
-  } = props as MSLTBlockProps
+  } = props
 
   const stepIconMap = [Moon, Activity, Clock, CheckCircle] as const
 
-  const conditionItems: string[] = Array.isArray(conditions)
-    ? (conditions as unknown[])
-        .map((c) => (typeof c === 'string' ? c : (c as any)?.text || ''))
-        .filter(Boolean)
-    : []
+  const conditionItems = (conditions ?? [])
+    .map((condition) => condition?.text ?? '')
+    .filter(Boolean)
 
-  const symptomItems: string[] = Array.isArray(symptoms)
-    ? (symptoms as unknown[])
-        .map((s) => (typeof s === 'string' ? s : (s as any)?.text || ''))
-        .filter(Boolean)
-    : []
+  const symptomItems = (symptoms ?? []).map((symptom) => symptom?.text ?? '').filter(Boolean)
+
+  const resolveButtonHref = (button?: MSLTBlockProps['ctaPrimary']) =>
+    resolveLinkHref({
+      linkType: button?.linkType,
+      internal: button?.internal,
+      external: button?.external,
+    })
 
   return (
     <section className={cn('w-full py-16 md:py-20 px-4', className)}>
@@ -79,7 +80,7 @@ export function MSLTBlock(props: MSLTBlockProps) {
           <CardContent className="space-y-4">
             {whatIsRichText && isLexicalEditorState(whatIsRichText) ? (
               <RichText
-                data={whatIsRichText as unknown}
+                data={whatIsRichText}
                 className="text-ds-pastille-green text-lg leading-relaxed"
               />
             ) : null}
@@ -94,17 +95,17 @@ export function MSLTBlock(props: MSLTBlockProps) {
             </h2>
             {involveIntroRichText && isLexicalEditorState(involveIntroRichText) ? (
               <RichText
-                data={involveIntroRichText as unknown}
+                data={involveIntroRichText}
                 className="text-ds-pastille-green text-lg max-w-2xl mx-auto"
               />
             ) : null}
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {(testSteps || []).map((step, index) => {
+            {(testSteps ?? []).map((step, index) => {
               const Icon = stepIconMap[index % stepIconMap.length]
-              const title = (step as any)?.title as string | undefined
-              const description = (step as any)?.description as string | undefined
+              const title = step?.title ?? ''
+              const description = step?.description ?? ''
               return (
                 <Card key={index} className="h-full shadow-md hover:shadow-lg border-0">
                   <CardHeader>
@@ -127,7 +128,7 @@ export function MSLTBlock(props: MSLTBlockProps) {
             <CardContent className="pt-8">
               {involveDetailRichText && isLexicalEditorState(involveDetailRichText) ? (
                 <RichText
-                  data={involveDetailRichText as unknown}
+                  data={involveDetailRichText}
                   className="text-ds-pastille-green leading-relaxed"
                 />
               ) : null}
@@ -143,7 +144,7 @@ export function MSLTBlock(props: MSLTBlockProps) {
             </h2>
             {whyIntroRichText && isLexicalEditorState(whyIntroRichText) ? (
               <RichText
-                data={whyIntroRichText as unknown}
+                data={whyIntroRichText}
                 className="text-ds-pastille-green text-lg max-w-2xl mx-auto"
               />
             ) : null}
@@ -197,7 +198,7 @@ export function MSLTBlock(props: MSLTBlockProps) {
             </div>
             {whoConclusionRichText && isLexicalEditorState(whoConclusionRichText) ? (
               <RichText
-                data={whoConclusionRichText as unknown}
+                data={whoConclusionRichText}
                 className="leading-relaxed text-ds-pastille-green font-medium"
               />
             ) : null}
@@ -214,7 +215,7 @@ export function MSLTBlock(props: MSLTBlockProps) {
           <CardContent className="space-y-4">
             {ipdRichText && isLexicalEditorState(ipdRichText) ? (
               <RichText
-                data={ipdRichText as unknown}
+                data={ipdRichText}
                 className="text-ds-pastille-green text-lg leading-relaxed"
               />
             ) : null}
@@ -225,8 +226,8 @@ export function MSLTBlock(props: MSLTBlockProps) {
         <div className="relative overflow-hidden rounded-lg">
           {ctaImage ? (
             <Image
-              src={mediaToUrl(ctaImage as any) || '/placeholder.svg'}
-              alt={(ctaImage as any)?.alt || 'MSLT'}
+              src={mediaToUrl(ctaImage) || '/placeholder.svg'}
+              alt={(ctaImage as { alt?: string | null })?.alt || 'MSLT'}
               width={800}
               height={400}
               className="absolute inset-0 w-full h-full object-cover"
@@ -242,40 +243,30 @@ export function MSLTBlock(props: MSLTBlockProps) {
             <CardContent className="text-center space-y-6">
               {ctaDescription && isLexicalEditorState(ctaDescription) ? (
                 <RichText
-                  data={ctaDescription as unknown}
+                  data={ctaDescription}
                   className="text-lg opacity-90 max-w-2xl mx-auto text-pretty text-white"
                 />
               ) : null}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 {(() => {
-                  const btn = ctaPrimary as any
-                  const href = resolveLinkHref({
-                    linkType: btn?.linkType,
-                    internal: btn?.internal,
-                    external: btn?.external,
-                  })
-                  return btn?.label ? (
+                  const href = resolveButtonHref(ctaPrimary)
+                  return ctaPrimary?.label ? (
                     <a
                       href={href || '#'}
                       className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold text-white bg-ds-accent-yellow hover:opacity-90"
                     >
-                      {btn.label}
+                      {ctaPrimary.label}
                     </a>
                   ) : null
                 })()}
                 {(() => {
-                  const btn = ctaSecondary as any
-                  const href = resolveLinkHref({
-                    linkType: btn?.linkType,
-                    internal: btn?.internal,
-                    external: btn?.external,
-                  })
-                  return btn?.label ? (
+                  const href = resolveButtonHref(ctaSecondary)
+                  return ctaSecondary?.label ? (
                     <a
                       href={href || '#'}
                       className="inline-flex items-center justify-center px-6 py-3 rounded-md font-semibold border border-white text-white hover:bg-white hover:text-black"
                     >
-                      {btn.label}
+                      {ctaSecondary.label}
                     </a>
                   ) : null
                 })()}

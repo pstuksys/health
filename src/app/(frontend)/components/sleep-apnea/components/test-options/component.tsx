@@ -11,13 +11,11 @@ type TestOptionsBlock = Extract<
   { blockType: 'sleepApneaTestOptions' }
 >
 
-export function SleepApneaTestOptions({
-  className,
-  title,
-  items,
-}: TestOptionsBlock & { className?: string }) {
+type TestOptionsProps = TestOptionsBlock & { className?: string }
+
+export function SleepApneaTestOptions({ className, title, items }: TestOptionsProps) {
   const header = title || 'Step 2: Understand Your Sleep Test Options'
-  const cards =
+  const cards: NonNullable<TestOptionsBlock['items']> =
     items && items.length
       ? items
       : [
@@ -33,7 +31,9 @@ export function SleepApneaTestOptions({
             ],
             description:
               'Our compact, two-sensor sleep test offers a more convenient solution for suspected obstructive sleep apnoea, ideal for many adults with classic symptoms. It allows you to sleep in your own bed and routine while still getting a detailed diagnostic report.',
-            primaryCta: { text: 'Book for £300', href: '#' },
+            primaryText: 'Book for £300',
+            linkTypePrimary: 'external',
+            primaryExternal: { href: '#' },
           },
           {
             key: 'rp',
@@ -46,8 +46,12 @@ export function SleepApneaTestOptions({
             ],
             description:
               'Multi-channel home study monitoring airflow, respiratory effort, oxygen levels, body position and more. Higher diagnostic confidence than basic HST.',
-            secondaryCta: { text: 'Learn more', href: '#' },
-            primaryCta: { text: 'Enquire', href: '#' },
+            secondaryText: 'Learn more',
+            linkTypeSecondary: 'external',
+            secondaryExternal: { href: '#' },
+            primaryText: 'Enquire',
+            linkTypePrimary: 'external',
+            primaryExternal: { href: '#' },
           },
           {
             key: 'vpsg',
@@ -60,8 +64,12 @@ export function SleepApneaTestOptions({
             ],
             description:
               'Video Polysomnography (vPSG) is the most comprehensive test available, used for complex or neurological sleep conditions. It involves an overnight clinic stay and full physiological monitoring including video and full sleep staging — diagnosing more than sleep apnoea.',
-            secondaryCta: { text: 'Learn more', href: '#' },
-            primaryCta: { text: 'Enquire', href: '#' },
+            secondaryText: 'Learn more',
+            linkTypeSecondary: 'external',
+            secondaryExternal: { href: '#' },
+            primaryText: 'Enquire',
+            linkTypePrimary: 'external',
+            primaryExternal: { href: '#' },
           },
         ]
 
@@ -125,11 +133,11 @@ export function SleepApneaTestOptions({
                   <div className="space-y-2 mb-2">
                     {(() => {
                       const href = resolveLinkHref({
-                        linkType: (card as any)?.linkTypeSecondary,
-                        internal: (card as any)?.secondaryInternal,
-                        external: (card as any)?.secondaryExternal,
+                        linkType: card.linkTypeSecondary,
+                        internal: card.secondaryInternal,
+                        external: card.secondaryExternal,
                       })
-                      const text = (card as any)?.secondaryText
+                      const text = card.secondaryText
                       return text ? (
                         <a
                           href={href || '#'}
@@ -141,11 +149,11 @@ export function SleepApneaTestOptions({
                     })()}
                     {(() => {
                       const href = resolveLinkHref({
-                        linkType: (card as any)?.linkTypePrimary,
-                        internal: (card as any)?.primaryInternal,
-                        external: (card as any)?.primaryExternal,
+                        linkType: card.linkTypePrimary,
+                        internal: card.primaryInternal,
+                        external: card.primaryExternal,
                       })
-                      const text = (card as any)?.primaryText
+                      const text = card.primaryText
                       return text ? (
                         <a
                           href={href || '#'}

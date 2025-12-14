@@ -4,20 +4,9 @@ import { Button } from '@/app/(frontend)/components/ui/button'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
 import { cn } from '@/lib/utils'
 import { mediaToUrl } from '@/lib/media'
-import type { Media } from '@/payload-types'
+import type { ExtractBlock } from '@/types/blocks'
 
-type CTAButton = {
-  label?: string | null | undefined
-  href?: string | null | undefined
-}
-
-type AboutUsSectionProps = {
-  title: string
-  content?: any // Lexical content
-  image?: number | Media | null | undefined
-  ctaButton?: CTAButton
-  className?: string
-}
+type AboutUsSectionProps = ExtractBlock<'aboutUsSection'> & { className?: string }
 
 export function AboutUsSection({
   title,

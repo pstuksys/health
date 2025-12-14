@@ -9,7 +9,7 @@ type ScrollableCard = {
   id?: string | null
   icon?: string | null
   title: string
-  content: any // Rich text content
+  content: unknown
 }
 
 type ScrollableCardsProps = {
@@ -26,10 +26,12 @@ export function ScrollableCards({ title, subtitle, cards, className }: Scrollabl
 
   // Memoize icon components to avoid repeated lookups
   const iconComponents = useMemo(() => {
-    const components: Record<string, any> = {}
+    const components: Record<string, React.ComponentType<{ className?: string }>> = {}
     cards.forEach((card) => {
-      if (card.icon && !components[card.icon]) {
-        components[card.icon] = (LucideIcons as any)[card.icon]
+      if (card.icon && !components[card.icon] && card.icon in LucideIcons) {
+        components[card.icon] = (
+          LucideIcons as Record<string, React.ComponentType<{ className?: string }>>
+        )[card.icon]
       }
     })
     return components
@@ -103,7 +105,7 @@ export function ScrollableCards({ title, subtitle, cards, className }: Scrollabl
               {card.icon && (
                 <div className="flex items-center justify-center p-6 md:p-8">
                   {(() => {
-                    const IconComponent = iconComponents[card.icon!]
+                    const IconComponent = card.icon ? iconComponents[card.icon] : undefined
                     return IconComponent ? (
                       <IconComponent className="w-16 h-16 md:w-20 md:h-20 text-ds-accent-yellow" />
                     ) : null

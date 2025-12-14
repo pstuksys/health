@@ -64,17 +64,18 @@ const richTextBlocks = [
   },
 ]
 
-// Environment variable validation
+const isTestEnv = process.env.NODE_ENV === 'test'
+const payloadSecret = process.env.PAYLOAD_SECRET ?? (isTestEnv ? 'test-secret' : '')
+
+// Environment variable validation (enforce outside of tests)
 const requiredEnvVars = {
-  BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN || '',
   PAYLOAD_SECRET: process.env.PAYLOAD_SECRET || '',
   POSTGRES_URL: process.env.POSTGRES_URL || '',
 }
 
-// Check for missing environment variables only in production
-if (process.env.NODE_ENV === 'production') {
+if (!isTestEnv) {
   const missingEnvVars = Object.entries(requiredEnvVars)
-    .filter(([_, value]) => !value)
+    .filter(([, value]) => !value)
     .map(([key]) => key)
 
   if (missingEnvVars.length > 0) {
@@ -172,7 +173,7 @@ export default buildConfig({
       }),
     ],
   }),
-  secret: process.env.PAYLOAD_SECRET || 'dev-secret-please-change',
+  secret: payloadSecret,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },

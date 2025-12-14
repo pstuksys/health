@@ -57,9 +57,9 @@ export function SleepApneaAfterTest({
               </div>
 
               <div className="space-y-6">
-                {left && (left as any).richText && isLexicalEditorState((left as any).richText) ? (
+                {left?.richText && isLexicalEditorState(left.richText) ? (
                   <RichText
-                    data={(left as any).richText as unknown}
+                    data={left.richText}
                     className="text-ds-pastille-green text-sm leading-relaxed rich-text-headings-blue"
                   />
                 ) : null}
@@ -86,11 +86,9 @@ export function SleepApneaAfterTest({
               </div>
 
               <div className="space-y-6">
-                {right &&
-                (right as any).richText &&
-                isLexicalEditorState((right as any).richText) ? (
+                {right?.richText && isLexicalEditorState(right.richText) ? (
                   <RichText
-                    data={(right as any).richText as unknown}
+                    data={right.richText}
                     className="text-ds-pastille-green text-sm leading-relaxed rich-text-headings-blue"
                   />
                 ) : null}

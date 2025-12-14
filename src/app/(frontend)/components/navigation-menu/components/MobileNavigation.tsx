@@ -81,7 +81,7 @@ export function MobileNavigation({
                         {item.megaMenu.categories?.map((category) => (
                           <Link
                             key={category.title}
-                            href={resolveUrl(category as any)}
+                            href={resolveUrl(category)}
                             className="text-ds-dark-blue hover:text-ds-accent-yellow text-base font-light block py-2 hover:bg-gray-50 px-3 -mx-3 rounded transition-all duration-200 ml-4"
                             onClick={onClose}
                           >

@@ -12,7 +12,7 @@ import { MegaMenuDropdown } from './components/MegaMenuDropdown'
 import { MobileNavigation } from './components/MobileNavigation'
 import { NavigationItems } from './components/NavigationItems'
 import { useResponsiveNavigation } from '../../../../hooks/useResponsiveNavigation'
-import { findNavigationItem } from '../../../../lib/navigationUtils'
+import { findNavigationItem } from '@/lib/navigation'
 // getFirstCategoryTitle - no longer needed (categories are now direct links, not nested items)
 
 // Constants

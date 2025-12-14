@@ -1,4 +1,5 @@
 import type { Field } from 'payload'
+import { createLinkFields } from '@/lib/fields/link'
 
 export const buttonFields: Field[] = [
   {
@@ -69,52 +70,8 @@ export const buttonFields: Field[] = [
       description: 'Spacing maps to py-6, py-12, py-16, or py-32.',
     },
   },
-  {
-    name: 'linkType',
-    type: 'radio',
-    required: true,
+  ...createLinkFields({
     defaultValue: 'external',
-    options: [
-      { label: 'Internal', value: 'internal' },
-      { label: 'External', value: 'external' },
-    ],
-    admin: {
-      description: 'Choose whether to link to an internal page or external URL',
-    },
-  },
-  {
-    name: 'internal',
-    type: 'group',
-    admin: {
-      condition: (_, siblingData) => siblingData?.linkType === 'internal',
-    },
-    fields: [
-      {
-        name: 'relation',
-        type: 'relationship',
-        relationTo: ['pages', 'blogs'],
-        required: true,
-        admin: {
-          description: 'Select a page or blog document to link to',
-        },
-      },
-    ],
-  },
-  {
-    name: 'external',
-    type: 'group',
-    admin: {
-      condition: (_, siblingData) => siblingData?.linkType === 'external',
-    },
-    fields: [
-      {
-        name: 'href',
-        type: 'text',
-        required: true,
-        admin: {
-          description: 'External URL (e.g., https://example.com)',
-        },
-      },
-    ],
-  },
+    description: 'Choose whether to link to an internal page or external URL',
+  }),
 ]

@@ -36,7 +36,7 @@ export function MedicalServicesGrid({
         {/* Services Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-8">
           {(services || []).map((service, index) => {
-            const rawIcon = (service as any)?.icon
+            const rawIcon = service.icon
             let iconKey: IconKey = 'Scan'
             if (typeof rawIcon === 'string') {
               const pascal = (rawIcon.slice(0, 1).toUpperCase() + rawIcon.slice(1)) as IconKey

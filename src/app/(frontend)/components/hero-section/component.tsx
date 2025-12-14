@@ -14,7 +14,7 @@ import {
 } from '@/lib/hero-config'
 import { cn } from '@/lib/utils'
 import { ConsistentHTML } from '../safe-html/component'
-import { RichText } from '@/app/(frontend)/components/ui/rich-text'
+import { RichText, isLexicalEditorState } from '@/app/(frontend)/components/ui/rich-text'
 import { SleepDisorderStatsCard } from '../sleep-disorder-stats-card/component'
 import type { Page } from '@/payload-types'
 type CTAButton = { label: string; href: string; variant?: 'primary' | 'secondary' }
@@ -234,9 +234,4 @@ export function HeroSection({
       )}
     </section>
   )
-}
-
-function isLexicalEditorState(value: unknown): boolean {
-  if (!value || typeof value !== 'object') return false
-  return 'root' in (value as Record<string, unknown>)
 }

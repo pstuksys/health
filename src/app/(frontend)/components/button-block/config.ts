@@ -1,4 +1,11 @@
 import type { Field } from 'payload'
+import { createLinkFields } from '@/lib/fields/link'
+
+const linkTypeOptions = [
+  { label: 'Internal', value: 'internal' },
+  { label: 'External', value: 'external' },
+  { label: 'IPD referral form download', value: 'ipd-referral-form' },
+]
 
 export const buttonBlockFields: Field[] = [
   {
@@ -39,65 +46,10 @@ export const buttonBlockFields: Field[] = [
       description: 'Button size',
     },
   },
-  {
-    name: 'linkType',
-    type: 'radio',
-    required: true,
+  ...createLinkFields({
     defaultValue: 'external',
-    options: [
-      { label: 'Internal', value: 'internal' },
-      { label: 'External', value: 'external' },
-      { label: 'IPD referral form download', value: 'ipd-referral-form' },
-    ],
-    admin: {
-      description:
-        'Choose whether to link to an internal page, external URL, or trigger the IPD referral form download',
-    },
-  },
-  {
-    name: 'internal',
-    type: 'group',
-    admin: {
-      condition: (_, siblingData) => siblingData?.linkType === 'internal',
-    },
-    fields: [
-      {
-        name: 'relationTo',
-        type: 'select',
-        required: true,
-        options: [
-          { label: 'Page', value: 'pages' },
-          { label: 'Blog', value: 'blogs' },
-        ],
-        admin: {
-          description: 'Type of content to link to',
-        },
-      },
-      {
-        name: 'value',
-        type: 'text',
-        required: true,
-        admin: {
-          description: 'Slug of the page or blog to link to',
-        },
-      },
-    ],
-  },
-  {
-    name: 'external',
-    type: 'group',
-    admin: {
-      condition: (_, siblingData) => siblingData?.linkType === 'external',
-    },
-    fields: [
-      {
-        name: 'href',
-        type: 'text',
-        required: true,
-        admin: {
-          description: 'External URL (e.g., https://example.com)',
-        },
-      },
-    ],
-  },
+    linkTypeOptions,
+    description:
+      'Choose whether to link to an internal page, external URL, or trigger the IPD referral form download',
+  }),
 ]
