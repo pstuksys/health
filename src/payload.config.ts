@@ -4,6 +4,7 @@ import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
+import { resendAdapter } from '@payloadcms/email-resend'
 import {
   lexicalEditor,
   BlocksFeature,
@@ -84,6 +85,11 @@ if (process.env.NODE_ENV === 'production') {
 
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
+  email: resendAdapter({
+    defaultFromAddress: process.env.RESEND_FROM_EMAIL || 'noreply@example.com',
+    defaultFromName: process.env.RESEND_FROM_NAME || 'Health CMS',
+    apiKey: process.env.RESEND_API_KEY || '',
+  }),
   localization: {
     // locales: ['en', 'es', 'de'],
     locales: ['en'],
@@ -199,7 +205,19 @@ export default buildConfig({
       tabbedUI: true,
       generateTitle: ({ doc }) => (typeof doc?.title === 'string' ? doc.title : ''),
     }),
-    formBuilderPlugin({}),
+    formBuilderPlugin({
+      formSubmissionOverrides: {
+        access: {
+          create: () => false,
+          read: () => false,
+          update: () => false,
+          delete: () => false,
+        },
+        admin: {
+          hidden: true,
+        },
+      },
+    }),
     searchPlugin({
       collections: ['pages', 'blogs'],
     }),
