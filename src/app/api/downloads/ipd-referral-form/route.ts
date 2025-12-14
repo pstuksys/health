@@ -1,7 +1,6 @@
 import { NextResponse } from 'next/server'
 import { promises as fs } from 'fs'
 import path from 'path'
-import { checkBotId } from 'botid/server'
 
 const FILE_NAME = 'IPD referral form 2025.docx'
 const PUBLIC_PATH = path.join(process.cwd(), 'public', FILE_NAME)
@@ -10,11 +9,6 @@ const DOCX_MIME =
 
 export async function GET() {
   try {
-    const { isBot } = await checkBotId()
-    if (isBot) {
-      return new NextResponse('Access denied', { status: 403 })
-    }
-
     const fileBuffer = await fs.readFile(PUBLIC_PATH)
     const arrayBuffer = fileBuffer.buffer.slice(
       fileBuffer.byteOffset,
