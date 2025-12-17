@@ -31,7 +31,7 @@ function resolveBlogLink(post: any): PostLinkInfo {
     const doc = rel?.value ?? rel
     const slug = doc?.slug ?? ''
     return {
-      href: `/blogs/${slug}`,
+      href: `/blog/${slug}`,
       isExternal: false,
     }
   }

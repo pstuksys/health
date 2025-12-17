@@ -83,7 +83,7 @@ export default async function BlogPage(props: BlogPageParams) {
           {/* Share buttons */}
           <ShareButtons
             title={blog.title}
-            url={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/blogs/${blog.slug}`}
+            url={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/blog/${blog.slug}`}
             excerpt={blog.excerpt || undefined}
           />
         </div>

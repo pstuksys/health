@@ -51,7 +51,7 @@ export const resolveUrl = (item: {
     }
     if (relationTo === 'blogs') {
       const slug = typeof value === 'object' ? value.slug : ''
-      return `/blogs/${slug || ''}`
+      return `/blog/${slug || ''}`
     }
   }
 
@@ -113,7 +113,7 @@ export const resolveLinkHref = (linkData: {
     if (typeof doc === 'object' && doc !== null && 'slug' in doc) {
       const slug = doc.slug ?? ''
       const collection = rel?.relationTo
-      if (collection === 'blogs') return `/blogs/${slug}`
+      if (collection === 'blogs') return `/blog/${slug}`
       else if (collection === 'pages') return `/${slug}`
     }
   }
