@@ -86,8 +86,8 @@ if (process.env.NODE_ENV === 'production') {
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
   email: resendAdapter({
-    defaultFromAddress: process.env.RESEND_FROM_EMAIL || 'noreply@example.com',
-    defaultFromName: process.env.RESEND_FROM_NAME || 'Health CMS',
+    defaultFromAddress: process.env.RESEND_FROM_EMAIL || '',
+    defaultFromName: process.env.RESEND_FROM_NAME || 'IPDiagnostics',
     apiKey: process.env.RESEND_API_KEY || '',
   }),
   localization: {

@@ -143,6 +143,8 @@ export function FormBlock({
         setSubmitStatus('success')
         setSubmitMessage('Thank you! Your form has been submitted successfully.')
         setFormData({}) // Reset form
+        const formElement = e.target as HTMLFormElement
+        formElement.reset()
 
         // Handle confirmation type
         if (form.confirmationType === 'redirect' && form.redirect?.url) {
