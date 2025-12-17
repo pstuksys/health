@@ -61,6 +61,12 @@ function replaceFieldPlaceholders(template: string, submissionData: SubmissionFi
 }
 
 export async function POST(request: NextRequest) {
+  // TODO: [TECH DEBT] Re-enable form submissions when UI is active again
+  const FORM_SUBMISSIONS_ENABLED = false
+  if (!FORM_SUBMISSIONS_ENABLED) {
+    return NextResponse.json({ error: 'Form submissions temporarily disabled' }, { status: 503 })
+  }
+
   try {
     const { isBot } = await checkBotId()
     if (isBot) {
