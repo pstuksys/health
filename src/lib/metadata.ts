@@ -3,22 +3,23 @@ import type { Metadata } from 'next'
 export const siteMetadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
-    default: 'Health & Wellness Platform',
-    template: '%s | Health & Wellness Platform',
+    default: 'IPDiagnostics',
+    template: '%s | IPDiagnostics',
   },
   description:
-    'Your comprehensive health and wellness platform for sleep disorders, diagnostics, treatments, and lifestyle tips.',
+    'Independent Physiological Diagnostics — specialists in sleep, neurophysiology, and lung function testing across the UK.',
   keywords: [
-    'health',
-    'wellness',
-    'sleep disorders',
-    'medical diagnostics',
-    'treatments',
-    'healthcare',
+    'IPDiagnostics',
+    'sleep diagnostics',
+    'neurophysiology',
+    'lung function testing',
+    'sleep apnea',
+    'EEG',
+    'spirometry',
   ],
-  authors: [{ name: 'Health & Wellness Team' }],
-  creator: 'Health & Wellness Platform',
-  publisher: 'Health & Wellness Platform',
+  authors: [{ name: 'IPDiagnostics' }],
+  creator: 'IPDiagnostics',
+  publisher: 'IPDiagnostics',
   formatDetection: {
     email: false,
     address: false,
@@ -27,7 +28,7 @@ export const siteMetadata: Metadata = {
   category: 'healthcare',
   classification: 'healthcare',
   generator: 'Next.js',
-  applicationName: 'Health & Wellness Platform',
+  applicationName: 'IPDiagnostics',
   referrer: 'origin-when-cross-origin',
   verification: {
     // Add these when you have them
@@ -47,25 +48,25 @@ export const siteMetadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    title: 'Health & Wellness Platform',
+    title: 'IPDiagnostics',
     description:
-      'Your comprehensive health and wellness platform for sleep disorders, diagnostics, treatments, and lifestyle tips.',
-    siteName: 'Health & Wellness Platform',
+      'Independent Physiological Diagnostics — specialists in sleep, neurophysiology, and lung function testing across the UK.',
+    siteName: 'IPDiagnostics',
     images: [
       {
         url: '/logo.svg', // Update with your actual OG image
         width: 1200,
         height: 630,
-        alt: 'Health & Wellness Platform',
+        alt: 'IPDiagnostics',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Health & Wellness Platform',
+    title: 'IPDiagnostics',
     description:
-      'Your comprehensive health and wellness platform for sleep disorders, diagnostics, treatments, and lifestyle tips.',
-    creator: '@yourtwitterhandle', // Update with your Twitter handle
+      'Independent Physiological Diagnostics — specialists in sleep, neurophysiology, and lung function testing across the UK.',
+    creator: '@ipdiagnostics', // Update if a different handle is used
     images: ['/logo.svg'], // Update with your actual Twitter image
   },
   robots: {

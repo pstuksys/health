@@ -158,17 +158,20 @@ export default async function BlogsPage() {
 
 export async function generateMetadata() {
   return {
-    title: 'Blog | Health & Wellness Insights',
-    description: 'Read our latest blog posts about health, wellness, and medical insights.',
+    title: 'IPDiagnostics Blog | Sleep & Diagnostics Insights',
+    description:
+      'Expert articles from IPDiagnostics on sleep health, neurophysiology, and lung function testing across the UK.',
     openGraph: {
-      title: 'Blog | Health & Wellness Insights',
-      description: 'Read our latest blog posts about health, wellness, and medical insights.',
+      title: 'IPDiagnostics Blog | Sleep & Diagnostics Insights',
+      description:
+        'Expert articles from IPDiagnostics on sleep health, neurophysiology, and lung function testing across the UK.',
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: 'Blog | Health & Wellness Insights',
-      description: 'Read our latest blog posts about health, wellness, and medical insights.',
+      title: 'IPDiagnostics Blog | Sleep & Diagnostics Insights',
+      description:
+        'Expert articles from IPDiagnostics on sleep health, neurophysiology, and lung function testing across the UK.',
     },
   }
 }

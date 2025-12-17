@@ -1,7 +1,7 @@
 {
-  "name": "Health & Wellness Platform",
-  "short_name": "Health Platform",
-  "description": "Your comprehensive health and wellness platform for sleep disorders, diagnostics, treatments, and lifestyle tips.",
+  "name": "IPDiagnostics",
+  "short_name": "IPDiagnostics",
+  "description": "Independent Physiological Diagnostics — specialists in sleep, neurophysiology, and lung function testing across the UK.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
