@@ -29,7 +29,7 @@ export default function NotFound() {
             </Button>
           </Link>
 
-          <Link href="/contact">
+          <Link href="/contact-us">
             <Button
               variant="outline"
               size="lg"
@@ -56,7 +56,7 @@ export default function NotFound() {
               About Us
             </Link>
             <Link
-              href="/blogs"
+              href="/blog"
               className="text-ds-pastille-green hover:text-ds-accent-yellow transition-colors"
             >
               Blog

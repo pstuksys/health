@@ -31,6 +31,8 @@ export function ContentBlockArray({
             const imageUrl = mediaToUrl(block.image as any)
             const isImageLeft = block.imagePosition === 'left'
             const shouldAlternate = layout === 'alternating' && index % 2 === 1
+            const description = block.description ?? ''
+            const shouldJustify = description.trim().length > 120
 
             const actualImagePosition = shouldAlternate
               ? isImageLeft
@@ -59,8 +61,13 @@ export function ContentBlockArray({
                     <h3 className="text-2xl lg:text-3xl font-light text-ds-dark-blue mb-4">
                       {block.title}
                     </h3>
-                    <p className="text-ds-pastille-green text-base lg:text-lg leading-relaxed mb-6 text-left lg:text-justify hyphens-none text-pretty">
-                      {block.description}
+                    <p
+                      className={cn(
+                        'text-ds-pastille-green text-base lg:text-lg leading-relaxed mb-6 text-left hyphens-none text-pretty',
+                        shouldJustify ? 'lg:text-justify lg:hyphens-auto' : 'lg:text-left',
+                      )}
+                    >
+                      {description}
                     </p>
                     {(block.buttonText || block.btn2Text) && (
                       <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">

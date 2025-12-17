@@ -29,7 +29,7 @@ export const Blogs: CollectionConfig = {
     preview: ({ slug, linkType, externalUrl }) => {
       if (linkType === 'external') return (externalUrl as string) || null
       const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
-      return `${base}/blogs/${slug ?? ''}?preview=true`
+      return `${base}/blog/${slug ?? ''}?preview=true`
     },
   },
   versions: {

@@ -270,7 +270,7 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
         {/* Copyright && Back to top button */}
         <div className="mt-8 pt-8 border-t border-ds-accent-yellow relative">
           <p className="text-center text-gray-400 text-sm font-light">
-            © {new Date().getFullYear()} Health. All rights reserved.
+            © {new Date().getFullYear()} IPDiagnostics. All rights reserved.
           </p>
           <Button
             onClick={scrollToTop}

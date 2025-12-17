@@ -42,7 +42,7 @@ export function SingleCard({
     const doc = (rel as any).value ?? rel
     const slug = doc?.slug ?? ''
     const collection = doc?.collection ?? (rel as any)?.relationTo
-    if (collection === 'blogs') href = `/blogs/${slug}`
+    if (collection === 'blogs') href = `/blog/${slug}`
     else if (collection === 'pages') href = `/${slug}`
   }
 
