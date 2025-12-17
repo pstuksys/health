@@ -23,7 +23,7 @@ export default function NotFound() {
           <Link href="/">
             <Button
               size="lg"
-              className="bg-ds-accent-yellow hover:ds-accent-yellow/90 text-ds-dark-blue font-bold px-8 py-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg"
+              className="bg-ds-accent-yellow hover:bg-ds-accent-yellow/90 text-ds-dark-blue font-bold px-8 py-3 rounded-lg transition-all duration-200 hover:scale-105 shadow-lg border-0 focus-visible:ring-2 focus-visible:ring-ds-accent-yellow/60"
             >
               Go Back Home
             </Button>
@@ -35,7 +35,7 @@ export default function NotFound() {
               size="lg"
               className="border-2 border-white text-white hover:bg-white hover:text-ds-dark-blue font-semibold px-8 py-3 rounded-lg transition-all duration-200 hover:scale-105 bg-transparent"
             >
-              Contact Support
+              Contact Us
             </Button>
           </Link>
         </div>

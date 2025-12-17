@@ -62,6 +62,10 @@ export function FormBlock({
 
   // Handle form relation - could be ID or full form object
   const form = typeof formRelation === 'object' ? formRelation : null
+  // TODO: Temp mailto fallback; replace with proper form submission once email infra is ready.
+  const mailtoAddress = 'enquiries@ipdiagnostics.co.uk'
+  const mailtoHref = `mailto:${mailtoAddress}?subject=${encodeURIComponent(title || 'Contact')}`
+  const hideFormForMailto = true
 
   const isDarkSurface = backgroundColor === 'primary' && layout !== 'card'
   const labelClasses = cn(
@@ -84,6 +88,42 @@ export function FormBlock({
     'bg-gradient-to-r from-ds-accent-yellow via-[#ffd67f] to-[#ffbb55] text-[#2b2f4a] focus-visible:ring-ds-accent-yellow/40',
     'hover:scale-[1.01] active:scale-[0.99] shadow-[0_15px_35px_rgba(250,166,54,0.35)] disabled:opacity-60 disabled:pointer-events-none',
   )
+
+  // TODO: Temp mailto fallback; replace with proper form submission once email infra is ready.
+  if (hideFormForMailto) {
+    return (
+      <section className="relative isolate overflow-hidden py-16 sm:py-24">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-b from-[#f4f6fb] via-white to-ds-light-neutral"
+        />
+        <div
+          aria-hidden
+          className="absolute -top-10 right-6 h-64 w-64 rounded-full bg-ds-pastille-green/20 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="absolute bottom-0 left-6 h-72 w-72 rounded-full bg-ds-accent-yellow/20 blur-[90px]"
+        />
+        <div className="relative z-10 container mx-auto px-4">
+          <div className="mx-auto max-w-2xl rounded-3xl bg-white/90 p-10 text-center shadow-[0_35px_120px_rgba(61,66,106,0.15)]">
+            <h2 className="text-2xl font-light text-ds-dark-blue">{title || 'Get in touch'}</h2>
+            <p className="mt-3 text-ds-dark-blue/70">
+              We&apos;re temporarily handling enquiries by email. Please reach out directly.
+            </p>
+            <div className="mt-6 flex justify-center">
+              <Button
+                asChild
+                className="bg-ds-accent-yellow hover:bg-ds-accent-yellow/90 text-ds-dark-blue font-semibold px-6 py-3 rounded-2xl shadow-[0_15px_35px_rgba(250,166,54,0.35)]"
+              >
+                <a href={mailtoHref}>Contact us</a>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
 
   if (!form) {
     return (
