@@ -1,85 +1,125 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import type { Page } from '@/payload-types'
 import { useIsMobile } from '@/hooks/use-is-mobile'
 import { useSwipe } from '@/hooks/use-swipe'
+import { useDoctifyWidget } from '@/hooks/use-doctify-widget'
 
 type TestimonialsProps = Omit<
   Extract<NonNullable<Page['blocks']>[number], { blockType: 'testimonials' }>,
   'doctifyConfig'
 >
 
+type DoctifyCarouselConfig = {
+  widgetId: string
+  tenant: string
+  language: string
+  profileType: string
+  layoutType: string
+  slugs: string
+  background: string
+  itemBackground: string
+  itemFrame: boolean
+}
+
+const DEFAULT_DOCTIFY_CAROUSEL_CONFIG = {
+  widgetId: '0yewt1ji',
+  tenant: 'athena-uk',
+  language: 'en',
+  profileType: 'practice',
+  layoutType: 'layoutA',
+  slugs: 'independent-physiological-diagnostics',
+  background: 'white',
+  itemBackground: 'ffffff',
+  itemFrame: true,
+} as const satisfies DoctifyCarouselConfig
+
+function ensureDoctifyFontStyles(widgetId: string) {
+  const styleId = `doctify-styles-${widgetId}`
+  const existing = document.getElementById(styleId)
+  if (existing) return
+
+  const style = document.createElement('style')
+  style.id = styleId
+  style.textContent = `
+    /* Override Doctify font loading to prevent CORS errors */
+    @font-face {
+      font-family: 'Poppins';
+      font-display: swap;
+      src: local('Poppins'), local('Poppins-Light'), local('Poppins-Regular'), local('Poppins-SemiBold');
+    }
+    
+    /* Force all Doctify elements to use our Poppins font */
+    .doctify-testimonial-wrapper * {
+      font-family: var(--font-poppins), 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    }
+  `
+
+  document.head.appendChild(style)
+}
+
 // Doctify Widget Component with Progressive Enhancement
-function DoctifyWidget({ config }: { config: any }) {
+function DoctifyWidget({ config }: { config: DoctifyCarouselConfig }) {
+  const scriptUrl = useMemo(() => {
+    const params = new URLSearchParams({
+      widget_container_id: config.widgetId,
+      type: 'carousel-widget',
+      tenant: config.tenant,
+      language: config.language,
+      profileType: config.profileType,
+      layoutType: config.layoutType,
+      slugs: config.slugs,
+      background: config.background,
+      itemBackground: config.itemBackground,
+      itemFrame: String(config.itemFrame),
+    })
+    return `https://www.doctify.com/get-script?${params.toString()}`
+  }, [
+    config.background,
+    config.itemBackground,
+    config.itemFrame,
+    config.language,
+    config.layoutType,
+    config.profileType,
+    config.slugs,
+    config.tenant,
+    config.widgetId,
+  ])
+
+  const { isLoaded, containerRef } = useDoctifyWidget({
+    widgetId: config.widgetId,
+    scriptUrl,
+    rootMargin: '300px',
+  })
+
   useEffect(() => {
-    const container = document.getElementById(config.widgetId)
-    if (!container) return
-
-    // Clear any existing content
-    container.innerHTML = ''
-
-    // Create and load the script
-    const script = document.createElement('script')
-    script.src = `https://www.doctify.com/get-script?widget_container_id=${config.widgetId}&type=carousel-widget&tenant=${config.tenant}&language=${config.language}&profileType=${config.profileType}&layoutType=${config.layoutType}&slugs=${config.slugs}&background=${config.background}&itemBackground=${config.itemBackground}&itemFrame=${config.itemFrame}`
-    script.async = true
-
-    // Targeted CSS styling based on actual Doctify widget structure
-    const addCustomStyles = () => {
-      const styleId = `doctify-styles-${config.widgetId}`
-
-      // Remove existing styles if any
-      const existingStyle = document.getElementById(styleId)
-      if (existingStyle) {
-        existingStyle.remove()
-      }
-
-      const style = document.createElement('style')
-      style.id = styleId
-      style.textContent = `
-        /* Override Doctify font loading to prevent CORS errors */
-        @font-face {
-          font-family: 'Poppins';
-          font-display: swap;
-          src: local('Poppins'), local('Poppins-Light'), local('Poppins-Regular'), local('Poppins-SemiBold');
-        }
-        
-        /* Force all Doctify elements to use our Poppins font */
-        .doctify-testimonial-wrapper * {
-          font-family: var(--font-poppins), 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-        }
-      `
-
-      document.head.appendChild(style)
-    }
-
-    // Apply styles immediately and after script loads
-    addCustomStyles()
-
-    script.onload = () => {
-      // Apply styles again after widget loads
-      setTimeout(addCustomStyles, 1000)
-      // Also try after a longer delay in case widget loads slowly
-      setTimeout(addCustomStyles, 3000)
-    }
-
-    container.appendChild(script)
-
-    // Cleanup function
+    ensureDoctifyFontStyles(config.widgetId)
     return () => {
       const style = document.getElementById(`doctify-styles-${config.widgetId}`)
-      if (style) {
-        style.remove()
-      }
-      if (container && script.parentNode) {
-        script.parentNode.removeChild(script)
-      }
+      if (style) style.remove()
     }
-  }, [config])
+  }, [config.widgetId])
+
+  useEffect(() => {
+    if (!isLoaded) return
+    ensureDoctifyFontStyles(config.widgetId)
+    const t1 = window.setTimeout(() => ensureDoctifyFontStyles(config.widgetId), 1000)
+    const t2 = window.setTimeout(() => ensureDoctifyFontStyles(config.widgetId), 3000)
+    return () => {
+      window.clearTimeout(t1)
+      window.clearTimeout(t2)
+    }
+  }, [config.widgetId, isLoaded])
 
   return (
     <div className="doctify-testimonial-wrapper relative overflow-hidden">
-      <div id={config.widgetId} className="w-full" />
+      <div ref={containerRef} className="w-full min-h-[320px]">
+        {!isLoaded ? (
+          <div className="text-sm text-ds-pastille-green/70">Loading reviews…</div>
+        ) : null}
+        <div id={config.widgetId} className="w-full" suppressHydrationWarning />
+      </div>
     </div>
   )
 }
@@ -122,23 +162,13 @@ export function Testimonials({
 
   // If using Doctify, render the widget with default configuration
   if (testimonialType === 'doctify') {
-    const defaultDoctifyConfig = {
-      widgetId: '0yewt1ji',
-      tenant: 'athena-uk',
-      language: 'en',
-      profileType: 'practice',
-      layoutType: 'layoutA',
-      slugs: 'independent-physiological-diagnostics',
-      background: 'white',
-      itemBackground: 'ffffff',
-      itemFrame: true,
-    }
+    const config = DEFAULT_DOCTIFY_CAROUSEL_CONFIG
 
     return (
       <section className="py-16 px-4 ">
         <div className="max-w-container mx-auto">
           <h2 className="text-3xl font-heading text-ds-dark-blue text-center mb-12">{title}</h2>
-          <DoctifyWidget config={defaultDoctifyConfig} />
+          <DoctifyWidget config={config} />
         </div>
       </section>
     )
