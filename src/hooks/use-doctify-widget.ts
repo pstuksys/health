@@ -13,20 +13,36 @@ type UseDoctifyWidgetReturn = {
 
 const DEFAULT_ROOT_MARGIN = '200px'
 
-// Global state to track script loading across all component instances
-const globalLoadState = {
-  isLoading: false,
-  isLoaded: false,
-  hasAttempted: false,
+type GlobalScriptLoadState = {
+  isLoading: boolean
+  isLoaded: boolean
+  hasAttempted: boolean
+}
+
+// Track script load state per script URL so multiple widgets can coexist
+const globalScriptLoadState = new Map<string, GlobalScriptLoadState>()
+
+function getOrInitGlobalState(scriptUrl: string): GlobalScriptLoadState {
+  const existing = globalScriptLoadState.get(scriptUrl)
+  if (existing) return existing
+  const created: GlobalScriptLoadState = { isLoading: false, isLoaded: false, hasAttempted: false }
+  globalScriptLoadState.set(scriptUrl, created)
+  return created
+}
+
+function hasScriptWithSrc(scriptUrl: string): boolean {
+  return Array.from(document.scripts).some((s) => s.src === scriptUrl)
 }
 
 function loadDoctifyScript(scriptUrl: string, widgetId: string): Promise<void> {
   return new Promise((resolve, reject) => {
-    // Check if script already exists in DOM
-    const existingScript = document.querySelector<HTMLScriptElement>(`script[src*="doctify.com"]`)
+    const state = getOrInitGlobalState(scriptUrl)
 
-    if (existingScript) {
-      // Script exists, just resolve
+    // If script already exists in DOM, consider it loaded for this URL
+    if (hasScriptWithSrc(scriptUrl)) {
+      state.isLoaded = true
+      state.isLoading = false
+      state.hasAttempted = true
       resolve()
       return
     }
@@ -46,14 +62,16 @@ function loadDoctifyScript(scriptUrl: string, widgetId: string): Promise<void> {
 
     // Set up load handlers
     const onLoad = () => {
-      globalLoadState.isLoaded = true
-      globalLoadState.isLoading = false
+      state.isLoaded = true
+      state.isLoading = false
+      state.hasAttempted = true
       cleanup()
       resolve()
     }
 
     const onError = () => {
-      globalLoadState.isLoading = false
+      state.isLoading = false
+      state.hasAttempted = true
       cleanup()
       reject(new Error('Script failed to load'))
     }
@@ -76,20 +94,22 @@ export function useDoctifyWidget({
   scriptUrl,
   rootMargin = DEFAULT_ROOT_MARGIN,
 }: UseDoctifyWidgetOptions): UseDoctifyWidgetReturn {
-  const [isLoaded, setIsLoaded] = useState(globalLoadState.isLoaded)
+  const [isLoaded, setIsLoaded] = useState(() => getOrInitGlobalState(scriptUrl).isLoaded)
   const containerRef = useRef<HTMLDivElement>(null)
   const observerRef = useRef<IntersectionObserver | null>(null)
   const hasLoadedRef = useRef(false)
 
   useEffect(() => {
-    // If already loaded globally, just update local state
-    if (globalLoadState.isLoaded) {
+    const state = getOrInitGlobalState(scriptUrl)
+
+    // If already loaded for this script URL, just update local state
+    if (state.isLoaded) {
       if (!isLoaded) setIsLoaded(true)
       return
     }
 
     // If already attempted and failed, don't retry
-    if (globalLoadState.hasAttempted && !globalLoadState.isLoaded) {
+    if (state.hasAttempted && !state.isLoaded) {
       return
     }
 
@@ -100,20 +120,20 @@ export function useDoctifyWidget({
 
     const handleLoad = async () => {
       // Prevent multiple simultaneous loads
-      if (globalLoadState.isLoading || hasLoadedRef.current) {
+      if (state.isLoading || hasLoadedRef.current) {
         return
       }
 
       hasLoadedRef.current = true
-      globalLoadState.isLoading = true
-      globalLoadState.hasAttempted = true
+      state.isLoading = true
+      state.hasAttempted = true
 
       try {
         await loadDoctifyScript(scriptUrl, widgetId)
         setIsLoaded(true)
       } catch (error) {
         console.warn('Doctify widget failed to load:', error)
-        globalLoadState.isLoading = false
+        state.isLoading = false
       }
     }
 

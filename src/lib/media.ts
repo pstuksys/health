@@ -3,12 +3,9 @@ import type { Media } from '@/payload-types'
 /**
  * Client-safe helper to convert a Payload Media object (or id) into a URL string.
  * - Chooses best available size
- * - Prepends NEXT_PUBLIC_SITE_URL when needed for absolute URLs in production
  */
 export function mediaToUrl(media: number | Media | null | undefined): string {
   if (!media || typeof media === 'number') return '/placeholder.svg'
-
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || ''
 
   const url =
     media.url ??
@@ -17,9 +14,17 @@ export function mediaToUrl(media: number | Media | null | undefined): string {
     media.sizes?.thumbnail?.url ??
     ''
 
-  if (url && !url.startsWith('http') && baseUrl) {
-    return `${baseUrl}${url}`
-  }
+  if (!url) return '/placeholder.svg'
 
-  return url || '/placeholder.svg'
+  // Absolute URL (e.g. Vercel Blob)
+  if (url.startsWith('http')) return url
+
+  // Prefer relative URLs (e.g. /api/media/...) so next/image treats them as same-origin
+  if (url.startsWith('/')) return url
+
+  // Fallback: join with base URL if Payload ever returns a non-leading-slash path
+  const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? '').trim().replace(/\/+$/, '')
+  return baseUrl ? `${baseUrl}/${url.replace(/^\/+/, '')}` : url
+
+  // (unreachable)
 }

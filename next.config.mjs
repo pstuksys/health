@@ -23,6 +23,16 @@ const nextConfig = {
       },
       {
         protocol: 'https',
+        hostname: 'www.ipdiagnostics.co.uk',
+        pathname: '/api/media/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.ipdiagnostics.co.uk',
+        pathname: '/media/**',
+      },
+      {
+        protocol: 'https',
         hostname: '*.public.blob.vercel-storage.com', // for production blob storage
       },
       {
