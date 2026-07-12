@@ -141,6 +141,43 @@ export async function getBlogsByCategory(category: string, limit = 12): Promise<
   return cached()
 }
 
+async function fetchBlogsByCategories(
+  categories: string[],
+  limit = 12,
+  draft = false,
+): Promise<Blog[]> {
+  try {
+    const payload = await getPayloadClient()
+
+    const { docs } = await payload.find({
+      collection: 'blogs',
+      where: { category: { in: categories } },
+      draft,
+      sort: '-publishedAt',
+      limit,
+      pagination: false,
+    })
+
+    return JSON.parse(JSON.stringify(docs)) as Blog[]
+  } catch (error) {
+    console.error(`Failed to fetch blogs for categories "${categories.join(', ')}":`, error)
+    return []
+  }
+}
+
+export async function getBlogsByCategories(categories: string[], limit = 12): Promise<Blog[]> {
+  const { isEnabled } = await draftMode()
+  if (isEnabled) return fetchBlogsByCategories(categories, limit, true)
+
+  const cacheKey = ['payload:getBlogsByCategories', categories.join(','), limit.toString()]
+  const cached = unstable_cache(() => fetchBlogsByCategories(categories, limit, false), cacheKey, {
+    revalidate: CACHE_REVALIDATE_SECONDS,
+    tags: [cacheTags.blogs, ...categories.map((category) => cacheTags.blogCategory(category))],
+  })
+
+  return cached()
+}
+
 /**
  * Fetch a single blog by slug
  */

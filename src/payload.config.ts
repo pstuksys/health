@@ -184,6 +184,7 @@ export default buildConfig({
   },
   globals: [Header, Footer],
   db: vercelPostgresAdapter({
+    push: process.env.PAYLOAD_DB_PUSH === 'false' ? false : undefined,
     pool: {
       connectionString: process.env.POSTGRES_URL || '',
     },

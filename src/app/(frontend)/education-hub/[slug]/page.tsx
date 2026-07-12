@@ -3,6 +3,8 @@ import { RichText } from '@/app/(frontend)/components/ui/rich-text'
 import { mediaToUrl } from '@/lib/media'
 import Image from 'next/image'
 import { getBlogBySlug } from '@/lib/cms/payload-client'
+import { KeyTakeaways } from '@/app/(frontend)/components/key-takeaways/component'
+import { SpecialistProfile } from '@/app/(frontend)/components/specialist-profile/component'
 import { ShareButtons } from './ShareButtons'
 
 type BlogPageParams = {
@@ -70,6 +72,13 @@ export default async function BlogPage(props: BlogPageParams) {
             )}
           </div>
 
+          {/* Key Takeaways */}
+          {blog.keyTakeaways && blog.keyTakeaways.length > 0 && (
+            <div className="mb-12">
+              <KeyTakeaways takeaways={blog.keyTakeaways} />
+            </div>
+          )}
+
           {/* Content */}
           <div className="prose prose-lg max-w-none">
             {blog.content && (
@@ -80,10 +89,20 @@ export default async function BlogPage(props: BlogPageParams) {
             )}
           </div>
 
+          {/* Specialist Profile */}
+          {blog.showSpecialistProfile && blog.specialist && (
+            <div className="mt-12">
+              <SpecialistProfile
+                specialist={blog.specialist}
+                reviewNote={blog.clinicalReviewNote}
+              />
+            </div>
+          )}
+
           {/* Share buttons */}
           <ShareButtons
             title={blog.title}
-            url={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/blog/${blog.slug}`}
+            url={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/education-hub/${blog.slug}`}
             excerpt={blog.excerpt || undefined}
           />
         </div>

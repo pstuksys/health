@@ -58,4 +58,13 @@ declare module 'lucide-react' {
   export const Building2: React.FC<React.SVGProps<SVGSVGElement>>
   export const AlertCircle: React.FC<React.SVGProps<SVGSVGElement>>
   export const Loader2: React.FC<React.SVGProps<SVGSVGElement>>
+  export const BookOpen: React.FC<React.SVGProps<SVGSVGElement>>
+  export const MapPin: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Globe: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Mail: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Info: React.FC<React.SVGProps<SVGSVGElement>>
+  export const Award: React.FC<React.SVGProps<SVGSVGElement>>
+  export const ShieldCheck: React.FC<React.SVGProps<SVGSVGElement>>
+  export const BadgeCheck: React.FC<React.SVGProps<SVGSVGElement>>
+  export const GraduationCap: React.FC<React.SVGProps<SVGSVGElement>>
 }

@@ -56,10 +56,10 @@ export default function NotFound() {
               About Us
             </Link>
             <Link
-              href="/blog"
+              href="/education-hub"
               className="text-ds-pastille-green hover:text-ds-accent-yellow transition-colors"
             >
-              Blog
+              Sleep Education Hub
             </Link>
             <Link
               href="/contact-us"

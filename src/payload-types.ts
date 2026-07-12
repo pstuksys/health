@@ -3629,6 +3629,10 @@ export interface Blog {
   id: number;
   title: string;
   /**
+   * Specialist Insights are written/reviewed by a clinical partner and show a specialist profile.
+   */
+  articleType?: ('standard' | 'specialist-insight') | null;
+  /**
    * Choose whether this is a full blog post or a link to an external article
    */
   linkType?: ('internal' | 'external') | null;
@@ -3642,7 +3646,13 @@ export interface Blog {
   /**
    * Select the category that best fits this blog post
    */
-  category: 'sleep-disorders' | 'diagnostics-testing' | 'therapies-treatments' | 'lifestyle-tips' | 'featured in';
+  category:
+    | 'sleep-disorders'
+    | 'diagnostics-testing'
+    | 'therapies-treatments'
+    | 'specialists-insights'
+    | 'lifestyle-tips'
+    | 'featured in';
   content?: {
     root: {
       type: string;
@@ -3660,6 +3670,62 @@ export interface Blog {
   } | null;
   author?: string | null;
   readTime?: string | null;
+  /**
+   * Optional summary points shown in a highlighted box near the top of the article.
+   */
+  keyTakeaways?:
+    | {
+        point: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Display a "Reviewed by Sleep Specialist" profile card on this article.
+   */
+  showSpecialistProfile?: boolean | null;
+  specialist?: {
+    photo?: (number | null) | Media;
+    name?: string | null;
+    title?: string | null;
+    bio?: string | null;
+    /**
+     * e.g. "GMC Number: 1234567", "NHS Consultant since 2012".
+     */
+    professionalDetails?:
+      | {
+          detail: string;
+          id?: string | null;
+        }[]
+      | null;
+    contact?: {
+      location?: string | null;
+      website?: string | null;
+      email?: string | null;
+      phone?: string | null;
+    };
+    cta?: {
+      label?: string | null;
+      linkType?: ('internal' | 'external') | null;
+      internal?: {
+        relation?:
+          | ({
+              relationTo: 'pages';
+              value: number | Page;
+            } | null)
+          | ({
+              relationTo: 'blogs';
+              value: number | Blog;
+            } | null);
+      };
+      external?: {
+        href?: string | null;
+      };
+    };
+  };
+  /**
+   * Shown below the specialist profile card.
+   */
+  clinicalReviewNote?: string | null;
   publishedAt?: string | null;
   meta?: {
     title?: string | null;
@@ -6025,6 +6091,7 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface BlogsSelect<T extends boolean = true> {
   title?: T;
+  articleType?: T;
   linkType?: T;
   externalUrl?: T;
   slug?: T;
@@ -6034,6 +6101,52 @@ export interface BlogsSelect<T extends boolean = true> {
   content?: T;
   author?: T;
   readTime?: T;
+  keyTakeaways?:
+    | T
+    | {
+        point?: T;
+        id?: T;
+      };
+  showSpecialistProfile?: T;
+  specialist?:
+    | T
+    | {
+        photo?: T;
+        name?: T;
+        title?: T;
+        bio?: T;
+        professionalDetails?:
+          | T
+          | {
+              detail?: T;
+              id?: T;
+            };
+        contact?:
+          | T
+          | {
+              location?: T;
+              website?: T;
+              email?: T;
+              phone?: T;
+            };
+        cta?:
+          | T
+          | {
+              label?: T;
+              linkType?: T;
+              internal?:
+                | T
+                | {
+                    relation?: T;
+                  };
+              external?:
+                | T
+                | {
+                    href?: T;
+                  };
+            };
+      };
+  clinicalReviewNote?: T;
   publishedAt?: T;
   meta?:
     | T
