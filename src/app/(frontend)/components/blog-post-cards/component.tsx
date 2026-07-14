@@ -31,7 +31,7 @@ function resolveBlogHref(post: RawBlogPost): string {
     const rel = post.post
     const doc = rel?.value ?? rel
     const slug = doc?.slug ?? ''
-    return `/blog/${slug}`
+    return `/education-hub/${slug}`
   }
 
   return '#'

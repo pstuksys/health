@@ -4,6 +4,20 @@ import { withBotId } from 'botid/next/config'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Your Next.js config here
+  async redirects() {
+    return [
+      {
+        source: '/blog',
+        destination: '/education-hub',
+        permanent: true,
+      },
+      {
+        source: '/blog/:slug*',
+        destination: '/education-hub/:slug*',
+        permanent: true,
+      },
+    ]
+  },
   webpack: (webpackConfig) => {
     webpackConfig.resolve.extensionAlias = {
       '.cjs': ['.cts', '.cjs'],

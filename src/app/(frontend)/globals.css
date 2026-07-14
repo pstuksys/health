@@ -120,12 +120,27 @@ body.mobile-menu-open {
 }
 
 .rich-text-content ul,
-.rich-text-content ol {
-  @apply mb-4 pl-6;
+.rich-text-content ul[class] {
+  @apply mb-4 space-y-2 pl-6;
+  list-style: disc !important;
+}
+
+.rich-text-content ol,
+.rich-text-content ol[class] {
+  @apply mb-4 space-y-2 pl-6;
+  list-style: decimal !important;
 }
 
 .rich-text-content li {
   @apply mb-2;
+  display: list-item !important;
+}
+
+.rich-text-content ul ul,
+.rich-text-content ol ol,
+.rich-text-content ul ol,
+.rich-text-content ol ul {
+  @apply mt-2 mb-0;
 }
 
 .rich-text-content a:not([class*="bg-"]):not([class*="border"]) {
