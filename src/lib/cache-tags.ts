@@ -8,6 +8,7 @@ export const cacheTags = {
   blogCategory: (category: string) => `payload:blog-category:${category || 'uncategorized'}`,
   header: 'payload:global:header',
   footer: 'payload:global:footer',
+  educationHub: 'payload:global:education-hub',
 }
 
 export const CACHE_REVALIDATE_SECONDS = DAY_IN_SECONDS

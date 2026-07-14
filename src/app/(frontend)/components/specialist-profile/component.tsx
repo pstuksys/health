@@ -1,9 +1,6 @@
 import type { Blog } from '@/payload-types'
 import Image from 'next/image'
 import { mediaToUrl } from '@/lib/media'
-import { resolveLinkHref } from '@/lib/navigation'
-import { CMSLink } from '@/app/(frontend)/components/ui/cms-link'
-import { cn } from '@/lib/utils'
 import {
   ShieldCheck,
   Award,
@@ -13,7 +10,6 @@ import {
   Globe,
   Mail,
   Phone,
-  Calendar,
   Info,
 } from 'lucide-react'
 
@@ -30,21 +26,11 @@ function normalizeExternalHref(value: string): string {
 }
 
 export function SpecialistProfile({ specialist, reviewNote }: SpecialistProfileProps) {
-  const { photo, name, title, bio, professionalDetails, contact, cta } = specialist
+  const { photo, name, title, bio, professionalDetails, contact } = specialist
 
   const hasContent =
     name || title || bio || photo || (professionalDetails && professionalDetails.length > 0)
   if (!hasContent) return null
-
-  const ctaHref = cta
-    ? resolveLinkHref({
-        linkType: cta.linkType,
-        internal: cta.internal,
-        external: cta.external,
-      })
-    : '#'
-  const ctaIsExternal = cta?.linkType === 'external'
-  const showCta = Boolean(cta?.label) && ctaHref !== '#'
 
   return (
     <section
@@ -154,21 +140,6 @@ export function SpecialistProfile({ specialist, reviewNote }: SpecialistProfileP
               </li>
             )}
           </ul>
-
-          {showCta && (
-            <CMSLink
-              href={ctaHref}
-              external={ctaIsExternal}
-              variant="default"
-              className={cn(
-                'mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-ds-dark-blue px-5 py-3 text-center text-sm font-semibold text-white',
-                'transition-colors duration-200 hover:bg-ds-dark-blue/90',
-              )}
-            >
-              <Calendar className="h-4 w-4 shrink-0" aria-hidden="true" />
-              <span className="min-w-0">{cta?.label}</span>
-            </CMSLink>
-          )}
         </div>
       </div>
 

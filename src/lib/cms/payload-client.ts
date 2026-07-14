@@ -2,7 +2,7 @@ import { getPayload } from 'payload'
 import { draftMode } from 'next/headers'
 import { unstable_cache } from 'next/cache'
 import type { Payload, Where } from 'payload'
-import type { Blog, Page, Header, Footer } from '@/payload-types'
+import type { Blog, Page, Header, Footer, EducationHub } from '@/payload-types'
 import { CACHE_REVALIDATE_SECONDS, cacheTags } from '@/lib/cache-tags'
 
 /**
@@ -274,6 +274,38 @@ export async function getFooter(): Promise<Footer | null> {
   const cached = unstable_cache(() => fetchFooter(false), ['payload:getFooter'], {
     revalidate: CACHE_REVALIDATE_SECONDS,
     tags: [cacheTags.footer],
+  })
+
+  return cached()
+}
+
+/**
+ * Fetch education hub global
+ */
+async function fetchEducationHub(draft = false): Promise<EducationHub | null> {
+  try {
+    const payload = await getPayloadClient()
+    const educationHub = (await payload.findGlobal({
+      slug: 'education-hub',
+      depth: 2,
+      draft,
+    })) as EducationHub
+
+    const safe = JSON.parse(JSON.stringify(educationHub))
+    return safe ?? null
+  } catch (error) {
+    console.error('Failed to fetch education hub:', error)
+    return null
+  }
+}
+
+export async function getEducationHub(): Promise<EducationHub | null> {
+  const { isEnabled } = await draftMode()
+  if (isEnabled) return fetchEducationHub(true)
+
+  const cached = unstable_cache(() => fetchEducationHub(false), ['payload:getEducationHub'], {
+    revalidate: CACHE_REVALIDATE_SECONDS,
+    tags: [cacheTags.educationHub],
   })
 
   return cached()

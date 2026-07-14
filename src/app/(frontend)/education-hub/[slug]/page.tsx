@@ -1,10 +1,16 @@
 import { notFound, redirect } from 'next/navigation'
+import Link from 'next/link'
+import Image from 'next/image'
+import { ChevronRight, Clock } from 'lucide-react'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
 import { mediaToUrl } from '@/lib/media'
-import Image from 'next/image'
-import { getBlogBySlug } from '@/lib/cms/payload-client'
+import { getBlogBySlug, getEducationHub } from '@/lib/cms/payload-client'
+import { getHubTopicForCategory } from '@/lib/education-hub/constants'
+import { resolveEducationHubSettings } from '@/lib/education-hub/resolve-settings'
 import { KeyTakeaways } from '@/app/(frontend)/components/key-takeaways/component'
 import { SpecialistProfile } from '@/app/(frontend)/components/specialist-profile/component'
+import { SleepAssessmentCta } from '@/app/(frontend)/components/education-hub/sleep-assessment-cta/component'
+import { EducationHubTrustPillars } from '@/app/(frontend)/components/education-hub/trust-pillars/component'
 import { ShareButtons } from './ShareButtons'
 
 type BlogPageParams = {
@@ -15,91 +21,140 @@ type BlogPageParams = {
 
 export default async function BlogPage(props: BlogPageParams) {
   const { slug } = await props.params
-  const blog = await getBlogBySlug(slug, 2)
+  const [blog, global] = await Promise.all([getBlogBySlug(slug, 2), getEducationHub()])
+  const settings = resolveEducationHubSettings(global)
 
   if (!blog) return notFound()
 
-  // External blogs should redirect to their external URL
   if (blog.linkType === 'external' && blog.externalUrl) {
     redirect(blog.externalUrl)
   }
 
+  const topic = blog.category ? getHubTopicForCategory(blog.category) : undefined
+  const publishedLabel = blog.publishedAt
+    ? new Date(blog.publishedAt).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      })
+    : 'Recently'
+
   return (
     <main className="min-h-screen bg-white">
-      <article className="max-w-container mx-auto px-4 sm:px-6 lg:px-8 py-16 bg-white">
-        <div className="max-w-4xl mx-auto">
-          {blog.image && (
-            <div className="py-6 md:py-12">
-              <div className="relative w-full h-[320px] sm:h-[420px] lg:h-[520px] overflow-hidden bg-gray-100">
-                <Image
-                  src={mediaToUrl(blog.image)}
-                  alt={blog.title}
-                  fill
-                  priority
-                  sizes="(max-width: 768px) 100vw, 1024px"
-                  className="object-cover"
-                />
-              </div>
-            </div>
-          )}
-
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-light leading-tight text-ds-dark-blue text-balance">
-              {blog.title}
-            </h1>
-          </div>
-
-          {/* Excerpt */}
-          {blog.excerpt && (
-            <div className="mb-8">
-              <p className="text-xl text-ds-pastille-green leading-relaxed">{blog.excerpt}</p>
-            </div>
-          )}
-
-          {/* Meta info */}
-          <div className="flex items-center gap-4 text-sm text-gray-500 border-b border-gray-200 pb-6 mb-12">
-            <span>
-              Published{' '}
-              {blog.publishedAt ? new Date(blog.publishedAt).toLocaleDateString() : 'Recently'}
-            </span>
-            <span>•</span>
-            <span>{blog.readTime || '5 min'} read</span>
-            {blog.author && (
+      <article className="max-w-container mx-auto px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+        <nav aria-label="Breadcrumb" className="mb-8 text-sm text-ds-pastille-green">
+          <ol className="flex flex-wrap items-center gap-2">
+            <li>
+              <Link href="/" className="hover:text-ds-dark-blue">
+                Home
+              </Link>
+            </li>
+            <li aria-hidden="true">
+              <ChevronRight className="h-4 w-4" />
+            </li>
+            <li>
+              <Link href="/education-hub" className="hover:text-ds-dark-blue">
+                Sleep Education Hub
+              </Link>
+            </li>
+            {topic && (
               <>
-                <span>•</span>
-                <span>By {blog.author}</span>
+                <li aria-hidden="true">
+                  <ChevronRight className="h-4 w-4" />
+                </li>
+                <li>
+                  <Link
+                    href={`/education-hub/topics/${topic.id}`}
+                    className="hover:text-ds-dark-blue"
+                  >
+                    {topic.label}
+                  </Link>
+                </li>
               </>
             )}
-          </div>
+            <li aria-hidden="true">
+              <ChevronRight className="h-4 w-4" />
+            </li>
+            <li className="font-medium text-ds-dark-blue">{blog.title}</li>
+          </ol>
+        </nav>
 
-          {/* Key Takeaways */}
-          {blog.keyTakeaways && blog.keyTakeaways.length > 0 && (
-            <div className="mb-12">
-              <KeyTakeaways takeaways={blog.keyTakeaways} />
-            </div>
-          )}
+        <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-12">
+          <div className="min-w-0">
+            <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-ds-pastille-green">
+              Sleep Education Hub
+            </p>
+            <h1 className="text-3xl font-light leading-tight text-ds-dark-blue text-balance md:text-4xl lg:text-5xl">
+              {blog.title}
+            </h1>
 
-          {/* Content */}
-          <div className="prose prose-lg max-w-none">
-            {blog.content && (
-              <RichText
-                data={blog.content}
-                className="rich-text-headings-blue text-ds-pastille-green leading-relaxed"
-              />
+            {blog.excerpt && (
+              <p className="mt-6 text-lg font-light leading-relaxed text-ds-pastille-green">
+                {blog.excerpt}
+              </p>
             )}
+
+            <div className="mt-6 flex flex-wrap items-center gap-4 border-b border-gray-200 pb-6 text-sm text-gray-500">
+              <span>Updated {publishedLabel}</span>
+              <span aria-hidden="true">•</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Clock className="h-4 w-4" aria-hidden="true" />
+                {blog.readTime || '5 min'} read
+              </span>
+              {blog.author && (
+                <>
+                  <span aria-hidden="true">•</span>
+                  <span>By {blog.author}</span>
+                </>
+              )}
+            </div>
           </div>
 
-          {/* Specialist Profile */}
-          {blog.showSpecialistProfile && blog.specialist && (
-            <div className="mt-12">
-              <SpecialistProfile
-                specialist={blog.specialist}
-                reviewNote={blog.clinicalReviewNote}
+          {blog.image && (
+            <div className="relative min-h-[280px] overflow-hidden rounded-2xl bg-gray-100 sm:min-h-[360px] lg:min-h-[420px]">
+              <Image
+                src={mediaToUrl(blog.image)}
+                alt={blog.title}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
               />
             </div>
           )}
+        </div>
 
-          {/* Share buttons */}
+        {blog.content && (
+          <div className="mt-12">
+            <RichText
+              data={blog.content}
+              className="rich-text-headings-blue text-ds-pastille-green leading-relaxed"
+            />
+          </div>
+        )}
+
+        {blog.keyTakeaways && blog.keyTakeaways.length > 0 && (
+          <div className="mt-12">
+            <KeyTakeaways takeaways={blog.keyTakeaways} />
+          </div>
+        )}
+
+        {blog.showSpecialistProfile && blog.specialist && (
+          <div className="mt-12">
+            <SpecialistProfile
+              specialist={blog.specialist}
+              reviewNote={blog.clinicalReviewNote}
+            />
+          </div>
+        )}
+
+        <div className="mt-12 space-y-12">
+          <SleepAssessmentCta
+            title={settings.sleepAssessment.title}
+            description={settings.sleepAssessment.description}
+            ctaLabel={settings.sleepAssessment.ctaLabel}
+            ctaHref={settings.sleepAssessment.ctaHref}
+          />
           <ShareButtons
             title={blog.title}
             url={`${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/education-hub/${blog.slug}`}
@@ -107,6 +162,8 @@ export default async function BlogPage(props: BlogPageParams) {
           />
         </div>
       </article>
+
+      <EducationHubTrustPillars pillars={settings.trustPillars} />
     </main>
   )
 }
@@ -115,26 +172,26 @@ export async function generateMetadata(props: BlogPageParams) {
   const { slug } = await props.params
 
   try {
-    const blog = await getBlogBySlug(slug, 2) // Need depth 2 for SEO meta fields
+    const blog = await getBlogBySlug(slug, 2)
 
     if (!blog) {
       return {
-        title: 'Blog Post Not Found',
-        description: 'The requested blog post could not be found.',
+        title: 'Article Not Found',
+        description: 'The requested article could not be found.',
       }
     }
 
-    // Use SEO plugin fields if available, fallback to blog fields
     const seoTitle = blog.meta?.title
     const seoDescription = blog.meta?.description
     const seoImage = blog.meta?.image
 
     return {
-      title: seoTitle || `${blog.title} | Blog`,
-      description: seoDescription || blog.excerpt || `Read ${blog.title} on our blog.`,
+      title: seoTitle || `${blog.title} | Sleep Education Hub`,
+      description: seoDescription || blog.excerpt || `Read ${blog.title} on our Sleep Education Hub.`,
       openGraph: {
         title: seoTitle || blog.title,
-        description: seoDescription || blog.excerpt || `Read ${blog.title} on our blog.`,
+        description:
+          seoDescription || blog.excerpt || `Read ${blog.title} on our Sleep Education Hub.`,
         type: 'article',
         publishedTime: blog.publishedAt || undefined,
         authors: blog.author ? [blog.author] : undefined,
@@ -166,7 +223,8 @@ export async function generateMetadata(props: BlogPageParams) {
       twitter: {
         card: 'summary_large_image',
         title: seoTitle || blog.title,
-        description: seoDescription || blog.excerpt || `Read ${blog.title} on our blog.`,
+        description:
+          seoDescription || blog.excerpt || `Read ${blog.title} on our Sleep Education Hub.`,
         images: seoImage
           ? typeof seoImage === 'object' && seoImage?.url
             ? [seoImage.url]
@@ -179,8 +237,8 @@ export async function generateMetadata(props: BlogPageParams) {
   } catch (error) {
     console.error('Error generating blog metadata:', error)
     return {
-      title: 'Blog Post',
-      description: 'Read our latest blog post.',
+      title: 'Sleep Education Hub Article',
+      description: 'Read our latest sleep education article.',
     }
   }
 }

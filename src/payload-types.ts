@@ -97,10 +97,12 @@ export interface Config {
   globals: {
     header: Header;
     footer: Footer;
+    'education-hub': EducationHub;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
+    'education-hub': EducationHubSelect<false> | EducationHubSelect<true>;
   };
   locale: 'en';
   user: User & {
@@ -1131,7 +1133,9 @@ export interface Page {
                 | 'Waves'
                 | 'Monitor'
                 | 'Video'
-                | 'Check';
+                | 'Check'
+                | 'ShieldCheck'
+                | 'Users';
               /**
                * Name of the medical service (e.g., MRI, ULTRASOUND)
                */
@@ -3375,6 +3379,8 @@ export interface Page {
                         | 'Monitor'
                         | 'Video'
                         | 'Check'
+                        | 'ShieldCheck'
+                        | 'Users'
                       )
                     | null;
                   id?: string | null;
@@ -6486,6 +6492,133 @@ export interface Footer {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "education-hub".
+ */
+export interface EducationHub {
+  id: number;
+  hero?: {
+    eyebrow?: string | null;
+    title?: string | null;
+    description?: string | null;
+    ctaLabel?: string | null;
+    /**
+     * Internal path or anchor (e.g. #explore-topics) or full URL.
+     */
+    ctaHref?: string | null;
+    /**
+     * Wide crop recommended. Falls back to the bundled public image when empty.
+     */
+    imageDesktop?: (number | null) | Media;
+    /**
+     * Taller crop recommended. Falls back to desktop image, then the bundled public image.
+     */
+    imageMobile?: (number | null) | Media;
+    imageAlt?: string | null;
+  };
+  /**
+   * Each topic is fixed in the site. Edit the card title and description, or hide a topic from the hub. Article categories and URLs are managed automatically.
+   */
+  exploreTopics: {
+    heading?: string | null;
+    /**
+     * Articles route: /education-hub/topics/understanding-sleep-disorders
+     */
+    understandingSleepDisorders: {
+      enabled?: boolean | null;
+      label: string;
+      description: string;
+    };
+    /**
+     * Articles route: /education-hub/topics/diagnostics-treatment
+     */
+    diagnosticsTreatment: {
+      enabled?: boolean | null;
+      label: string;
+      description: string;
+    };
+    /**
+     * Articles route: /education-hub/topics/specialist-insights
+     */
+    specialistInsights: {
+      enabled?: boolean | null;
+      label: string;
+      description: string;
+    };
+    /**
+     * Articles route: /education-hub/topics/lifestyle-tips
+     */
+    lifestyleTips: {
+      enabled?: boolean | null;
+      label: string;
+      description: string;
+    };
+    /**
+     * Articles route: /education-hub/topics/featured
+     */
+    featured: {
+      enabled?: boolean | null;
+      label: string;
+      description: string;
+    };
+  };
+  trustedEducation?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  trustPillars?:
+    | {
+        /**
+         * Select an icon from the shared icon map (src/lib/icons/icon-map.ts).
+         */
+        icon:
+          | 'FileText'
+          | 'PhoneCall'
+          | 'Beaker'
+          | 'SquareActivity'
+          | 'Activity'
+          | 'Heart'
+          | 'Scan'
+          | 'Stethoscope'
+          | 'Brain'
+          | 'Moon'
+          | 'Baby'
+          | 'TrendingUp'
+          | 'HeartHandshake'
+          | 'ClipboardList'
+          | 'UserCheck'
+          | 'List'
+          | 'UserPlus'
+          | 'BriefcaseMedical'
+          | 'BarChart3'
+          | 'Building'
+          | 'Building2'
+          | 'Eye'
+          | 'Waves'
+          | 'Monitor'
+          | 'Video'
+          | 'Check'
+          | 'ShieldCheck'
+          | 'Users';
+        title: string;
+        description: string;
+        id?: string | null;
+      }[]
+    | null;
+  sleepAssessment?: {
+    title?: string | null;
+    description?: string | null;
+    ctaLabel?: string | null;
+    ctaHref?: string | null;
+  };
+  metadata?: {
+    title?: string | null;
+    description?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -6570,6 +6703,95 @@ export interface FooterSelect<T extends boolean = true> {
         platform?: T;
         url?: T;
         id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "education-hub_select".
+ */
+export interface EducationHubSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        eyebrow?: T;
+        title?: T;
+        description?: T;
+        ctaLabel?: T;
+        ctaHref?: T;
+        imageDesktop?: T;
+        imageMobile?: T;
+        imageAlt?: T;
+      };
+  exploreTopics?:
+    | T
+    | {
+        heading?: T;
+        understandingSleepDisorders?:
+          | T
+          | {
+              enabled?: T;
+              label?: T;
+              description?: T;
+            };
+        diagnosticsTreatment?:
+          | T
+          | {
+              enabled?: T;
+              label?: T;
+              description?: T;
+            };
+        specialistInsights?:
+          | T
+          | {
+              enabled?: T;
+              label?: T;
+              description?: T;
+            };
+        lifestyleTips?:
+          | T
+          | {
+              enabled?: T;
+              label?: T;
+              description?: T;
+            };
+        featured?:
+          | T
+          | {
+              enabled?: T;
+              label?: T;
+              description?: T;
+            };
+      };
+  trustedEducation?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+      };
+  trustPillars?:
+    | T
+    | {
+        icon?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  sleepAssessment?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        ctaLabel?: T;
+        ctaHref?: T;
+      };
+  metadata?:
+    | T
+    | {
+        title?: T;
+        description?: T;
       };
   updatedAt?: T;
   createdAt?: T;

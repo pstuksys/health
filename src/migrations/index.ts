@@ -37,6 +37,8 @@ import * as migration_20251201_204732 from './20251201_204732';
 import * as migration_20251208_210645 from './20251208_210645';
 import * as migration_20251214_203640 from './20251214_203640';
 import * as migration_20260712_111524_education_hub_specialist_fields from './20260712_111524_education_hub_specialist_fields';
+import * as migration_20260712_163155 from './20260712_163155';
+import * as migration_20260712_164117_education_hub_topic_groups from './20260712_164117_education_hub_topic_groups';
 
 export const migrations = [
   {
@@ -232,6 +234,16 @@ export const migrations = [
   {
     up: migration_20260712_111524_education_hub_specialist_fields.up,
     down: migration_20260712_111524_education_hub_specialist_fields.down,
-    name: '20260712_111524_education_hub_specialist_fields'
+    name: '20260712_111524_education_hub_specialist_fields',
+  },
+  {
+    up: migration_20260712_163155.up,
+    down: migration_20260712_163155.down,
+    name: '20260712_163155',
+  },
+  {
+    up: migration_20260712_164117_education_hub_topic_groups.up,
+    down: migration_20260712_164117_education_hub_topic_groups.down,
+    name: '20260712_164117_education_hub_topic_groups'
   },
 ];

@@ -35,6 +35,7 @@ import { Pages } from './collections/Pages'
 import { Blogs } from './collections/Blogs'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
+import { EducationHub } from './globals/EducationHub'
 
 // Import blocks for rich text editor
 import { buttonBlockFields } from './app/(frontend)/components/button-block/config'
@@ -182,7 +183,7 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-  globals: [Header, Footer],
+  globals: [Header, Footer, EducationHub],
   db: vercelPostgresAdapter({
     push: process.env.PAYLOAD_DB_PUSH === 'false' ? false : undefined,
     pool: {
