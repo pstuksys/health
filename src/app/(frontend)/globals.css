@@ -502,3 +502,25 @@ body.mobile-menu-open {
     animation: none;
   }
 }
+
+/* Trust badges marquee — 2 groups, translate -50% of total width */
+@keyframes trust-badges-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.trust-badges-track {
+  animation: trust-badges-scroll var(--trust-badges-duration, 20s) linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trust-badges-track {
+    animation: none;
+  }
+}
