@@ -57,6 +57,7 @@ import { callToActionBannerBlockFields } from '../app/(frontend)/components/call
 import { gridCardsFields } from '../app/(frontend)/components/grid-cards/config'
 import { buttonFields } from '../app/(frontend)/components/button/config'
 import { splitInfoGridBlockFields } from '../app/(frontend)/components/split-info-grid-block/config'
+import { trustBadgesBlockFields } from '../app/(frontend)/components/trust-badges-block/config'
 import { cacheTags, revalidateCacheTags } from '@/lib/cache-tags'
 
 // Safely extract authenticated user's role without using `any`
@@ -284,6 +285,12 @@ const buttonBlock: Block = {
   fields: buttonFields,
 }
 
+const trustBadgesBlock: Block = {
+  slug: 'trustBadgesBlock',
+  dbName: 'trust_badges_block',
+  fields: trustBadgesBlockFields,
+}
+
 // All available page blocks
 const pageBlocks: Block[] = [
   contentBlock,
@@ -342,6 +349,7 @@ const pageBlocks: Block[] = [
   cardBannerBlock,
   callToActionBannerBlock,
   gridCardsBlock,
+  trustBadgesBlock,
 ]
 
 export const Pages: CollectionConfig = {

@@ -64,6 +64,7 @@ import { CallToActionBannerBlock } from './call-to-action-banner-block/component
 import { SplitInfoListBlock } from './split-info-list-block/component'
 import { GridCards } from './grid-cards/component'
 import { Button, type ButtonBlockProps } from './button/component'
+import { TrustBadgesBlock } from './trust-badges-block/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -112,6 +113,10 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   gridCards: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'gridCards' }>
     return <GridCards {...b} />
+  },
+  trustBadgesBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'trustBadgesBlock' }>
+    return <TrustBadgesBlock {...b} />
   },
   contentBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'contentBlock' }>

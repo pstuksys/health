@@ -3613,6 +3613,21 @@ export interface Page {
             blockName?: string | null;
             blockType: 'gridCards';
           }
+        | {
+            /**
+             * Compliance and certification badge images to display in the strip.
+             */
+            badges: {
+              /**
+               * Badge image/SVG — the label should be embedded in the image.
+               */
+              logo: number | Media;
+              id?: string | null;
+            }[];
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'trustBadgesBlock';
+          }
       )[]
     | null;
   meta?: {
@@ -6076,6 +6091,18 @@ export interface PagesSelect<T extends boolean = true> {
                   };
               gridColumns?: T;
               backgroundColor?: T;
+              id?: T;
+              blockName?: T;
+            };
+        trustBadgesBlock?:
+          | T
+          | {
+              badges?:
+                | T
+                | {
+                    logo?: T;
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };
