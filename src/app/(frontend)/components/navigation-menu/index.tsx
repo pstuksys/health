@@ -251,7 +251,6 @@ export function NavigationMenu({
         items={items}
         ctaButton={ctaButton}
         onClose={toggleMobileMenu}
-        logoRef={logoRef}
       />
     </nav>
   )

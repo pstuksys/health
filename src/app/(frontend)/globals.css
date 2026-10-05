@@ -524,3 +524,8 @@ body.mobile-menu-open {
     animation: none;
   }
 }
+/* Doctify widgets: use the site's self-hosted Poppins so Doctify's own web fonts are never requested.
+   Doubled class beats Doctify's own !important rules, which are injected later in the document. */
+.doctify-widget.doctify-widget * {
+  font-family: var(--font-poppins), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}

@@ -6,7 +6,7 @@ import type { ServerFunctionClient } from 'payload'
 import { handleServerFunctions, RootLayout } from '@payloadcms/next/layouts'
 import React from 'react'
 
-import { importMap } from './admin/importMap.js'
+import { importMap } from './admin-jic7lr85m3l7/importMap.js'
 import './custom.scss'
 
 type Args = {

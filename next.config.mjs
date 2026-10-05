@@ -28,6 +28,8 @@ const nextConfig = {
     return webpackConfig
   },
   images: {
+    // Next 16 blocks optimizing images served from localhost; allow it only in local dev
+    dangerouslyAllowLocalIP: process.env.NODE_ENV === 'development',
     remotePatterns: [
       {
         protocol: 'http',

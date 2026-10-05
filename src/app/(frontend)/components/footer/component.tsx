@@ -9,7 +9,7 @@ import type { IconType } from 'react-icons'
 import { Button } from '../ui/button'
 import { Building } from 'lucide-react'
 import { CQCRatingCard } from '../footer-card/component'
-import { useDoctifyWidget } from '@/hooks/use-doctify-widget'
+import { useDoctifyWidget, DOCTIFY_PRACTICE_URL } from '@/hooks/use-doctify-widget'
 import type { Footer as FooterType } from '@/payload-types'
 
 type SocialPlatform = 'facebook' | 'twitter' | 'linkedin' | 'x'
@@ -48,7 +48,7 @@ const SOCIAL_ICON_MAP: Record<SocialPlatform, IconType> = {
 
 export function Footer({ socialLinks, navLinks, legalLinks, contact, className }: FooterProps) {
   const [copySuccess, setCopySuccess] = useState(false)
-  const { isLoaded: widgetLoaded, containerRef } = useDoctifyWidget({
+  const { status: widgetStatus, containerRef } = useDoctifyWidget({
     widgetId: DOCTIFY_WIDGET_ID,
     scriptUrl: DOCTIFY_SCRIPT_URL,
     rootMargin: '200px',
@@ -110,14 +110,23 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
                     )
                   })}
               </ul>
-              {/* Doctify Badge - Wrapped with key to prevent React reconciliation issues */}
-              <div key="doctify-widget-wrapper" ref={containerRef}>
-                {!widgetLoaded ? (
-                  <div className="min-h-[60px] text-gray-400 text-xs animate-pulse">
+              <div ref={containerRef} className="doctify-widget relative min-h-[60px]">
+                {widgetStatus === 'idle' || widgetStatus === 'loading' ? (
+                  <div className="absolute inset-0 text-gray-400 text-xs animate-pulse">
                     Loading reviews...
                   </div>
                 ) : null}
-                <div id={DOCTIFY_WIDGET_ID} className="min-h-[60px]" suppressHydrationWarning />
+                {widgetStatus === 'error' ? (
+                  <Link
+                    href={DOCTIFY_PRACTICE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn('text-gray-300 text-sm', HOVER_TEXT_CLASSES, TRANSITION_CLASSES)}
+                  >
+                    Read our reviews on Doctify
+                  </Link>
+                ) : null}
+                <div id={DOCTIFY_WIDGET_ID} suppressHydrationWarning />
               </div>
             </div>
           )}

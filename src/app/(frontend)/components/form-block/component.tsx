@@ -1,8 +1,9 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useSyncExternalStore } from 'react'
 import type { Page, Form as FormType } from '@/payload-types'
 import { cn } from '@/lib/utils'
+import { FORMS_PUBLICLY_ENABLED, FORMS_PREVIEW_HEADER, FORMS_PREVIEW_PARAM } from '@/lib/forms'
 import {
   Button,
   Input,
@@ -45,6 +46,18 @@ const paddingClasses = {
   xl: 'p-16',
 }
 
+function subscribeToNothing() {
+  return () => {}
+}
+
+function getPreviewToken() {
+  return new URLSearchParams(window.location.search).get(FORMS_PREVIEW_PARAM)
+}
+
+function getServerPreviewToken() {
+  return null
+}
+
 export function FormBlock({
   form: formRelation,
   title,
@@ -59,13 +72,17 @@ export function FormBlock({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [submitMessage, setSubmitMessage] = useState('')
+  const previewToken = useSyncExternalStore(
+    subscribeToNothing,
+    getPreviewToken,
+    getServerPreviewToken,
+  )
 
   // Handle form relation - could be ID or full form object
   const form = typeof formRelation === 'object' ? formRelation : null
-  // TODO: Temp mailto fallback; replace with proper form submission once email infra is ready.
   const mailtoAddress = 'enquiries@ipdiagnostics.co.uk'
   const mailtoHref = `mailto:${mailtoAddress}?subject=${encodeURIComponent(title || 'Contact')}`
-  const hideFormForMailto = true
+  const hideFormForMailto = !FORMS_PUBLICLY_ENABLED && !previewToken
 
   const isDarkSurface = backgroundColor === 'primary' && layout !== 'card'
   const labelClasses = cn(
@@ -89,7 +106,6 @@ export function FormBlock({
     'hover:scale-[1.01] active:scale-[0.99] shadow-[0_15px_35px_rgba(250,166,54,0.35)] disabled:opacity-60 disabled:pointer-events-none',
   )
 
-  // TODO: Temp mailto fallback; replace with proper form submission once email infra is ready.
   if (hideFormForMailto) {
     return (
       <section className="relative isolate overflow-hidden py-16 sm:py-24">
@@ -169,6 +185,7 @@ export function FormBlock({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...(previewToken ? { [FORMS_PREVIEW_HEADER]: previewToken } : {}),
         },
         body: JSON.stringify({
           form: form.id,

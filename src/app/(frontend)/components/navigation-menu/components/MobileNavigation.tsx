@@ -16,7 +16,6 @@ interface MobileNavigationProps {
   items: NavigationItem[]
   ctaButton?: CTAButton
   onClose: () => void
-  logoRef: React.RefObject<HTMLAnchorElement | null>
 }
 
 export function MobileNavigation({
@@ -24,7 +23,6 @@ export function MobileNavigation({
   items,
   ctaButton,
   onClose,
-  logoRef,
 }: MobileNavigationProps) {
   if (!isOpen) return null
 
@@ -38,7 +36,7 @@ export function MobileNavigation({
         {/* Header with close button */}
         <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-gradient-primary shadow-lg flex-shrink-0">
           <div className="flex-shrink-0">
-            <Link ref={logoRef} href="/" className="flex items-center flex-shrink-0 w-40">
+            <Link href="/" className="flex items-center flex-shrink-0 w-40" onClick={onClose}>
               <Image
                 src="/logo-white.svg"
                 alt="Logo"
@@ -140,7 +138,7 @@ export function MobileNavigation({
 
             {/* CTA Button */}
             {ctaButton && (
-              <div className="pt-6">
+              <div className="pt-6" onClick={onClose}>
                 <CMSLink href={resolveUrl(ctaButton)} variant="primary" className="w-full">
                   {ctaButton.label}
                 </CMSLink>
