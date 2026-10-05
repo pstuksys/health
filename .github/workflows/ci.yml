@@ -15,6 +15,8 @@ env:
   PAYLOAD_SECRET: ci-secret
   POSTGRES_URL: postgres://postgres:postgres@localhost:5432/health_ci
   NEXT_PUBLIC_SITE_URL: http://localhost:3000
+  # The Blob plugin (and the fields/admin components it adds) only loads when a token is set
+  BLOB_READ_WRITE_TOKEN: vercel_blob_rw_ci0000_dummy
 
 jobs:
   checks:
