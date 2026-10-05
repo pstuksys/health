@@ -4,6 +4,12 @@ import { useEffect, useRef } from 'react'
 import Script from 'next/script'
 import type { Page } from '@/payload-types'
 
+declare global {
+  interface Window {
+    ScoreAppWidget?: { createFromElement: (element: HTMLElement) => unknown }
+  }
+}
+
 type ScoreAppWidgetProps = Extract<
   NonNullable<Page['blocks']>[number],
   { blockType: 'scoreAppWidget' }
@@ -22,7 +28,7 @@ export function ScoreAppWidget({
   autoHeight = true,
 }: ScoreAppWidgetProps) {
   const widgetRef = useRef<HTMLDivElement>(null)
-  const widgetInstanceRef = useRef<any>(null)
+  const widgetInstanceRef = useRef<unknown>(null)
   const isMountedRef = useRef(true)
 
   useEffect(() => {
@@ -33,7 +39,7 @@ export function ScoreAppWidget({
       if (
         !isMountedRef.current ||
         typeof window === 'undefined' ||
-        !(window as any).ScoreAppWidget ||
+        !window.ScoreAppWidget ||
         !widgetRef.current
       ) {
         return
@@ -76,7 +82,7 @@ export function ScoreAppWidget({
       }
 
       // Initialize the widget and store the instance
-      widgetInstanceRef.current = (window as any).ScoreAppWidget.createFromElement(element)
+      widgetInstanceRef.current = window.ScoreAppWidget.createFromElement(element)
 
       // Fix mobile close button after widget loads
       setTimeout(() => {

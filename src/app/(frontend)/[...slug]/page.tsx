@@ -7,6 +7,7 @@ import {
   deriveGlobalHeroProps,
 } from '@/app/(frontend)/components/RenderBlocks'
 import { getPage, generateMetadataBySlug } from '@/lib/page-utils'
+import type { Page } from '@/payload-types'
 
 /**
  * Check if a slug should be handled by the dynamic page route
@@ -79,6 +80,20 @@ export async function generateMetadata(props: {
 }
 
 export default async function DynamicPage(props: { params: Promise<{ slug: string[] }> }) {
+  const page = await loadPage(props)
+  const renderHeroFromBlocks = hasHeroBlock(page.blocks)
+  const heroProps = deriveGlobalHeroProps(page)
+  const showGlobalHero = Boolean(page.showHero)
+
+  return (
+    <main className="flex flex-col">
+      {!renderHeroFromBlocks && showGlobalHero && <HeroSection {...heroProps} />}
+      <RenderBlocks blocks={page.blocks ?? null} />
+    </main>
+  )
+}
+
+async function loadPage(props: { params: Promise<{ slug: string[] }> }): Promise<Page> {
   try {
     const params = await props.params
     const slug = params?.slug?.join('/') ?? ''
@@ -99,16 +114,7 @@ export default async function DynamicPage(props: { params: Promise<{ slug: strin
       return notFound()
     }
 
-    const renderHeroFromBlocks = hasHeroBlock(page.blocks)
-    const heroProps = deriveGlobalHeroProps(page)
-    const showGlobalHero = Boolean(page.showHero)
-
-    return (
-      <main className="flex flex-col">
-        {!renderHeroFromBlocks && showGlobalHero && <HeroSection {...heroProps} />}
-        <RenderBlocks blocks={page.blocks ?? null} />
-      </main>
-    )
+    return page
   } catch (error) {
     // Don't log detailed errors for system requests or filtered requests
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'

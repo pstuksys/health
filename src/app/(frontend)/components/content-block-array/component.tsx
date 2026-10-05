@@ -28,7 +28,7 @@ export function ContentBlockArray({
 
         <div className="space-y-12 ">
           {contentBlocks.map((block, index) => {
-            const imageUrl = mediaToUrl(block.image as any)
+            const imageUrl = mediaToUrl(block.image)
             const isImageLeft = block.imagePosition === 'left'
             const shouldAlternate = layout === 'alternating' && index % 2 === 1
             const description = block.description ?? ''

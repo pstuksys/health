@@ -48,29 +48,25 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
   const measureIconMap = [Brain, Video, Activity] as const
 
   const reasons: string[] = Array.isArray(whenReasons)
-    ? (whenReasons as unknown[])
-        .map((r) => (typeof r === 'string' ? r : (r as any)?.text || ''))
-        .filter(Boolean)
+    ? whenReasons.map((r) => r.text || '').filter(Boolean)
     : []
 
   const measureItems: Array<{ category: string; description: string }> = Array.isArray(measures)
-    ? (measures as unknown[]).map((m) => ({
-        category: (m as any)?.category || '',
-        description: (m as any)?.description || '',
+    ? measures.map((m) => ({
+        category: m?.category || '',
+        description: m?.description || '',
       }))
     : []
 
   const howItems: Array<{ title: string; description: string }> = Array.isArray(howSteps)
-    ? (howSteps as unknown[]).map((s) => ({
-        title: (s as any)?.title || '',
-        description: (s as any)?.description || '',
+    ? howSteps.map((s) => ({
+        title: s?.title || '',
+        description: s?.description || '',
       }))
     : []
 
   const whyItems: string[] = Array.isArray(whyChoose)
-    ? (whyChoose as unknown[])
-        .map((w) => (typeof w === 'string' ? w : (w as any)?.text || ''))
-        .filter(Boolean)
+    ? whyChoose.map((w) => w.text || '').filter(Boolean)
     : []
 
   return (
@@ -108,7 +104,7 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {(() => {
-              const btn = heroPrimary as any
+              const btn = heroPrimary
               const href = resolveLinkHref({
                 linkType: btn?.linkType,
                 internal: btn?.internal,
@@ -124,7 +120,7 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
               ) : null
             })()}
             {(() => {
-              const btn = heroSecondary as any
+              const btn = heroSecondary
               const href = resolveLinkHref({
                 linkType: btn?.linkType,
                 internal: btn?.internal,
@@ -288,8 +284,7 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
         <div className="relative overflow-hidden rounded-2xl">
           <Image
             src={
-              mediaToUrl(ctaBgImage as any) ||
-              '/professional-medical-testing-room-with-comfortable.jpg'
+              mediaToUrl(ctaBgImage) || '/professional-medical-testing-room-with-comfortable.jpg'
             }
             alt="Advanced neurophysiology testing facility"
             width={1200}
@@ -339,7 +334,7 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
 
                   <div className="space-y-3">
                     {(() => {
-                      const btn = ctaPrimary as any
+                      const btn = ctaPrimary
                       const href = resolveLinkHref({
                         linkType: btn?.linkType,
                         internal: btn?.internal,
@@ -355,7 +350,7 @@ export function VPSGEEGBlock(props: VPSGEEGBlockProps) {
                       ) : null
                     })()}
                     {(() => {
-                      const btn = ctaSecondary as any
+                      const btn = ctaSecondary
                       const href = resolveLinkHref({
                         linkType: btn?.linkType,
                         internal: btn?.internal,

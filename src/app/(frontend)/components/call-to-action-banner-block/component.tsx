@@ -6,7 +6,7 @@ import { isLexicalEditorState, RichText } from '@/app/(frontend)/components/ui/r
 import type { Page } from '@/payload-types'
 import { cn } from '@/lib/utils'
 import { resolveLinkHref } from '@/lib/navigation'
-import { mediaToUrl } from '@/lib/media'
+import { mediaAlt, mediaToUrl } from '@/lib/media'
 
 type CallToActionBannerBlockProps = Extract<
   NonNullable<Page['blocks']>[number],
@@ -39,8 +39,8 @@ export function CallToActionBannerBlock(props: CallToActionBannerBlockProps) {
       >
         {ctaImage ? (
           <Image
-            src={mediaToUrl(ctaImage as any) || '/placeholder.svg'}
-            alt={(ctaImage as any)?.alt || 'CTA'}
+            src={mediaToUrl(ctaImage) || '/placeholder.svg'}
+            alt={mediaAlt(ctaImage, 'CTA')}
             width={1200}
             height={600}
             className="absolute inset-0 w-full h-full object-cover object-center z-0"
@@ -61,7 +61,7 @@ export function CallToActionBannerBlock(props: CallToActionBannerBlockProps) {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               {(() => {
-                const btn = ctaPrimary as any
+                const btn = ctaPrimary
                 const href = resolveLinkHref({
                   linkType: btn?.linkType,
                   internal: btn?.internal,
@@ -77,7 +77,7 @@ export function CallToActionBannerBlock(props: CallToActionBannerBlockProps) {
                 ) : null
               })()}
               {(() => {
-                const btn = ctaSecondary as any
+                const btn = ctaSecondary
                 const href = resolveLinkHref({
                   linkType: btn?.linkType,
                   internal: btn?.internal,

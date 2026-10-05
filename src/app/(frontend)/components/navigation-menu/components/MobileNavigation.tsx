@@ -18,12 +18,7 @@ interface MobileNavigationProps {
   onClose: () => void
 }
 
-export function MobileNavigation({
-  isOpen,
-  items,
-  ctaButton,
-  onClose,
-}: MobileNavigationProps) {
+export function MobileNavigation({ isOpen, items, ctaButton, onClose }: MobileNavigationProps) {
   if (!isOpen) return null
 
   return (
@@ -41,7 +36,7 @@ export function MobileNavigation({
                 src="/logo-white.svg"
                 alt="Logo"
                 width={240}
-                height={40}
+                height={62}
                 className="w-full h-auto"
               />
             </Link>
@@ -79,7 +74,7 @@ export function MobileNavigation({
                         {item.megaMenu.categories?.map((category) => (
                           <Link
                             key={category.title}
-                            href={resolveUrl(category as any)}
+                            href={resolveUrl(category)}
                             className="text-ds-dark-blue hover:text-ds-accent-yellow text-base font-light block py-2 hover:bg-gray-50 px-3 -mx-3 rounded transition-all duration-200 ml-4"
                             onClick={onClose}
                           >

@@ -17,19 +17,19 @@ type PostLinkInfo = {
   isExternal: boolean
 }
 
-function resolveBlogLink(post: any): PostLinkInfo {
+type ScrollPost = NonNullable<ScrollPostCardsProps['posts']>[number]
+
+function resolveBlogLink(post: ScrollPost): PostLinkInfo {
   if (post.linkType === 'external') {
     return {
-      href: post.externalUrl ?? post.href ?? '#',
+      href: post.href ?? '#',
       isExternal: true,
     }
   }
 
-  // Internal link - resolve to proper URL
   if (post.post) {
-    const rel = post.post
-    const doc = rel?.value ?? rel
-    const slug = doc?.slug ?? ''
+    const doc = post.post.value
+    const slug = typeof doc === 'object' ? (doc.slug ?? '') : ''
     return {
       href: `/education-hub/${slug}`,
       isExternal: false,
@@ -65,12 +65,7 @@ export function ScrollPostCards({
   }, [disableObserver])
 
   useEffect(() => {
-    if (disableObserver) {
-      // If observer is disabled, make all cards visible immediately
-      const allIndices = new Set((posts || []).map((_, index) => index))
-      setVisibleCards(allIndices)
-      return
-    }
+    if (disableObserver) return
 
     const cardObserver = new IntersectionObserver(
       (entries) => {
@@ -135,32 +130,33 @@ export function ScrollPostCards({
 
                 <p className="text-gray-600 mb-6 leading-relaxed">{post.excerpt || ''}</p>
 
-                {!clickableCard && (() => {
-                  const link = resolveBlogLink(post)
-                  return (
-                    <CMSLink
-                      href={link.href}
-                      variant="ghost"
-                      className="w-fit"
-                      external={link.isExternal}
-                    >
-                      Read More
-                      <svg
-                        className="ml-2 w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                {!clickableCard &&
+                  (() => {
+                    const link = resolveBlogLink(post)
+                    return (
+                      <CMSLink
+                        href={link.href}
+                        variant="ghost"
+                        className="w-fit"
+                        external={link.isExternal}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </CMSLink>
-                  )
-                })()}
+                        Read More
+                        <svg
+                          className="ml-2 w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </CMSLink>
+                    )
+                  })()}
               </div>
             </div>
           )
@@ -172,7 +168,7 @@ export function ScrollPostCards({
               key={post.id || index}
               data-index={index}
               className={`w-full bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-700 ${
-                visibleCards.has(index)
+                disableObserver || visibleCards.has(index)
                   ? 'opacity-100 translate-y-0 scale-100'
                   : 'opacity-0 translate-y-8 scale-95'
               } ${clickableCard ? 'cursor-pointer' : ''}`}

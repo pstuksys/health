@@ -1,7 +1,5 @@
 import { ImageResponse } from 'next/og'
 
-export const runtime = 'edge'
-
 export async function GET() {
   const size = 32
   const image = new ImageResponse(

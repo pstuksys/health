@@ -28,3 +28,8 @@ export function mediaToUrl(media: number | Media | null | undefined): string {
 
   // (unreachable)
 }
+
+export function mediaAlt(media: number | Media | null | undefined, fallback: string): string {
+  if (!media || typeof media === 'number') return fallback
+  return media.alt || fallback
+}

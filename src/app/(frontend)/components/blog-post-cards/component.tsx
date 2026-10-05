@@ -2,21 +2,15 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
 import { mediaToUrl } from '@/lib/media'
-import type { Media } from '@/payload-types'
+import type { Page } from '@/payload-types'
 
-type RawBlogPost = {
-  image?: number | Media | null | undefined
-  title: string
-  excerpt?: string | null | undefined
-  linkType?: 'internal' | 'external' | null | undefined
-  href?: string | null | undefined
-  post?: any
-  date?: string | null | undefined
-  author?: string | null | undefined
-}
+type BlogPostCardsBlock = Extract<
+  NonNullable<Page['blocks']>[number],
+  { blockType: 'blogPostCards' }
+>
+type RawBlogPost = NonNullable<BlogPostCardsBlock['posts']>[number]
 
-type BlogPostCardsProps = {
-  posts?: RawBlogPost[]
+type BlogPostCardsProps = BlogPostCardsBlock & {
   mobileCarousel?: boolean
   className?: string
 }
@@ -26,22 +20,16 @@ function resolveBlogHref(post: RawBlogPost): string {
     return post.href ?? '#'
   }
 
-  // Internal link - resolve to proper URL
   if (post.post) {
-    const rel = post.post
-    const doc = rel?.value ?? rel
-    const slug = doc?.slug ?? ''
+    const doc = post.post.value
+    const slug = typeof doc === 'object' ? (doc.slug ?? '') : ''
     return `/education-hub/${slug}`
   }
 
   return '#'
 }
 
-export function BlogPostCards({
-  posts = [],
-  mobileCarousel = false,
-  className,
-}: BlogPostCardsProps) {
+export function BlogPostCards({ posts, mobileCarousel = false, className }: BlogPostCardsProps) {
   return (
     <section className={cn('py-6 px-4 sm:px-4 lg:px-4', className)}>
       <div className="max-w-container mx-auto">
@@ -53,7 +41,7 @@ export function BlogPostCards({
               : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
           )}
         >
-          {posts.map((post, index) => (
+          {(posts ?? []).map((post, index) => (
             <article key={index} className="group">
               <Link href={resolveBlogHref(post)} className="block">
                 <div className="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">

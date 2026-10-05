@@ -220,18 +220,17 @@ export function FormBlock({
   }
 
   const renderField = (field: NonNullable<FormType['fields']>[number], index: number) => {
-    const fieldData = field as any
-    const fieldKey = `field-${fieldData.name || 'unnamed'}-${index}`
-    const isRequired = fieldData.required || false
+    const fieldName = 'name' in field ? field.name : undefined
+    const fieldLabel = 'label' in field ? field.label : undefined
+    const width = 'width' in field ? field.width : undefined
+    const fieldKey = `field-${fieldName || 'unnamed'}-${index}`
+    const isRequired = 'required' in field ? Boolean(field.required) : false
 
     const fieldWrapper = (content: React.ReactNode) => (
       <div
         key={fieldKey}
-        style={{ width: fieldData.width ? `${fieldData.width}%` : '100%' }}
-        className={cn(
-          'min-w-0',
-          fieldData.width && fieldData.width < 100 ? '' : 'w-full sm:w-auto',
-        )}
+        style={{ width: width ? `${width}%` : '100%' }}
+        className={cn('min-w-0', width && width < 100 ? '' : 'w-full sm:w-auto')}
       >
         {content}
       </div>
@@ -244,17 +243,17 @@ export function FormBlock({
         return fieldWrapper(
           <div className="space-y-3">
             <Label htmlFor={fieldKey} className={labelClasses}>
-              {fieldData.label || fieldData.name}
+              {field.label || field.name}
               {requiredBadge}
             </Label>
             <Input
               id={fieldKey}
-              name={fieldData.name}
+              name={field.name}
               type="text"
               required={isRequired}
-              defaultValue={fieldData.defaultValue || ''}
+              defaultValue={field.defaultValue || ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                handleInputChange(fieldData.name, e.target.value)
+                handleInputChange(field.name, e.target.value)
               }
               className={inputClasses}
             />
@@ -265,16 +264,16 @@ export function FormBlock({
         return fieldWrapper(
           <div className="space-y-3">
             <Label htmlFor={fieldKey} className={labelClasses}>
-              {fieldData.label || fieldData.name}
+              {field.label || field.name}
               {requiredBadge}
             </Label>
             <Input
               id={fieldKey}
-              name={fieldData.name}
+              name={field.name}
               type="email"
               required={isRequired}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                handleInputChange(fieldData.name, e.target.value)
+                handleInputChange(field.name, e.target.value)
               }
               className={inputClasses}
             />
@@ -285,17 +284,17 @@ export function FormBlock({
         return fieldWrapper(
           <div className="space-y-3">
             <Label htmlFor={fieldKey} className={labelClasses}>
-              {fieldData.label || fieldData.name}
+              {field.label || field.name}
               {requiredBadge}
             </Label>
             <Input
               id={fieldKey}
-              name={fieldData.name}
+              name={field.name}
               type="number"
               required={isRequired}
-              defaultValue={fieldData.defaultValue || ''}
+              defaultValue={field.defaultValue || ''}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                handleInputChange(fieldData.name, e.target.value)
+                handleInputChange(field.name, e.target.value)
               }
               className={inputClasses}
             />
@@ -306,16 +305,16 @@ export function FormBlock({
         return fieldWrapper(
           <div className="space-y-3">
             <Label htmlFor={fieldKey} className={labelClasses}>
-              {fieldData.label || fieldData.name}
+              {field.label || field.name}
               {requiredBadge}
             </Label>
             <Textarea
               id={fieldKey}
-              name={fieldData.name}
+              name={field.name}
               required={isRequired}
-              defaultValue={fieldData.defaultValue || ''}
+              defaultValue={field.defaultValue || ''}
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
-                handleInputChange(fieldData.name, e.target.value)
+                handleInputChange(field.name, e.target.value)
               }
               className={textareaClasses}
             />
@@ -327,16 +326,16 @@ export function FormBlock({
           <div className="flex items-center gap-3">
             <Checkbox
               id={fieldKey}
-              name={fieldData.name}
+              name={field.name}
               required={isRequired}
-              defaultChecked={fieldData.defaultValue || false}
-              onCheckedChange={(checked: boolean) => handleInputChange(fieldData.name, checked)}
+              defaultChecked={field.defaultValue || false}
+              onCheckedChange={(checked: boolean) => handleInputChange(field.name, checked)}
             />
             <Label
               htmlFor={fieldKey}
               className={cn(labelClasses, 'tracking-normal font-medium text-sm')}
             >
-              {fieldData.label || fieldData.name}
+              {field.label || field.name}
               {requiredBadge}
             </Label>
           </div>,
@@ -346,21 +345,21 @@ export function FormBlock({
         return fieldWrapper(
           <div className="space-y-3">
             <Label htmlFor={fieldKey} className={labelClasses}>
-              {fieldData.label || fieldData.name}
+              {field.label || field.name}
               {requiredBadge}
             </Label>
             <Select
               id={fieldKey}
-              name={fieldData.name}
+              name={field.name}
               required={isRequired}
-              defaultValue={fieldData.defaultValue || ''}
-              onValueChange={(value: string) => handleInputChange(fieldData.name, value)}
+              defaultValue={field.defaultValue || ''}
+              onValueChange={(value: string) => handleInputChange(field.name, value)}
               className={selectClasses}
             >
               <option value="" disabled>
-                {fieldData.placeholder || 'Select an option'}
+                {field.placeholder || 'Select an option'}
               </option>
-              {fieldData.options?.map((option: any) => (
+              {field.options?.map((option) => (
                 <option key={option.id || option.value} value={option.value}>
                   {option.label}
                 </option>
@@ -372,9 +371,9 @@ export function FormBlock({
       case 'message':
         return fieldWrapper(
           <div className="py-2">
-            {fieldData.message && isLexicalEditorState(fieldData.message) && (
+            {field.message && isLexicalEditorState(field.message) && (
               <RichText
-                data={fieldData.message}
+                data={field.message}
                 className={cn(
                   'prose prose-sm max-w-none',
                   isDarkSurface ? 'prose-invert text-white/80' : 'text-ds-dark-blue/70',
@@ -387,9 +386,7 @@ export function FormBlock({
       default:
         return fieldWrapper(
           <div className="space-y-2">
-            <Label className={labelClasses}>
-              {fieldData.label || fieldData.name || 'Unknown field'}
-            </Label>
+            <Label className={labelClasses}>{fieldLabel || fieldName || 'Unknown field'}</Label>
             <p className={cn('text-sm', helperTextClasses)}>
               Unsupported field type: {field.blockType}
             </p>

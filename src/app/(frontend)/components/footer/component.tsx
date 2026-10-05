@@ -54,22 +54,18 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
     rootMargin: '200px',
   })
 
-  const handleContactClick = useCallback((type: 'email' | 'phone', value: string) => {
-    const prefix = type === 'email' ? 'mailto:' : 'tel:'
-    window.location.href = `${prefix}${value}`
-  }, [])
-
+  const address = contact?.address
   const handleAddressClick = useCallback(async () => {
-    if (!contact?.address) return
+    if (!address) return
 
     try {
-      await navigator.clipboard.writeText(contact.address)
+      await navigator.clipboard.writeText(address)
       setCopySuccess(true)
       setTimeout(() => setCopySuccess(false), 1000)
     } catch (error) {
       console.warn('Failed to copy address:', error)
     }
-  }, [contact?.address])
+  }, [address])
 
   const scrollToTop = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -185,11 +181,10 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
             <h3 className="text-lg font-semibold text-white">Contact</h3>
             <div className="space-y-2 text-gray-300 font-light overflow-hidden">
               {contact?.email && (
-                <button
-                  onClick={() => handleContactClick('email', contact.email!)}
+                <a
+                  href={`mailto:${contact.email}`}
                   className={cn('flex items-center gap-2 cursor-pointer group', TRANSITION_CLASSES)}
                   aria-label={`Send email to ${contact.email}`}
-                  type="button"
                 >
                   <FaMailBulk
                     size={ICON_SIZE_SMALL}
@@ -208,14 +203,13 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
                   >
                     {contact.email}
                   </span>
-                </button>
+                </a>
               )}
               {contact?.phone && (
-                <button
-                  onClick={() => handleContactClick('phone', contact.phone!)}
+                <a
+                  href={`tel:${contact.phone}`}
                   className={cn('flex items-center gap-2 cursor-pointer group', TRANSITION_CLASSES)}
                   aria-label={`Call ${contact.phone}`}
-                  type="button"
                 >
                   <FaPhone
                     size={ICON_SIZE_SMALL}
@@ -234,7 +228,7 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
                   >
                     {contact.phone}
                   </span>
-                </button>
+                </a>
               )}
               {contact?.address && (
                 <button
