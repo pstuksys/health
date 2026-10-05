@@ -1,0 +1,46 @@
+name: Claude Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, ready_for_review, reopened]
+
+concurrency:
+  group: claude-review-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  review:
+    if: github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          track_progress: true
+          prompt: |
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
+
+            Review this pull request. Follow the conventions in CLAUDE.md.
+
+            Focus on real problems, most important first:
+            - Bugs, broken edge cases and runtime errors
+            - Security: input validation, auth/access control, secrets, the form submission API
+            - Payload-specific mistakes: block changes not kept in sync across config.ts,
+              Pages.ts and RenderBlocks.tsx; schema changes without a migration in src/migrations;
+              new cached queries or collections/globals without a cache tag and revalidation hook
+            - Accidental changes to the admin route or env handling
+
+            Skip style nitpicks that ESLint/Prettier would catch, and don't praise.
+            Use inline comments for specific issues and one short top-level summary comment.
+            If there's nothing worth flagging, say so in one line.
+          claude_args: |
+            --allowedTools "mcp__github_inline_comment__create_inline_comment,Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
