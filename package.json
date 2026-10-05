@@ -80,6 +80,11 @@
     "pnpm": "^9 || ^10"
   },
   "pnpm": {
+    "auditConfig": {
+      "ignoreGhsas": [
+        "GHSA-vfj7-8cjw-p6xm"
+      ]
+    },
     "onlyBuiltDependencies": [
       "sharp",
       "esbuild",
@@ -108,7 +113,7 @@
       "postcss@8": "^8.5.23",
       "rollup@4": "^4.59.0",
       "undici@7": "^7.29.1",
-      "vite@7": "^7.3.5",
+      "vite@7": "^7.3.6",
       "ws@8": "^8.21.0",
       "yaml@1": "^1.10.3",
       "yaml@2": "^2.8.3"
