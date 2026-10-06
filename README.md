@@ -1,6 +1,6 @@
 # IPDiagnostics Website
 
-Next.js 15 site with Payload CMS 3 embedded, backed by PostgreSQL. Media is stored on Vercel Blob and email is sent via Resend.
+Next.js 16 site with Payload CMS 3 embedded, backed by PostgreSQL. Media is stored on Vercel Blob and email is sent via Resend.
 
 ## Local setup
 
@@ -23,6 +23,8 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000
 ```
 
 Optional: `BLOB_READ_WRITE_TOKEN` (without it, media uploads are stored locally), `REVALIDATION_SECRET`, `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `RESEND_FROM_NAME`, `FORM_NOTIFICATION_EMAIL`.
+
+Forms: they stay hidden until `NEXT_PUBLIC_FORMS_ENABLED=true`, or open a page with `?forms-preview=<FORMS_PREVIEW_TOKEN>` to test them. Spam protection uses Cloudflare Turnstile (`NEXT_PUBLIC_TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`); `.env.example` has Cloudflare's always-pass test keys for local use. Production rejects submissions if the secret is missing.
 
 ### 3. Install and run
 
