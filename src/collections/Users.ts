@@ -6,7 +6,7 @@ export const Users: CollectionConfig = {
     useAsTitle: 'email',
   },
   auth: {
-    maxLoginAttempts: 10,
+    maxLoginAttempts: 5,
     lockTime: 10 * 60 * 1000,
   },
   fields: [
