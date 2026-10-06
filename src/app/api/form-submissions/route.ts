@@ -2,11 +2,11 @@ import { timingSafeEqual } from 'crypto'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { NextRequest, NextResponse } from 'next/server'
-import { checkBotId } from 'botid/server'
 import { convertLexicalToHTML } from '@payloadcms/richtext-lexical/html'
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 import type { Form } from '@/payload-types'
 import { FORMS_PUBLICLY_ENABLED, FORMS_PREVIEW_HEADER } from '@/lib/forms'
+import { verifyTurnstileToken } from '@/lib/turnstile'
 
 type SubmissionField = {
   field: string
@@ -155,17 +155,20 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { isBot } = await checkBotId()
-    if (isBot) {
-      return NextResponse.json({ error: 'Access denied' }, { status: 403 })
-    }
-
     const body = (await request.json().catch(() => null)) as Record<string, unknown> | null
     if (!body?.form || !body.submissionData) {
       return NextResponse.json(
         { error: 'Missing required fields: form and submissionData' },
         { status: 400 },
       )
+    }
+
+    const isHuman = await verifyTurnstileToken(
+      body.turnstileToken,
+      request.headers.get('cf-connecting-ip'),
+    )
+    if (!isHuman) {
+      return NextResponse.json({ error: 'Spam check failed, please try again' }, { status: 403 })
     }
 
     const formId = typeof body.form === 'number' ? body.form : parseInt(String(body.form), 10)

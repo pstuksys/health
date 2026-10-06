@@ -17,6 +17,8 @@ import {
   CardTitle,
   RichText,
   isLexicalEditorState,
+  Turnstile,
+  TURNSTILE_SITE_KEY,
 } from '@/app/(frontend)/components/ui'
 
 type FormBlockProps = Extract<NonNullable<Page['blocks']>[number], { blockType: 'formBlock' }>
@@ -72,6 +74,8 @@ export function FormBlock({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
   const [submitMessage, setSubmitMessage] = useState('')
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null)
+  const [turnstileKey, setTurnstileKey] = useState(0)
   const previewToken = useSyncExternalStore(
     subscribeToNothing,
     getPreviewToken,
@@ -189,6 +193,7 @@ export function FormBlock({
         },
         body: JSON.stringify({
           form: form.id,
+          turnstileToken,
           submissionData: Object.entries(formData).map(([field, value]) => ({
             field,
             value: String(value),
@@ -216,6 +221,8 @@ export function FormBlock({
       setSubmitMessage('Sorry, there was an error submitting your form. Please try again.')
     } finally {
       setIsSubmitting(false)
+      setTurnstileToken(null)
+      setTurnstileKey((key) => key + 1)
     }
   }
 
@@ -474,10 +481,18 @@ export function FormBlock({
       <div className="flex flex-wrap gap-4">
         {form.fields?.map((field, index) => renderField(field, index))}
       </div>
+      {TURNSTILE_SITE_KEY && (
+        <Turnstile
+          key={turnstileKey}
+          siteKey={TURNSTILE_SITE_KEY}
+          onTokenChange={setTurnstileToken}
+          theme={isDarkSurface ? 'dark' : 'light'}
+        />
+      )}
       <div className={cn('pt-4', buttonWidth === 'auto' && 'flex justify-center')}>
         <Button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || Boolean(TURNSTILE_SITE_KEY && !turnstileToken)}
           className={cn(
             buttonClasses,
             buttonWidth === 'full' ? 'w-full' : 'w-auto',
