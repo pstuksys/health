@@ -3,7 +3,6 @@ import { formBuilderPlugin } from '@payloadcms/plugin-form-builder'
 import { seoPlugin } from '@payloadcms/plugin-seo'
 import { searchPlugin } from '@payloadcms/plugin-search'
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
-import { payloadCloudPlugin } from '@payloadcms/payload-cloud'
 import { resendAdapter } from '@payloadcms/email-resend'
 import {
   lexicalEditor,
@@ -95,6 +94,10 @@ export default buildConfig({
     // locales: ['en', 'es', 'de'],
     locales: ['en'],
     defaultLocale: 'en',
+  },
+  // Must match the folder name in src/app/(payload)/
+  routes: {
+    admin: '/admin-jic7lr85m3l7',
   },
   admin: {
     user: Users.slug,
@@ -192,7 +195,6 @@ export default buildConfig({
   }),
   sharp,
   plugins: [
-    payloadCloudPlugin(),
     ...(process.env.BLOB_READ_WRITE_TOKEN
       ? [
           vercelBlobStorage({

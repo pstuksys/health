@@ -30,7 +30,7 @@ export function ContentBlock({
     return () => observer.disconnect()
   }, [])
 
-  const imageUrl = mediaToUrl(image as any)
+  const imageUrl = mediaToUrl(image)
 
   if (layout === 'full') {
     return (

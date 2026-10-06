@@ -40,6 +40,7 @@ import * as migration_20260712_111524_education_hub_specialist_fields from './20
 import * as migration_20260712_163155 from './20260712_163155';
 import * as migration_20260712_164117_education_hub_topic_groups from './20260712_164117_education_hub_topic_groups';
 import * as migration_20260722_161929 from './20260722_161929';
+import * as migration_20261005_153709_payload_3_90_upgrade from './20261005_153709_payload_3_90_upgrade';
 
 export const migrations = [
   {
@@ -250,6 +251,11 @@ export const migrations = [
   {
     up: migration_20260722_161929.up,
     down: migration_20260722_161929.down,
-    name: '20260722_161929'
+    name: '20260722_161929',
+  },
+  {
+    up: migration_20261005_153709_payload_3_90_upgrade.up,
+    down: migration_20261005_153709_payload_3_90_upgrade.down,
+    name: '20261005_153709_payload_3_90_upgrade'
   },
 ];

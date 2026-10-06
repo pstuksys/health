@@ -33,7 +33,7 @@ export function transformNavigationItems(
       // New structure: categories are now direct links
       const categories = (item.megaMenu.categories ?? []).map((cat) => ({
         title: cat.title,
-        href: resolveUrl(cat as any),
+        href: resolveUrl(cat),
       }))
 
       const featured = (item.megaMenu.featured ?? []).map((f) => ({

@@ -1,30 +1,21 @@
 'use client'
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import type { Page } from '@/payload-types'
 import { useIsMobile } from '@/hooks/use-is-mobile'
 import { useSwipe } from '@/hooks/use-swipe'
-import { useDoctifyWidget } from '@/hooks/use-doctify-widget'
+import { useDoctifyWidget, DOCTIFY_PRACTICE_URL } from '@/hooks/use-doctify-widget'
 
 type TestimonialsProps = Omit<
   Extract<NonNullable<Page['blocks']>[number], { blockType: 'testimonials' }>,
   'doctifyConfig'
 >
 
-type DoctifyCarouselConfig = {
-  widgetId: string
-  tenant: string
-  language: string
-  profileType: string
-  layoutType: string
-  slugs: string
-  background: string
-  itemBackground: string
-  itemFrame: boolean
-}
+const DOCTIFY_CAROUSEL_WIDGET_ID = '0yewt1ji'
 
-const DEFAULT_DOCTIFY_CAROUSEL_CONFIG = {
-  widgetId: '0yewt1ji',
+const DOCTIFY_CAROUSEL_SCRIPT_URL = `https://www.doctify.com/get-script?${new URLSearchParams({
+  widget_container_id: DOCTIFY_CAROUSEL_WIDGET_ID,
+  type: 'carousel-widget',
   tenant: 'athena-uk',
   language: 'en',
   profileType: 'practice',
@@ -32,94 +23,36 @@ const DEFAULT_DOCTIFY_CAROUSEL_CONFIG = {
   slugs: 'independent-physiological-diagnostics',
   background: 'white',
   itemBackground: 'ffffff',
-  itemFrame: true,
-} as const satisfies DoctifyCarouselConfig
+  itemFrame: 'true',
+}).toString()}`
 
-function ensureDoctifyFontStyles(widgetId: string) {
-  const styleId = `doctify-styles-${widgetId}`
-  const existing = document.getElementById(styleId)
-  if (existing) return
-
-  const style = document.createElement('style')
-  style.id = styleId
-  style.textContent = `
-    /* Override Doctify font loading to prevent CORS errors */
-    @font-face {
-      font-family: 'Poppins';
-      font-display: swap;
-      src: local('Poppins'), local('Poppins-Light'), local('Poppins-Regular'), local('Poppins-SemiBold');
-    }
-    
-    /* Force all Doctify elements to use our Poppins font */
-    .doctify-testimonial-wrapper * {
-      font-family: var(--font-poppins), 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-    }
-  `
-
-  document.head.appendChild(style)
-}
-
-// Doctify Widget Component with Progressive Enhancement
-function DoctifyWidget({ config }: { config: DoctifyCarouselConfig }) {
-  const scriptUrl = useMemo(() => {
-    const params = new URLSearchParams({
-      widget_container_id: config.widgetId,
-      type: 'carousel-widget',
-      tenant: config.tenant,
-      language: config.language,
-      profileType: config.profileType,
-      layoutType: config.layoutType,
-      slugs: config.slugs,
-      background: config.background,
-      itemBackground: config.itemBackground,
-      itemFrame: String(config.itemFrame),
-    })
-    return `https://www.doctify.com/get-script?${params.toString()}`
-  }, [
-    config.background,
-    config.itemBackground,
-    config.itemFrame,
-    config.language,
-    config.layoutType,
-    config.profileType,
-    config.slugs,
-    config.tenant,
-    config.widgetId,
-  ])
-
-  const { isLoaded, containerRef } = useDoctifyWidget({
-    widgetId: config.widgetId,
-    scriptUrl,
+function DoctifyCarousel() {
+  const { status, containerRef } = useDoctifyWidget({
+    widgetId: DOCTIFY_CAROUSEL_WIDGET_ID,
+    scriptUrl: DOCTIFY_CAROUSEL_SCRIPT_URL,
     rootMargin: '300px',
   })
 
-  useEffect(() => {
-    ensureDoctifyFontStyles(config.widgetId)
-    return () => {
-      const style = document.getElementById(`doctify-styles-${config.widgetId}`)
-      if (style) style.remove()
-    }
-  }, [config.widgetId])
-
-  useEffect(() => {
-    if (!isLoaded) return
-    ensureDoctifyFontStyles(config.widgetId)
-    const t1 = window.setTimeout(() => ensureDoctifyFontStyles(config.widgetId), 1000)
-    const t2 = window.setTimeout(() => ensureDoctifyFontStyles(config.widgetId), 3000)
-    return () => {
-      window.clearTimeout(t1)
-      window.clearTimeout(t2)
-    }
-  }, [config.widgetId, isLoaded])
-
   return (
-    <div className="doctify-testimonial-wrapper relative overflow-hidden">
-      <div ref={containerRef} className="w-full min-h-[320px]">
-        {!isLoaded ? (
-          <div className="text-sm text-ds-pastille-green/70">Loading reviews…</div>
-        ) : null}
-        <div id={config.widgetId} className="w-full" suppressHydrationWarning />
-      </div>
+    <div ref={containerRef} className="doctify-widget relative w-full min-h-[320px] overflow-hidden">
+      {status === 'idle' || status === 'loading' ? (
+        <div className="absolute inset-0 flex items-center justify-center text-sm text-ds-pastille-green/70 animate-pulse">
+          Loading reviews…
+        </div>
+      ) : null}
+      {status === 'error' ? (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <a
+            href={DOCTIFY_PRACTICE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-ds-dark-blue underline underline-offset-4 hover:text-ds-accent-yellow"
+          >
+            Read our patient reviews on Doctify
+          </a>
+        </div>
+      ) : null}
+      <div id={DOCTIFY_CAROUSEL_WIDGET_ID} className="w-full" suppressHydrationWarning />
     </div>
   )
 }
@@ -160,15 +93,12 @@ export function Testimonials({
     return () => clearInterval(id)
   }, [testimonials, autoplayInterval])
 
-  // If using Doctify, render the widget with default configuration
   if (testimonialType === 'doctify') {
-    const config = DEFAULT_DOCTIFY_CAROUSEL_CONFIG
-
     return (
       <section className="py-16 px-4 ">
         <div className="max-w-container mx-auto">
           <h2 className="text-3xl font-heading text-ds-dark-blue text-center mb-12">{title}</h2>
-          <DoctifyWidget config={config} />
+          <DoctifyCarousel />
         </div>
       </section>
     )

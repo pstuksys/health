@@ -132,7 +132,7 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   },
   ctaBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'ctaBlock' }>
-    return <CTABlock {...(b as any)} />
+    return <CTABlock {...b} />
   },
   aboutUsSection: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'aboutUsSection' }>
@@ -164,7 +164,7 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   },
   blogPostCards: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'blogPostCards' }>
-    return <BlogPostCards {...(b as any)} />
+    return <BlogPostCards {...b} />
   },
   scrollPostCards: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'scrollPostCards' }>
@@ -228,11 +228,11 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   },
   formBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'formBlock' }>
-    return <FormBlock {...(b as any)} />
+    return <FormBlock {...b} />
   },
   contentBlockV2: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'contentBlockV2' }>
-    return <ContentBlockV2 {...(b as any)} />
+    return <ContentBlockV2 {...b} />
   },
   patientsSleep: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'patientsSleep' }>
@@ -240,11 +240,11 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   },
   corporateHealth: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'corporateHealth' }>
-    return <CorporateHealth {...(b as any)} />
+    return <CorporateHealth {...b} />
   },
   occupationalHealth: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'occupationalHealth' }>
-    return <OccupationalHealth {...(b as any)} />
+    return <OccupationalHealth {...b} />
   },
   cpapBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'cpapBlock' }>
@@ -260,19 +260,19 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   },
   sleepApneaReportIncludes: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'sleepApneaReportIncludes' }>
-    return <SleepApneaReportIncludes {...(b as any)} />
+    return <SleepApneaReportIncludes {...b} />
   },
   sleepApneaAboutHST: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'sleepApneaAboutHST' }>
-    return <SleepApneaAboutHST {...(b as any)} />
+    return <SleepApneaAboutHST {...b} />
   },
   sleepApneaWhyIPD: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'sleepApneaWhyIPD' }>
-    return <SleepApneaWhyIPD {...(b as any)} />
+    return <SleepApneaWhyIPD {...b} />
   },
   sleepApneaAfterTest: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'sleepApneaAfterTest' }>
-    return <SleepApneaAfterTest {...(b as any)} />
+    return <SleepApneaAfterTest {...b} />
   },
   cbtiBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'cbtiBlock' }>
@@ -284,23 +284,23 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   },
   mwtBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'mwtBlock' }>
-    return <MWTBlock {...(b as any)} />
+    return <MWTBlock {...b} />
   },
   actigraphyBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'actigraphyBlock' }>
-    return <ActigraphyBlock {...(b as any)} />
+    return <ActigraphyBlock {...b} />
   },
   vpsgBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'vpsgBlock' }>
-    return <VPSGBlock {...(b as any)} />
+    return <VPSGBlock {...b} />
   },
   vpsgEegBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'vpsgEegBlock' }>
-    return <VPSGEEGBlock {...(b as any)} />
+    return <VPSGEEGBlock {...b} />
   },
   respiratoryPolygrophyBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'respiratoryPolygrophyBlock' }>
-    return <RespiratoryPolygrophyBlock {...(b as any)} />
+    return <RespiratoryPolygrophyBlock {...b} />
   },
 }
 
@@ -338,7 +338,7 @@ function BlockRenderer({ block }: { block: PageBlock }) {
   return (
     <div style={{ padding: '1rem' }}>
       <div style={{ border: '1px dashed #ccc', padding: '1rem', borderRadius: 8 }}>
-        Unknown block type: <code>{(block as any).blockType}</code>
+        Unknown block type: <code>{block.blockType}</code>
       </div>
     </div>
   )

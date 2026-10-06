@@ -2,9 +2,10 @@
 
 export function hasNonEmptyLexicalContent(state: unknown): boolean {
   try {
-    const obj = typeof state === 'string' ? JSON.parse(state) : (state as Record<string, unknown>)
-    const root = obj && typeof obj === 'object' ? (obj as any).root : undefined
-    if (!root || !Array.isArray(root.children)) return false
+    const obj: unknown = typeof state === 'string' ? JSON.parse(state) : state
+    const root = obj && typeof obj === 'object' && 'root' in obj ? obj.root : undefined
+    if (!root || typeof root !== 'object' || !('children' in root)) return false
+    if (!Array.isArray(root.children)) return false
 
     function extractText(node: unknown): string {
       if (!node || typeof node !== 'object') return ''
