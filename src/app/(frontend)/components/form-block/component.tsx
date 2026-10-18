@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useSyncExternalStore } from 'react'
+import React, { useEffect, useState, useSyncExternalStore } from 'react'
 import type { Page, Form as FormType } from '@/payload-types'
 import { cn } from '@/lib/utils'
 import { FORMS_PUBLICLY_ENABLED, FORMS_PREVIEW_HEADER, FORMS_PREVIEW_PARAM } from '@/lib/forms'
@@ -81,12 +81,26 @@ export function FormBlock({
     getPreviewToken,
     getServerPreviewToken,
   )
+  const [isPreviewVerified, setIsPreviewVerified] = useState(false)
+
+  useEffect(() => {
+    if (FORMS_PUBLICLY_ENABLED || !previewToken) return
+    let isCancelled = false
+    fetch('/api/form-submissions', { headers: { [FORMS_PREVIEW_HEADER]: previewToken } })
+      .then((response) => {
+        if (!isCancelled) setIsPreviewVerified(response.ok)
+      })
+      .catch(() => {})
+    return () => {
+      isCancelled = true
+    }
+  }, [previewToken])
 
   // Handle form relation - could be ID or full form object
   const form = typeof formRelation === 'object' ? formRelation : null
   const mailtoAddress = 'enquiries@ipdiagnostics.co.uk'
   const mailtoHref = `mailto:${mailtoAddress}?subject=${encodeURIComponent(title || 'Contact')}`
-  const hideFormForMailto = !FORMS_PUBLICLY_ENABLED && !previewToken
+  const hideFormForMailto = !FORMS_PUBLICLY_ENABLED && !isPreviewVerified
 
   const isDarkSurface = backgroundColor === 'primary' && layout !== 'card'
   const labelClasses = cn(

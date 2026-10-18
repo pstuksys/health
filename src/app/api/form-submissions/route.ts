@@ -149,6 +149,15 @@ function fillSubjectTemplate(template: string, submission: SubmissionField[]): s
   return fillTemplate(template, submission, false).replace(/[\r\n]+/g, ' ')
 }
 
+// Lets the form block check a preview token before revealing the form
+export function GET(request: NextRequest) {
+  const isAllowed = FORMS_PUBLICLY_ENABLED || isPreviewTokenValid(request)
+  return new NextResponse(null, {
+    status: isAllowed ? 204 : 503,
+    headers: { 'Cache-Control': 'no-store' },
+  })
+}
+
 export async function POST(request: NextRequest) {
   if (!FORMS_PUBLICLY_ENABLED && !isPreviewTokenValid(request)) {
     return NextResponse.json({ error: 'Form submissions temporarily disabled' }, { status: 503 })
