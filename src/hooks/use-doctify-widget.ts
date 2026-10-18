@@ -23,9 +23,7 @@ export const DOCTIFY_PRACTICE_URL =
 // it is inserted (MutationObserver callbacks run before the next render), which stops ~5
 // duplicate font downloads.
 function removeDoctifyFontStylesheets(root: Element) {
-  root
-    .querySelectorAll('link[href*="doctify.com/assets/fonts/"]')
-    .forEach((link) => link.remove())
+  root.querySelectorAll('link[href*="doctify.com/assets/fonts/"]').forEach((link) => link.remove())
 }
 
 // Doctify's script renders once, on execution, into the element with `widgetId`
@@ -45,19 +43,37 @@ export function useDoctifyWidget({
     if (!container) return
 
     let script: HTMLScriptElement | null = null
+    let previousOnResize: typeof window.onresize = null
+    let widgetOnResize: typeof window.onresize = null
+    const widgetListeners: Parameters<typeof window.removeEventListener>[] = []
+    const originalAddEventListener = window.addEventListener
     const fontLinkObserver = new MutationObserver(() => removeDoctifyFontStylesheets(container))
+
+    // The widget script runs synchronously on load, so listeners it adds to `window` are
+    // recorded between append and onload and removed on unmount (it has no teardown of its own)
+    const stopRecordingListeners = () => {
+      window.addEventListener = originalAddEventListener
+    }
 
     const injectScript = () => {
       setStatus('loading')
       fontLinkObserver.observe(container, { childList: true, subtree: true })
+      previousOnResize = window.onresize
+      window.addEventListener = (...args: Parameters<typeof window.addEventListener>) => {
+        widgetListeners.push(args)
+        originalAddEventListener.apply(window, args)
+      }
       script = document.createElement('script')
       script.src = scriptUrl
       script.async = true
       script.onload = () => {
+        stopRecordingListeners()
         fontLinkObserver.disconnect()
+        if (window.onresize !== previousOnResize) widgetOnResize = window.onresize
         setStatus('loaded')
       }
       script.onerror = () => {
+        stopRecordingListeners()
         fontLinkObserver.disconnect()
         setStatus('error')
       }
@@ -77,7 +93,12 @@ export function useDoctifyWidget({
     return () => {
       observer.disconnect()
       fontLinkObserver.disconnect()
+      stopRecordingListeners()
       script?.remove()
+      // The carousel's resize handlers keep running after the container is gone and throw on
+      // every resize; onresize is only reset if nothing else replaced it since
+      widgetListeners.forEach((args) => window.removeEventListener(...args))
+      if (widgetOnResize && window.onresize === widgetOnResize) window.onresize = previousOnResize
     }
   }, [widgetId, scriptUrl, rootMargin])
 
