@@ -65,6 +65,9 @@ import { SplitInfoListBlock } from './split-info-list-block/component'
 import { GridCards } from './grid-cards/component'
 import { Button, type ButtonBlockProps } from './button/component'
 import { TrustBadgesBlock } from './trust-badges-block/component'
+import { IconRowBlock } from './icon-row-block/component'
+import { CareNetworkBlock } from './care-network-block/component'
+import { EducationHubArticles } from './education-hub-articles/component'
 
 type PageBlock = NonNullable<Page['blocks']>[number]
 
@@ -117,6 +120,18 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   trustBadgesBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'trustBadgesBlock' }>
     return <TrustBadgesBlock {...b} />
+  },
+  iconRowBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'iconRowBlock' }>
+    return <IconRowBlock {...b} />
+  },
+  careNetworkBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'careNetworkBlock' }>
+    return <CareNetworkBlock {...b} />
+  },
+  educationHubArticles: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'educationHubArticles' }>
+    return <EducationHubArticles {...b} />
   },
   contentBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'contentBlock' }>

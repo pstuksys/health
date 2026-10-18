@@ -29,6 +29,15 @@ import {
   Check,
   ShieldCheck,
   Users,
+  Bed,
+  Wind,
+  Sunrise,
+  Frown,
+  Ear,
+  Smile,
+  MessagesSquare,
+  User,
+  BrainCog,
 } from 'lucide-react'
 import type { Field } from 'payload'
 
@@ -63,6 +72,15 @@ export type IconKey =
   | 'Check'
   | 'ShieldCheck'
   | 'Users'
+  | 'Bed'
+  | 'Wind'
+  | 'Sunrise'
+  | 'Frown'
+  | 'Ear'
+  | 'Smile'
+  | 'MessagesSquare'
+  | 'User'
+  | 'BrainCog'
 
 export const iconMap: Record<IconKey, LucideIcon> = {
   FileText,
@@ -93,6 +111,15 @@ export const iconMap: Record<IconKey, LucideIcon> = {
   Check,
   ShieldCheck,
   Users,
+  Bed,
+  Wind,
+  Sunrise,
+  Frown,
+  Ear,
+  Smile,
+  MessagesSquare,
+  User,
+  BrainCog,
 }
 
 type CreateIconSelectFieldArgs = {

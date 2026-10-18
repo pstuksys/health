@@ -1142,7 +1142,16 @@ export interface Page {
                 | 'Video'
                 | 'Check'
                 | 'ShieldCheck'
-                | 'Users';
+                | 'Users'
+                | 'Bed'
+                | 'Wind'
+                | 'Sunrise'
+                | 'Frown'
+                | 'Ear'
+                | 'Smile'
+                | 'MessagesSquare'
+                | 'User'
+                | 'BrainCog';
               /**
                * Name of the medical service (e.g., MRI, ULTRASOUND)
                */
@@ -3388,6 +3397,15 @@ export interface Page {
                         | 'Check'
                         | 'ShieldCheck'
                         | 'Users'
+                        | 'Bed'
+                        | 'Wind'
+                        | 'Sunrise'
+                        | 'Frown'
+                        | 'Ear'
+                        | 'Smile'
+                        | 'MessagesSquare'
+                        | 'User'
+                        | 'BrainCog'
                       )
                     | null;
                   id?: string | null;
@@ -3634,6 +3652,156 @@ export interface Page {
             id?: string | null;
             blockName?: string | null;
             blockType: 'trustBadgesBlock';
+          }
+        | {
+            title?: string | null;
+            description?: string | null;
+            /**
+             * Number the items and show arrows between them (for step-by-step processes)
+             */
+            showSteps?: boolean | null;
+            items?:
+              | {
+                  title: string;
+                  description?: string | null;
+                  /**
+                   * Pick an icon for this item
+                   */
+                  icon?:
+                    | (
+                        | 'FileText'
+                        | 'PhoneCall'
+                        | 'Beaker'
+                        | 'SquareActivity'
+                        | 'Activity'
+                        | 'Heart'
+                        | 'Scan'
+                        | 'Stethoscope'
+                        | 'Brain'
+                        | 'Moon'
+                        | 'Baby'
+                        | 'TrendingUp'
+                        | 'HeartHandshake'
+                        | 'ClipboardList'
+                        | 'UserCheck'
+                        | 'List'
+                        | 'UserPlus'
+                        | 'BriefcaseMedical'
+                        | 'BarChart3'
+                        | 'Building'
+                        | 'Building2'
+                        | 'Eye'
+                        | 'Waves'
+                        | 'Monitor'
+                        | 'Video'
+                        | 'Check'
+                        | 'ShieldCheck'
+                        | 'Users'
+                        | 'Bed'
+                        | 'Wind'
+                        | 'Sunrise'
+                        | 'Frown'
+                        | 'Ear'
+                        | 'Smile'
+                        | 'MessagesSquare'
+                        | 'User'
+                        | 'BrainCog'
+                      )
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'iconRowBlock';
+          }
+        | {
+            title?: string | null;
+            description?: string | null;
+            /**
+             * Text in the centre circle
+             */
+            centerLabel?: string | null;
+            /**
+             * Shown in a circle around the centre (up to 10)
+             */
+            specialists?:
+              | {
+                  label: string;
+                  /**
+                   * Pick an icon for this specialist
+                   */
+                  icon?:
+                    | (
+                        | 'FileText'
+                        | 'PhoneCall'
+                        | 'Beaker'
+                        | 'SquareActivity'
+                        | 'Activity'
+                        | 'Heart'
+                        | 'Scan'
+                        | 'Stethoscope'
+                        | 'Brain'
+                        | 'Moon'
+                        | 'Baby'
+                        | 'TrendingUp'
+                        | 'HeartHandshake'
+                        | 'ClipboardList'
+                        | 'UserCheck'
+                        | 'List'
+                        | 'UserPlus'
+                        | 'BriefcaseMedical'
+                        | 'BarChart3'
+                        | 'Building'
+                        | 'Building2'
+                        | 'Eye'
+                        | 'Waves'
+                        | 'Monitor'
+                        | 'Video'
+                        | 'Check'
+                        | 'ShieldCheck'
+                        | 'Users'
+                        | 'Bed'
+                        | 'Wind'
+                        | 'Sunrise'
+                        | 'Frown'
+                        | 'Ear'
+                        | 'Smile'
+                        | 'MessagesSquare'
+                        | 'User'
+                        | 'BrainCog'
+                      )
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'careNetworkBlock';
+          }
+        | {
+            title?: string | null;
+            subtitle?: string | null;
+            /**
+             * Published articles from this Education Hub topic are rotated
+             */
+            topic:
+              | 'understanding-sleep-disorders'
+              | 'diagnostics-treatment'
+              | 'specialist-insights'
+              | 'lifestyle-tips'
+              | 'featured';
+            /**
+             * Maximum number of articles to rotate through
+             */
+            limit?: number | null;
+            /**
+             * Link to the Education Hub; leave empty to hide it
+             */
+            linkLabel?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'educationHubArticles';
           }
       )[]
     | null;
@@ -6123,6 +6291,50 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        iconRowBlock?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              showSteps?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        careNetworkBlock?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              centerLabel?: T;
+              specialists?:
+                | T
+                | {
+                    label?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        educationHubArticles?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              topic?: T;
+              limit?: T;
+              linkLabel?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
@@ -6650,7 +6862,16 @@ export interface EducationHub {
           | 'Video'
           | 'Check'
           | 'ShieldCheck'
-          | 'Users';
+          | 'Users'
+          | 'Bed'
+          | 'Wind'
+          | 'Sunrise'
+          | 'Frown'
+          | 'Ear'
+          | 'Smile'
+          | 'MessagesSquare'
+          | 'User'
+          | 'BrainCog';
         title: string;
         description: string;
         id?: string | null;

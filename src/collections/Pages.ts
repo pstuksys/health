@@ -58,6 +58,9 @@ import { gridCardsFields } from '../app/(frontend)/components/grid-cards/config'
 import { buttonFields } from '../app/(frontend)/components/button/config'
 import { splitInfoGridBlockFields } from '../app/(frontend)/components/split-info-grid-block/config'
 import { trustBadgesBlockFields } from '../app/(frontend)/components/trust-badges-block/config'
+import { iconRowBlockFields } from '../app/(frontend)/components/icon-row-block/config'
+import { careNetworkBlockFields } from '../app/(frontend)/components/care-network-block/config'
+import { educationHubArticlesFields } from '../app/(frontend)/components/education-hub-articles/config'
 import { cacheTags, revalidateCacheTags } from '@/lib/cache-tags'
 
 // Safely extract authenticated user's role without using `any`
@@ -291,6 +294,24 @@ const trustBadgesBlock: Block = {
   fields: trustBadgesBlockFields,
 }
 
+const iconRowBlock: Block = {
+  slug: 'iconRowBlock',
+  dbName: 'icon_row_block',
+  fields: iconRowBlockFields,
+}
+
+const careNetworkBlock: Block = {
+  slug: 'careNetworkBlock',
+  dbName: 'care_network_block',
+  fields: careNetworkBlockFields,
+}
+
+const educationHubArticlesBlock: Block = {
+  slug: 'educationHubArticles',
+  dbName: 'edu_hub_articles',
+  fields: educationHubArticlesFields,
+}
+
 // All available page blocks
 const pageBlocks: Block[] = [
   contentBlock,
@@ -350,6 +371,9 @@ const pageBlocks: Block[] = [
   callToActionBannerBlock,
   gridCardsBlock,
   trustBadgesBlock,
+  iconRowBlock,
+  careNetworkBlock,
+  educationHubArticlesBlock,
 ]
 
 export const Pages: CollectionConfig = {
