@@ -59,7 +59,15 @@ export function SingleCard({
               imagePosition === 'right' && 'md:order-2',
             )}
           >
-            {imageUrl && <Image src={imageUrl} alt={title} fill className="object-cover" />}
+            {imageUrl && (
+              <Image
+                src={imageUrl}
+                alt={title}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+              />
+            )}
           </div>
           <div className={cn(imagePosition === 'right' && 'md:order-1')}>
             <h3 className="text-2xl md:text-3xl font-light text-ds-dark-blue mb-4">{title}</h3>

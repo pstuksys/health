@@ -46,7 +46,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const footerLegalLinks = footer?.legalLinks ? transformFooterLegalLinks(footer.legalLinks) : []
 
   return (
-    <html lang="en" className={`${poppins.variable} antialiased`}>
+    <html lang="en" className={`${poppins.variable} antialiased`} data-scroll-behavior="smooth">
       <body className="font-sans bg-white">
         <NavWithScroll
           items={items}

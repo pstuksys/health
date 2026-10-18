@@ -106,6 +106,7 @@ export function ScrollPostCards({
                   src={mediaToUrl(post.image)}
                   alt={post.title}
                   fill
+                  sizes="(max-width: 768px) 100vw, 40vw"
                   className="object-cover"
                 />
                 <div className="absolute top-4 left-4">

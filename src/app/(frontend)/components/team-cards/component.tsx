@@ -90,6 +90,7 @@ export function TeamCards({
                       }
                       alt={`${member.name}`}
                       fill
+                      sizes="240px"
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                       style={{
                         aspectRatio: '1/1',
