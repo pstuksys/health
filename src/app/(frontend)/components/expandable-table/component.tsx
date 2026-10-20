@@ -10,6 +10,7 @@ type ExpandableTableProps = Extract<
   NonNullable<Page['blocks']>[number],
   { blockType: 'expandableTable' }
 >
+type ExpandableTableItem = NonNullable<ExpandableTableProps['items']>[number]
 
 export function ExpandableTable({
   title = '',
@@ -45,7 +46,7 @@ export function ExpandableTable({
     setActiveItem(activeItem === itemId ? null : itemId)
   }
 
-  const hasDetails = (item: any) => {
+  const hasDetails = (item: ExpandableTableItem) => {
     return item.details && isLexicalEditorState(item.details)
   }
 

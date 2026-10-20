@@ -8,60 +8,63 @@ interface AnimatedCounterProps {
   className?: string
 }
 
+type ParsedCounterValue = { numericValue: number; suffix: string; isRatio: boolean }
+
+function parseCounterValue(value: string | number): ParsedCounterValue {
+  if (typeof value === 'number') {
+    return { numericValue: value, suffix: '', isRatio: false }
+  }
+
+  const str = value.toString()
+
+  // Handle ratio values like "1 in 3", "2 in 5", etc.
+  const ratioMatch = str.match(/^(\d+)\s+in\s+(\d+)$/)
+  if (ratioMatch) {
+    return {
+      numericValue: parseFloat(ratioMatch[1]),
+      suffix: ` in ${ratioMatch[2]}`,
+      isRatio: true,
+    }
+  }
+
+  // Handle currency and percentage values
+  const match = str.match(/^([£$€]?)(\d+(?:\.\d+)?)([BMK%]?)(.*)$/)
+  if (!match) {
+    return { numericValue: 0, suffix: str, isRatio: false }
+  }
+
+  const [, prefix, number, multiplier, suffix] = match
+  let numericValue = parseFloat(number)
+
+  // Apply multiplier (but preserve % in suffix)
+  switch (multiplier) {
+    case 'B':
+      numericValue *= 1000000000
+      break
+    case 'M':
+      numericValue *= 1000000
+      break
+    case 'K':
+      numericValue *= 1000
+      break
+    case '%':
+      // Don't modify numericValue for percentages, just preserve the %
+      break
+  }
+
+  return {
+    numericValue,
+    suffix: prefix + (multiplier === '%' ? '%' : '') + suffix,
+    isRatio: false,
+  }
+}
+
 export function AnimatedCounter({ value, duration = 2000, className = '' }: AnimatedCounterProps) {
   const [displayValue, setDisplayValue] = useState(0)
   const [isVisible, setIsVisible] = useState(false)
   const elementRef = useRef<HTMLDivElement>(null)
 
-  // Memoize parsed value to avoid recalculation
-  const parsedValue = useMemo(() => {
-    if (typeof value === 'number') {
-      return { numericValue: value, suffix: '', isRatio: false }
-    }
-
-    const str = value.toString()
-
-    // Handle ratio values like "1 in 3", "2 in 5", etc.
-    const ratioMatch = str.match(/^(\d+)\s+in\s+(\d+)$/)
-    if (ratioMatch) {
-      return {
-        numericValue: parseFloat(ratioMatch[1]),
-        suffix: ` in ${ratioMatch[2]}`,
-        isRatio: true,
-      }
-    }
-
-    // Handle currency and percentage values
-    const match = str.match(/^([£$€]?)(\d+(?:\.\d+)?)([BMK%]?)(.*)$/)
-    if (!match) {
-      return { numericValue: 0, suffix: str, isRatio: false }
-    }
-
-    const [, prefix, number, multiplier, suffix] = match
-    let numericValue = parseFloat(number)
-
-    // Apply multiplier (but preserve % in suffix)
-    switch (multiplier) {
-      case 'B':
-        numericValue *= 1000000000
-        break
-      case 'M':
-        numericValue *= 1000000
-        break
-      case 'K':
-        numericValue *= 1000
-        break
-      case '%':
-        // Don't modify numericValue for percentages, just preserve the %
-        break
-    }
-
-    return {
-      numericValue,
-      suffix: prefix + (multiplier === '%' ? '%' : '') + suffix,
-      isRatio: false,
-    }
-  }, [value])
+  const parsedValue = useMemo(() => parseCounterValue(value), [value])
 
   // Memoize intersection observer callback
   const handleIntersection = useCallback(

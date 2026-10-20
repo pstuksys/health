@@ -33,17 +33,15 @@ export function SingleCard({
   | 'external'
   | 'cta'
 >) {
-  const imageUrl = mediaToUrl(image as any)
+  const imageUrl = mediaToUrl(image)
 
   let href: string | undefined
   if (linkType === 'external') href = external?.href ?? '#'
   else if (internal?.relation) {
-    const rel = internal.relation
-    const doc = (rel as any).value ?? rel
-    const slug = doc?.slug ?? ''
-    const collection = doc?.collection ?? (rel as any)?.relationTo
-    if (collection === 'blogs') href = `/education-hub/${slug}`
-    else if (collection === 'pages') href = `/${slug}`
+    const { relationTo, value } = internal.relation
+    const slug = typeof value === 'object' ? (value.slug ?? '') : ''
+    if (relationTo === 'blogs') href = `/education-hub/${slug}`
+    else if (relationTo === 'pages') href = `/${slug}`
   }
 
   return (
@@ -61,17 +59,23 @@ export function SingleCard({
               imagePosition === 'right' && 'md:order-2',
             )}
           >
-            {imageUrl && <Image src={imageUrl} alt={title} fill className="object-cover" />}
+            {imageUrl && (
+              <Image
+                src={imageUrl}
+                alt={title}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+              />
+            )}
           </div>
           <div className={cn(imagePosition === 'right' && 'md:order-1')}>
             <h3 className="text-2xl md:text-3xl font-light text-ds-dark-blue mb-4">{title}</h3>
             {subtitle && (
-              <p className="text-ds-pastille-green font-light leading-relaxed mb-6">
-                {subtitle as any}
-              </p>
+              <p className="text-ds-pastille-green font-light leading-relaxed mb-6">{subtitle}</p>
             )}
             {Boolean(enableLink) && href && cta?.text && (
-              <CMSLink href={href} variant={(cta?.variant as any) ?? 'primary'}>
+              <CMSLink href={href} variant={cta.variant ?? 'primary'}>
                 {cta.text}
               </CMSLink>
             )}

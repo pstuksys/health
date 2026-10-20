@@ -1,7 +1,63 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import * as LucideIcons from 'lucide-react'
+import {
+  Calendar,
+  Check,
+  Clock,
+  Cloud,
+  CloudRain,
+  CloudSnow,
+  Droplets,
+  Heart,
+  HelpCircle,
+  Mail,
+  MapPin,
+  Moon,
+  Phone,
+  Repeat,
+  Shield,
+  Shuffle,
+  Star,
+  Sun,
+  Sunrise,
+  Sunset,
+  Thermometer,
+  Umbrella,
+  User,
+  Wind,
+  Zap,
+  type LucideIcon,
+} from 'lucide-react'
+
+// Must match the `icon` select options in ./config.ts
+const icons: Record<string, LucideIcon> = {
+  Heart,
+  Clock,
+  Check,
+  Star,
+  User,
+  Mail,
+  Phone,
+  MapPin,
+  Calendar,
+  Shield,
+  Zap,
+  Repeat,
+  Shuffle,
+  Sun,
+  Moon,
+  Cloud,
+  CloudRain,
+  CloudSnow,
+  Wind,
+  Thermometer,
+  Droplets,
+  Umbrella,
+  Sunrise,
+  Sunset,
+  HelpCircle,
+}
 
 type IconTextBlockProps = {
   icon?: string
@@ -28,8 +84,7 @@ export function IconTextBlock({
     return null
   }
 
-  // Get the Lucide icon component
-  const IconComponent = (LucideIcons as any)[icon] || (LucideIcons as any).HelpCircle
+  const IconComponent = icons[icon] ?? HelpCircle
 
   // Icon size classes
   const getIconSizeClass = () => {

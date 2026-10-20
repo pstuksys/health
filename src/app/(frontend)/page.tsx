@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { HeroSection } from '@/app/(frontend)/components/hero-section/component'
 import { RenderBlocks, deriveGlobalHeroProps } from '@/app/(frontend)/components/RenderBlocks'
 import { getHomePage, generatePageMetadata } from '@/lib/page-utils'
+import type { Page } from '@/payload-types'
 
 export const revalidate = 86400
 
@@ -24,29 +25,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
+  let page: Page | null
   try {
-    const page = await getHomePage()
-
-    if (!page) {
-      console.warn('Home page not found in CMS')
-      return (
-        <main className="flex flex-col items-center justify-center min-h-[50vh]">
-          <h1 className="text-2xl font-semibold text-gray-800">Welcome</h1>
-          <p className="text-gray-600 mt-2">Content is being loaded...</p>
-        </main>
-      )
-    }
-
-    const showGlobalHero = Boolean(page.showHero)
-    const heroProps = deriveGlobalHeroProps(page)
-
-    // Ensure consistent rendering - avoid hydration mismatches
-    return (
-      <main className="flex flex-col">
-        {showGlobalHero && <HeroSection {...heroProps} />}
-        <RenderBlocks blocks={page.blocks ?? null} />
-      </main>
-    )
+    page = await getHomePage()
   } catch (error) {
     console.error('Failed to render home page:', error)
     // Log additional details for debugging in production
@@ -62,4 +43,24 @@ export default async function HomePage() {
       </main>
     )
   }
+
+  if (!page) {
+    console.warn('Home page not found in CMS')
+    return (
+      <main className="flex flex-col items-center justify-center min-h-[50vh]">
+        <h1 className="text-2xl font-semibold text-gray-800">Welcome</h1>
+        <p className="text-gray-600 mt-2">Content is being loaded...</p>
+      </main>
+    )
+  }
+
+  const showGlobalHero = Boolean(page.showHero)
+  const heroProps = deriveGlobalHeroProps(page)
+
+  return (
+    <main className="flex flex-col">
+      {showGlobalHero && <HeroSection {...heroProps} />}
+      <RenderBlocks blocks={page.blocks ?? null} />
+    </main>
+  )
 }

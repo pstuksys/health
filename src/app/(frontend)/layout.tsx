@@ -6,6 +6,8 @@ import { Footer } from './components/footer/component'
 import { getHeader, getFooter } from '@/lib/cms/payload-client'
 import { NavWithScroll } from './components/navigation-menu/components/NavWithScroll'
 import { siteMetadata } from '@/lib/metadata'
+import { resolveUrl } from '@/lib/navigation'
+import { BookingModal } from './components/booking-modal/component'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -44,9 +46,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     ? transformFooterNavLinks(footer.navigationLinks)
     : []
   const footerLegalLinks = footer?.legalLinks ? transformFooterLegalLinks(footer.legalLinks) : []
+  const bookingModal = header?.bookingModal
 
   return (
-    <html lang="en" className={`${poppins.variable} antialiased`}>
+    <html lang="en" className={`${poppins.variable} antialiased`} data-scroll-behavior="smooth">
       <body className="font-sans bg-white">
         <NavWithScroll
           items={items}
@@ -57,6 +60,26 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
           }
         />
         <main className="min-h-screen">{children}</main>
+        <BookingModal
+          title={bookingModal?.title || 'Book a Video Consultation'}
+          description={bookingModal?.description ?? undefined}
+          options={(bookingModal?.options ?? []).map((option) => ({
+            icon: option.icon ?? 'Wallet',
+            title: option.title,
+            description: option.description ?? undefined,
+            href: resolveUrl(option),
+            embed: Boolean(option.embed),
+          }))}
+          help={
+            bookingModal?.help?.label
+              ? {
+                  label: bookingModal.help.label,
+                  text: bookingModal.help.text ?? undefined,
+                  href: resolveUrl(bookingModal.help),
+                }
+              : undefined
+          }
+        />
         <Footer
           socialLinks={footer?.socialLinks ?? []}
           navLinks={footerNavLinks}

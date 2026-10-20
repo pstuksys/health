@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import { resolveLinkHref } from '@/lib/navigation'
 import type { Page } from '@/payload-types'
 import { isLexicalEditorState, RichText } from '@/app/(frontend)/components/ui/rich-text'
-import { mediaToUrl } from '@/lib/media'
+import { mediaAlt, mediaToUrl } from '@/lib/media'
 
 type ActigraphyBlockProps = Extract<
   NonNullable<Page['blocks']>[number],
@@ -39,9 +39,7 @@ export function ActigraphyBlock(props: ActigraphyBlockProps) {
   const reasonIconMap = [Moon, Clock, Activity, Users, CheckCircle] as const
 
   const featureItems: string[] = Array.isArray(features)
-    ? (features as unknown[])
-        .map((f) => (typeof f === 'string' ? f : (f as any)?.text || ''))
-        .filter(Boolean)
+    ? features.map((f) => f.text || '').filter(Boolean)
     : []
 
   return (
@@ -94,8 +92,8 @@ export function ActigraphyBlock(props: ActigraphyBlockProps) {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {(reasons || []).map((r, index) => {
               const Icon = reasonIconMap[index % reasonIconMap.length]
-              const title = (r as any)?.title as string | undefined
-              const description = (r as any)?.description as string | undefined
+              const title = r?.title as string | undefined
+              const description = r?.description as string | undefined
               return (
                 <Card key={index} className="h-full shadow-md hover:shadow-lg border-0">
                   <CardHeader>
@@ -161,8 +159,8 @@ export function ActigraphyBlock(props: ActigraphyBlockProps) {
         <div className="relative overflow-hidden rounded-lg">
           {ctaImage ? (
             <Image
-              src={mediaToUrl(ctaImage as any) || '/placeholder.svg'}
-              alt={(ctaImage as any)?.alt || 'Actigraphy'}
+              src={mediaToUrl(ctaImage) || '/placeholder.svg'}
+              alt={mediaAlt(ctaImage, 'Actigraphy')}
               width={800}
               height={400}
               className="absolute inset-0 w-full h-full object-cover"
@@ -184,7 +182,7 @@ export function ActigraphyBlock(props: ActigraphyBlockProps) {
               ) : null}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 {(() => {
-                  const btn = ctaPrimary as any
+                  const btn = ctaPrimary
                   const href = resolveLinkHref({
                     linkType: btn?.linkType,
                     internal: btn?.internal,
@@ -200,7 +198,7 @@ export function ActigraphyBlock(props: ActigraphyBlockProps) {
                   ) : null
                 })()}
                 {(() => {
-                  const btn = ctaSecondary as any
+                  const btn = ctaSecondary
                   const href = resolveLinkHref({
                     linkType: btn?.linkType,
                     internal: btn?.internal,

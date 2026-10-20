@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import { resolveLinkHref } from '@/lib/navigation'
 import type { Page } from '@/payload-types'
 import { isLexicalEditorState, RichText } from '@/app/(frontend)/components/ui/rich-text'
-import { mediaToUrl } from '@/lib/media'
+import { mediaAlt, mediaToUrl } from '@/lib/media'
 
 type CBTIBlockProps = Extract<NonNullable<Page['blocks']>[number], { blockType: 'cbtiBlock' }> & {
   className?: string
@@ -36,13 +36,7 @@ export function CBTIBlock(props: CBTIBlockProps) {
   const techniqueIconMap = [Brain, Moon, CheckCircle, Clock, Brain, Users] as const
 
   const features: string[] = Array.isArray(programFeatures)
-    ? (programFeatures as unknown[])
-        .map((f) => {
-          if (typeof f === 'string') return f
-          const text = (f as any)?.text
-          return typeof text === 'string' ? text : ''
-        })
-        .filter(Boolean)
+    ? programFeatures.map((f) => f.text || '').filter(Boolean)
     : []
 
   return (
@@ -134,8 +128,8 @@ export function CBTIBlock(props: CBTIBlockProps) {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {(techniques || []).map((t, index) => {
               const Icon = techniqueIconMap[index % techniqueIconMap.length]
-              const title = (t as any)?.title as string | undefined
-              const description = (t as any)?.description as string | undefined
+              const title = t?.title as string | undefined
+              const description = t?.description as string | undefined
               return (
                 <Card key={index} className="h-full shadow-md hover:shadow-lg border-0">
                   <CardHeader>
@@ -181,8 +175,8 @@ export function CBTIBlock(props: CBTIBlockProps) {
         <div className="relative overflow-hidden rounded-lg">
           {ctaImage ? (
             <Image
-              src={mediaToUrl(ctaImage as any) || '/placeholder.svg'}
-              alt={(ctaImage as any)?.alt || 'CBTi'}
+              src={mediaToUrl(ctaImage) || '/placeholder.svg'}
+              alt={mediaAlt(ctaImage, 'CBTi')}
               width={800}
               height={400}
               className="absolute inset-0 w-full h-full object-cover"
@@ -202,7 +196,7 @@ export function CBTIBlock(props: CBTIBlockProps) {
               ) : null}
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 {(() => {
-                  const btn = ctaPrimary as any
+                  const btn = ctaPrimary
                   const href = resolveLinkHref({
                     linkType: btn?.linkType,
                     internal: btn?.internal,
@@ -218,7 +212,7 @@ export function CBTIBlock(props: CBTIBlockProps) {
                   ) : null
                 })()}
                 {(() => {
-                  const btn = ctaSecondary as any
+                  const btn = ctaSecondary
                   const href = resolveLinkHref({
                     linkType: btn?.linkType,
                     internal: btn?.internal,

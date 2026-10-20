@@ -1,11 +1,28 @@
-import type { CollectionConfig } from 'payload'
+import type { Access, CollectionConfig } from 'payload'
+
+const isAdmin: Access = ({ req }) => (req.user as { role?: string } | undefined)?.role === 'admin'
+
+const isAdminOrSelf: Access = ({ req }) => {
+  if (!req.user) return false
+  if ((req.user as { role?: string }).role === 'admin') return true
+  return { id: { equals: req.user.id } }
+}
 
 export const Users: CollectionConfig = {
   slug: 'users',
   admin: {
     useAsTitle: 'email',
   },
-  auth: true,
+  access: {
+    read: isAdminOrSelf,
+    create: isAdmin,
+    update: isAdminOrSelf,
+    delete: isAdmin,
+  },
+  auth: {
+    maxLoginAttempts: 5,
+    lockTime: 10 * 60 * 1000,
+  },
   fields: [
     {
       name: 'role',

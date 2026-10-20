@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState, useSyncExternalStore } from 'react'
 import { Share2, Copy, Check, Facebook, Linkedin } from 'lucide-react'
 
 type IconProps = {
@@ -24,6 +24,10 @@ function XMark({ className }: IconProps) {
   )
 }
 
+function subscribeNoop() {
+  return () => {}
+}
+
 interface ShareButtonsProps {
   title: string
   url: string
@@ -32,13 +36,11 @@ interface ShareButtonsProps {
 
 export function ShareButtons({ title, url, excerpt }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false)
-  const [canNativeShare, setCanNativeShare] = useState(false)
-
-  useEffect(() => {
-    if (typeof navigator !== 'undefined' && typeof navigator.share === 'function') {
-      setCanNativeShare(true)
-    }
-  }, [])
+  const canNativeShare = useSyncExternalStore(
+    subscribeNoop,
+    () => typeof navigator.share === 'function',
+    () => false,
+  )
 
   const handleCopyLink = async () => {
     try {

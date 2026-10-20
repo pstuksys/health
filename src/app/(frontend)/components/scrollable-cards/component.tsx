@@ -1,39 +1,68 @@
 'use client'
 
-import { useEffect, useRef, useState, useMemo } from 'react'
-import * as LucideIcons from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import {
+  Activity,
+  Award,
+  Calendar,
+  CheckCircle,
+  Clock,
+  FileText,
+  Globe,
+  Heart,
+  Leaf,
+  Lightbulb,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  Shield,
+  Star,
+  Target,
+  TrendingUp,
+  Users,
+  Zap,
+  type LucideIcon,
+} from 'lucide-react'
 import { cn } from '@/lib/utils'
+import type { Page } from '@/payload-types'
 import { RichText } from '../ui/rich-text'
 
-type ScrollableCard = {
-  id?: string | null
-  icon?: string | null
-  title: string
-  content: any // Rich text content
-}
-
-type ScrollableCardsProps = {
-  title?: string | null
-  subtitle?: string | null
-  cards: ScrollableCard[]
+type ScrollableCardsProps = Extract<
+  NonNullable<Page['blocks']>[number],
+  { blockType: 'scrollableCards' }
+> & {
   className?: string
+}
+type ScrollableCardIcon = NonNullable<ScrollableCardsProps['cards'][number]['icon']>
+
+const iconComponents: Record<ScrollableCardIcon, LucideIcon> = {
+  Heart,
+  Activity,
+  Users,
+  Shield,
+  Star,
+  CheckCircle,
+  Lightbulb,
+  Target,
+  TrendingUp,
+  Award,
+  Zap,
+  Leaf,
+  Globe,
+  Clock,
+  MapPin,
+  Phone,
+  Mail,
+  MessageCircle,
+  Calendar,
+  FileText,
 }
 
 export function ScrollableCards({ title, subtitle, cards, className }: ScrollableCardsProps) {
   const [visibleCards, setVisibleCards] = useState<Set<number>>(new Set())
   const [isVisible, setIsVisible] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
-
-  // Memoize icon components to avoid repeated lookups
-  const iconComponents = useMemo(() => {
-    const components: Record<string, any> = {}
-    cards.forEach((card) => {
-      if (card.icon && !components[card.icon]) {
-        components[card.icon] = (LucideIcons as any)[card.icon]
-      }
-    })
-    return components
-  }, [cards])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -103,7 +132,7 @@ export function ScrollableCards({ title, subtitle, cards, className }: Scrollabl
               {card.icon && (
                 <div className="flex items-center justify-center p-6 md:p-8">
                   {(() => {
-                    const IconComponent = iconComponents[card.icon!]
+                    const IconComponent = iconComponents[card.icon]
                     return IconComponent ? (
                       <IconComponent className="w-16 h-16 md:w-20 md:h-20 text-ds-accent-yellow" />
                     ) : null

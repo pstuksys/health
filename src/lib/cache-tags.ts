@@ -19,7 +19,7 @@ export async function revalidateCacheTags(tags: string | string[]) {
 
   try {
     const { revalidateTag } = await import('next/cache')
-    tagList.forEach((tag) => revalidateTag(tag))
+    tagList.forEach((tag) => revalidateTag(tag, { expire: 0 }))
   } catch (error) {
     if (process.env.NODE_ENV !== 'production') {
       console.warn('Failed to revalidate cache tags', { tags: tagList, error })

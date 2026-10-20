@@ -74,6 +74,7 @@ export interface Config {
     forms: Form;
     'form-submissions': FormSubmission;
     search: Search;
+    'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -87,6 +88,7 @@ export interface Config {
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
+    'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -94,6 +96,7 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | 'en' | 'en'[];
   globals: {
     header: Header;
     footer: Footer;
@@ -105,9 +108,10 @@ export interface Config {
     'education-hub': EducationHubSelect<false> | EducationHubSelect<true>;
   };
   locale: 'en';
-  user: User & {
-    collection: 'users';
+  widgets: {
+    collections: CollectionsWidget;
   };
+  user: User;
   jobs: {
     tasks: unknown;
     workflows: unknown;
@@ -148,6 +152,7 @@ export interface User {
   resetPasswordExpiration?: string | null;
   salt?: string | null;
   hash?: string | null;
+  resetPasswordRequestedAt?: string | null;
   loginAttempts?: number | null;
   lockUntil?: string | null;
   sessions?:
@@ -158,6 +163,7 @@ export interface User {
       }[]
     | null;
   password?: string | null;
+  collection: 'users';
 }
 /**
  * Upload images, documents, and other media files
@@ -179,6 +185,7 @@ export interface Media {
    * Photo credit or attribution
    */
   credit?: string | null;
+  _objectKey?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -240,7 +247,7 @@ export interface Page {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -401,7 +408,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -478,7 +485,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -503,7 +510,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -518,7 +525,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -594,7 +601,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -653,7 +660,7 @@ export interface Page {
                 root: {
                   type: string;
                   children: {
-                    type: string;
+                    type: any;
                     version: number;
                     [k: string]: unknown;
                   }[];
@@ -694,7 +701,7 @@ export interface Page {
                   root: {
                     type: string;
                     children: {
-                      type: string;
+                      type: any;
                       version: number;
                       [k: string]: unknown;
                     }[];
@@ -832,7 +839,7 @@ export interface Page {
                 root: {
                   type: string;
                   children: {
-                    type: string;
+                    type: any;
                     version: number;
                     [k: string]: unknown;
                   }[];
@@ -1135,7 +1142,18 @@ export interface Page {
                 | 'Video'
                 | 'Check'
                 | 'ShieldCheck'
-                | 'Users';
+                | 'Users'
+                | 'Bed'
+                | 'Wind'
+                | 'Sunrise'
+                | 'Frown'
+                | 'Ear'
+                | 'Smile'
+                | 'MessagesSquare'
+                | 'User'
+                | 'BrainCog'
+                | 'Wallet'
+                | 'CircleHelp';
               /**
                * Name of the medical service (e.g., MRI, ULTRASOUND)
                */
@@ -1284,7 +1302,7 @@ export interface Page {
                 root: {
                   type: string;
                   children: {
-                    type: string;
+                    type: any;
                     version: number;
                     [k: string]: unknown;
                   }[];
@@ -1302,7 +1320,7 @@ export interface Page {
                 root: {
                   type: string;
                   children: {
-                    type: string;
+                    type: any;
                     version: number;
                     [k: string]: unknown;
                   }[];
@@ -1517,7 +1535,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -1569,7 +1587,7 @@ export interface Page {
                     root: {
                       type: string;
                       children: {
-                        type: string;
+                        type: any;
                         version: number;
                         [k: string]: unknown;
                       }[];
@@ -2195,7 +2213,7 @@ export interface Page {
                     root: {
                       type: string;
                       children: {
-                        type: string;
+                        type: any;
                         version: number;
                         [k: string]: unknown;
                       }[];
@@ -2221,7 +2239,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2237,7 +2255,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2266,7 +2284,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2282,7 +2300,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2342,7 +2360,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2358,7 +2376,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2380,7 +2398,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2396,7 +2414,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2424,7 +2442,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2440,7 +2458,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2456,7 +2474,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2516,7 +2534,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2532,7 +2550,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2556,7 +2574,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2572,7 +2590,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2594,7 +2612,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2610,7 +2628,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2626,7 +2644,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2686,7 +2704,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2702,7 +2720,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2731,7 +2749,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2747,7 +2765,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2843,7 +2861,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2865,7 +2883,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2896,7 +2914,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -2991,7 +3009,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3007,7 +3025,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3029,7 +3047,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3051,7 +3069,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3085,7 +3103,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3100,7 +3118,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3334,7 +3352,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3381,6 +3399,17 @@ export interface Page {
                         | 'Check'
                         | 'ShieldCheck'
                         | 'Users'
+                        | 'Bed'
+                        | 'Wind'
+                        | 'Sunrise'
+                        | 'Frown'
+                        | 'Ear'
+                        | 'Smile'
+                        | 'MessagesSquare'
+                        | 'User'
+                        | 'BrainCog'
+                        | 'Wallet'
+                        | 'CircleHelp'
                       )
                     | null;
                   id?: string | null;
@@ -3396,7 +3425,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3423,7 +3452,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3438,7 +3467,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3465,7 +3494,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3487,7 +3516,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3539,7 +3568,7 @@ export interface Page {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3628,6 +3657,156 @@ export interface Page {
             blockName?: string | null;
             blockType: 'trustBadgesBlock';
           }
+        | {
+            title?: string | null;
+            description?: string | null;
+            /**
+             * Number the items and show arrows between them (for step-by-step processes)
+             */
+            showSteps?: boolean | null;
+            items?:
+              | {
+                  title: string;
+                  description?: string | null;
+                  /**
+                   * Pick an icon for this item
+                   */
+                  icon?:
+                    | (
+                        | 'FileText'
+                        | 'PhoneCall'
+                        | 'Beaker'
+                        | 'SquareActivity'
+                        | 'Activity'
+                        | 'Heart'
+                        | 'Scan'
+                        | 'Stethoscope'
+                        | 'Brain'
+                        | 'Moon'
+                        | 'Baby'
+                        | 'TrendingUp'
+                        | 'HeartHandshake'
+                        | 'ClipboardList'
+                        | 'UserCheck'
+                        | 'List'
+                        | 'UserPlus'
+                        | 'BriefcaseMedical'
+                        | 'BarChart3'
+                        | 'Building'
+                        | 'Building2'
+                        | 'Eye'
+                        | 'Waves'
+                        | 'Monitor'
+                        | 'Video'
+                        | 'Check'
+                        | 'ShieldCheck'
+                        | 'Users'
+                        | 'Bed'
+                        | 'Wind'
+                        | 'Sunrise'
+                        | 'Frown'
+                        | 'Ear'
+                        | 'Smile'
+                        | 'MessagesSquare'
+                        | 'User'
+                        | 'BrainCog'
+                        | 'Wallet'
+                        | 'CircleHelp'
+                      )
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'iconRowBlock';
+          }
+        | {
+            title?: string | null;
+            description?: string | null;
+            /**
+             * Shown in a circle around the centre (up to 10)
+             */
+            specialists?:
+              | {
+                  label: string;
+                  /**
+                   * Pick an icon for this specialist
+                   */
+                  icon?:
+                    | (
+                        | 'FileText'
+                        | 'PhoneCall'
+                        | 'Beaker'
+                        | 'SquareActivity'
+                        | 'Activity'
+                        | 'Heart'
+                        | 'Scan'
+                        | 'Stethoscope'
+                        | 'Brain'
+                        | 'Moon'
+                        | 'Baby'
+                        | 'TrendingUp'
+                        | 'HeartHandshake'
+                        | 'ClipboardList'
+                        | 'UserCheck'
+                        | 'List'
+                        | 'UserPlus'
+                        | 'BriefcaseMedical'
+                        | 'BarChart3'
+                        | 'Building'
+                        | 'Building2'
+                        | 'Eye'
+                        | 'Waves'
+                        | 'Monitor'
+                        | 'Video'
+                        | 'Check'
+                        | 'ShieldCheck'
+                        | 'Users'
+                        | 'Bed'
+                        | 'Wind'
+                        | 'Sunrise'
+                        | 'Frown'
+                        | 'Ear'
+                        | 'Smile'
+                        | 'MessagesSquare'
+                        | 'User'
+                        | 'BrainCog'
+                        | 'Wallet'
+                        | 'CircleHelp'
+                      )
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'careNetworkBlock';
+          }
+        | {
+            title?: string | null;
+            subtitle?: string | null;
+            /**
+             * Published articles from this Education Hub topic are rotated
+             */
+            topic:
+              | 'understanding-sleep-disorders'
+              | 'diagnostics-treatment'
+              | 'specialist-insights'
+              | 'lifestyle-tips'
+              | 'featured';
+            /**
+             * Maximum number of articles to rotate through
+             */
+            limit?: number | null;
+            /**
+             * Link to the Education Hub; leave empty to hide it
+             */
+            linkLabel?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'educationHubArticles';
+          }
       )[]
     | null;
   meta?: {
@@ -3678,7 +3857,7 @@ export interface Blog {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -3802,7 +3981,7 @@ export interface Form {
               root: {
                 type: string;
                 children: {
-                  type: string;
+                  type: any;
                   version: number;
                   [k: string]: unknown;
                 }[];
@@ -3877,15 +4056,12 @@ export interface Form {
       )[]
     | null;
   submitButtonLabel?: string | null;
-  /**
-   * Choose whether to display an on-page message or redirect to a different page after they submit the form.
-   */
   confirmationType?: ('message' | 'redirect') | null;
   confirmationMessage?: {
     root: {
       type: string;
       children: {
-        type: string;
+        type: any;
         version: number;
         [k: string]: unknown;
       }[];
@@ -3899,9 +4075,6 @@ export interface Form {
   redirect?: {
     url: string;
   };
-  /**
-   * Send custom emails when the form submits. Use comma separated lists to send the same email to multiple recipients. To reference a value from this form, wrap that field's name with double curly brackets, i.e. {{firstName}}. You can use a wildcard {{*}} to output all data and {{*:table}} to format it as an HTML table in the email.
-   */
   emails?:
     | {
         emailTo?: string | null;
@@ -3910,14 +4083,11 @@ export interface Form {
         replyTo?: string | null;
         emailFrom?: string | null;
         subject: string;
-        /**
-         * Enter the message that should be sent in this email.
-         */
         message?: {
           root: {
             type: string;
             children: {
-              type: string;
+              type: any;
               version: number;
               [k: string]: unknown;
             }[];
@@ -3972,6 +4142,23 @@ export interface Search {
       };
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv".
+ */
+export interface PayloadKv {
+  id: number;
+  key: string;
+  data:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -4063,6 +4250,7 @@ export interface UsersSelect<T extends boolean = true> {
   resetPasswordExpiration?: T;
   salt?: T;
   hash?: T;
+  resetPasswordRequestedAt?: T;
   loginAttempts?: T;
   lockUntil?: T;
   sessions?:
@@ -4081,6 +4269,7 @@ export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
   credit?: T;
+  _objectKey?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -6106,6 +6295,49 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        iconRowBlock?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              showSteps?: T;
+              items?:
+                | T
+                | {
+                    title?: T;
+                    description?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        careNetworkBlock?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              specialists?:
+                | T
+                | {
+                    label?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        educationHubArticles?:
+          | T
+          | {
+              title?: T;
+              subtitle?: T;
+              topic?: T;
+              limit?: T;
+              linkLabel?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
@@ -6354,6 +6586,14 @@ export interface SearchSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "payload-kv_select".
+ */
+export interface PayloadKvSelect<T extends boolean = true> {
+  key?: T;
+  data?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -6459,6 +6699,96 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Opens from any button or link pointing to #book-video-consultation
+   */
+  bookingModal?: {
+    title?: string | null;
+    description?: string | null;
+    options?:
+      | {
+          /**
+           * Select an icon from the shared icon map (src/lib/icons/icon-map.ts).
+           */
+          icon?:
+            | (
+                | 'FileText'
+                | 'PhoneCall'
+                | 'Beaker'
+                | 'SquareActivity'
+                | 'Activity'
+                | 'Heart'
+                | 'Scan'
+                | 'Stethoscope'
+                | 'Brain'
+                | 'Moon'
+                | 'Baby'
+                | 'TrendingUp'
+                | 'HeartHandshake'
+                | 'ClipboardList'
+                | 'UserCheck'
+                | 'List'
+                | 'UserPlus'
+                | 'BriefcaseMedical'
+                | 'BarChart3'
+                | 'Building'
+                | 'Building2'
+                | 'Eye'
+                | 'Waves'
+                | 'Monitor'
+                | 'Video'
+                | 'Check'
+                | 'ShieldCheck'
+                | 'Users'
+                | 'Bed'
+                | 'Wind'
+                | 'Sunrise'
+                | 'Frown'
+                | 'Ear'
+                | 'Smile'
+                | 'MessagesSquare'
+                | 'User'
+                | 'BrainCog'
+                | 'Wallet'
+                | 'CircleHelp'
+              )
+            | null;
+          title: string;
+          description?: string | null;
+          linkType?: ('internal' | 'external') | null;
+          page?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'blogs';
+                value: number | Blog;
+              } | null);
+          href?: string | null;
+          /**
+           * Shows the link (e.g. the Semble booking page) in an iframe in the modal
+           */
+          embed?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    help?: {
+      label?: string | null;
+      text?: string | null;
+      linkType?: ('internal' | 'external') | null;
+      page?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'blogs';
+            value: number | Blog;
+          } | null);
+      href?: string | null;
+    };
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -6625,7 +6955,18 @@ export interface EducationHub {
           | 'Video'
           | 'Check'
           | 'ShieldCheck'
-          | 'Users';
+          | 'Users'
+          | 'Bed'
+          | 'Wind'
+          | 'Sunrise'
+          | 'Frown'
+          | 'Ear'
+          | 'Smile'
+          | 'MessagesSquare'
+          | 'User'
+          | 'BrainCog'
+          | 'Wallet'
+          | 'CircleHelp';
         title: string;
         description: string;
         id?: string | null;
@@ -6689,6 +7030,33 @@ export interface HeaderSelect<T extends boolean = true> {
             };
         external?: T;
         id?: T;
+      };
+  bookingModal?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        options?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              linkType?: T;
+              page?: T;
+              href?: T;
+              embed?: T;
+              id?: T;
+            };
+        help?:
+          | T
+          | {
+              label?: T;
+              text?: T;
+              linkType?: T;
+              page?: T;
+              href?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
@@ -6823,6 +7191,16 @@ export interface EducationHubSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "collections_widget".
+ */
+export interface CollectionsWidget {
+  data?: {
+    [k: string]: unknown;
+  };
+  width: 'full';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

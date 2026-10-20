@@ -52,9 +52,9 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
     ctaSecondary,
   } = props as RPBlockProps
 
-  const measures = Array.isArray(testMeasures) ? (testMeasures as any[]) : []
-  const symptomItems = Array.isArray(symptoms) ? (symptoms as any[]) : []
-  const benefitItems = Array.isArray(benefits) ? (benefits as any[]) : []
+  const measures = Array.isArray(testMeasures) ? testMeasures : []
+  const symptomItems = Array.isArray(symptoms) ? symptoms : []
+  const benefitItems = Array.isArray(benefits) ? benefits : []
 
   return (
     <section className={cn('w-full py-16 md:py-20 px-4', className)}>
@@ -83,7 +83,7 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {(() => {
-              const btn = heroPrimary as any
+              const btn = heroPrimary
               const href = resolveLinkHref({
                 linkType: btn?.linkType,
                 internal: btn?.internal,
@@ -99,7 +99,7 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
               ) : null
             })()}
             {(() => {
-              const btn = heroSecondary as any
+              const btn = heroSecondary
               const href = resolveLinkHref({
                 linkType: btn?.linkType,
                 internal: btn?.internal,
@@ -158,7 +158,7 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {measures.map((m, index) => {
-              const iconName = String((m as any)?.icon || '').toLowerCase()
+              const iconName = String(m?.icon || '').toLowerCase()
               const Icon =
                 iconName === 'stethoscope'
                   ? Stethoscope
@@ -177,8 +177,8 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
                   <div className="w-12 h-12 mx-auto rounded-full flex items-center justify-center mb-4 bg-ds-accent-yellow text-white">
                     <Icon className="h-6 w-6" />
                   </div>
-                  <h3 className="font-semibold mb-2 text-ds-dark-blue">{(m as any)?.title}</h3>
-                  <p className="text-sm text-ds-pastille-green">{(m as any)?.description}</p>
+                  <h3 className="font-semibold mb-2 text-ds-dark-blue">{m?.title}</h3>
+                  <p className="text-sm text-ds-pastille-green">{m?.description}</p>
                 </Card>
               )
             })}
@@ -226,9 +226,7 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
                 className="flex items-start gap-3 p-4 rounded-lg bg-white border border-gray-100"
               >
                 <CheckCircle className="h-5 w-5 mt-0.5 flex-shrink-0 text-ds-accent-yellow" />
-                <span className="text-ds-pastille-green">
-                  {typeof s === 'string' ? s : (s as any)?.text}
-                </span>
+                <span className="text-ds-pastille-green">{s.text}</span>
               </div>
             ))}
           </div>
@@ -289,9 +287,7 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
                       <Users className="h-5 w-5" />
                     )}
                   </div>
-                  <span className="text-sm text-ds-pastille-green">
-                    {typeof b === 'string' ? b : (b as any)?.text}
-                  </span>
+                  <span className="text-sm text-ds-pastille-green">{b.text}</span>
                 </div>
               ))}
             </div>
@@ -314,7 +310,7 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                 {(() => {
-                  const btn = ctaPrimary as any
+                  const btn = ctaPrimary
                   const href = resolveLinkHref({
                     linkType: btn?.linkType,
                     internal: btn?.internal,
@@ -330,7 +326,7 @@ export function RespiratoryPolygrophyBlock(props: RPBlockProps) {
                   ) : null
                 })()}
                 {(() => {
-                  const btn = ctaSecondary as any
+                  const btn = ctaSecondary
                   const href = resolveLinkHref({
                     linkType: btn?.linkType,
                     internal: btn?.internal,

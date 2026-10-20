@@ -6,160 +6,101 @@ type UseDoctifyWidgetOptions = {
   rootMargin?: string
 }
 
+export type DoctifyWidgetStatus = 'idle' | 'loading' | 'loaded' | 'error'
+
 type UseDoctifyWidgetReturn = {
-  isLoaded: boolean
+  status: DoctifyWidgetStatus
   containerRef: React.RefObject<HTMLDivElement | null>
 }
 
 const DEFAULT_ROOT_MARGIN = '200px'
 
-type GlobalScriptLoadState = {
-  isLoading: boolean
-  isLoaded: boolean
-  hasAttempted: boolean
+export const DOCTIFY_PRACTICE_URL =
+  'https://www.doctify.com/uk/practice/independent-physiological-diagnostics'
+
+// The widget markup links Doctify's global.css, which only declares @font-face rules for
+// Poppins. The site already self-hosts Poppins (next/font), so the link is dropped as soon as
+// it is inserted (MutationObserver callbacks run before the next render), which stops ~5
+// duplicate font downloads.
+function removeDoctifyFontStylesheets(root: Element) {
+  root.querySelectorAll('link[href*="doctify.com/assets/fonts/"]').forEach((link) => link.remove())
 }
 
-// Track script load state per script URL so multiple widgets can coexist
-const globalScriptLoadState = new Map<string, GlobalScriptLoadState>()
-
-function getOrInitGlobalState(scriptUrl: string): GlobalScriptLoadState {
-  const existing = globalScriptLoadState.get(scriptUrl)
-  if (existing) return existing
-  const created: GlobalScriptLoadState = { isLoading: false, isLoaded: false, hasAttempted: false }
-  globalScriptLoadState.set(scriptUrl, created)
-  return created
-}
-
-function hasScriptWithSrc(scriptUrl: string): boolean {
-  return Array.from(document.scripts).some((s) => s.src === scriptUrl)
-}
-
-function loadDoctifyScript(scriptUrl: string, widgetId: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const state = getOrInitGlobalState(scriptUrl)
-
-    // If script already exists in DOM, consider it loaded for this URL
-    if (hasScriptWithSrc(scriptUrl)) {
-      state.isLoaded = true
-      state.isLoading = false
-      state.hasAttempted = true
-      resolve()
-      return
-    }
-
-    // Verify container exists
-    const container = document.getElementById(widgetId)
-    if (!container) {
-      reject(new Error('Widget container not found'))
-      return
-    }
-
-    // Create script element
-    const script = document.createElement('script')
-    script.src = scriptUrl
-    script.async = true
-    script.defer = true
-
-    // Set up load handlers
-    const onLoad = () => {
-      state.isLoaded = true
-      state.isLoading = false
-      state.hasAttempted = true
-      cleanup()
-      resolve()
-    }
-
-    const onError = () => {
-      state.isLoading = false
-      state.hasAttempted = true
-      cleanup()
-      reject(new Error('Script failed to load'))
-    }
-
-    const cleanup = () => {
-      script.removeEventListener('load', onLoad)
-      script.removeEventListener('error', onError)
-    }
-
-    script.addEventListener('load', onLoad)
-    script.addEventListener('error', onError)
-
-    // Append to document
-    document.head.appendChild(script)
-  })
-}
-
+// Doctify's script renders once, on execution, into the element with `widgetId`
+// (via innerHTML). It is not a reusable library, so it is injected on every mount:
+// after a client-side navigation the container is a fresh, empty element and a
+// previously loaded script would not fill it again.
 export function useDoctifyWidget({
   widgetId,
   scriptUrl,
   rootMargin = DEFAULT_ROOT_MARGIN,
 }: UseDoctifyWidgetOptions): UseDoctifyWidgetReturn {
-  const [isLoaded, setIsLoaded] = useState(() => getOrInitGlobalState(scriptUrl).isLoaded)
+  const [status, setStatus] = useState<DoctifyWidgetStatus>('idle')
   const containerRef = useRef<HTMLDivElement>(null)
-  const observerRef = useRef<IntersectionObserver | null>(null)
-  const hasLoadedRef = useRef(false)
 
   useEffect(() => {
-    const state = getOrInitGlobalState(scriptUrl)
+    const container = containerRef.current
+    if (!container) return
 
-    // If already loaded for this script URL, just update local state
-    if (state.isLoaded) {
-      if (!isLoaded) setIsLoaded(true)
-      return
+    let script: HTMLScriptElement | null = null
+    let previousOnResize: typeof window.onresize = null
+    let widgetOnResize: typeof window.onresize = null
+    const widgetListeners: Parameters<typeof window.removeEventListener>[] = []
+    const originalAddEventListener = window.addEventListener
+    const fontLinkObserver = new MutationObserver(() => removeDoctifyFontStylesheets(container))
+
+    // The widget script runs synchronously on load, so listeners it adds to `window` are
+    // recorded between append and onload and removed on unmount (it has no teardown of its own)
+    const stopRecordingListeners = () => {
+      window.addEventListener = originalAddEventListener
     }
 
-    // If already attempted and failed, don't retry
-    if (state.hasAttempted && !state.isLoaded) {
-      return
-    }
-
-    // If already handling load for this instance, don't do it again
-    if (hasLoadedRef.current) {
-      return
-    }
-
-    const handleLoad = async () => {
-      // Prevent multiple simultaneous loads
-      if (state.isLoading || hasLoadedRef.current) {
-        return
+    const injectScript = () => {
+      setStatus('loading')
+      fontLinkObserver.observe(container, { childList: true, subtree: true })
+      previousOnResize = window.onresize
+      window.addEventListener = (...args: Parameters<typeof window.addEventListener>) => {
+        widgetListeners.push(args)
+        originalAddEventListener.apply(window, args)
       }
-
-      hasLoadedRef.current = true
-      state.isLoading = true
-      state.hasAttempted = true
-
-      try {
-        await loadDoctifyScript(scriptUrl, widgetId)
-        setIsLoaded(true)
-      } catch (error) {
-        console.warn('Doctify widget failed to load:', error)
-        state.isLoading = false
+      script = document.createElement('script')
+      script.src = scriptUrl
+      script.async = true
+      script.onload = () => {
+        stopRecordingListeners()
+        fontLinkObserver.disconnect()
+        if (window.onresize !== previousOnResize) widgetOnResize = window.onresize
+        setStatus('loaded')
       }
+      script.onerror = () => {
+        stopRecordingListeners()
+        fontLinkObserver.disconnect()
+        setStatus('error')
+      }
+      document.body.appendChild(script)
     }
 
-    // Use IntersectionObserver for lazy loading
-    if ('IntersectionObserver' in window && containerRef.current) {
-      observerRef.current = new IntersectionObserver(
-        (entries) => {
-          if (entries[0]?.isIntersecting && !hasLoadedRef.current) {
-            handleLoad()
-            observerRef.current?.disconnect()
-          }
-        },
-        { rootMargin },
-      )
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0]?.isIntersecting) return
+        observer.disconnect()
+        injectScript()
+      },
+      { rootMargin },
+    )
+    observer.observe(container)
 
-      observerRef.current.observe(containerRef.current)
-    } else {
-      // Fallback: load immediately
-      handleLoad()
-    }
-
-    // Cleanup: only disconnect observer, never remove script
     return () => {
-      observerRef.current?.disconnect()
+      observer.disconnect()
+      fontLinkObserver.disconnect()
+      stopRecordingListeners()
+      script?.remove()
+      // The carousel's resize handlers keep running after the container is gone and throw on
+      // every resize; onresize is only reset if nothing else replaced it since
+      widgetListeners.forEach((args) => window.removeEventListener(...args))
+      if (widgetOnResize && window.onresize === widgetOnResize) window.onresize = previousOnResize
     }
-  }, [widgetId, scriptUrl, rootMargin, isLoaded])
+  }, [widgetId, scriptUrl, rootMargin])
 
-  return { isLoaded, containerRef }
+  return { status, containerRef }
 }

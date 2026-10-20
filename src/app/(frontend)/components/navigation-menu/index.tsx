@@ -187,7 +187,7 @@ export function NavigationMenu({
               src="/logo-white.svg"
               alt="Logo"
               width={240}
-              height={40}
+              height={62}
               className="w-full h-auto"
               priority
             />
@@ -251,7 +251,6 @@ export function NavigationMenu({
         items={items}
         ctaButton={ctaButton}
         onClose={toggleMobileMenu}
-        logoRef={logoRef}
       />
     </nav>
   )

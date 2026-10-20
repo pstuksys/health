@@ -1,5 +1,6 @@
 {
   "buildCommand": "npm run build:vercel",
+  "regions": ["lhr1"],
   "functions": {
     "src/app/api/**/*.ts": {
       "maxDuration": 30

@@ -17,8 +17,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ slug: s
   try {
     const filePath = path.join(process.cwd(), 'public', fileName)
     const fileBuffer = await fs.readFile(filePath)
+    const arrayBuffer = fileBuffer.buffer.slice(
+      fileBuffer.byteOffset,
+      fileBuffer.byteOffset + fileBuffer.byteLength,
+    ) as ArrayBuffer
 
-    return new NextResponse(fileBuffer, {
+    return new NextResponse(arrayBuffer, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',

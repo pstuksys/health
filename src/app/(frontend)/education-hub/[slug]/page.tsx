@@ -41,17 +41,9 @@ export default async function BlogPage(props: BlogPageParams) {
 
   return (
     <main className="min-h-screen bg-white">
-      <article className="max-w-container mx-auto px-4 py-10 sm:px-6 sm:py-12 lg:px-8">
+      <article className="max-w-container mx-auto px-4 pt-24 pb-10 sm:px-6 sm:pt-28 sm:pb-12 lg:px-8">
         <nav aria-label="Breadcrumb" className="mb-8 text-sm text-ds-pastille-green">
           <ol className="flex flex-wrap items-center gap-2">
-            <li>
-              <Link href="/" className="hover:text-ds-dark-blue">
-                Home
-              </Link>
-            </li>
-            <li aria-hidden="true">
-              <ChevronRight className="h-4 w-4" />
-            </li>
             <li>
               <Link href="/education-hub" className="hover:text-ds-dark-blue">
                 Sleep Education Hub
@@ -72,10 +64,6 @@ export default async function BlogPage(props: BlogPageParams) {
                 </li>
               </>
             )}
-            <li aria-hidden="true">
-              <ChevronRight className="h-4 w-4" />
-            </li>
-            <li className="font-medium text-ds-dark-blue">{blog.title}</li>
           </ol>
         </nav>
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useIsHydrated } from '@/hooks/use-is-hydrated'
 import { cn } from '@/lib/utils'
 
 type SafeHTMLProps = {
@@ -14,11 +14,7 @@ type SafeHTMLProps = {
  * by only rendering HTML on the client side after initial hydration
  */
 export function SafeHTML({ html, className, as: Component = 'div' }: SafeHTMLProps) {
-  const [isHydrated, setIsHydrated] = useState(false)
-
-  useEffect(() => {
-    setIsHydrated(true)
-  }, [])
+  const isHydrated = useIsHydrated()
 
   // During SSR and initial client render, show plain text without HTML
   if (!isHydrated) {
@@ -38,11 +34,7 @@ export function SafeHTML({ html, className, as: Component = 'div' }: SafeHTMLPro
  * with better formatting, styling, and hydration safety
  */
 export function ConsistentHTML({ html, className, as: Component = 'div' }: SafeHTMLProps) {
-  const [isHydrated, setIsHydrated] = useState(false)
-
-  useEffect(() => {
-    setIsHydrated(true)
-  }, [])
+  const isHydrated = useIsHydrated()
 
   const cleanHtml = html?.trim() || ''
 

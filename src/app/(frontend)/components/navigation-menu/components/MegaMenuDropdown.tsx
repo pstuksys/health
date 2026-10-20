@@ -66,7 +66,7 @@ export function MegaMenuDropdown({
             </h3>
             <div className="space-y-2">
               {megaMenu.categories.map((category) => {
-                const href = resolveUrl(category as any)
+                const href = resolveUrl(category)
                 return (
                   <Link
                     key={category.title}

@@ -2,19 +2,10 @@ import Link from 'next/link'
 import { Button } from '@/app/(frontend)/components/ui/button'
 import { RichText } from '@/app/(frontend)/components/ui/rich-text'
 import { cn } from '@/lib/utils'
-import { getAlignmentClasses, type AlignmentType } from '@/lib/design-system'
+import { getAlignmentClasses } from '@/lib/design-system'
+import type { Page } from '@/payload-types'
 
-type CTAButton = {
-  label?: string | null | undefined
-  href?: string | null | undefined
-}
-
-type CTABlockProps = {
-  title?: any // Lexical content
-  description?: any // Lexical content
-  ctaButton?: CTAButton
-  align?: AlignmentType
-  variant?: 'default' | 'accent' | 'gradient'
+type CTABlockProps = Extract<NonNullable<Page['blocks']>[number], { blockType: 'ctaBlock' }> & {
   className?: string
 }
 
@@ -22,10 +13,12 @@ export function CTABlock({
   title,
   description,
   ctaButton,
-  align = 'center',
-  variant = 'default',
+  align: alignProp,
+  variant: variantProp,
   className,
 }: CTABlockProps) {
+  const align = alignProp ?? 'center'
+  const variant = variantProp ?? 'default'
   const alignmentClasses = getAlignmentClasses(align)
   const getBackgroundClasses = () =>
     variant === 'accent'

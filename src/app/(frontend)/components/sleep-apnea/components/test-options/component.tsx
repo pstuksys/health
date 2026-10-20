@@ -10,6 +10,7 @@ type TestOptionsBlock = Extract<
   NonNullable<Page['blocks']>[number],
   { blockType: 'sleepApneaTestOptions' }
 >
+type TestOptionsItem = TestOptionsBlock['items'][number]
 
 export function SleepApneaTestOptions({
   className,
@@ -17,7 +18,7 @@ export function SleepApneaTestOptions({
   items,
 }: TestOptionsBlock & { className?: string }) {
   const header = title || 'Step 2: Understand Your Sleep Test Options'
-  const cards =
+  const cards: TestOptionsItem[] =
     items && items.length
       ? items
       : [
@@ -33,7 +34,6 @@ export function SleepApneaTestOptions({
             ],
             description:
               'Our compact, two-sensor sleep test offers a more convenient solution for suspected obstructive sleep apnoea, ideal for many adults with classic symptoms. It allows you to sleep in your own bed and routine while still getting a detailed diagnostic report.',
-            primaryCta: { text: 'Book for £300', href: '#' },
           },
           {
             key: 'rp',
@@ -46,8 +46,6 @@ export function SleepApneaTestOptions({
             ],
             description:
               'Multi-channel home study monitoring airflow, respiratory effort, oxygen levels, body position and more. Higher diagnostic confidence than basic HST.',
-            secondaryCta: { text: 'Learn more', href: '#' },
-            primaryCta: { text: 'Enquire', href: '#' },
           },
           {
             key: 'vpsg',
@@ -60,8 +58,6 @@ export function SleepApneaTestOptions({
             ],
             description:
               'Video Polysomnography (vPSG) is the most comprehensive test available, used for complex or neurological sleep conditions. It involves an overnight clinic stay and full physiological monitoring including video and full sleep staging — diagnosing more than sleep apnoea.',
-            secondaryCta: { text: 'Learn more', href: '#' },
-            primaryCta: { text: 'Enquire', href: '#' },
           },
         ]
 
@@ -76,7 +72,7 @@ export function SleepApneaTestOptions({
 
         <div className="grid md:grid-cols-3 gap-8 mx-auto">
           {cards.map((card, idx) => {
-            const Icon = iconMap[card.icon as keyof typeof iconMap] || Home
+            const Icon = (card.icon && iconMap[card.icon]) || Home
             const isHome = card.icon === 'home'
             const cardBg = isHome ? 'bg-ds-accent-yellow/30' : 'bg-white'
             const iconBg = isHome ? 'bg-ds-accent-yellow' : 'bg-gray-100'
@@ -125,11 +121,11 @@ export function SleepApneaTestOptions({
                   <div className="space-y-2 mb-2">
                     {(() => {
                       const href = resolveLinkHref({
-                        linkType: (card as any)?.linkTypeSecondary,
-                        internal: (card as any)?.secondaryInternal,
-                        external: (card as any)?.secondaryExternal,
+                        linkType: card?.linkTypeSecondary,
+                        internal: card?.secondaryInternal,
+                        external: card?.secondaryExternal,
                       })
-                      const text = (card as any)?.secondaryText
+                      const text = card?.secondaryText
                       return text ? (
                         <a
                           href={href || '#'}
@@ -141,11 +137,11 @@ export function SleepApneaTestOptions({
                     })()}
                     {(() => {
                       const href = resolveLinkHref({
-                        linkType: (card as any)?.linkTypePrimary,
-                        internal: (card as any)?.primaryInternal,
-                        external: (card as any)?.primaryExternal,
+                        linkType: card?.linkTypePrimary,
+                        internal: card?.primaryInternal,
+                        external: card?.primaryExternal,
                       })
-                      const text = (card as any)?.primaryText
+                      const text = card?.primaryText
                       return text ? (
                         <a
                           href={href || '#'}

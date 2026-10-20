@@ -16,16 +16,9 @@ interface MobileNavigationProps {
   items: NavigationItem[]
   ctaButton?: CTAButton
   onClose: () => void
-  logoRef: React.RefObject<HTMLAnchorElement | null>
 }
 
-export function MobileNavigation({
-  isOpen,
-  items,
-  ctaButton,
-  onClose,
-  logoRef,
-}: MobileNavigationProps) {
+export function MobileNavigation({ isOpen, items, ctaButton, onClose }: MobileNavigationProps) {
   if (!isOpen) return null
 
   return (
@@ -38,12 +31,12 @@ export function MobileNavigation({
         {/* Header with close button */}
         <div className="flex justify-between items-center p-4 border-b border-gray-200 bg-gradient-primary shadow-lg flex-shrink-0">
           <div className="flex-shrink-0">
-            <Link ref={logoRef} href="/" className="flex items-center flex-shrink-0 w-40">
+            <Link href="/" className="flex items-center flex-shrink-0 w-40" onClick={onClose}>
               <Image
                 src="/logo-white.svg"
                 alt="Logo"
                 width={240}
-                height={40}
+                height={62}
                 className="w-full h-auto"
               />
             </Link>
@@ -81,7 +74,7 @@ export function MobileNavigation({
                         {item.megaMenu.categories?.map((category) => (
                           <Link
                             key={category.title}
-                            href={resolveUrl(category as any)}
+                            href={resolveUrl(category)}
                             className="text-ds-dark-blue hover:text-ds-accent-yellow text-base font-light block py-2 hover:bg-gray-50 px-3 -mx-3 rounded transition-all duration-200 ml-4"
                             onClick={onClose}
                           >
@@ -140,7 +133,7 @@ export function MobileNavigation({
 
             {/* CTA Button */}
             {ctaButton && (
-              <div className="pt-6">
+              <div className="pt-6" onClick={onClose}>
                 <CMSLink href={resolveUrl(ctaButton)} variant="primary" className="w-full">
                   {ctaButton.label}
                 </CMSLink>

@@ -9,7 +9,7 @@ import type { IconType } from 'react-icons'
 import { Button } from '../ui/button'
 import { Building } from 'lucide-react'
 import { CQCRatingCard } from '../footer-card/component'
-import { useDoctifyWidget } from '@/hooks/use-doctify-widget'
+import { useDoctifyWidget, DOCTIFY_PRACTICE_URL } from '@/hooks/use-doctify-widget'
 import type { Footer as FooterType } from '@/payload-types'
 
 type SocialPlatform = 'facebook' | 'twitter' | 'linkedin' | 'x'
@@ -48,28 +48,24 @@ const SOCIAL_ICON_MAP: Record<SocialPlatform, IconType> = {
 
 export function Footer({ socialLinks, navLinks, legalLinks, contact, className }: FooterProps) {
   const [copySuccess, setCopySuccess] = useState(false)
-  const { isLoaded: widgetLoaded, containerRef } = useDoctifyWidget({
+  const { status: widgetStatus, containerRef } = useDoctifyWidget({
     widgetId: DOCTIFY_WIDGET_ID,
     scriptUrl: DOCTIFY_SCRIPT_URL,
     rootMargin: '200px',
   })
 
-  const handleContactClick = useCallback((type: 'email' | 'phone', value: string) => {
-    const prefix = type === 'email' ? 'mailto:' : 'tel:'
-    window.location.href = `${prefix}${value}`
-  }, [])
-
+  const address = contact?.address
   const handleAddressClick = useCallback(async () => {
-    if (!contact?.address) return
+    if (!address) return
 
     try {
-      await navigator.clipboard.writeText(contact.address)
+      await navigator.clipboard.writeText(address)
       setCopySuccess(true)
       setTimeout(() => setCopySuccess(false), 1000)
     } catch (error) {
       console.warn('Failed to copy address:', error)
     }
-  }, [contact?.address])
+  }, [address])
 
   const scrollToTop = useCallback(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -110,14 +106,23 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
                     )
                   })}
               </ul>
-              {/* Doctify Badge - Wrapped with key to prevent React reconciliation issues */}
-              <div key="doctify-widget-wrapper" ref={containerRef}>
-                {!widgetLoaded ? (
-                  <div className="min-h-[60px] text-gray-400 text-xs animate-pulse">
+              <div ref={containerRef} className="doctify-widget relative min-h-[60px]">
+                {widgetStatus === 'idle' || widgetStatus === 'loading' ? (
+                  <div className="absolute inset-0 text-gray-400 text-xs animate-pulse">
                     Loading reviews...
                   </div>
                 ) : null}
-                <div id={DOCTIFY_WIDGET_ID} className="min-h-[60px]" suppressHydrationWarning />
+                {widgetStatus === 'error' ? (
+                  <Link
+                    href={DOCTIFY_PRACTICE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={cn('text-gray-300 text-sm', HOVER_TEXT_CLASSES, TRANSITION_CLASSES)}
+                  >
+                    Read our reviews on Doctify
+                  </Link>
+                ) : null}
+                <div id={DOCTIFY_WIDGET_ID} suppressHydrationWarning />
               </div>
             </div>
           )}
@@ -176,11 +181,10 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
             <h3 className="text-lg font-semibold text-white">Contact</h3>
             <div className="space-y-2 text-gray-300 font-light overflow-hidden">
               {contact?.email && (
-                <button
-                  onClick={() => handleContactClick('email', contact.email!)}
+                <a
+                  href={`mailto:${contact.email}`}
                   className={cn('flex items-center gap-2 cursor-pointer group', TRANSITION_CLASSES)}
                   aria-label={`Send email to ${contact.email}`}
-                  type="button"
                 >
                   <FaMailBulk
                     size={ICON_SIZE_SMALL}
@@ -199,14 +203,13 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
                   >
                     {contact.email}
                   </span>
-                </button>
+                </a>
               )}
               {contact?.phone && (
-                <button
-                  onClick={() => handleContactClick('phone', contact.phone!)}
+                <a
+                  href={`tel:${contact.phone}`}
                   className={cn('flex items-center gap-2 cursor-pointer group', TRANSITION_CLASSES)}
                   aria-label={`Call ${contact.phone}`}
-                  type="button"
                 >
                   <FaPhone
                     size={ICON_SIZE_SMALL}
@@ -225,7 +228,7 @@ export function Footer({ socialLinks, navLinks, legalLinks, contact, className }
                   >
                     {contact.phone}
                   </span>
-                </button>
+                </a>
               )}
               {contact?.address && (
                 <button

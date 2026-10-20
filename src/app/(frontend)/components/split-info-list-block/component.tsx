@@ -14,9 +14,7 @@ type SplitInfoListBlockProps = Extract<
 export function SplitInfoListBlock(props: SplitInfoListBlockProps) {
   const { className, leftTitle, leftRichText, listItems } = props as SplitInfoListBlockProps
 
-  const items: string[] = Array.isArray(listItems)
-    ? (listItems as unknown[]).map((c) => (typeof c === 'string' ? c : (c as any)?.text || ''))
-    : []
+  const items: string[] = Array.isArray(listItems) ? listItems.map((c) => c.text || '') : []
 
   return (
     <section className={cn('w-full py-16 px-4', className)}>

@@ -19,7 +19,7 @@ export const resolveUrl = (item: {
     const href = item.href
 
     // If the href is just '#' or empty, return it as is
-    if (!href || href === '#') {
+    if (!href || href.startsWith('#')) {
       return href
     }
 

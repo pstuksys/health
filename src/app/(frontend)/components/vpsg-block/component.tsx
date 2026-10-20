@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 import { resolveLinkHref } from '@/lib/navigation'
 import type { Page } from '@/payload-types'
 import { isLexicalEditorState, RichText } from '@/app/(frontend)/components/ui/rich-text'
-import { mediaToUrl } from '@/lib/media'
+import { mediaAlt, mediaToUrl } from '@/lib/media'
 
 type VPSGBlockProps = Extract<NonNullable<Page['blocks']>[number], { blockType: 'vpsgBlock' }> & {
   className?: string
@@ -38,20 +38,18 @@ export function VPSGBlock(props: VPSGBlockProps) {
   const aspectIcons = [Brain, Eye, Activity, Heart, Waves, Stethoscope, Monitor, Video] as const
 
   const aspectItems: string[] = Array.isArray(monitoringAspects)
-    ? (monitoringAspects as unknown[]).map((a) =>
-        typeof a === 'string' ? a : (a as any)?.label || '',
-      )
+    ? monitoringAspects.map((a) => a.label || '')
     : []
 
   const conditionItems: string[] = Array.isArray(conditions)
-    ? (conditions as unknown[]).map((c) => (typeof c === 'string' ? c : (c as any)?.text || ''))
+    ? conditions.map((c) => c.text || '')
     : []
 
   const whyCardItems: Array<{ title: string; text: string; icon: keyof typeof iconMap }> =
     Array.isArray(whyCards)
-      ? (whyCards as unknown[]).map((c, i) => ({
-          title: (c as any)?.title || '',
-          text: (c as any)?.text || '',
+      ? whyCards.map((c, i) => ({
+          title: c?.title || '',
+          text: c?.text || '',
           icon: (['activity', 'video', 'brain'] as const)[i % 3],
         }))
       : []
@@ -79,7 +77,7 @@ export function VPSGBlock(props: VPSGBlockProps) {
             ) : null}
             <div className="flex flex-col sm:flex-row gap-4">
               {(() => {
-                const btn = heroPrimary as any
+                const btn = heroPrimary
                 const href = resolveLinkHref({
                   linkType: btn?.linkType,
                   internal: btn?.internal,
@@ -95,7 +93,7 @@ export function VPSGBlock(props: VPSGBlockProps) {
                 ) : null
               })()}
               {(() => {
-                const btn = heroSecondary as any
+                const btn = heroSecondary
                 const href = resolveLinkHref({
                   linkType: btn?.linkType,
                   internal: btn?.internal,
@@ -230,8 +228,8 @@ export function VPSGBlock(props: VPSGBlockProps) {
         <div className="relative overflow-hidden rounded-2xl">
           {ctaBgImage ? (
             <Image
-              src={mediaToUrl(ctaBgImage as any) || '/placeholder.svg'}
-              alt={(ctaBgImage as any)?.alt || 'vPSG'}
+              src={mediaToUrl(ctaBgImage) || '/placeholder.svg'}
+              alt={mediaAlt(ctaBgImage, 'vPSG')}
               width={1200}
               height={600}
               className="absolute inset-0 w-full h-full object-cover"
@@ -254,7 +252,7 @@ export function VPSGBlock(props: VPSGBlockProps) {
                 </div>
                 <div className="space-y-4">
                   {(() => {
-                    const btn = ctaPrimary as any
+                    const btn = ctaPrimary
                     const href = resolveLinkHref({
                       linkType: btn?.linkType,
                       internal: btn?.internal,
@@ -270,7 +268,7 @@ export function VPSGBlock(props: VPSGBlockProps) {
                     ) : null
                   })()}
                   {(() => {
-                    const btn = ctaSecondary as any
+                    const btn = ctaSecondary
                     const href = resolveLinkHref({
                       linkType: btn?.linkType,
                       internal: btn?.internal,

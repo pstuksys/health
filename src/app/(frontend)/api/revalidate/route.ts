@@ -8,6 +8,6 @@ export async function POST(req: NextRequest) {
   }
   const body = await req.json().catch(() => ({}))
   const tags = Array.isArray(body?.tags) ? (body.tags as string[]) : []
-  tags.forEach((t) => revalidateTag(t))
+  tags.forEach((t) => revalidateTag(t, { expire: 0 }))
   return NextResponse.json({ revalidated: true, tags })
 }

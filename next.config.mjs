@@ -1,5 +1,4 @@
 import { withPayload } from '@payloadcms/next/withPayload'
-import { withBotId } from 'botid/next/config'
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -28,6 +27,8 @@ const nextConfig = {
     return webpackConfig
   },
   images: {
+    // Next 16 blocks optimizing images served from localhost; allow it only in local dev
+    dangerouslyAllowLocalIP: process.env.NODE_ENV === 'development',
     remotePatterns: [
       {
         protocol: 'http',
@@ -63,4 +64,4 @@ const nextConfig = {
   },
 }
 
-export default withBotId(withPayload(nextConfig, { devBundleServerPackages: false }))
+export default withPayload(nextConfig, { devBundleServerPackages: false })
