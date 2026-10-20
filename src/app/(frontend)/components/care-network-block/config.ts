@@ -13,12 +13,6 @@ export const careNetworkBlockFields: Field[] = [
     defaultValue: 'We work with a trusted network of specialists, including:',
   },
   {
-    name: 'centerLabel',
-    type: 'text',
-    defaultValue: 'You',
-    admin: { description: 'Text in the centre circle' },
-  },
-  {
     name: 'specialists',
     type: 'array',
     maxRows: 10,

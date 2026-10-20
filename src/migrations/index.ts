@@ -42,6 +42,8 @@ import * as migration_20260712_164117_education_hub_topic_groups from './2026071
 import * as migration_20260722_161929 from './20260722_161929';
 import * as migration_20261005_153709_payload_3_90_upgrade from './20261005_153709_payload_3_90_upgrade';
 import * as migration_20261018_201002_sleep_care_blocks from './20261018_201002_sleep_care_blocks';
+import * as migration_20261020_173926_booking_modal_care_network_icon from './20261020_173926_booking_modal_care_network_icon';
+import * as migration_20261020_180012_booking_modal_embed from './20261020_180012_booking_modal_embed';
 
 export const migrations = [
   {
@@ -262,6 +264,16 @@ export const migrations = [
   {
     up: migration_20261018_201002_sleep_care_blocks.up,
     down: migration_20261018_201002_sleep_care_blocks.down,
-    name: '20261018_201002_sleep_care_blocks'
+    name: '20261018_201002_sleep_care_blocks',
+  },
+  {
+    up: migration_20261020_173926_booking_modal_care_network_icon.up,
+    down: migration_20261020_173926_booking_modal_care_network_icon.down,
+    name: '20261020_173926_booking_modal_care_network_icon',
+  },
+  {
+    up: migration_20261020_180012_booking_modal_embed.up,
+    down: migration_20261020_180012_booking_modal_embed.down,
+    name: '20261020_180012_booking_modal_embed'
   },
 ];

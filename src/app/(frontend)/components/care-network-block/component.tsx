@@ -20,7 +20,6 @@ function orbitPosition(index: number, total: number) {
 export function CareNetworkBlock({
   title,
   description,
-  centerLabel,
   specialists,
 }: CareNetworkBlockProps) {
   const items = specialists ?? []
@@ -59,9 +58,8 @@ export function CareNetworkBlock({
             })}
           </svg>
 
-          <div className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-full bg-ds-dark-blue text-white shadow-lg">
-            <CenterIcon className="h-8 w-8 mb-1" aria-hidden />
-            <span className="text-xl font-light uppercase tracking-wide">{centerLabel}</span>
+          <div className="absolute left-1/2 top-1/2 flex h-32 w-32 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-ds-dark-blue text-white shadow-lg">
+            <CenterIcon className="h-12 w-12" aria-hidden />
           </div>
 
           <ul>

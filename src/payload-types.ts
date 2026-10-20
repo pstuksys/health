@@ -1151,7 +1151,9 @@ export interface Page {
                 | 'Smile'
                 | 'MessagesSquare'
                 | 'User'
-                | 'BrainCog';
+                | 'BrainCog'
+                | 'Wallet'
+                | 'CircleHelp';
               /**
                * Name of the medical service (e.g., MRI, ULTRASOUND)
                */
@@ -3406,6 +3408,8 @@ export interface Page {
                         | 'MessagesSquare'
                         | 'User'
                         | 'BrainCog'
+                        | 'Wallet'
+                        | 'CircleHelp'
                       )
                     | null;
                   id?: string | null;
@@ -3706,6 +3710,8 @@ export interface Page {
                         | 'MessagesSquare'
                         | 'User'
                         | 'BrainCog'
+                        | 'Wallet'
+                        | 'CircleHelp'
                       )
                     | null;
                   id?: string | null;
@@ -3718,10 +3724,6 @@ export interface Page {
         | {
             title?: string | null;
             description?: string | null;
-            /**
-             * Text in the centre circle
-             */
-            centerLabel?: string | null;
             /**
              * Shown in a circle around the centre (up to 10)
              */
@@ -3770,6 +3772,8 @@ export interface Page {
                         | 'MessagesSquare'
                         | 'User'
                         | 'BrainCog'
+                        | 'Wallet'
+                        | 'CircleHelp'
                       )
                     | null;
                   id?: string | null;
@@ -6313,7 +6317,6 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               title?: T;
               description?: T;
-              centerLabel?: T;
               specialists?:
                 | T
                 | {
@@ -6696,6 +6699,96 @@ export interface Header {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Opens from any button or link pointing to #book-video-consultation
+   */
+  bookingModal?: {
+    title?: string | null;
+    description?: string | null;
+    options?:
+      | {
+          /**
+           * Select an icon from the shared icon map (src/lib/icons/icon-map.ts).
+           */
+          icon?:
+            | (
+                | 'FileText'
+                | 'PhoneCall'
+                | 'Beaker'
+                | 'SquareActivity'
+                | 'Activity'
+                | 'Heart'
+                | 'Scan'
+                | 'Stethoscope'
+                | 'Brain'
+                | 'Moon'
+                | 'Baby'
+                | 'TrendingUp'
+                | 'HeartHandshake'
+                | 'ClipboardList'
+                | 'UserCheck'
+                | 'List'
+                | 'UserPlus'
+                | 'BriefcaseMedical'
+                | 'BarChart3'
+                | 'Building'
+                | 'Building2'
+                | 'Eye'
+                | 'Waves'
+                | 'Monitor'
+                | 'Video'
+                | 'Check'
+                | 'ShieldCheck'
+                | 'Users'
+                | 'Bed'
+                | 'Wind'
+                | 'Sunrise'
+                | 'Frown'
+                | 'Ear'
+                | 'Smile'
+                | 'MessagesSquare'
+                | 'User'
+                | 'BrainCog'
+                | 'Wallet'
+                | 'CircleHelp'
+              )
+            | null;
+          title: string;
+          description?: string | null;
+          linkType?: ('internal' | 'external') | null;
+          page?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'blogs';
+                value: number | Blog;
+              } | null);
+          href?: string | null;
+          /**
+           * Shows the link (e.g. the Semble booking page) in an iframe in the modal
+           */
+          embed?: boolean | null;
+          id?: string | null;
+        }[]
+      | null;
+    help?: {
+      label?: string | null;
+      text?: string | null;
+      linkType?: ('internal' | 'external') | null;
+      page?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'blogs';
+            value: number | Blog;
+          } | null);
+      href?: string | null;
+    };
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -6871,7 +6964,9 @@ export interface EducationHub {
           | 'Smile'
           | 'MessagesSquare'
           | 'User'
-          | 'BrainCog';
+          | 'BrainCog'
+          | 'Wallet'
+          | 'CircleHelp';
         title: string;
         description: string;
         id?: string | null;
@@ -6935,6 +7030,33 @@ export interface HeaderSelect<T extends boolean = true> {
             };
         external?: T;
         id?: T;
+      };
+  bookingModal?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        options?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              linkType?: T;
+              page?: T;
+              href?: T;
+              embed?: T;
+              id?: T;
+            };
+        help?:
+          | T
+          | {
+              label?: T;
+              text?: T;
+              linkType?: T;
+              page?: T;
+              href?: T;
+            };
       };
   updatedAt?: T;
   createdAt?: T;
