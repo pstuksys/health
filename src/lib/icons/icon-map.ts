@@ -40,7 +40,9 @@ import {
   BrainCog,
   Wallet,
   CircleHelp,
+  Scale,
 } from 'lucide-react'
+import { Lungs, EntHead, Jaw, DentalAppliance } from './custom-icons'
 import type { Field } from 'payload'
 
 export type LucideIcon = React.ComponentType<React.SVGProps<SVGSVGElement>>
@@ -85,6 +87,11 @@ export type IconKey =
   | 'BrainCog'
   | 'Wallet'
   | 'CircleHelp'
+  | 'Scale'
+  | 'Lungs'
+  | 'EntHead'
+  | 'Jaw'
+  | 'DentalAppliance'
 
 export const iconMap: Record<IconKey, LucideIcon> = {
   FileText,
@@ -126,6 +133,11 @@ export const iconMap: Record<IconKey, LucideIcon> = {
   BrainCog,
   Wallet,
   CircleHelp,
+  Scale,
+  Lungs,
+  EntHead,
+  Jaw,
+  DentalAppliance,
 }
 
 type CreateIconSelectFieldArgs = {

@@ -1153,7 +1153,12 @@ export interface Page {
                 | 'User'
                 | 'BrainCog'
                 | 'Wallet'
-                | 'CircleHelp';
+                | 'CircleHelp'
+                | 'Scale'
+                | 'Lungs'
+                | 'EntHead'
+                | 'Jaw'
+                | 'DentalAppliance';
               /**
                * Name of the medical service (e.g., MRI, ULTRASOUND)
                */
@@ -3410,6 +3415,11 @@ export interface Page {
                         | 'BrainCog'
                         | 'Wallet'
                         | 'CircleHelp'
+                        | 'Scale'
+                        | 'Lungs'
+                        | 'EntHead'
+                        | 'Jaw'
+                        | 'DentalAppliance'
                       )
                     | null;
                   id?: string | null;
@@ -3712,6 +3722,11 @@ export interface Page {
                         | 'BrainCog'
                         | 'Wallet'
                         | 'CircleHelp'
+                        | 'Scale'
+                        | 'Lungs'
+                        | 'EntHead'
+                        | 'Jaw'
+                        | 'DentalAppliance'
                       )
                     | null;
                   id?: string | null;
@@ -3774,6 +3789,11 @@ export interface Page {
                         | 'BrainCog'
                         | 'Wallet'
                         | 'CircleHelp'
+                        | 'Scale'
+                        | 'Lungs'
+                        | 'EntHead'
+                        | 'Jaw'
+                        | 'DentalAppliance'
                       )
                     | null;
                   id?: string | null;
@@ -6700,7 +6720,7 @@ export interface Header {
       }[]
     | null;
   /**
-   * Opens from any button or link pointing to #book-video-consultation
+   * Opens from any button or link pointing to #book-video-consultation. Use #book-video-consultation=https://... to open it with that booking link instead of the options' own links.
    */
   bookingModal?: {
     title?: string | null;
@@ -6751,6 +6771,11 @@ export interface Header {
                 | 'BrainCog'
                 | 'Wallet'
                 | 'CircleHelp'
+                | 'Scale'
+                | 'Lungs'
+                | 'EntHead'
+                | 'Jaw'
+                | 'DentalAppliance'
               )
             | null;
           title: string;
@@ -6966,7 +6991,12 @@ export interface EducationHub {
           | 'User'
           | 'BrainCog'
           | 'Wallet'
-          | 'CircleHelp';
+          | 'CircleHelp'
+          | 'Scale'
+          | 'Lungs'
+          | 'EntHead'
+          | 'Jaw'
+          | 'DentalAppliance';
         title: string;
         description: string;
         id?: string | null;

@@ -83,7 +83,7 @@ export function CareNetworkBlock({
         </div>
 
         {/* Simple grid on small screens, where the circle would be too cramped */}
-        <ul className="grid grid-cols-2 gap-4 md:hidden">
+        <ul className="grid grid-cols-1 gap-4 min-[420px]:grid-cols-2 md:hidden">
           {items.map((item, index) => {
             const Icon = iconMap[item.icon ?? 'Users']
             return (
@@ -92,7 +92,9 @@ export function CareNetworkBlock({
                 className="flex items-center gap-3 rounded-xl bg-white p-3 shadow-md"
               >
                 <Icon className="h-5 w-5 flex-shrink-0 text-ds-pastille-green" aria-hidden />
-                <span className="text-sm font-light text-ds-dark-blue">{item.label}</span>
+                <span className="min-w-0 break-words text-sm font-light text-ds-dark-blue">
+                  {item.label}
+                </span>
               </li>
             )
           })}
