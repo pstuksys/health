@@ -49,17 +49,10 @@ export async function generateMetadataBySlug(
   slug: string,
   fallback?: { title?: string; description?: string },
 ): Promise<Metadata> {
-  try {
-    // Draft mode is automatically handled in getCachedPage
-    const page = await getPage(slug, 2) // depth = 2 for metadata
-    return generatePageMetadata(page, fallback)
-  } catch (error) {
-    console.error(`Failed to generate metadata for slug "${slug}":`, error)
-    return {
-      title: fallback?.title ?? 'Error',
-      description: fallback?.description ?? 'An error occurred while loading the page.',
-    }
-  }
+  // Draft mode is handled in getPage. CMS errors propagate so a wrong title
+  // is never cached alongside the page.
+  const page = await getPage(slug, 2) // depth = 2 for metadata
+  return generatePageMetadata(page, fallback)
 }
 
 /**
