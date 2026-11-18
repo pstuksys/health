@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     pages: Page;
     blogs: Blog;
+    questionnaires: Questionnaire;
     forms: Form;
     'form-submissions': FormSubmission;
     search: Search;
@@ -85,6 +86,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     blogs: BlogsSelect<false> | BlogsSelect<true>;
+    questionnaires: QuestionnairesSelect<false> | QuestionnairesSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
@@ -3827,6 +3829,28 @@ export interface Page {
             blockName?: string | null;
             blockType: 'educationHubArticles';
           }
+        | {
+            /**
+             * Pick a questionnaire, or create a new one under Questionnaires.
+             */
+            questionnaire: number | Questionnaire;
+            title?: string | null;
+            description?: string | null;
+            /**
+             * Button shown with the result
+             */
+            cta?: {
+              label?: string | null;
+              /**
+               * Use #book-video-consultation to open the booking modal, or any page/URL.
+               */
+              href?: string | null;
+            };
+            disclaimer?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'sleepScreenerBlock';
+          }
       )[]
     | null;
   meta?: {
@@ -4125,6 +4149,63 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * Scored questionnaires (e.g. sleep screeners). Add one to a page with the Sleep screener block.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "questionnaires".
+ */
+export interface Questionnaire {
+  id: number;
+  name: string;
+  /**
+   * Each section is scored separately and gets its own result (e.g. Sleep apnoea, Insomnia). Visitors answer all sections in one go.
+   */
+  sections: {
+    /**
+     * Shown above its questions and its result
+     */
+    title: string;
+    questions: {
+      text: string;
+      answers: {
+        label: string;
+        points: number;
+        id?: string | null;
+      }[];
+      id?: string | null;
+    }[];
+    /**
+     * Each possible section score must fall in exactly one result. The score is the sum of the chosen answers’ points in this section.
+     */
+    results: {
+      label: string;
+      level: 'low' | 'medium' | 'high';
+      minScore: number;
+      maxScore: number;
+      headline: string;
+      content?: {
+        root: {
+          type: string;
+          children: {
+            type: any;
+            version: number;
+            [k: string]: unknown;
+          }[];
+          direction: ('ltr' | 'rtl') | null;
+          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+          indent: number;
+          version: number;
+        };
+        [k: string]: unknown;
+      } | null;
+      id?: string | null;
+    }[];
+    id?: string | null;
+  }[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
@@ -4202,6 +4283,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'blogs';
         value: number | Blog;
+      } | null)
+    | ({
+        relationTo: 'questionnaires';
+        value: number | Questionnaire;
       } | null)
     | ({
         relationTo: 'forms';
@@ -6358,6 +6443,22 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        sleepScreenerBlock?:
+          | T
+          | {
+              questionnaire?: T;
+              title?: T;
+              description?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    href?: T;
+                  };
+              disclaimer?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
@@ -6443,6 +6544,45 @@ export interface BlogsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "questionnaires_select".
+ */
+export interface QuestionnairesSelect<T extends boolean = true> {
+  name?: T;
+  sections?:
+    | T
+    | {
+        title?: T;
+        questions?:
+          | T
+          | {
+              text?: T;
+              answers?:
+                | T
+                | {
+                    label?: T;
+                    points?: T;
+                    id?: T;
+                  };
+              id?: T;
+            };
+        results?:
+          | T
+          | {
+              label?: T;
+              level?: T;
+              minScore?: T;
+              maxScore?: T;
+              headline?: T;
+              content?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
