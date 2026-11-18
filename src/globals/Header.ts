@@ -212,7 +212,7 @@ export const Header: GlobalConfig = {
       name: 'bookingModal',
       type: 'group',
       admin: {
-        description: `Opens from any button or link pointing to ${BOOKING_MODAL_HASH}`,
+        description: `Opens from any button or link pointing to ${BOOKING_MODAL_HASH}. Use ${BOOKING_MODAL_HASH}=https://... to open it with that booking link instead of the options' own links.`,
       },
       fields: [
         { name: 'title', type: 'text', defaultValue: 'Book a Video Consultation' },

@@ -13,7 +13,7 @@ import {
   DialogTitle,
 } from '@/app/(frontend)/components/ui/dialog'
 import { iconMap, type IconKey } from '@/lib/icons/icon-map'
-import { BOOKING_MODAL_HASH } from '@/lib/booking-modal'
+import { parseBookingModalHash } from '@/lib/booking-modal'
 import { cn } from '@/lib/utils'
 
 type BookingOption = {
@@ -40,6 +40,8 @@ export function BookingModal({ title, description, options, help }: BookingModal
   const [open, setOpen] = useState(false)
   const [embedded, setEmbedded] = useState<BookingOption | null>(null)
   const [isIframeLoading, setIsIframeLoading] = useState(true)
+  // Booking URL from the clicked link, used instead of each option's own link
+  const [bookingHref, setBookingHref] = useState<string | null>(null)
   const HeaderIcon = iconMap.Video
   const HelpIcon = iconMap.CircleHelp
 
@@ -47,8 +49,10 @@ export function BookingModal({ title, description, options, help }: BookingModal
     // Capture phase so the click is handled before Next's <Link> navigates
     function handleClick(event: MouseEvent) {
       const anchor = event.target instanceof Element ? event.target.closest('a') : null
-      if (!anchor || anchor.hash !== BOOKING_MODAL_HASH) return
+      const booking = anchor ? parseBookingModalHash(anchor.hash) : null
+      if (!booking) return
       event.preventDefault()
+      setBookingHref(booking.bookingHref)
       setOpen(true)
     }
 
@@ -143,7 +147,8 @@ export function BookingModal({ title, description, options, help }: BookingModal
 
               {options.length > 0 && (
                 <ul className="mt-8 space-y-4">
-                  {options.map((option) => {
+                  {options.map((baseOption) => {
+                    const option = bookingHref ? { ...baseOption, href: bookingHref } : baseOption
                     const Icon = iconMap[option.icon]
                     const content = (
                       <>

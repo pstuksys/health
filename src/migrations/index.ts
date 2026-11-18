@@ -44,6 +44,7 @@ import * as migration_20261005_153709_payload_3_90_upgrade from './20261005_1537
 import * as migration_20261018_201002_sleep_care_blocks from './20261018_201002_sleep_care_blocks';
 import * as migration_20261020_173926_booking_modal_care_network_icon from './20261020_173926_booking_modal_care_network_icon';
 import * as migration_20261020_180012_booking_modal_embed from './20261020_180012_booking_modal_embed';
+import * as migration_20261118_184011_sleep_care_icons from './20261118_184011_sleep_care_icons';
 
 export const migrations = [
   {
@@ -274,6 +275,11 @@ export const migrations = [
   {
     up: migration_20261020_180012_booking_modal_embed.up,
     down: migration_20261020_180012_booking_modal_embed.down,
-    name: '20261020_180012_booking_modal_embed'
+    name: '20261020_180012_booking_modal_embed',
+  },
+  {
+    up: migration_20261118_184011_sleep_care_icons.up,
+    down: migration_20261118_184011_sleep_care_icons.down,
+    name: '20261118_184011_sleep_care_icons'
   },
 ];
