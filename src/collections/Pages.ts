@@ -1,4 +1,5 @@
 import type { CollectionConfig, Block } from 'payload'
+import { previewUrl } from '../lib/preview'
 import type { Page } from '@/payload-types'
 import { HERO_OVERLAY_DARKNESS_OPTIONS, HERO_TEXT_COLOR_OPTIONS } from '../lib/hero-config'
 import { contentBlockFields } from '../app/(frontend)/components/content-block/config'
@@ -404,10 +405,7 @@ export const Pages: CollectionConfig = {
   admin: {
     useAsTitle: 'title',
     defaultColumns: ['title', 'slug', '_status', 'updatedAt'],
-    preview: ({ slug }) => {
-      const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
-      return `${base}/${slug ?? ''}?preview=true`
-    },
+    preview: ({ slug }) => previewUrl(`/${typeof slug === 'string' ? slug.trim() : ''}`),
     livePreview: {
       url: ({ data }) => {
         const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'

@@ -1,4 +1,5 @@
 import type { CollectionConfig } from 'payload'
+import { previewUrl } from '@/lib/preview'
 import type { Blog } from '@/payload-types'
 import { cacheTags, revalidateCacheTags } from '@/lib/cache-tags'
 
@@ -28,8 +29,7 @@ export const Blogs: CollectionConfig = {
     defaultColumns: ['title', 'linkType', 'category', '_status', 'updatedAt'],
     preview: ({ slug, linkType, externalUrl }) => {
       if (linkType === 'external') return (externalUrl as string) || null
-      const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
-      return `${base}/education-hub/${slug ?? ''}?preview=true`
+      return previewUrl(`/education-hub/${typeof slug === 'string' ? slug.trim() : ''}`)
     },
   },
   versions: {
@@ -167,7 +167,8 @@ export const Blogs: CollectionConfig = {
       label: 'Key Takeaways',
       labels: { singular: 'Takeaway', plural: 'Takeaways' },
       admin: {
-        description: 'Optional summary points shown in a highlighted box near the top of the article.',
+        description:
+          'Optional summary points shown in a highlighted box near the top of the article.',
         condition: (data) => data?.linkType !== 'external',
       },
       fields: [{ name: 'point', type: 'text', required: true }],
@@ -187,8 +188,7 @@ export const Blogs: CollectionConfig = {
       type: 'group',
       label: 'Specialist Profile',
       admin: {
-        condition: (data) =>
-          data?.linkType !== 'external' && Boolean(data?.showSpecialistProfile),
+        condition: (data) => data?.linkType !== 'external' && Boolean(data?.showSpecialistProfile),
       },
       fields: [
         { name: 'photo', type: 'upload', relationTo: 'media', label: 'Photo' },
@@ -255,8 +255,7 @@ export const Blogs: CollectionConfig = {
         'This article has been clinically reviewed to ensure accuracy and reflect current best practice.',
       admin: {
         description: 'Shown below the specialist profile card.',
-        condition: (data) =>
-          data?.linkType !== 'external' && Boolean(data?.showSpecialistProfile),
+        condition: (data) => data?.linkType !== 'external' && Boolean(data?.showSpecialistProfile),
       },
     },
     // SEO fields will be provided by @payloadcms/plugin-seo; avoid duplicate 'meta' field name
