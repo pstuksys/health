@@ -3,6 +3,7 @@ import type { Page } from '@/payload-types'
 import { mediaToUrl } from './media'
 import { getPage } from './cms/payload-client'
 import { draftMode } from 'next/headers'
+import { canonicalPath, openGraphDefaults } from './metadata'
 
 // Re-export the functions from payload-client for backward compatibility
 export { getPage, getHomePage } from './cms/payload-client'
@@ -12,6 +13,7 @@ export { getPage, getHomePage } from './cms/payload-client'
  */
 export async function generatePageMetadata(
   page: Page | null,
+  path: string,
   fallback?: { title?: string; description?: string },
 ): Promise<Metadata> {
   if (!page) {
@@ -24,11 +26,15 @@ export async function generatePageMetadata(
   const title = page.meta?.title ?? page.title
   const description = page.meta?.description ?? undefined
   const imageUrl = mediaToUrl(page.meta?.image)
+  const url = canonicalPath(path)
 
   return {
     title,
     description,
+    alternates: { canonical: url },
     openGraph: {
+      ...openGraphDefaults,
+      url,
       title,
       description,
       images: imageUrl ? [{ url: imageUrl }] : undefined,
@@ -52,7 +58,7 @@ export async function generateMetadataBySlug(
   // Draft mode is handled in getPage. CMS errors propagate so a wrong title
   // is never cached alongside the page.
   const page = await getPage(slug, 2) // depth = 2 for metadata
-  return generatePageMetadata(page, fallback)
+  return generatePageMetadata(page, slug, fallback)
 }
 
 /**
