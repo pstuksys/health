@@ -9,7 +9,7 @@ export const revalidate = 86400
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await getHomePage()
-  return generatePageMetadata(page, {
+  return generatePageMetadata(page, '/', {
     title: 'Home',
     description: 'Welcome to our site',
   })

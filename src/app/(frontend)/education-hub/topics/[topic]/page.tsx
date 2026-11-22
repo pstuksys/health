@@ -1,3 +1,4 @@
+import { canonicalPath } from '@/lib/metadata'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import type { Blog } from '@/payload-types'
@@ -98,5 +99,6 @@ export async function generateMetadata(props: TopicPageParams) {
   return {
     title: `${topic.label} | Sleep Education Hub | IPDiagnostics`,
     description: topic.description,
+    alternates: { canonical: canonicalPath(`education-hub/topics/${topicId}`) },
   }
 }
