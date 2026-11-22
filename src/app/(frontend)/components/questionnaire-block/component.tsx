@@ -4,12 +4,13 @@ import { useEffect, useRef, useState } from 'react'
 import { ArrowLeft, ArrowRight, RotateCcw } from 'lucide-react'
 import type { Page, Questionnaire } from '@/payload-types'
 import { cn } from '@/lib/utils'
+import { resolveLinkHref } from '@/lib/navigation'
 import { findResult, maxScore, scoreAnswers } from '@/lib/questionnaires/scoring'
 import { isLexicalEditorState, RichText } from '@/app/(frontend)/components/ui/rich-text'
 
-type SleepScreenerBlockProps = Extract<
+type QuestionnaireBlockProps = Extract<
   NonNullable<Page['blocks']>[number],
-  { blockType: 'sleepScreenerBlock' }
+  { blockType: 'questionnaireBlock' }
 >
 type Section = Questionnaire['sections'][number]
 type Level = Section['results'][number]['level']
@@ -22,13 +23,13 @@ const levelStyles: Record<Level, { segment: string; badge: string }> = {
   high: { segment: 'bg-ds-dark-blue', badge: 'bg-ds-dark-blue/10 text-ds-dark-blue' },
 }
 
-export function SleepScreenerBlock({
+export function QuestionnaireBlock({
   questionnaire,
   title,
   description,
   cta,
   disclaimer,
-}: SleepScreenerBlockProps) {
+}: QuestionnaireBlockProps) {
   const [answers, setAnswers] = useState<number[]>([])
   const [step, setStep] = useState(0)
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -191,9 +192,11 @@ function Results({
   sections: Section[]
   answers: number[]
   headingRef: React.RefObject<HTMLHeadingElement | null>
-  cta: SleepScreenerBlockProps['cta']
+  cta: QuestionnaireBlockProps['cta']
   onRestart: () => void
 }) {
+  const ctaHref = cta ? resolveLinkHref(cta) : '#'
+
   // Answers are in flow order; give each section its own slice
   const sectionAnswers = sections.map((section, index) => {
     const start = sections.slice(0, index).reduce((n, s) => n + s.questions.length, 0)
@@ -222,9 +225,9 @@ function Results({
       </div>
 
       <div className="mt-10 flex flex-wrap items-center gap-4">
-        {cta?.label && cta.href && (
+        {cta?.label && ctaHref !== '#' && (
           <a
-            href={cta.href}
+            href={ctaHref}
             className="inline-flex items-center gap-2 rounded-[14px] bg-ds-accent-yellow px-6 py-3 text-white transition-all duration-200 hover:scale-[1.03] hover:brightness-110 active:brightness-95"
           >
             {cta.label}

@@ -59,7 +59,7 @@ import { buttonFields } from '../app/(frontend)/components/button/config'
 import { splitInfoGridBlockFields } from '../app/(frontend)/components/split-info-grid-block/config'
 import { trustBadgesBlockFields } from '../app/(frontend)/components/trust-badges-block/config'
 import { iconRowBlockFields } from '../app/(frontend)/components/icon-row-block/config'
-import { sleepScreenerBlockFields } from '../app/(frontend)/components/sleep-screener-block/config'
+import { questionnaireBlockFields } from '../app/(frontend)/components/questionnaire-block/config'
 import { careNetworkBlockFields } from '../app/(frontend)/components/care-network-block/config'
 import { educationHubArticlesFields } from '../app/(frontend)/components/education-hub-articles/config'
 import { cacheTags, revalidateCacheTags } from '@/lib/cache-tags'
@@ -307,10 +307,10 @@ const careNetworkBlock: Block = {
   fields: careNetworkBlockFields,
 }
 
-const sleepScreenerBlock: Block = {
-  slug: 'sleepScreenerBlock',
-  dbName: 'sleep_screener_block',
-  fields: sleepScreenerBlockFields,
+const questionnaireBlock: Block = {
+  slug: 'questionnaireBlock',
+  dbName: 'questionnaire_block',
+  fields: questionnaireBlockFields,
 }
 
 const educationHubArticlesBlock: Block = {
@@ -381,7 +381,7 @@ const pageBlocks: Block[] = [
   iconRowBlock,
   careNetworkBlock,
   educationHubArticlesBlock,
-  sleepScreenerBlock,
+  questionnaireBlock,
 ]
 
 export const Pages: CollectionConfig = {

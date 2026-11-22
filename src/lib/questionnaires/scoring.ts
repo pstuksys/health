@@ -54,5 +54,5 @@ export function checkResultRanges(
   if (missing.length) problems.push(`no result for score ${missing.join(', ')}`)
   if (overlapping.length) problems.push(`more than one result for score ${overlapping.join(', ')}`)
   if (!problems.length) return null
-  return `Result score ranges must cover 0–${max} with no gaps or overlaps: ${problems.join('; ')}.`
+  return `Check the From/To scores: in this section a visitor can score anywhere from 0 to ${max}, and each score needs exactly one result. Right now there is ${problems.join(', and ')}.`
 }

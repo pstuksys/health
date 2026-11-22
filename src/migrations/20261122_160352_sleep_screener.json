@@ -17521,8 +17521,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.sleep_screener_block": {
-      "name": "sleep_screener_block",
+    "public.questionnaire_block": {
+      "name": "questionnaire_block",
       "schema": "",
       "columns": {
         "_order": {
@@ -17576,8 +17576,16 @@
           "notNull": false,
           "default": "'Book a call with our doctor'"
         },
-        "cta_href": {
-          "name": "cta_href",
+        "cta_link_type": {
+          "name": "cta_link_type",
+          "type": "enum_questionnaire_block_cta_link_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'external'"
+        },
+        "cta_external_href": {
+          "name": "cta_external_href",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false,
@@ -17598,8 +17606,8 @@
         }
       },
       "indexes": {
-        "sleep_screener_block_order_idx": {
-          "name": "sleep_screener_block_order_idx",
+        "questionnaire_block_order_idx": {
+          "name": "questionnaire_block_order_idx",
           "columns": [
             {
               "expression": "_order",
@@ -17613,8 +17621,8 @@
           "method": "btree",
           "with": {}
         },
-        "sleep_screener_block_parent_id_idx": {
-          "name": "sleep_screener_block_parent_id_idx",
+        "questionnaire_block_parent_id_idx": {
+          "name": "questionnaire_block_parent_id_idx",
           "columns": [
             {
               "expression": "_parent_id",
@@ -17628,8 +17636,8 @@
           "method": "btree",
           "with": {}
         },
-        "sleep_screener_block_path_idx": {
-          "name": "sleep_screener_block_path_idx",
+        "questionnaire_block_path_idx": {
+          "name": "questionnaire_block_path_idx",
           "columns": [
             {
               "expression": "_path",
@@ -17643,8 +17651,8 @@
           "method": "btree",
           "with": {}
         },
-        "sleep_screener_block_questionnaire_idx": {
-          "name": "sleep_screener_block_questionnaire_idx",
+        "questionnaire_block_questionnaire_idx": {
+          "name": "questionnaire_block_questionnaire_idx",
           "columns": [
             {
               "expression": "questionnaire_id",
@@ -17660,9 +17668,9 @@
         }
       },
       "foreignKeys": {
-        "sleep_screener_block_questionnaire_id_questionnaires_id_fk": {
-          "name": "sleep_screener_block_questionnaire_id_questionnaires_id_fk",
-          "tableFrom": "sleep_screener_block",
+        "questionnaire_block_questionnaire_id_questionnaires_id_fk": {
+          "name": "questionnaire_block_questionnaire_id_questionnaires_id_fk",
+          "tableFrom": "questionnaire_block",
           "tableTo": "questionnaires",
           "columnsFrom": [
             "questionnaire_id"
@@ -17673,9 +17681,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "sleep_screener_block_parent_id_fk": {
-          "name": "sleep_screener_block_parent_id_fk",
-          "tableFrom": "sleep_screener_block",
+        "questionnaire_block_parent_id_fk": {
+          "name": "questionnaire_block_parent_id_fk",
+          "tableFrom": "questionnaire_block",
           "tableTo": "pages",
           "columnsFrom": [
             "_parent_id"
@@ -36021,8 +36029,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public._sleep_screener_block_v": {
-      "name": "_sleep_screener_block_v",
+    "public._questionnaire_block_v": {
+      "name": "_questionnaire_block_v",
       "schema": "",
       "columns": {
         "_order": {
@@ -36076,8 +36084,16 @@
           "notNull": false,
           "default": "'Book a call with our doctor'"
         },
-        "cta_href": {
-          "name": "cta_href",
+        "cta_link_type": {
+          "name": "cta_link_type",
+          "type": "enum__questionnaire_block_v_cta_link_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false,
+          "default": "'external'"
+        },
+        "cta_external_href": {
+          "name": "cta_external_href",
           "type": "varchar",
           "primaryKey": false,
           "notNull": false,
@@ -36104,8 +36120,8 @@
         }
       },
       "indexes": {
-        "_sleep_screener_block_v_order_idx": {
-          "name": "_sleep_screener_block_v_order_idx",
+        "_questionnaire_block_v_order_idx": {
+          "name": "_questionnaire_block_v_order_idx",
           "columns": [
             {
               "expression": "_order",
@@ -36119,8 +36135,8 @@
           "method": "btree",
           "with": {}
         },
-        "_sleep_screener_block_v_parent_id_idx": {
-          "name": "_sleep_screener_block_v_parent_id_idx",
+        "_questionnaire_block_v_parent_id_idx": {
+          "name": "_questionnaire_block_v_parent_id_idx",
           "columns": [
             {
               "expression": "_parent_id",
@@ -36134,8 +36150,8 @@
           "method": "btree",
           "with": {}
         },
-        "_sleep_screener_block_v_path_idx": {
-          "name": "_sleep_screener_block_v_path_idx",
+        "_questionnaire_block_v_path_idx": {
+          "name": "_questionnaire_block_v_path_idx",
           "columns": [
             {
               "expression": "_path",
@@ -36149,8 +36165,8 @@
           "method": "btree",
           "with": {}
         },
-        "_sleep_screener_block_v_questionnaire_idx": {
-          "name": "_sleep_screener_block_v_questionnaire_idx",
+        "_questionnaire_block_v_questionnaire_idx": {
+          "name": "_questionnaire_block_v_questionnaire_idx",
           "columns": [
             {
               "expression": "questionnaire_id",
@@ -36166,9 +36182,9 @@
         }
       },
       "foreignKeys": {
-        "_sleep_screener_block_v_questionnaire_id_questionnaires_id_fk": {
-          "name": "_sleep_screener_block_v_questionnaire_id_questionnaires_id_fk",
-          "tableFrom": "_sleep_screener_block_v",
+        "_questionnaire_block_v_questionnaire_id_questionnaires_id_fk": {
+          "name": "_questionnaire_block_v_questionnaire_id_questionnaires_id_fk",
+          "tableFrom": "_questionnaire_block_v",
           "tableTo": "questionnaires",
           "columnsFrom": [
             "questionnaire_id"
@@ -36179,9 +36195,9 @@
           "onDelete": "set null",
           "onUpdate": "no action"
         },
-        "_sleep_screener_block_v_parent_id_fk": {
-          "name": "_sleep_screener_block_v_parent_id_fk",
-          "tableFrom": "_sleep_screener_block_v",
+        "_questionnaire_block_v_parent_id_fk": {
+          "name": "_questionnaire_block_v_parent_id_fk",
+          "tableFrom": "_questionnaire_block_v",
           "tableTo": "_pages_v",
           "columnsFrom": [
             "_parent_id"
@@ -45375,6 +45391,14 @@
         "featured"
       ]
     },
+    "public.enum_questionnaire_block_cta_link_type": {
+      "name": "enum_questionnaire_block_cta_link_type",
+      "schema": "public",
+      "values": [
+        "internal",
+        "external"
+      ]
+    },
     "public.enum_pages_hero_text_color": {
       "name": "enum_pages_hero_text_color",
       "schema": "public",
@@ -46536,6 +46560,14 @@
         "featured"
       ]
     },
+    "public.enum__questionnaire_block_v_cta_link_type": {
+      "name": "enum__questionnaire_block_v_cta_link_type",
+      "schema": "public",
+      "values": [
+        "internal",
+        "external"
+      ]
+    },
     "public.enum__pages_v_version_hero_text_color": {
       "name": "enum__pages_v_version_hero_text_color",
       "schema": "public",
@@ -46903,6 +46935,6 @@
     "tables": {},
     "columns": {}
   },
-  "id": "802f2c9b-ec6e-428a-985c-06964cd1f584",
+  "id": "99471bd5-7ecb-40a8-b894-6879166b9304",
   "prevId": "00000000-0000-0000-0000-000000000000"
 }

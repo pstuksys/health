@@ -3,8 +3,10 @@ import { questionnairePresets } from '../lib/questionnaires/presets'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
-   CREATE TYPE "public"."enum_questionnaires_sections_results_level" AS ENUM('low', 'medium', 'high');
-  CREATE TABLE "sleep_screener_block" (
+   CREATE TYPE "public"."enum_questionnaire_block_cta_link_type" AS ENUM('internal', 'external');
+  CREATE TYPE "public"."enum__questionnaire_block_v_cta_link_type" AS ENUM('internal', 'external');
+  CREATE TYPE "public"."enum_questionnaires_sections_results_level" AS ENUM('low', 'medium', 'high');
+  CREATE TABLE "questionnaire_block" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
@@ -13,12 +15,13 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"title" varchar DEFAULT 'Free sleep screener',
   	"description" varchar DEFAULT 'Answer a few quick questions to find out whether your symptoms may be linked to a sleep disorder. It takes less than a minute.',
   	"cta_label" varchar DEFAULT 'Book a call with our doctor',
-  	"cta_href" varchar DEFAULT '#book-video-consultation',
+  	"cta_link_type" "enum_questionnaire_block_cta_link_type" DEFAULT 'external',
+  	"cta_external_href" varchar DEFAULT '#book-video-consultation',
   	"disclaimer" varchar DEFAULT 'This screener is not a diagnosis. Your answers stay in your browser and are not stored or sent anywhere.',
   	"block_name" varchar
   );
   
-  CREATE TABLE "_sleep_screener_block_v" (
+  CREATE TABLE "_questionnaire_block_v" (
   	"_order" integer NOT NULL,
   	"_parent_id" integer NOT NULL,
   	"_path" text NOT NULL,
@@ -27,7 +30,8 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   	"title" varchar DEFAULT 'Free sleep screener',
   	"description" varchar DEFAULT 'Answer a few quick questions to find out whether your symptoms may be linked to a sleep disorder. It takes less than a minute.',
   	"cta_label" varchar DEFAULT 'Book a call with our doctor',
-  	"cta_href" varchar DEFAULT '#book-video-consultation',
+  	"cta_link_type" "enum__questionnaire_block_v_cta_link_type" DEFAULT 'external',
+  	"cta_external_href" varchar DEFAULT '#book-video-consultation',
   	"disclaimer" varchar DEFAULT 'This screener is not a diagnosis. Your answers stay in your browser and are not stored or sent anywhere.',
   	"_uuid" varchar,
   	"block_name" varchar
@@ -75,22 +79,22 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   );
   
   ALTER TABLE "payload_locked_documents_rels" ADD COLUMN "questionnaires_id" integer;
-  ALTER TABLE "sleep_screener_block" ADD CONSTRAINT "sleep_screener_block_questionnaire_id_questionnaires_id_fk" FOREIGN KEY ("questionnaire_id") REFERENCES "public"."questionnaires"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "sleep_screener_block" ADD CONSTRAINT "sleep_screener_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
-  ALTER TABLE "_sleep_screener_block_v" ADD CONSTRAINT "_sleep_screener_block_v_questionnaire_id_questionnaires_id_fk" FOREIGN KEY ("questionnaire_id") REFERENCES "public"."questionnaires"("id") ON DELETE set null ON UPDATE no action;
-  ALTER TABLE "_sleep_screener_block_v" ADD CONSTRAINT "_sleep_screener_block_v_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "questionnaire_block" ADD CONSTRAINT "questionnaire_block_questionnaire_id_questionnaires_id_fk" FOREIGN KEY ("questionnaire_id") REFERENCES "public"."questionnaires"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "questionnaire_block" ADD CONSTRAINT "questionnaire_block_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."pages"("id") ON DELETE cascade ON UPDATE no action;
+  ALTER TABLE "_questionnaire_block_v" ADD CONSTRAINT "_questionnaire_block_v_questionnaire_id_questionnaires_id_fk" FOREIGN KEY ("questionnaire_id") REFERENCES "public"."questionnaires"("id") ON DELETE set null ON UPDATE no action;
+  ALTER TABLE "_questionnaire_block_v" ADD CONSTRAINT "_questionnaire_block_v_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."_pages_v"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "questionnaires_sections_questions_answers" ADD CONSTRAINT "questionnaires_sections_questions_answers_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."questionnaires_sections_questions"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "questionnaires_sections_questions" ADD CONSTRAINT "questionnaires_sections_questions_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."questionnaires_sections"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "questionnaires_sections_results" ADD CONSTRAINT "questionnaires_sections_results_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."questionnaires_sections"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "questionnaires_sections" ADD CONSTRAINT "questionnaires_sections_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."questionnaires"("id") ON DELETE cascade ON UPDATE no action;
-  CREATE INDEX "sleep_screener_block_order_idx" ON "sleep_screener_block" USING btree ("_order");
-  CREATE INDEX "sleep_screener_block_parent_id_idx" ON "sleep_screener_block" USING btree ("_parent_id");
-  CREATE INDEX "sleep_screener_block_path_idx" ON "sleep_screener_block" USING btree ("_path");
-  CREATE INDEX "sleep_screener_block_questionnaire_idx" ON "sleep_screener_block" USING btree ("questionnaire_id");
-  CREATE INDEX "_sleep_screener_block_v_order_idx" ON "_sleep_screener_block_v" USING btree ("_order");
-  CREATE INDEX "_sleep_screener_block_v_parent_id_idx" ON "_sleep_screener_block_v" USING btree ("_parent_id");
-  CREATE INDEX "_sleep_screener_block_v_path_idx" ON "_sleep_screener_block_v" USING btree ("_path");
-  CREATE INDEX "_sleep_screener_block_v_questionnaire_idx" ON "_sleep_screener_block_v" USING btree ("questionnaire_id");
+  CREATE INDEX "questionnaire_block_order_idx" ON "questionnaire_block" USING btree ("_order");
+  CREATE INDEX "questionnaire_block_parent_id_idx" ON "questionnaire_block" USING btree ("_parent_id");
+  CREATE INDEX "questionnaire_block_path_idx" ON "questionnaire_block" USING btree ("_path");
+  CREATE INDEX "questionnaire_block_questionnaire_idx" ON "questionnaire_block" USING btree ("questionnaire_id");
+  CREATE INDEX "_questionnaire_block_v_order_idx" ON "_questionnaire_block_v" USING btree ("_order");
+  CREATE INDEX "_questionnaire_block_v_parent_id_idx" ON "_questionnaire_block_v" USING btree ("_parent_id");
+  CREATE INDEX "_questionnaire_block_v_path_idx" ON "_questionnaire_block_v" USING btree ("_path");
+  CREATE INDEX "_questionnaire_block_v_questionnaire_idx" ON "_questionnaire_block_v" USING btree ("questionnaire_id");
   CREATE INDEX "questionnaires_sections_questions_answers_order_idx" ON "questionnaires_sections_questions_answers" USING btree ("_order");
   CREATE INDEX "questionnaires_sections_questions_answers_parent_id_idx" ON "questionnaires_sections_questions_answers" USING btree ("_parent_id");
   CREATE INDEX "questionnaires_sections_questions_order_idx" ON "questionnaires_sections_questions" USING btree ("_order");
@@ -112,15 +116,15 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
 
 export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
-   ALTER TABLE "sleep_screener_block" DISABLE ROW LEVEL SECURITY;
-  ALTER TABLE "_sleep_screener_block_v" DISABLE ROW LEVEL SECURITY;
+   ALTER TABLE "questionnaire_block" DISABLE ROW LEVEL SECURITY;
+  ALTER TABLE "_questionnaire_block_v" DISABLE ROW LEVEL SECURITY;
   ALTER TABLE "questionnaires_sections_questions_answers" DISABLE ROW LEVEL SECURITY;
   ALTER TABLE "questionnaires_sections_questions" DISABLE ROW LEVEL SECURITY;
   ALTER TABLE "questionnaires_sections_results" DISABLE ROW LEVEL SECURITY;
   ALTER TABLE "questionnaires_sections" DISABLE ROW LEVEL SECURITY;
   ALTER TABLE "questionnaires" DISABLE ROW LEVEL SECURITY;
-  DROP TABLE "sleep_screener_block" CASCADE;
-  DROP TABLE "_sleep_screener_block_v" CASCADE;
+  DROP TABLE "questionnaire_block" CASCADE;
+  DROP TABLE "_questionnaire_block_v" CASCADE;
   DROP TABLE "questionnaires_sections_questions_answers" CASCADE;
   DROP TABLE "questionnaires_sections_questions" CASCADE;
   DROP TABLE "questionnaires_sections_results" CASCADE;
@@ -130,5 +134,7 @@ export async function down({ db, payload, req }: MigrateDownArgs): Promise<void>
   
   DROP INDEX "payload_locked_documents_rels_questionnaires_id_idx";
   ALTER TABLE "payload_locked_documents_rels" DROP COLUMN "questionnaires_id";
+  DROP TYPE "public"."enum_questionnaire_block_cta_link_type";
+  DROP TYPE "public"."enum__questionnaire_block_v_cta_link_type";
   DROP TYPE "public"."enum_questionnaires_sections_results_level";`)
 }

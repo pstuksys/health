@@ -3831,25 +3831,51 @@ export interface Page {
           }
         | {
             /**
-             * Pick a questionnaire, or create a new one under Questionnaires.
+             * The questions and results to show. Pick one, or create a new one under Questionnaires first.
              */
             questionnaire: number | Questionnaire;
+            /**
+             * Heading shown above the questions.
+             */
             title?: string | null;
+            /**
+             * Short intro under the heading: what this is and how long it takes.
+             */
             description?: string | null;
             /**
-             * Button shown with the result
+             * The button visitors see next to their result, e.g. "Book a call with our doctor". Leave the button text empty to hide the button.
              */
             cta?: {
               label?: string | null;
-              /**
-               * Use #book-video-consultation to open the booking modal, or any page/URL.
-               */
-              href?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                /**
+                 * Page or blog post the button opens.
+                 */
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                /**
+                 * Full address such as https://example.com. Keep #book-video-consultation to open the "Book a video consultation" pop-up instead.
+                 */
+                href?: string | null;
+              };
             };
+            /**
+             * Small print under the questionnaire. Use it to reassure visitors: this is not a medical diagnosis, and their answers are not saved, sent or tracked (true for every questionnaire on this site). Leave empty to hide it, though keeping it is recommended.
+             */
             disclaimer?: string | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'sleepScreenerBlock';
+            blockType: 'questionnaireBlock';
           }
       )[]
     | null;
@@ -4149,24 +4175,33 @@ export interface Form {
   createdAt: string;
 }
 /**
- * Scored questionnaires (e.g. sleep screeners). Add one to a page with the Sleep screener block.
+ * Self-check questionnaires such as the sleep screener. Visitors answer the questions, their answers add up to a score, and the score decides which result they see. Answers are never saved or tracked. To show a questionnaire, add the Questionnaire block to a page and pick it there.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "questionnaires".
  */
 export interface Questionnaire {
   id: number;
+  /**
+   * Only for finding it in the admin and in the Questionnaire block; visitors don’t see it.
+   */
   name: string;
   /**
-   * Each section is scored separately and gets its own result (e.g. Sleep apnoea, Insomnia). Visitors answer all sections in one go.
+   * A section is one topic with its own questions and its own result, e.g. "Sleep apnoea" and "Insomnia" in the sleep screener. Visitors go through all sections in one go and then see one result per section. A simple questionnaire needs just one section.
    */
   sections: {
     /**
-     * Shown above its questions and its result
+     * Shown to visitors above this section’s questions and its result, e.g. "Sleep apnoea".
      */
     title: string;
+    /**
+     * Visitors see one question at a time and pick one answer. Each answer is worth some points, which add up to this section’s score.
+     */
     questions: {
       text: string;
+      /**
+       * The choices visitors can pick from (at least 2). Give more points to answers that point to a higher risk; 0 points means it doesn’t count.
+       */
       answers: {
         label: string;
         points: number;
@@ -4175,14 +4210,29 @@ export interface Questionnaire {
       id?: string | null;
     }[];
     /**
-     * Each possible section score must fall in exactly one result. The score is the sum of the chosen answers’ points in this section.
+     * What visitors see after answering, based on this section’s score (the points of their answers added up). Each result covers a score range, e.g. 0–2 low risk, 3–4 medium, 5–8 high. Together the ranges must cover every possible score once, from 0 to the highest possible total; you’ll get a message on save if any score is missing or covered twice.
      */
     results: {
+      /**
+       * Short badge text, e.g. "Low risk"
+       */
       label: string;
+      /**
+       * Sets the colour and where the marker sits on the risk bar
+       */
       level: 'low' | 'medium' | 'high';
       minScore: number;
+      /**
+       * Inclusive: "From 3 to 4" means scores 3 and 4
+       */
       maxScore: number;
+      /**
+       * One sentence summing up the result, e.g. "Your answers suggest a low risk of sleep apnoea."
+       */
       headline: string;
+      /**
+       * Optional: what this result means and what to do next.
+       */
       content?: {
         root: {
           type: string;
@@ -6443,7 +6493,7 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        sleepScreenerBlock?:
+        questionnaireBlock?:
           | T
           | {
               questionnaire?: T;
@@ -6453,7 +6503,17 @@ export interface PagesSelect<T extends boolean = true> {
                 | T
                 | {
                     label?: T;
-                    href?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
                   };
               disclaimer?: T;
               id?: T;
