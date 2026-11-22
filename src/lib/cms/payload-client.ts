@@ -19,11 +19,33 @@ export async function getPayloadClient(): Promise<Payload> {
   return payloadInstance
 }
 
+const RETRY_DELAY_MS = 300
+
 /**
- * Fetch a page by slug with proper error handling
+ * Run a CMS query, retrying once on failure. Errors are rethrown rather than
+ * turned into null/[] so unstable_cache never stores a transient DB failure
+ * as "not found" (which used to 404 pages until they were re-saved).
+ */
+async function queryWithRetry<T>(label: string, query: () => Promise<T>): Promise<T> {
+  try {
+    return await query()
+  } catch (firstError) {
+    console.warn(`${label} failed, retrying once:`, firstError)
+    await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY_MS))
+    try {
+      return await query()
+    } catch (error) {
+      console.error(`${label} failed after retry:`, error)
+      throw error
+    }
+  }
+}
+
+/**
+ * Fetch a page by slug. Returns null only when no page matches.
  */
 async function fetchPage(slug: string, depth = 2, draft = false): Promise<Page | null> {
-  try {
+  return queryWithRetry(`Fetch page with slug "${slug}"`, async () => {
     const payload = await getPayloadClient()
 
     const where = slug
@@ -47,10 +69,7 @@ async function fetchPage(slug: string, depth = 2, draft = false): Promise<Page |
 
     const doc = (docs?.[0] as Page | undefined) ?? null
     return doc ? JSON.parse(JSON.stringify(doc)) : null
-  } catch (error) {
-    console.error(`Failed to fetch page with slug "${slug}":`, error)
-    return null
-  }
+  })
 }
 
 export async function getPage(slug: string, depth = 2): Promise<Page | null> {
@@ -73,80 +92,12 @@ export async function getHomePage(depth = 2): Promise<Page | null> {
   return getPage('', depth)
 }
 
-/**
- * Fetch blogs with proper error handling
- */
-async function fetchBlogs(limit = 50, draft = false): Promise<Blog[]> {
-  try {
-    const payload = await getPayloadClient()
-
-    const { docs } = await payload.find({
-      collection: 'blogs',
-      draft,
-      sort: '-publishedAt',
-      limit,
-      pagination: false,
-    })
-
-    return JSON.parse(JSON.stringify(docs)) as Blog[]
-  } catch (error) {
-    console.error('Failed to fetch blogs:', error)
-    return []
-  }
-}
-
-export async function getBlogs(limit = 50): Promise<Blog[]> {
-  const { isEnabled } = await draftMode()
-  if (isEnabled) return fetchBlogs(limit, true)
-
-  const cacheKey = ['payload:getBlogs', limit.toString()]
-  const cached = unstable_cache(() => fetchBlogs(limit, false), cacheKey, {
-    revalidate: CACHE_REVALIDATE_SECONDS,
-    tags: [cacheTags.blogs],
-  })
-
-  return cached()
-}
-
-async function fetchBlogsByCategory(category: string, limit = 12, draft = false): Promise<Blog[]> {
-  try {
-    const payload = await getPayloadClient()
-
-    const { docs } = await payload.find({
-      collection: 'blogs',
-      where: { category: { equals: category } },
-      draft,
-      sort: '-publishedAt',
-      limit,
-      pagination: false,
-    })
-
-    return JSON.parse(JSON.stringify(docs)) as Blog[]
-  } catch (error) {
-    console.error(`Failed to fetch blogs for category "${category}":`, error)
-    return []
-  }
-}
-
-export async function getBlogsByCategory(category: string, limit = 12): Promise<Blog[]> {
-  const { isEnabled } = await draftMode()
-  if (isEnabled) return fetchBlogsByCategory(category, limit, true)
-
-  const cacheKey = ['payload:getBlogsByCategory', category, limit.toString()]
-  const cached = unstable_cache(() => fetchBlogsByCategory(category, limit, false), cacheKey, {
-    revalidate: CACHE_REVALIDATE_SECONDS,
-    tags: [cacheTags.blogs, cacheTags.blogCategory(category)],
-  })
-
-  return cached()
-}
-
 async function fetchBlogsByCategories(
   categories: string[],
   limit = 12,
   draft = false,
 ): Promise<Blog[]> {
-  try {
+  return queryWithRetry(`Fetch blogs for categories "${categories.join(', ')}"`, async () => {
     const payload = await getPayloadClient()
 
     const { docs } = await payload.find({
@@ -159,10 +110,7 @@ async function fetchBlogsByCategories(
     })
 
     return JSON.parse(JSON.stringify(docs)) as Blog[]
-  } catch (error) {
-    console.error(`Failed to fetch blogs for categories "${categories.join(', ')}":`, error)
-    return []
-  }
+  })
 }
 
 export async function getBlogsByCategories(categories: string[], limit = 12): Promise<Blog[]> {
@@ -179,10 +127,10 @@ export async function getBlogsByCategories(categories: string[], limit = 12): Pr
 }
 
 /**
- * Fetch a single blog by slug
+ * Fetch a single blog by slug. Returns null only when no blog matches.
  */
 async function fetchBlogBySlug(slug: string, depth = 2, draft = false): Promise<Blog | null> {
-  try {
+  return queryWithRetry(`Fetch blog with slug "${slug}"`, async () => {
     const payload = await getPayloadClient()
 
     const { docs } = await payload.find({
@@ -196,10 +144,7 @@ async function fetchBlogBySlug(slug: string, depth = 2, draft = false): Promise<
 
     const doc = (docs?.[0] as Blog | undefined) ?? null
     return doc ? JSON.parse(JSON.stringify(doc)) : null
-  } catch (error) {
-    console.error(`Failed to fetch blog with slug "${slug}":`, error)
-    return null
-  }
+  })
 }
 
 export async function getBlogBySlug(slug: string, depth = 2): Promise<Blog | null> {
@@ -219,7 +164,7 @@ export async function getBlogBySlug(slug: string, depth = 2): Promise<Blog | nul
  * Fetch header global
  */
 async function fetchHeader(draft = false): Promise<Header | null> {
-  try {
+  return queryWithRetry('Fetch header', async () => {
     const payload = await getPayloadClient()
     const header = (await payload.findGlobal({
       slug: 'header',
@@ -227,12 +172,8 @@ async function fetchHeader(draft = false): Promise<Header | null> {
       draft,
     })) as Header
 
-    const safe = JSON.parse(JSON.stringify(header))
-    return safe ?? null
-  } catch (error) {
-    console.error('Failed to fetch header:', error)
-    return null
-  }
+    return JSON.parse(JSON.stringify(header)) ?? null
+  })
 }
 
 export async function getHeader(): Promise<Header | null> {
@@ -251,7 +192,7 @@ export async function getHeader(): Promise<Header | null> {
  * Fetch footer global
  */
 async function fetchFooter(draft = false): Promise<Footer | null> {
-  try {
+  return queryWithRetry('Fetch footer', async () => {
     const payload = await getPayloadClient()
     const footer = (await payload.findGlobal({
       slug: 'footer',
@@ -259,12 +200,8 @@ async function fetchFooter(draft = false): Promise<Footer | null> {
       draft,
     })) as Footer
 
-    const safe = JSON.parse(JSON.stringify(footer))
-    return safe ?? null
-  } catch (error) {
-    console.error('Failed to fetch footer:', error)
-    return null
-  }
+    return JSON.parse(JSON.stringify(footer)) ?? null
+  })
 }
 
 export async function getFooter(): Promise<Footer | null> {
@@ -283,7 +220,7 @@ export async function getFooter(): Promise<Footer | null> {
  * Fetch education hub global
  */
 async function fetchEducationHub(draft = false): Promise<EducationHub | null> {
-  try {
+  return queryWithRetry('Fetch education hub', async () => {
     const payload = await getPayloadClient()
     const educationHub = (await payload.findGlobal({
       slug: 'education-hub',
@@ -291,12 +228,8 @@ async function fetchEducationHub(draft = false): Promise<EducationHub | null> {
       draft,
     })) as EducationHub
 
-    const safe = JSON.parse(JSON.stringify(educationHub))
-    return safe ?? null
-  } catch (error) {
-    console.error('Failed to fetch education hub:', error)
-    return null
-  }
+    return JSON.parse(JSON.stringify(educationHub)) ?? null
+  })
 }
 
 export async function getEducationHub(): Promise<EducationHub | null> {
@@ -309,18 +242,4 @@ export async function getEducationHub(): Promise<EducationHub | null> {
   })
 
   return cached()
-}
-
-/**
- * Fetch both header and footer globals
- */
-export async function getHeaderFooter(): Promise<{ header: Header | null; footer: Footer | null }> {
-  try {
-    const [header, footer] = await Promise.all([getHeader(), getFooter()])
-
-    return { header, footer }
-  } catch (error) {
-    console.error('Failed to fetch header/footer:', error)
-    return { header: null, footer: null }
-  }
 }

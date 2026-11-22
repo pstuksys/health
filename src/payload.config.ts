@@ -32,6 +32,7 @@ import { Users } from './collections/Users'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Blogs } from './collections/Blogs'
+import { Questionnaires } from './collections/Questionnaires'
 import { Header } from './globals/Header'
 import { Footer } from './globals/Footer'
 import { EducationHub } from './globals/EducationHub'
@@ -117,7 +118,7 @@ export default buildConfig({
   },
   cors: [process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000', 'http://127.0.0.1:3000'],
   csrf: [process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000', 'http://127.0.0.1:3000'],
-  collections: [Users, Media, Pages, Blogs],
+  collections: [Users, Media, Pages, Blogs, Questionnaires],
   editor: lexicalEditor({
     features: ({ defaultFeatures }) => [
       ...defaultFeatures,

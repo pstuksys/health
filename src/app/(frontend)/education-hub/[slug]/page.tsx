@@ -129,10 +129,7 @@ export default async function BlogPage(props: BlogPageParams) {
 
         {blog.showSpecialistProfile && blog.specialist && (
           <div className="mt-12">
-            <SpecialistProfile
-              specialist={blog.specialist}
-              reviewNote={blog.clinicalReviewNote}
-            />
+            <SpecialistProfile specialist={blog.specialist} reviewNote={blog.clinicalReviewNote} />
           </div>
         )}
 
@@ -159,74 +156,66 @@ export default async function BlogPage(props: BlogPageParams) {
 export async function generateMetadata(props: BlogPageParams) {
   const { slug } = await props.params
 
-  try {
-    const blog = await getBlogBySlug(slug, 2)
+  const blog = await getBlogBySlug(slug, 2)
 
-    if (!blog) {
-      return {
-        title: 'Article Not Found',
-        description: 'The requested article could not be found.',
-      }
-    }
-
-    const seoTitle = blog.meta?.title
-    const seoDescription = blog.meta?.description
-    const seoImage = blog.meta?.image
-
+  if (!blog) {
     return {
-      title: seoTitle || `${blog.title} | Sleep Education Hub`,
-      description: seoDescription || blog.excerpt || `Read ${blog.title} on our Sleep Education Hub.`,
-      openGraph: {
-        title: seoTitle || blog.title,
-        description:
-          seoDescription || blog.excerpt || `Read ${blog.title} on our Sleep Education Hub.`,
-        type: 'article',
-        publishedTime: blog.publishedAt || undefined,
-        authors: blog.author ? [blog.author] : undefined,
-        images: seoImage
+      title: 'Article Not Found',
+      description: 'The requested article could not be found.',
+    }
+  }
+
+  const seoTitle = blog.meta?.title
+  const seoDescription = blog.meta?.description
+  const seoImage = blog.meta?.image
+
+  return {
+    title: seoTitle || `${blog.title} | Sleep Education Hub`,
+    description: seoDescription || blog.excerpt || `Read ${blog.title} on our Sleep Education Hub.`,
+    openGraph: {
+      title: seoTitle || blog.title,
+      description:
+        seoDescription || blog.excerpt || `Read ${blog.title} on our Sleep Education Hub.`,
+      type: 'article',
+      publishedTime: blog.publishedAt || undefined,
+      authors: blog.author ? [blog.author] : undefined,
+      images: seoImage
+        ? [
+            {
+              url:
+                typeof seoImage === 'object' && seoImage?.url
+                  ? seoImage.url
+                  : typeof blog.image === 'object' && blog.image?.url
+                    ? blog.image.url
+                    : undefined,
+              width: typeof seoImage === 'object' ? seoImage?.width : undefined,
+              height: typeof seoImage === 'object' ? seoImage?.height : undefined,
+              alt: typeof seoImage === 'object' ? seoImage?.alt || blog.title : blog.title,
+            },
+          ].filter((img) => img.url)
+        : typeof blog.image === 'object' && blog.image?.url
           ? [
               {
-                url:
-                  typeof seoImage === 'object' && seoImage?.url
-                    ? seoImage.url
-                    : typeof blog.image === 'object' && blog.image?.url
-                      ? blog.image.url
-                      : undefined,
-                width: typeof seoImage === 'object' ? seoImage?.width : undefined,
-                height: typeof seoImage === 'object' ? seoImage?.height : undefined,
-                alt: typeof seoImage === 'object' ? seoImage?.alt || blog.title : blog.title,
+                url: blog.image.url,
+                width: blog.image.width,
+                height: blog.image.height,
+                alt: blog.image.alt || blog.title,
               },
-            ].filter((img) => img.url)
-          : typeof blog.image === 'object' && blog.image?.url
-            ? [
-                {
-                  url: blog.image.url,
-                  width: blog.image.width,
-                  height: blog.image.height,
-                  alt: blog.image.alt || blog.title,
-                },
-              ]
-            : undefined,
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: seoTitle || blog.title,
-        description:
-          seoDescription || blog.excerpt || `Read ${blog.title} on our Sleep Education Hub.`,
-        images: seoImage
-          ? typeof seoImage === 'object' && seoImage?.url
-            ? [seoImage.url]
-            : undefined
-          : typeof blog.image === 'object' && blog.image?.url
-            ? [blog.image.url]
-            : undefined,
-      },
-    }
-  } catch (error) {
-    console.error('Error generating blog metadata:', error)
-    return {
-      title: 'Sleep Education Hub Article',
-      description: 'Read our latest sleep education article.',
-    }
+            ]
+          : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: seoTitle || blog.title,
+      description:
+        seoDescription || blog.excerpt || `Read ${blog.title} on our Sleep Education Hub.`,
+      images: seoImage
+        ? typeof seoImage === 'object' && seoImage?.url
+          ? [seoImage.url]
+          : undefined
+        : typeof blog.image === 'object' && blog.image?.url
+          ? [blog.image.url]
+          : undefined,
+    },
   }
 }

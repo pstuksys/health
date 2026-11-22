@@ -2,47 +2,23 @@ import type { Metadata } from 'next'
 import { HeroSection } from '@/app/(frontend)/components/hero-section/component'
 import { RenderBlocks, deriveGlobalHeroProps } from '@/app/(frontend)/components/RenderBlocks'
 import { getHomePage, generatePageMetadata } from '@/lib/page-utils'
-import type { Page } from '@/payload-types'
 
 export const revalidate = 86400
 
 // Header/Footer are fetched in layout; keep this page focused on content rendering
 
 export async function generateMetadata(): Promise<Metadata> {
-  try {
-    const page = await getHomePage()
-    return generatePageMetadata(page, {
-      title: 'Home',
-      description: 'Welcome to our site',
-    })
-  } catch (error) {
-    console.error('Failed to generate home page metadata:', error)
-    return {
-      title: 'Home',
-      description: 'Welcome to our site',
-    }
-  }
+  const page = await getHomePage()
+  return generatePageMetadata(page, {
+    title: 'Home',
+    description: 'Welcome to our site',
+  })
 }
 
+// CMS errors are not caught here: rendering a fallback would be ISR-cached for
+// a day, while a thrown error goes to error.tsx and the next request retries.
 export default async function HomePage() {
-  let page: Page | null
-  try {
-    page = await getHomePage()
-  } catch (error) {
-    console.error('Failed to render home page:', error)
-    // Log additional details for debugging in production
-    console.error('Error details:', {
-      message: error instanceof Error ? error.message : 'Unknown error',
-      stack: error instanceof Error ? error.stack : undefined,
-      timestamp: new Date().toISOString(),
-    })
-    return (
-      <main className="flex flex-col items-center justify-center min-h-[50vh]">
-        <h1 className="text-2xl font-semibold text-gray-800">Something went wrong</h1>
-        <p className="text-gray-600 mt-2">Please try again later</p>
-      </main>
-    )
-  }
+  const page = await getHomePage()
 
   if (!page) {
     console.warn('Home page not found in CMS')

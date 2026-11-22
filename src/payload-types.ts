@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     pages: Page;
     blogs: Blog;
+    questionnaires: Questionnaire;
     forms: Form;
     'form-submissions': FormSubmission;
     search: Search;
@@ -85,6 +86,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     blogs: BlogsSelect<false> | BlogsSelect<true>;
+    questionnaires: QuestionnairesSelect<false> | QuestionnairesSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
     search: SearchSelect<false> | SearchSelect<true>;
@@ -3827,6 +3829,54 @@ export interface Page {
             blockName?: string | null;
             blockType: 'educationHubArticles';
           }
+        | {
+            /**
+             * The questions and results to show. Pick one, or create a new one under Questionnaires first.
+             */
+            questionnaire: number | Questionnaire;
+            /**
+             * Heading shown above the questions.
+             */
+            title?: string | null;
+            /**
+             * Short intro under the heading: what this is and how long it takes.
+             */
+            description?: string | null;
+            /**
+             * The button visitors see next to their result, e.g. "Book a call with our doctor". Leave the button text empty to hide the button.
+             */
+            cta?: {
+              label?: string | null;
+              linkType?: ('internal' | 'external') | null;
+              internal?: {
+                /**
+                 * Page or blog post the button opens.
+                 */
+                relation?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'blogs';
+                      value: number | Blog;
+                    } | null);
+              };
+              external?: {
+                /**
+                 * Full address such as https://example.com. Keep #book-video-consultation to open the "Book a video consultation" pop-up instead.
+                 */
+                href?: string | null;
+              };
+            };
+            /**
+             * Small print under the questionnaire. Use it to reassure visitors: this is not a medical diagnosis, and their answers are not saved, sent or tracked (true for every questionnaire on this site). Leave empty to hide it, though keeping it is recommended.
+             */
+            disclaimer?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'questionnaireBlock';
+          }
       )[]
     | null;
   meta?: {
@@ -4125,6 +4175,87 @@ export interface Form {
   createdAt: string;
 }
 /**
+ * Self-check questionnaires such as the sleep screener. Visitors answer the questions, their answers add up to a score, and the score decides which result they see. Answers are never saved or tracked. To show a questionnaire, add the Questionnaire block to a page and pick it there.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "questionnaires".
+ */
+export interface Questionnaire {
+  id: number;
+  /**
+   * Only for finding it in the admin and in the Questionnaire block; visitors don’t see it.
+   */
+  name: string;
+  /**
+   * A section is one topic with its own questions and its own result, e.g. "Sleep apnoea" and "Insomnia" in the sleep screener. Visitors go through all sections in one go and then see one result per section. A simple questionnaire needs just one section.
+   */
+  sections: {
+    /**
+     * Shown to visitors above this section’s questions and its result, e.g. "Sleep apnoea".
+     */
+    title: string;
+    /**
+     * Visitors see one question at a time and pick one answer. Each answer is worth some points, which add up to this section’s score.
+     */
+    questions: {
+      text: string;
+      /**
+       * The choices visitors can pick from (at least 2). Give more points to answers that point to a higher risk; 0 points means it doesn’t count.
+       */
+      answers: {
+        label: string;
+        points: number;
+        id?: string | null;
+      }[];
+      id?: string | null;
+    }[];
+    /**
+     * What visitors see after answering, based on this section’s score (the points of their answers added up). Each result covers a score range, e.g. 0–2 low risk, 3–4 medium, 5–8 high. Together the ranges must cover every possible score once, from 0 to the highest possible total; you’ll get a message on save if any score is missing or covered twice.
+     */
+    results: {
+      /**
+       * Short badge text, e.g. "Low risk"
+       */
+      label: string;
+      /**
+       * Sets the colour and where the marker sits on the risk bar
+       */
+      level: 'low' | 'medium' | 'high';
+      minScore: number;
+      /**
+       * Inclusive: "From 3 to 4" means scores 3 and 4
+       */
+      maxScore: number;
+      /**
+       * One sentence summing up the result, e.g. "Your answers suggest a low risk of sleep apnoea."
+       */
+      headline: string;
+      /**
+       * Optional: what this result means and what to do next.
+       */
+      content?: {
+        root: {
+          type: string;
+          children: {
+            type: any;
+            version: number;
+            [k: string]: unknown;
+          }[];
+          direction: ('ltr' | 'rtl') | null;
+          format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+          indent: number;
+          version: number;
+        };
+        [k: string]: unknown;
+      } | null;
+      id?: string | null;
+    }[];
+    id?: string | null;
+  }[];
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "form-submissions".
  */
@@ -4202,6 +4333,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'blogs';
         value: number | Blog;
+      } | null)
+    | ({
+        relationTo: 'questionnaires';
+        value: number | Questionnaire;
       } | null)
     | ({
         relationTo: 'forms';
@@ -6358,6 +6493,32 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        questionnaireBlock?:
+          | T
+          | {
+              questionnaire?: T;
+              title?: T;
+              description?: T;
+              cta?:
+                | T
+                | {
+                    label?: T;
+                    linkType?: T;
+                    internal?:
+                      | T
+                      | {
+                          relation?: T;
+                        };
+                    external?:
+                      | T
+                      | {
+                          href?: T;
+                        };
+                  };
+              disclaimer?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
@@ -6443,6 +6604,45 @@ export interface BlogsSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "questionnaires_select".
+ */
+export interface QuestionnairesSelect<T extends boolean = true> {
+  name?: T;
+  sections?:
+    | T
+    | {
+        title?: T;
+        questions?:
+          | T
+          | {
+              text?: T;
+              answers?:
+                | T
+                | {
+                    label?: T;
+                    points?: T;
+                    id?: T;
+                  };
+              id?: T;
+            };
+        results?:
+          | T
+          | {
+              label?: T;
+              level?: T;
+              minScore?: T;
+              maxScore?: T;
+              headline?: T;
+              content?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

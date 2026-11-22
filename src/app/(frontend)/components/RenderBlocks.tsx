@@ -66,6 +66,7 @@ import { GridCards } from './grid-cards/component'
 import { Button, type ButtonBlockProps } from './button/component'
 import { TrustBadgesBlock } from './trust-badges-block/component'
 import { IconRowBlock } from './icon-row-block/component'
+import { QuestionnaireBlock } from './questionnaire-block/component'
 import { CareNetworkBlock } from './care-network-block/component'
 import { EducationHubArticles } from './education-hub-articles/component'
 
@@ -120,6 +121,10 @@ export const blockComponents: Record<string, (block: unknown) => JSX.Element> = 
   trustBadgesBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'trustBadgesBlock' }>
     return <TrustBadgesBlock {...b} />
+  },
+  questionnaireBlock: (block) => {
+    const b = block as Extract<PageBlock, { blockType: 'questionnaireBlock' }>
+    return <QuestionnaireBlock {...b} />
   },
   iconRowBlock: (block) => {
     const b = block as Extract<PageBlock, { blockType: 'iconRowBlock' }>
