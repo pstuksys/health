@@ -1,4 +1,5 @@
-import type { CollectionConfig, Field } from 'payload'
+import type { CollectionConfig, Field, NumberFieldSingleValidation } from 'payload'
+import { number } from 'payload/shared'
 import { cacheTags, revalidateCacheTags } from '@/lib/cache-tags'
 import {
   checkResultRanges,
@@ -8,6 +9,14 @@ import {
 
 const isEditor = (role?: string) => role === 'editor' || role === 'admin'
 const roleOf = (user: unknown) => (user as { role?: string } | null | undefined)?.role
+
+// Scores are checked as whole numbers, so decimals could create a score no result covers
+const wholeNumber: NumberFieldSingleValidation = (value, args) => {
+  if (typeof value === 'number' && !Number.isInteger(value)) {
+    return 'Use a whole number (no decimals).'
+  }
+  return (number as NumberFieldSingleValidation)(value, args)
+}
 
 // Pages embed their questionnaire, so any change must refresh cached pages
 const revalidatePages = async () => {
@@ -63,6 +72,7 @@ const questionsField: Field = {
               required: true,
               defaultValue: 0,
               min: 0,
+              validate: wholeNumber,
             },
           ],
         },
@@ -117,6 +127,7 @@ const resultsField: Field = {
           type: 'number',
           required: true,
           min: 0,
+          validate: wholeNumber,
         },
         {
           name: 'maxScore',
@@ -124,6 +135,7 @@ const resultsField: Field = {
           type: 'number',
           required: true,
           min: 0,
+          validate: wholeNumber,
           admin: { description: 'Inclusive: "From 3 to 4" means scores 3 and 4' },
         },
       ],

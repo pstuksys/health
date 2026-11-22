@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import type { Field, NumberFieldSingleValidation } from 'payload'
+import { Questionnaires } from '@/collections/Questionnaires'
 import { insomnia, sleepScreener, stopBang } from '@/lib/questionnaires/presets'
 import {
   checkResultRanges,
@@ -115,5 +117,32 @@ describe('checkResultRanges', () => {
       { minScore: 2, maxScore: 3 },
     ]
     expect(checkResultRanges(questions, results)).toContain('more than one result for score 2')
+  })
+})
+
+describe('questionnaire score fields', () => {
+  // Find the points / minScore / maxScore fields in the collection config
+  const findField = (fields: Field[], name: string): Field | undefined => {
+    for (const field of fields) {
+      if ('name' in field && field.name === name) return field
+      if ('fields' in field) {
+        const found = findField(field.fields, name)
+        if (found) return found
+      }
+    }
+  }
+  const validateOf = (name: string) =>
+    (findField(Questionnaires.fields, name) as { validate: NumberFieldSingleValidation }).validate
+
+  const args = {
+    req: { t: (key: string) => key },
+    required: true,
+    min: 0,
+  } as unknown as Parameters<NumberFieldSingleValidation>[1]
+
+  it.each(['points', 'minScore', 'maxScore'])('%s rejects decimals and accepts whole numbers', (name) => {
+    const validate = validateOf(name)
+    expect(validate(0.5, args)).toBe('Use a whole number (no decimals).')
+    expect(validate(2, args)).toBe(true)
   })
 })
