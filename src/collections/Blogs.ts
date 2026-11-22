@@ -1,6 +1,7 @@
 import type { CollectionConfig } from 'payload'
 import type { Blog } from '@/payload-types'
 import { cacheTags, revalidateCacheTags } from '@/lib/cache-tags'
+import { trimSlug } from '@/lib/cms/trim-slug'
 
 export const Blogs: CollectionConfig = {
   slug: 'blogs',
@@ -104,6 +105,7 @@ export const Blogs: CollectionConfig = {
       type: 'text',
       unique: true,
       index: true,
+      hooks: { beforeValidate: [trimSlug] },
       admin: {
         condition: (data) => data?.linkType !== 'external',
       },
