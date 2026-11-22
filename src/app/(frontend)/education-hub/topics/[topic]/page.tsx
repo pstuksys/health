@@ -21,7 +21,7 @@ const transformBlog = (blog: Blog) => ({
   excerpt: blog.excerpt,
   image: blog.image,
   linkType: (blog.linkType || 'internal') as 'internal' | 'external',
-  externalUrl: blog.externalUrl,
+  href: blog.externalUrl,
   post: { relationTo: 'blogs' as const, value: blog },
   date: blog.publishedAt ? new Date(blog.publishedAt).toLocaleDateString() : undefined,
   author: blog.author || '',
