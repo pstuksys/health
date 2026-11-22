@@ -8,6 +8,14 @@ import {
 } from '@/app/(frontend)/components/RenderBlocks'
 import { getPage, generateMetadataBySlug } from '@/lib/page-utils'
 import type { Page } from '@/payload-types'
+import { cn } from '@/lib/utils'
+
+/**
+ * First blocks that are already built to sit under the header, like a hero:
+ * occupationalHealth opens with a header-coloured gradient section, and the
+ * questionnaire pads itself for the header.
+ */
+const BLOCKS_THAT_CLEAR_HEADER = new Set<string>(['occupationalHealth', 'questionnaireBlock'])
 
 /**
  * Check if a slug should be handled by the dynamic page route
@@ -77,8 +85,16 @@ export default async function DynamicPage(props: { params: Promise<{ slug: strin
   const heroProps = deriveGlobalHeroProps(page)
   const showGlobalHero = Boolean(page.showHero)
 
+  // The site header (64px, h-16) floats over the top of the page. Without a hero
+  // underneath it, push the content down so it doesn't start behind the header.
+  const firstBlockType = page.blocks?.[0]?.blockType
+  const startsUnderHeader =
+    !showGlobalHero &&
+    !renderHeroFromBlocks &&
+    !(firstBlockType && BLOCKS_THAT_CLEAR_HEADER.has(firstBlockType))
+
   return (
-    <main className="flex flex-col">
+    <main className={cn('flex flex-col', startsUnderHeader && 'pt-16')}>
       {!renderHeroFromBlocks && showGlobalHero && <HeroSection {...heroProps} />}
       <RenderBlocks blocks={page.blocks ?? null} />
     </main>
