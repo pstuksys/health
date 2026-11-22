@@ -8,6 +8,9 @@ import { NavWithScroll } from './components/navigation-menu/components/NavWithSc
 import { siteMetadata } from '@/lib/metadata'
 import { resolveUrl } from '@/lib/navigation'
 import { BookingModal } from './components/booking-modal/component'
+import { NavigationProgress } from './components/navigation-progress/component'
+import { Suspense } from 'react'
+import { DraftModeBanner } from './components/draft-mode-banner/component'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -51,6 +54,10 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="en" className={`${poppins.variable} antialiased`} data-scroll-behavior="smooth">
       <body className="font-sans bg-white">
+        {/* Suspense only wraps the bar (useSearchParams); pages stay unstreamed so 404s keep their status */}
+        <Suspense fallback={null}>
+          <NavigationProgress />
+        </Suspense>
         <NavWithScroll
           items={items}
           ctaButton={
@@ -80,6 +87,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               : undefined
           }
         />
+        <DraftModeBanner />
         <Footer
           socialLinks={footer?.socialLinks ?? []}
           navLinks={footerNavLinks}

@@ -1,5 +1,24 @@
 import type { Metadata } from 'next'
 
+/**
+ * Open Graph fields every page shares. Next replaces the whole `openGraph`
+ * object when a page sets its own, so pages spread these back in.
+ */
+export const openGraphDefaults = {
+  type: 'website',
+  locale: 'en_GB',
+  siteName: 'IPDiagnostics',
+} as const
+
+/**
+ * Route path for a page's self-referencing canonical and og:url, e.g.
+ * `patient/cpap` -> `/patient/cpap`. Relative paths resolve against
+ * `metadataBase` (NEXT_PUBLIC_SITE_URL).
+ */
+export function canonicalPath(path: string): string {
+  return '/' + path.replace(/^\/+|\/+$/g, '')
+}
+
 export const siteMetadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
   title: {
@@ -37,17 +56,10 @@ export const siteMetadata: Metadata = {
     // yahoo: 'your-yahoo-verification',
     // other: 'your-other-verification',
   },
-  alternates: {
-    canonical: '/',
-    languages: {
-      'en-US': '/en-US',
-      en: '/en',
-    },
-  },
+  // No site-wide canonical: each route sets its own via canonicalPath(), otherwise
+  // every page would point search engines at the homepage.
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: '/',
+    ...openGraphDefaults,
     title: 'IPDiagnostics',
     description:
       'Independent Physiological Diagnostics — specialists in sleep, neurophysiology, and lung function testing across the UK.',
@@ -82,8 +94,13 @@ export const siteMetadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  // Square head mark from the logo (the full logo is too wide for an icon)
   icons: {
-    icon: [{ url: '/logo.svg', type: 'image/svg+xml' }],
+    icon: [
+      { url: '/favicon.ico', sizes: '16x16 32x32 48x48' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
   },
   manifest: '/manifest.json', // Create a web app manifest
 }

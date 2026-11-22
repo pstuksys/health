@@ -478,3 +478,13 @@ body.mobile-menu-open {
 .doctify-widget.doctify-widget * {
   font-family: var(--font-poppins), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
 }
+
+/* Page navigation progress bar (components/navigation-progress) */
+@keyframes nav-progress {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(300%);
+  }
+}

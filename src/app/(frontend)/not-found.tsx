@@ -1,5 +1,12 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import type { Metadata } from 'next'
+
+// Overrides the site-wide "index, follow" so missing pages carry a single noindex
+export const metadata: Metadata = {
+  title: 'Page Not Found',
+  robots: { index: false, follow: true },
+}
 
 export default function NotFound() {
   return (
