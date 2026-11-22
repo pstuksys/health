@@ -8,6 +8,7 @@ import { NavWithScroll } from './components/navigation-menu/components/NavWithSc
 import { siteMetadata } from '@/lib/metadata'
 import { resolveUrl } from '@/lib/navigation'
 import { BookingModal } from './components/booking-modal/component'
+import { DraftModeBanner } from './components/draft-mode-banner/component'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -80,6 +81,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               : undefined
           }
         />
+        <DraftModeBanner />
         <Footer
           socialLinks={footer?.socialLinks ?? []}
           navLinks={footerNavLinks}
