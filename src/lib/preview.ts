@@ -9,7 +9,12 @@ export function safeRedirectPath(path: string | null | undefined): string {
   try {
     const url = new URL(path, 'http://localhost')
     if (url.host !== 'localhost') return '/'
-    return `${url.pathname}${url.search}`
+    const result = `${url.pathname}${url.search}`
+    // Check again after normalising: "/.//evil.com" and "/a/..//evil.com" pass
+    // the checks above but collapse to "//evil.com", which browsers treat as
+    // another host.
+    if (result.startsWith('//') || result.includes('\\')) return '/'
+    return result
   } catch {
     return '/'
   }
