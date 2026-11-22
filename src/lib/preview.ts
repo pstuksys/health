@@ -15,6 +15,33 @@ export function safeRedirectPath(path: string | null | undefined): string {
   }
 }
 
+/**
+ * Redirect with a relative Location (`/faqs`, no host). The browser stays on
+ * the host it's on, which is also the host the draft-mode cookie was set for,
+ * whatever proxy or deployment URL is in front.
+ */
+export function relativeRedirect(path: string): Response {
+  return new Response(null, { status: 307, headers: { Location: safeRedirectPath(path) } })
+}
+
+/**
+ * The same-site page the request came from (Referer), so "Exit preview" can
+ * return the editor to the page they were on. Falls back to the homepage.
+ */
+export function refererPath(headers: Headers): string {
+  const referer = headers.get('referer')
+  const host = headers.get('x-forwarded-host') ?? headers.get('host')
+  if (!referer || !host) return '/'
+
+  try {
+    const url = new URL(referer)
+    if (url.host !== host) return '/'
+    return safeRedirectPath(`${url.pathname}${url.search}`)
+  } catch {
+    return '/'
+  }
+}
+
 /** Admin "Preview" link: enables draft mode, then opens the page at `path`. */
 export function previewUrl(path: string): string {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'

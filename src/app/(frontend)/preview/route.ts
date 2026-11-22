@@ -1,7 +1,7 @@
 import { draftMode } from 'next/headers'
 import { NextResponse, type NextRequest } from 'next/server'
 import { getPayloadClient } from '@/lib/cms/payload-client'
-import { safeRedirectPath } from '@/lib/preview'
+import { relativeRedirect } from '@/lib/preview'
 
 /**
  * Turn on draft mode so unpublished changes are shown, then go to `?path=`.
@@ -25,6 +25,5 @@ export async function GET(request: NextRequest) {
   const dm = await draftMode()
   dm.enable()
 
-  const path = safeRedirectPath(request.nextUrl.searchParams.get('path'))
-  return NextResponse.redirect(new URL(path, request.url))
+  return relativeRedirect(request.nextUrl.searchParams.get('path') ?? '/')
 }
