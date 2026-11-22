@@ -1,12 +1,29 @@
-import { draftMode, headers } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { draftMode } from 'next/headers'
+import { NextResponse, type NextRequest } from 'next/server'
+import { getPayloadClient } from '@/lib/cms/payload-client'
+import { relativeRedirect } from '@/lib/preview'
 
-export async function GET() {
+/**
+ * Turn on draft mode so unpublished changes are shown, then go to `?path=`.
+ * Used by the admin "Preview" buttons. Only editors and admins may enable it,
+ * matching who can read drafts in the admin (Pages/Blogs access rules);
+ * viewers only see published content there, so they don't get previews either.
+ */
+export async function GET(request: NextRequest) {
+  const payload = await getPayloadClient()
+  const { user } = await payload.auth({ headers: request.headers })
+
+  if (!user) {
+    return new NextResponse('Log in to the admin to preview drafts.', { status: 401 })
+  }
+
+  const role = (user as { role?: string }).role
+  if (role !== 'editor' && role !== 'admin') {
+    return new NextResponse('Only editors and admins can preview drafts.', { status: 403 })
+  }
+
   const dm = await draftMode()
   dm.enable()
-  const h = await headers()
-  const referer = h.get('referer') || ''
-  const origin = h.get('origin') || (referer ? new URL(referer).origin : undefined)
-  const base = origin ?? process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
-  return NextResponse.redirect(new URL('/', base))
+
+  return relativeRedirect(request.nextUrl.searchParams.get('path') ?? '/')
 }

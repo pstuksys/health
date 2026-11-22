@@ -1,3 +1,4 @@
+import { canonicalPath, openGraphDefaults } from '@/lib/metadata'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -89,10 +90,12 @@ export async function generateMetadata() {
   return {
     title: settings.metadata.title,
     description: settings.metadata.description,
+    alternates: { canonical: canonicalPath('education-hub') },
     openGraph: {
+      ...openGraphDefaults,
+      url: canonicalPath('education-hub'),
       title: settings.metadata.title,
       description: settings.metadata.description,
-      type: 'website',
     },
     twitter: {
       card: 'summary_large_image',

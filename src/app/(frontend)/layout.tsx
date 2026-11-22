@@ -10,6 +10,7 @@ import { resolveUrl } from '@/lib/navigation'
 import { BookingModal } from './components/booking-modal/component'
 import { NavigationProgress } from './components/navigation-progress/component'
 import { Suspense } from 'react'
+import { DraftModeBanner } from './components/draft-mode-banner/component'
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -86,6 +87,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               : undefined
           }
         />
+        <DraftModeBanner />
         <Footer
           socialLinks={footer?.socialLinks ?? []}
           navLinks={footerNavLinks}

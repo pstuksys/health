@@ -1,3 +1,4 @@
+import { canonicalPath, openGraphDefaults } from '@/lib/metadata'
 import { notFound, redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -169,10 +170,15 @@ export async function generateMetadata(props: BlogPageParams) {
   const seoDescription = blog.meta?.description
   const seoImage = blog.meta?.image
 
+  const url = canonicalPath(`education-hub/${slug}`)
+
   return {
     title: seoTitle || `${blog.title} | Sleep Education Hub`,
     description: seoDescription || blog.excerpt || `Read ${blog.title} on our Sleep Education Hub.`,
+    alternates: { canonical: url },
     openGraph: {
+      ...openGraphDefaults,
+      url,
       title: seoTitle || blog.title,
       description:
         seoDescription || blog.excerpt || `Read ${blog.title} on our Sleep Education Hub.`,
