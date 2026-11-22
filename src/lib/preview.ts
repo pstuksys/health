@@ -42,8 +42,12 @@ export function refererPath(headers: Headers): string {
   }
 }
 
-/** Admin "Preview" link: enables draft mode, then opens the page at `path`. */
+/**
+ * Admin "Preview" link: enables draft mode, then opens the page at `path`.
+ * Relative on purpose: the admin and the site are the same app, so the link
+ * stays on the host the editor is logged in on (localhost, a Vercel preview
+ * deployment or production) and the login cookie comes along.
+ */
 export function previewUrl(path: string): string {
-  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'
-  return `${base}/preview?path=${encodeURIComponent(path)}`
+  return `/preview?path=${encodeURIComponent(path)}`
 }
