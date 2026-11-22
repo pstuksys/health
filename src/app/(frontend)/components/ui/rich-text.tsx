@@ -24,7 +24,8 @@ export const RichText = memo(function RichText({ className, data, ...rest }: Ric
     <PayloadRichText
       {...(rest as unknown as React.ComponentProps<typeof PayloadRichText>)}
       data={data as unknown as React.ComponentProps<typeof PayloadRichText>['data']}
-      className={cn('rich-text-content', className)}
+      // break-words: long URLs/words with no spaces wrap instead of widening the page on mobile
+      className={cn('rich-text-content break-words', className)}
       converters={jsxConverters}
     />
   )
