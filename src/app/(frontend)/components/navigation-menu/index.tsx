@@ -45,6 +45,8 @@ export function NavigationMenu({
   isScrolled = false,
   isVisible = true,
 }: NavigationMenuProps) {
+  // Only show the call link when the admin value actually contains a number
+  const phoneHref = phone && /\d/.test(phone) ? telHref(phone) : null
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -215,11 +217,11 @@ export function NavigationMenu({
           </div>
 
           {/* Desktop click-to-call + CTA button (measured together by useResponsiveNavigation via ctaRef) */}
-          {(phone || ctaButton) && (
+          {(phoneHref || ctaButton) && (
             <div ref={ctaRef} className="hidden md:flex items-center gap-4 flex-shrink-0">
-              {phone && (
+              {phoneHref && (
                 <a
-                  href={telHref(phone)}
+                  href={phoneHref}
                   className="flex items-center gap-2 text-white hover:text-ds-accent-yellow text-sm font-light whitespace-nowrap transition-colors duration-200"
                   aria-label={`Call us on ${phone}`}
                 >
@@ -239,9 +241,9 @@ export function NavigationMenu({
 
           {/* Mobile: click-to-call icon + menu button */}
           <div className="md:hidden flex items-center gap-1">
-            {phone && (
+            {phoneHref && (
               <a
-                href={telHref(phone)}
+                href={phoneHref}
                 className="text-white hover:text-ds-accent-yellow p-2 transition-colors duration-200"
                 aria-label={`Call us on ${phone}`}
               >
