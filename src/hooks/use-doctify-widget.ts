@@ -71,6 +71,10 @@ export function useDoctifyWidget({
       // If the script is held back (e.g. by the cookie banner until consent), show the fallback
       // link instead of loading forever; a late onload still switches to 'loaded'
       loadTimeout = setTimeout(() => {
+        // Stop recording so other code's window listeners aren't captured (and later removed)
+        // while the script stays blocked; anything recorded so far isn't the widget's either
+        stopRecordingListeners()
+        widgetListeners.length = 0
         setStatus((current) => (current === 'loading' ? 'error' : current))
       }, EMBED_LOAD_TIMEOUT_MS)
       script.onload = () => {
