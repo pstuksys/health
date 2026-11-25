@@ -94,6 +94,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
               ? { label: header.ctaButton.label, href: header.ctaButton.href }
               : undefined
           }
+          phone={footer?.contact?.phone ?? undefined}
         />
         <main className="min-h-screen">{children}</main>
         <BookingModal
