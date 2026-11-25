@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { EMBED_LOAD_TIMEOUT_MS } from './use-load-timeout'
 
 type UseDoctifyWidgetOptions = {
   widgetId: string
@@ -43,6 +44,7 @@ export function useDoctifyWidget({
     if (!container) return
 
     let script: HTMLScriptElement | null = null
+    let loadTimeout: ReturnType<typeof setTimeout> | null = null
     let previousOnResize: typeof window.onresize = null
     let widgetOnResize: typeof window.onresize = null
     const widgetListeners: Parameters<typeof window.removeEventListener>[] = []
@@ -66,13 +68,24 @@ export function useDoctifyWidget({
       script = document.createElement('script')
       script.src = scriptUrl
       script.async = true
+      // If the script is held back (e.g. by the cookie banner until consent), show the fallback
+      // link instead of loading forever; a late onload still switches to 'loaded'
+      loadTimeout = setTimeout(() => {
+        // Stop recording so other code's window listeners aren't captured (and later removed)
+        // while the script stays blocked; anything recorded so far isn't the widget's either
+        stopRecordingListeners()
+        widgetListeners.length = 0
+        setStatus((current) => (current === 'loading' ? 'error' : current))
+      }, EMBED_LOAD_TIMEOUT_MS)
       script.onload = () => {
+        if (loadTimeout) clearTimeout(loadTimeout)
         stopRecordingListeners()
         fontLinkObserver.disconnect()
         if (window.onresize !== previousOnResize) widgetOnResize = window.onresize
         setStatus('loaded')
       }
       script.onerror = () => {
+        if (loadTimeout) clearTimeout(loadTimeout)
         stopRecordingListeners()
         fontLinkObserver.disconnect()
         setStatus('error')
@@ -91,6 +104,7 @@ export function useDoctifyWidget({
     observer.observe(container)
 
     return () => {
+      if (loadTimeout) clearTimeout(loadTimeout)
       observer.disconnect()
       fontLinkObserver.disconnect()
       stopRecordingListeners()

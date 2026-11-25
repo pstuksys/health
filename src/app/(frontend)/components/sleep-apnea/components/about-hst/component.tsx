@@ -12,6 +12,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog'
 import { Loader2, AlertCircle } from 'lucide-react'
+import { useLoadTimeout } from '@/hooks/use-load-timeout'
 
 type ProcessStep = {
   number?: string | null
@@ -36,6 +37,7 @@ export const SleepApneaAboutHST = memo(function SleepApneaAboutHST({
   const [isBookingOpen, setIsBookingOpen] = useState(false)
   const [isIframeLoading, setIsIframeLoading] = useState(true)
   const [hasIframeError, setHasIframeError] = useState(false)
+  const isIframeSlow = useLoadTimeout(isBookingOpen && isIframeLoading)
 
   // Memoized handlers for better performance
   const handleBookingOpenChange = useCallback((open: boolean) => {
@@ -114,6 +116,16 @@ export const SleepApneaAboutHST = memo(function SleepApneaAboutHST({
                     <div className="text-center">
                       <Loader2 className="h-8 w-8 animate-spin text-ds-accent-yellow mx-auto mb-2" />
                       <p className="text-gray-600">Loading booking system...</p>
+                      {isIframeSlow && (
+                        <a
+                          href={BOOKING_URL}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-block text-ds-dark-blue underline underline-offset-4 hover:text-ds-accent-yellow"
+                        >
+                          Taking too long? Open the booking page in a new tab
+                        </a>
+                      )}
                     </div>
                   </div>
                 )}
