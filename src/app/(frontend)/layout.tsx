@@ -57,6 +57,14 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   return (
     <html lang="en" className={`${poppins.variable} antialiased`} data-scroll-behavior="smooth">
       <body className="font-sans bg-white">
+        {/* Google Consent Mode v2 defaults: everything denied until the visitor accepts in CookieYes. Must run before
+            CookieYes and GTM. CookieYes (with "Support GCM" on) only sends the consent *update*, so the default lives here.
+            wait_for_update lets returning visitors' saved choice arrive before tags fire. */}
+        {cookieYesId && (
+          <Script id="consent-defaults" strategy="beforeInteractive">
+            {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',functionality_storage:'denied',personalization_storage:'denied',security_storage:'granted',wait_for_update:500});gtag('set','ads_data_redaction',true);`}
+          </Script>
+        )}
         {/* Cookie consent banner. beforeInteractive puts it in <head> ahead of the app (and of Google Tag Manager
             once added), so nothing sets cookies before consent. A plain <script> here breaks hydration and loops reloads. */}
         {cookieYesId && (
