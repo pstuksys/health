@@ -10,6 +10,7 @@ import { resolveUrl } from '@/lib/navigation'
 import { BookingModal } from './components/booking-modal/component'
 import { NavigationProgress } from './components/navigation-progress/component'
 import { Suspense } from 'react'
+import Script from 'next/script'
 import { DraftModeBanner } from './components/draft-mode-banner/component'
 
 const poppins = Poppins({
@@ -50,10 +51,20 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     : []
   const footerLegalLinks = footer?.legalLinks ? transformFooterLegalLinks(footer.legalLinks) : []
   const bookingModal = header?.bookingModal
+  const cookieYesId = process.env.NEXT_PUBLIC_COOKIEYES_ID
 
   return (
     <html lang="en" className={`${poppins.variable} antialiased`} data-scroll-behavior="smooth">
       <body className="font-sans bg-white">
+        {/* Cookie consent banner. beforeInteractive puts it in <head> ahead of the app (and of Google Tag Manager
+            once added), so nothing sets cookies before consent. A plain <script> here breaks hydration and loops reloads. */}
+        {cookieYesId && (
+          <Script
+            id="cookieyes"
+            src={`https://cdn-cookieyes.com/client_data/${cookieYesId}/script.js`}
+            strategy="beforeInteractive"
+          />
+        )}
         {/* Suspense only wraps the bar (useSearchParams); pages stay unstreamed so 404s keep their status */}
         <Suspense fallback={null}>
           <NavigationProgress />
