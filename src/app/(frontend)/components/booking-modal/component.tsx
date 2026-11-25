@@ -15,6 +15,7 @@ import {
 import { iconMap, type IconKey } from '@/lib/icons/icon-map'
 import { parseBookingModalHash } from '@/lib/booking-modal'
 import { cn } from '@/lib/utils'
+import { useLoadTimeout } from '@/hooks/use-load-timeout'
 
 type BookingOption = {
   icon: IconKey
@@ -40,6 +41,7 @@ export function BookingModal({ title, description, options, help }: BookingModal
   const [open, setOpen] = useState(false)
   const [embedded, setEmbedded] = useState<BookingOption | null>(null)
   const [isIframeLoading, setIsIframeLoading] = useState(true)
+  const isIframeSlow = useLoadTimeout(Boolean(embedded) && isIframeLoading)
   // Booking URL from the clicked link, used instead of each option's own link
   const [bookingHref, setBookingHref] = useState<string | null>(null)
   const HeaderIcon = iconMap.Video
@@ -112,6 +114,16 @@ export function BookingModal({ title, description, options, help }: BookingModal
                     <div className="text-center">
                       <Loader2 className="mx-auto mb-2 h-8 w-8 animate-spin text-ds-accent-yellow" />
                       <p className="font-light text-ds-dark-blue">Loading booking system...</p>
+                      {isIframeSlow && (
+                        <a
+                          href={embedded.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="mt-3 inline-block font-light text-ds-dark-blue underline underline-offset-4 hover:text-ds-accent-yellow"
+                        >
+                          Taking too long? Open the booking page in a new tab
+                        </a>
+                      )}
                     </div>
                   </div>
                 )}

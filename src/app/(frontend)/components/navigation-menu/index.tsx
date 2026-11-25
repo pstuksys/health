@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Menu, X } from 'lucide-react'
+import { Menu, Phone, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { Header } from '@/payload-types'
 import { CMSLink } from '../ui'
@@ -18,6 +18,9 @@ import { findNavigationItem } from '../../../../lib/navigationUtils'
 // Constants
 const MEGA_MENU_HIDE_DELAY = 150 // milliseconds
 
+// tel: links should not contain spaces or brackets (e.g. "020 1234 5678" -> "tel:02012345678")
+const telHref = (phone: string) => `tel:${phone.replace(/[^\d+]/g, '')}`
+
 // Extract types from Header interface
 type NavigationItem = NonNullable<Header['navigation']>[number]
 type CTAButton = NonNullable<Header['ctaButton']>
@@ -25,6 +28,8 @@ type CTAButton = NonNullable<Header['ctaButton']>
 interface NavigationMenuProps {
   items: NavigationItem[]
   ctaButton?: CTAButton
+  /** Phone number for the click-to-call link (from the Footer global's contact details) */
+  phone?: string
   sticky?: boolean
   className?: string
   isScrolled?: boolean
@@ -34,11 +39,14 @@ interface NavigationMenuProps {
 export function NavigationMenu({
   items,
   ctaButton,
+  phone,
   sticky = false,
   className,
   isScrolled = false,
   isVisible = true,
 }: NavigationMenuProps) {
+  // Only show the call link when the admin value actually contains a number
+  const phoneHref = phone && /\d/.test(phone) ? telHref(phone) : null
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [hoveredItem, setHoveredItem] = useState<string | null>(null)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -208,20 +216,40 @@ export function NavigationMenu({
             />
           </div>
 
-          {/* Desktop CTA Button */}
-          {ctaButton && (
-            <div
-              ref={ctaRef}
-              className="hidden md:block flex-shrink-0 max-w-[150px] md:max-w-[180px]"
-            >
-              <CMSLink variant="primary" href={resolveUrl(ctaButton)}>
-                {ctaButton.label}
-              </CMSLink>
+          {/* Desktop click-to-call + CTA button (measured together by useResponsiveNavigation via ctaRef) */}
+          {(phoneHref || ctaButton) && (
+            <div ref={ctaRef} className="hidden md:flex items-center gap-4 flex-shrink-0">
+              {phoneHref && (
+                <a
+                  href={phoneHref}
+                  className="flex items-center gap-2 text-white hover:text-ds-accent-yellow text-sm font-light whitespace-nowrap transition-colors duration-200"
+                  aria-label={`Call us on ${phone}`}
+                >
+                  <Phone className="h-4 w-4 flex-shrink-0" aria-hidden="true" />
+                  <span className="hidden lg:inline">{phone}</span>
+                </a>
+              )}
+              {ctaButton && (
+                <div className="max-w-[150px] md:max-w-[180px]">
+                  <CMSLink variant="primary" href={resolveUrl(ctaButton)}>
+                    {ctaButton.label}
+                  </CMSLink>
+                </div>
+              )}
             </div>
           )}
 
-          {/* Mobile menu button */}
-          <div className="md:hidden">
+          {/* Mobile: click-to-call icon + menu button */}
+          <div className="md:hidden flex items-center gap-1">
+            {phoneHref && (
+              <a
+                href={phoneHref}
+                className="text-white hover:text-ds-accent-yellow p-2 transition-colors duration-200"
+                aria-label={`Call us on ${phone}`}
+              >
+                <Phone className="h-5 w-5" aria-hidden="true" />
+              </a>
+            )}
             <button
               onClick={toggleMobileMenu}
               className="text-white hover:text-ds-accent-yellow p-2 transition-colors duration-200"
