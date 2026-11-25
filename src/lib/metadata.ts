@@ -50,8 +50,8 @@ export const siteMetadata: Metadata = {
   applicationName: 'IPDiagnostics',
   referrer: 'origin-when-cross-origin',
   verification: {
-    // Add these when you have them
-    // google: 'your-google-site-verification',
+    // Google Search Console (property owned by IPD / the SEO agency)
+    google: 'vr9iFOA4rrbQjI2kj3iGtoKb1EoBc550gWvY0g1Xc_w',
     // yandex: 'your-yandex-verification',
     // yahoo: 'your-yahoo-verification',
     // other: 'your-other-verification',

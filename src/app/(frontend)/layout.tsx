@@ -52,6 +52,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const footerLegalLinks = footer?.legalLinks ? transformFooterLegalLinks(footer.legalLinks) : []
   const bookingModal = header?.bookingModal
   const cookieYesId = process.env.NEXT_PUBLIC_COOKIEYES_ID
+  const gtmId = process.env.NEXT_PUBLIC_GTM_ID
 
   return (
     <html lang="en" className={`${poppins.variable} antialiased`} data-scroll-behavior="smooth">
@@ -64,6 +65,23 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             src={`https://cdn-cookieyes.com/client_data/${cookieYesId}/script.js`}
             strategy="beforeInteractive"
           />
+        )}
+        {/* Google Tag Manager (GA4 etc. are managed inside GTM by the SEO agency). beforeInteractive scripts run in
+            order, so this always runs after CookieYes and its Consent Mode defaults. */}
+        {gtmId && (
+          <>
+            <Script id="gtm" strategy="beforeInteractive">
+              {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer',${JSON.stringify(gtmId)});`}
+            </Script>
+            <noscript>
+              <iframe
+                src={`https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(gtmId)}`}
+                height="0"
+                width="0"
+                style={{ display: 'none', visibility: 'hidden' }}
+              />
+            </noscript>
+          </>
         )}
         {/* Suspense only wraps the bar (useSearchParams); pages stay unstreamed so 404s keep their status */}
         <Suspense fallback={null}>
